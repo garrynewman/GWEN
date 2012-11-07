@@ -26,6 +26,7 @@ namespace Gwen
 		bool	failed;
 		int		width;
 		int		height;
+		Gwen::Renderer::Base* acquired; // @rlyeh: this renderer will release any acquired texture
 
 		Texture()
 		{
@@ -33,14 +34,23 @@ namespace Gwen
 			width = 4;
 			height = 4;
 			failed = false;
+			acquired = NULL;
 		}
 
 		~Texture()
 		{
+			if( acquired )
+			{
+				Release( acquired );  // @rlyeh: free any memory leak
+				acquired = NULL;
+			}
 		}
 
 		void Load( const TextObject& str, Gwen::Renderer::Base* render )
 		{
+			Gwen::Debug::AssertCheck( acquired == NULL, "Release me first!" ); // @rlyeh: ensure texture has not been acquired previously
+			acquired = render;
+
 			name = str;
 			Gwen::Debug::AssertCheck( render != NULL, "No renderer!" );
 			render->LoadTexture( this );
@@ -48,6 +58,10 @@ namespace Gwen
 
 		void Release( Gwen::Renderer::Base* render )
 		{
+			Gwen::Debug::AssertCheck( acquired != NULL, "Load me first!" ); // @rlyeh: ensure texture has been acquired previously
+			Gwen::Debug::AssertCheck( acquired == render, "Renderer mismatch!" ); // @rlyeh: ensure we're using same renderer to release texture
+			acquired = 0;
+
 			render->FreeTexture( this );
 		}
 
