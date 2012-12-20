@@ -7,9 +7,9 @@
 #ifdef _WIN32
 
 #ifndef _WIN32_WINNT
-#	define _WIN32_WINNT 0x0501
+#	define _WIN32_WINNT 0x06000000
 #else
-#	if _WIN32_WINNT < 0x0501
+#	if _WIN32_WINNT < 0x06000000
 #		error Unsupported platform
 #	endif
 #endif
@@ -20,6 +20,7 @@
 
 #include <windows.h>
 #include <ShlObj.h>
+#include <Shobjidl.h>
 
 using namespace Gwen;
 using namespace Gwen::Platform;
@@ -188,64 +189,63 @@ bool Gwen::Platform::FileOpen( const String& Name, const String& StartPath, cons
 	return true;
 }
 
-// An annoying function just to change the folder that we start in, in the folder browser.
-static String g_InitialFolder;
-
-INT CALLBACK FolderBrowseCallback( HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData )
-{
-	switch(uMsg) 
-	{
-		case BFFM_INITIALIZED: 
-			{
-				WCHAR szDir[MAX_PATH];
-
-				if ( g_InitialFolder.empty() && GetCurrentDirectoryW( MAX_PATH, szDir) )
-				{
-					SendMessageW( hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) szDir );
-					return 0;
-				}
-
-				SendMessageW( hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) Gwen::Utility::StringToUnicode( g_InitialFolder ).c_str() );
-				return 0;
-			}
-
-			break;
-	}
-
-	return 0;
-}
-
 bool Gwen::Platform::FolderOpen( const String& Name, const String& StartPath, Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
 {
-	g_InitialFolder = StartPath;
+	IFileDialog *pfd = NULL;
+	bool bSuccess = false;
 
-	BROWSEINFOA   bi; 
-	ZeroMemory(&bi,   sizeof(bi)); 
+	if ( CoCreateInstance( CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS( &pfd ) ) != S_OK )
+		return bSuccess;
 
-	bi.lpszTitle        =   Name.c_str(); 
-	bi.ulFlags          =   BIF_RETURNONLYFSDIRS | BIF_USENEWUI;
-	bi.lpfn				=	&FolderBrowseCallback;
+	DWORD dwOptions;
 
-	LPITEMIDLIST pidl = SHBrowseForFolderA( &bi );
-
-	if ( pidl == NULL )
-		return true;
-
-	char szPathName[MAX_PATH]; 
-	if( !SHGetPathFromIDListA( pidl, szPathName ) )
-		return true;
-
-	if ( pHandler && fnCallback )
+	if ( pfd->GetOptions(&dwOptions) != S_OK )
 	{
-		Gwen::Event::Information info;
-		info.Control		= NULL;
-		info.ControlCaller	= NULL;
-		info.String			= szPathName;
-
-		(pHandler->*fnCallback)( info );
+		pfd->Release();
+		return bSuccess;
 	}
 
-	return true;
+	pfd->SetOptions( dwOptions | FOS_PICKFOLDERS );
+
+	//
+	// TODO: SetDefaultFolder -> StartPath
+	//
+
+	if ( pfd->Show(NULL) == S_OK )
+	{
+		IShellItem *psi;
+
+		if ( pfd->GetResult(&psi) == S_OK )
+		{
+			WCHAR* strOut = NULL;
+
+			if ( psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &strOut ) != S_OK )
+			{
+				return bSuccess;
+			}
+
+			//
+			// GWEN callback - call it.
+			//
+			if ( pHandler && fnCallback )
+			{
+				Gwen::Event::Information info;
+				info.Control		= NULL;
+				info.ControlCaller	= NULL;
+				info.String			= Gwen::Utility::UnicodeToString( strOut );
+
+				(pHandler->*fnCallback)( info );
+			}
+
+			CoTaskMemFree( strOut );
+			psi->Release();
+			bSuccess = true;
+		}
+	}
+
+	pfd->Release();
+
+	return bSuccess;
 }
 
 bool Gwen::Platform::FileSave( const String& Name, const String& StartPath, const String& Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
@@ -304,6 +304,8 @@ bool Gwen::Platform::FileSave( const String& Name, const String& StartPath, cons
 
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String& strWindowTitle )
 {
+	CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
+
 	WNDCLASSA	wc;
 	ZeroMemory( &wc, sizeof( wc ) );
 
@@ -333,6 +335,8 @@ void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gw
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
 	DestroyWindow( (HWND)pPtr );
+
+	CoUninitialize();
 }
 
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget )
