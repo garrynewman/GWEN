@@ -9,22 +9,22 @@ solution "GWEN"
 	libdirs { "../lib/", "../lib/" .. os.get() }
 
 	configurations
-	{ 
+	{
 		"Release",
 		"Debug"
 	}
-	
+
 	if ( _ACTION == "vs2010" or _ACTION=="vs2008" ) then
 		buildoptions { "/MP"  }
-	end 
-	
-	
+	end
+
+
 
 configuration "Release"
 	defines { "NDEBUG" }
 	flags{ "Optimize", "FloatFast" }
 	includedirs { "../include/" }
-	
+
 configuration "Debug"
 	defines { "_DEBUG" }
 	includedirs { "../include/" }
@@ -42,12 +42,12 @@ project "GWEN-Static"
 	flags { "Symbols" }
 	kind "StaticLib"
 	targetname( "gwen_static" )
-		
+
 project "UnitTest"
 	files { "../UnitTest/**.*" }
 	flags { "Symbols" }
 	kind "StaticLib"
-	targetname( "unittest" )		
+	targetname( "unittest" )
 
 --
 -- Renderers
@@ -68,7 +68,7 @@ end
 -- Samples
 --
 
-DefineSample( "CrossPlatform", { "../Samples/CrossPlatform/CrossPlatform.cpp" }, { "UnitTest", "Renderer-OpenGL_DebugFont", "GWEN-Static", "FreeImage", "opengl32" }, nil, { "USE_DEBUG_FONT" } )
+DefineSample( "CrossPlatform", { "../Samples/CrossPlatform/CrossPlatform.cpp" }, { "UnitTest", "Renderer-OpenGL_DebugFont", "GWEN-Static", "opengl32" }, nil, { "USE_DEBUG_FONT" } )
 
 DefineSample( "SFML", { "../Samples/SFML/SFML.cpp" }, SFML_LIBS, SFML_LIBS_D )
 DefineSample( "Allegro", { "../Samples/Allegro/AllegroSample.cpp" }, ALLEGRO_LIBS, ALLEGRO_LIBS_D )
@@ -78,8 +78,8 @@ if ( os.get() == "windows" ) then
 	DefineSample( "Direct2D", { "../Samples/Direct2D/Direct2DSample.cpp" }, { "UnitTest", "Renderer-Direct2D", "GWEN-Static", "d2d1", "dwrite", "windowscodecs" } )
 	DefineSample( "DirectX9", { "../Samples/Direct3D/Direct3DSample.cpp" }, { "UnitTest", "Renderer-DirectX9", "GWEN-Static" } )
 	DefineSample( "WindowsGDI", { "../Samples/WindowsGDI/WindowsGDI.cpp" }, { "UnitTest", "Renderer-GDI", "GWEN-Static" } )
-	DefineSample( "OpenGL", { "../Samples/OpenGL/OpenGLSample.cpp" }, { "UnitTest", "Renderer-OpenGL", "GWEN-Static", "FreeImage", "opengl32" } )
-	DefineSample( "OpenGL_DebugFont", { "../Samples/OpenGL/OpenGLSample.cpp" }, { "UnitTest", "Renderer-OpenGL_DebugFont", "GWEN-Static", "FreeImage", "opengl32" }, nil, { "USE_DEBUG_FONT" } )
+	DefineSample( "OpenGL", { "../Samples/OpenGL/OpenGLSample.cpp" }, { "UnitTest", "Renderer-OpenGL", "GWEN-Static", "opengl32" } )
+	DefineSample( "OpenGL_DebugFont", { "../Samples/OpenGL/OpenGLSample.cpp" }, { "UnitTest", "Renderer-OpenGL_DebugFont", "GWEN-Static", "opengl32" }, nil, { "USE_DEBUG_FONT" } )
 
 end
 
@@ -88,7 +88,7 @@ project "ControlFactory"
 	files { "../Util/ControlFactory/**.*" }
 	kind "StaticLib"
 	targetname( "controlfactory" )
-	
+
 project "ImportExport"
 	files { "../Util/ImportExport/**.*" }
 	kind "StaticLib"

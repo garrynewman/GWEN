@@ -238,6 +238,13 @@ void SplitWords(const Gwen::UnicodeString &s, wchar_t delim, std::vector<Gwen::U
 void Text::RefreshSizeWrap()
 {
 	RemoveAllChildren();
+
+	for( TextLines::const_iterator it = m_Lines.begin(), end = m_Lines.end(); it != end; ++it )
+	{
+		Text *t = *it;
+		if( t ) delete t, t = 0;
+	}
+
 	m_Lines.clear();
 
 	std::vector<Gwen::UnicodeString> words;

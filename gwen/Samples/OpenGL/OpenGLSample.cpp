@@ -8,9 +8,11 @@
 #include "Gwen/UnitTest/UnitTest.h"
 #include "Gwen/Input/Windows.h"
 
+#define USE_DEBUG_FONT // @rlyeh: just for me!
+
 #ifdef USE_DEBUG_FONT
 	#include "Gwen/Renderers/OpenGL_DebugFont.h"
-#else 
+#else
 	#include "Gwen/Renderers/OpenGL.h"
 #endif
 #include "gl/glew.h"
@@ -114,13 +116,13 @@ int main()
 	//
 	// Create a GWEN skin
 	//
-	Gwen::Skin::TexturedBase skin( pRenderer );
-	skin.Init("DefaultSkin.png");
+	Gwen::Skin::TexturedBase* pSkin = new Gwen::Skin::TexturedBase( pRenderer );
+	pSkin->Init("DefaultSkin.png");
 
 	//
 	// Create a Canvas (it's root, on which all other GWEN panels are created)
 	//
-	Gwen::Controls::Canvas* pCanvas = new Gwen::Controls::Canvas( &skin );
+	Gwen::Controls::Canvas* pCanvas = new Gwen::Controls::Canvas( pSkin );
 	pCanvas->SetSize( 998, 650 - 24 );
 	pCanvas->SetDrawBackground( true );
 	pCanvas->SetBackgroundColor( Gwen::Color( 150, 170, 170, 255 ) );
@@ -135,8 +137,8 @@ int main()
 	// Create a Windows Control helper 
 	// (Processes Windows MSG's and fires input at GWEN)
 	//
-	Gwen::Input::Windows GwenInput;
-	GwenInput.Initialize( pCanvas );
+	Gwen::Input::Windows* pInput = new Gwen::Input::Windows();
+	pInput->Initialize( pCanvas );
 
 	//
 	// Begin the main game loop
@@ -152,7 +154,7 @@ int main()
 		if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
 		{
 			// .. give it to the input handler to process
-			GwenInput.ProcessMessage( msg );
+			pInput->ProcessMessage( msg );
 
 			// if it's QUIT then quit..
 			if ( msg.message == WM_QUIT )
@@ -175,11 +177,17 @@ int main()
 		}
 	}
 
+	// Clean up Gwen
+	delete pInput;
+	delete pUnit;
+	delete pCanvas;
+	delete pSkin;
+	delete pRenderer;
+
 	// Clean up OpenGL
 	wglMakeCurrent( NULL, NULL );
 	wglDeleteContext( OpenGLContext );
 
-	delete pCanvas;
-	delete pRenderer;
-
+	// Exit
+	return 0;
 }
