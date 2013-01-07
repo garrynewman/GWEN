@@ -11,10 +11,19 @@ namespace Gwen
 {
 	namespace Renderer 
 	{
+        struct TextureData
+        {
+            TextureData(sf::Image* img): image(img), texture(NULL) { }
+            TextureData(sf::Texture* text): texture(text), image(NULL) { }
+            ~TextureData() { if (texture != NULL) delete texture; if (image != NULL) delete image; }
 
-		SFML::SFML( sf::RenderTarget& target ) : m_Target(target)
+            sf::Texture* texture;
+            sf::Image*   image;
+        };
+
+
+		SFML::SFML( sf::RenderTarget& target ) : m_Target(target), m_pixelShape( sf::Vector2f( 1, 1 ) )
 		{
-
 		}
 
 		SFML::~SFML()
@@ -34,16 +43,46 @@ namespace Gwen
 		{
 			Translate( rect );
 
-			#if SFML_VERSION_MAJOR == 2
+#if SFML_VERSION_MAJOR == 2
 			sf::RectangleShape rectShape( sf::Vector2f( rect.w, rect.h ) );
 			rectShape.setPosition( rect.x, rect.y );
 			rectShape.setFillColor( m_Color );
 
 			m_Target.draw( rectShape );
-			#else
+#else
 			m_Target.Draw( sf::Shape::Rectangle( rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, m_Color ) );
-			#endif
+#endif
 		}
+
+        void SFML::DrawLinedRect( Gwen::Rect rect )
+        {
+#if SFML_VERSION_MAJOR == 2
+            Translate( rect );
+
+            sf::RectangleShape rectShape( sf::Vector2f( rect.w-2, rect.h-2 ) );
+            rectShape.setPosition( rect.x+1, rect.y+1 );
+            rectShape.setFillColor( sf::Color::Transparent );
+            rectShape.setOutlineColor( m_Color );
+            rectShape.setOutlineThickness( 1.f );
+
+            m_Target.draw( rectShape );
+#else
+            Base::DrawLinedRect( rect );
+#endif
+        }
+
+        void SFML::DrawPixel( int x, int y )
+        {
+#if SFML_VERSION_MAJOR == 2
+            Translate( x, y );
+
+            sf::Vertex vert( sf::Vector2f( x, y ), m_Color );
+
+            m_Target.draw( &vert, 1, sf::PrimitiveType::Points );
+#else
+            Base::DrawPixel( x, y );
+#endif
+        }
 
 		void SFML::LoadFont( Gwen::Font* font )
 		{
@@ -213,21 +252,17 @@ namespace Gwen
 			pTexture->height = tex->GetHeight();
 			pTexture->width = tex->GetWidth();
 #endif
-			pTexture->data = tex;
+			pTexture->data = new TextureData(tex);
 
 		};
 
 		void SFML::FreeTexture( Gwen::Texture* pTexture )
 		{
-#if SFML_VERSION_MAJOR == 2
-			sf::Texture* tex = static_cast<sf::Texture*>( pTexture->data );
-#else 
-			sf::Image* tex = static_cast<sf::Image*>( pTexture->data );
-#endif 
+            TextureData* data = static_cast<TextureData*>( pTexture->data );
 
-			if ( tex )
+			if ( data )
 			{
-				delete tex;
+				delete data;
 			}
 
 			pTexture->data = NULL;
@@ -235,10 +270,15 @@ namespace Gwen
 
 		void SFML::DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 )
 		{
+            TextureData* data = static_cast<TextureData*>( pTexture->data );
+
+            if ( !data )
+                return DrawMissingImage( rect );
+
 #if SFML_VERSION_MAJOR == 2
-			const sf::Texture* tex = static_cast<sf::Texture*>( pTexture->data );
+			const sf::Texture* tex = data->texture;
 #else 
-			const sf::Image* tex = static_cast<sf::Image*>( pTexture->data );
+			const sf::Image* tex = data->image;
 #endif 
 
 			if ( !tex ) 
@@ -281,18 +321,23 @@ namespace Gwen
 
 		Gwen::Color SFML::PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default )
 		{
+            TextureData* data = static_cast<TextureData*>( pTexture->data );
+
 			#if SFML_VERSION_MAJOR == 2
 
-				const sf::Texture* tex = static_cast<sf::Texture*>( pTexture->data );
-				if ( !tex ) return col_default;
+				if ( !data->texture && !data->image ) return col_default;
+                if ( !data->image )
+                {
+                    sf::Image copy = data->texture->copyToImage();
+                    data->image = new sf::Image(copy);
+                }
 
-				sf::Image img = tex->copyToImage();
-				sf::Color col = img.getPixel( x, y );
+				sf::Color col = data->image->getPixel( x, y );
 				return Gwen::Color( col.r, col.g, col.b, col.a );
 
 			#else 
 
-				const sf::Image* tex = static_cast<sf::Image*>( pTexture->data );
+				const sf::Image* tex = data->image;
 				if ( !tex ) return col_default;
 
 				sf::Color col = tex->GetPixel( x, y );
