@@ -9,7 +9,9 @@
 #define GWEN_RENDERERS_SFML_H
 #include "Gwen/Gwen.h"
 #include "Gwen/BaseRender.h"
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
+
+namespace sf { class RenderTarget; }
 
 namespace Gwen 
 {
