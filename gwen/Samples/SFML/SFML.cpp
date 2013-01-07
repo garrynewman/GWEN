@@ -39,7 +39,11 @@ int main()
 	// Create a Canvas (it's root, on which all other GWEN panels are created)
 	//
 	Gwen::Controls::Canvas* pCanvas = new Gwen::Controls::Canvas( &skin );
+#if SFML_VERSION_MAJOR == 2
+    pCanvas->SetSize( App.getSize().x, App.getSize().y );
+#else
 	pCanvas->SetSize( App.GetWidth(), App.GetHeight() );
+#endif
 	pCanvas->SetDrawBackground( true );
 	pCanvas->SetBackgroundColor( Gwen::Color( 150, 170, 170, 255 ) );
 
@@ -57,7 +61,7 @@ int main()
 	GwenInput.Initialize( pCanvas );
 	
 #if SFML_VERSION_MAJOR == 2
-	while ( App.IsOpen() )
+	while ( App.isOpen() )
 #else
 	while ( App.IsOpened() )
 #endif
@@ -66,21 +70,25 @@ int main()
 		sf::Event Event;
 
 #if SFML_VERSION_MAJOR == 2
-		while ( App.PollEvent(Event) )
+		while ( App.pollEvent(Event) )
 #else
 		while ( App.GetEvent(Event) )
 #endif
 		{
 			// Window closed or escape key pressed : exit
 #if SFML_VERSION_MAJOR == 2
-			if ((Event.Type == sf::Event::Closed) || 
-				((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Keyboard::Escape)))
+			if ((Event.type == sf::Event::Closed) || 
+				((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape)))
 #else
 			if ((Event.Type == sf::Event::Closed) || 
 				((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape)))
 #endif
 			{
+#if SFML_VERSION_MAJOR == 2
+                App.close();
+#else
 				App.Close();
+#endif
 				break;
 			}
 
@@ -88,11 +96,19 @@ int main()
 		}
 
 		// Clear the window
+#if SFML_VERSION_MAJOR == 2
+        App.clear();
+#else
 		App.Clear();
+#endif
 		
 		pCanvas->RenderCanvas();
 		
+#if SFML_VERSION_MAJOR == 2
+        App.display();
+#else
 		App.Display();
+#endif
 	}
 
 	return EXIT_SUCCESS;

@@ -4,16 +4,26 @@
 #include "Gwen/Font.h"
 #include "Gwen/Texture.h"
 #include "Gwen/Renderers/SFML.h"
+#include <SFML/Graphics.hpp>
 #include <GL/gl.h>
 
 namespace Gwen 
 {
 	namespace Renderer 
 	{
+        struct TextureData
+        {
+            TextureData(sf::Image* img): image(img), texture(NULL) { }
+            TextureData(sf::Texture* text): texture(text), image(NULL) { }
+            ~TextureData() { if (texture != NULL) delete texture; if (image != NULL) delete image; }
 
-		SFML::SFML( sf::RenderTarget& target ) : m_Target(target)
+            sf::Texture* texture;
+            sf::Image*   image;
+        };
+
+
+		SFML::SFML( sf::RenderTarget& target ) : m_Target(target), m_pixelShape( sf::Vector2f( 1, 1 ) )
 		{
-
 		}
 
 		SFML::~SFML()
@@ -33,16 +43,46 @@ namespace Gwen
 		{
 			Translate( rect );
 
-			#if SFML_VERSION_MAJOR == 2
+#if SFML_VERSION_MAJOR == 2
 			sf::RectangleShape rectShape( sf::Vector2f( rect.w, rect.h ) );
-			rectShape.SetPosition( rect.x, rect.y );
-			rectShape.SetFillColor( m_Color );
+			rectShape.setPosition( rect.x, rect.y );
+			rectShape.setFillColor( m_Color );
 
-			m_Target.Draw( rectShape );
-			#else
+			m_Target.draw( rectShape );
+#else
 			m_Target.Draw( sf::Shape::Rectangle( rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, m_Color ) );
-			#endif
+#endif
 		}
+
+        void SFML::DrawLinedRect( Gwen::Rect rect )
+        {
+#if SFML_VERSION_MAJOR == 2
+            Translate( rect );
+
+            sf::RectangleShape rectShape( sf::Vector2f( rect.w-2, rect.h-2 ) );
+            rectShape.setPosition( rect.x+1, rect.y+1 );
+            rectShape.setFillColor( sf::Color::Transparent );
+            rectShape.setOutlineColor( m_Color );
+            rectShape.setOutlineThickness( 1.f );
+
+            m_Target.draw( rectShape );
+#else
+            Base::DrawLinedRect( rect );
+#endif
+        }
+
+        void SFML::DrawPixel( int x, int y )
+        {
+#if SFML_VERSION_MAJOR == 2
+            Translate( x, y );
+
+            sf::Vertex vert( sf::Vector2f( x, y ), m_Color );
+
+            m_Target.draw( &vert, 1, sf::PrimitiveType::Points );
+#else
+            Base::DrawPixel( x, y );
+#endif
+        }
 
 		void SFML::LoadFont( Gwen::Font* font )
 		{
@@ -51,16 +91,19 @@ namespace Gwen
 			sf::Font* pFont = new sf::Font();
 
 #if SFML_VERSION_MAJOR == 2
-			if ( !pFont->LoadFromFile( Utility::UnicodeToString( font->facename ) ) )
+			if ( !pFont->loadFromFile( Utility::UnicodeToString( font->facename ) ) )
 #else
 			if ( !pFont->LoadFromFile( Utility::UnicodeToString( font->facename ), font->realsize  ) )
 #endif
 			{
 				// Ideally here we should be setting the font to a system default font here.
 				delete pFont;
-
+#if SFML_VERSION_MAJOR == 2
+                pFont = NULL; // SFML 2 doesn't have a default font anymore
+#else
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pFont = &defaultFont;
+#endif
 			}
 			
 			font->data = pFont;
@@ -72,11 +115,13 @@ namespace Gwen
 
 			sf::Font* font = ((sf::Font*)pFont->data);
 
+#if SFML_VERSION_MAJOR != 2
 			// If this is the default font then don't delete it!
 			if ( font != &sf::Font::GetDefaultFont() )
 			{
 				delete font;
 			}
+#endif
 
 			pFont->data = NULL;
 		}
@@ -94,19 +139,22 @@ namespace Gwen
 
 			const sf::Font* pSFFont = (sf::Font*)(pFont->data);
 
+#if SFML_VERSION_MAJOR != 2
 			if  ( !pSFFont )
 			{
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pSFFont = &defaultFont;
 			}
+#endif
 
 			#if SFML_VERSION_MAJOR == 2
-				sf::Text sfStr( text );
-				sfStr.SetFont( *pSFFont );
-				sfStr.Move( pos.x, pos.y );
-				sfStr.SetCharacterSize( pFont->realsize );
-				sfStr.SetColor( m_Color );
-				m_Target.Draw( sfStr );
+				sf::Text sfStr;
+                sfStr.setString( text );
+				sfStr.setFont( *pSFFont );
+				sfStr.move( pos.x, pos.y );
+				sfStr.setCharacterSize( pFont->realsize );
+				sfStr.setColor( m_Color );
+				m_Target.draw( sfStr );
 			#else
 				sf::String sfStr( text );
 				sfStr.SetFont( *pSFFont );
@@ -130,18 +178,21 @@ namespace Gwen
 
 			const sf::Font* pSFFont = (sf::Font*)(pFont->data);
 
+#if SFML_VERSION_MAJOR != 2
 			if  ( !pSFFont )
 			{
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pSFFont = &defaultFont;
 			}
+#endif
 
 			#if SFML_VERSION_MAJOR == 2
-				sf::Text sfStr( text );
-				sfStr.SetFont( *pSFFont );
-				sfStr.SetCharacterSize( pFont->realsize );
-				sf::FloatRect sz = sfStr.GetLocalBounds();
-				return Gwen::Point( sz.Left + sz.Width, sz.Top + sz.Height );
+				sf::Text sfStr;
+                sfStr.setString( text );
+				sfStr.setFont( *pSFFont );
+				sfStr.setCharacterSize( pFont->realsize );
+				sf::FloatRect sz = sfStr.getLocalBounds();
+				return Gwen::Point( sz.left + sz.width, sz.top + sz.height );
 			#else
 				sf::String sfStr( text );
 				sfStr.SetFont( *pSFFont );
@@ -181,35 +232,37 @@ namespace Gwen
 
 #if SFML_VERSION_MAJOR == 2
 			sf::Texture* tex = new sf::Texture();
+            tex->setSmooth( true );
+            if ( !tex->loadFromFile( pTexture->name.Get() ) )
 #else
 			sf::Image* tex = new sf::Image();
+            tex->SetSmooth( true );
+            if ( !tex->LoadFromFile( pTexture->name.Get() ) )
 #endif
-			tex->SetSmooth( true );
-
-			if ( !tex->LoadFromFile( pTexture->name.Get() ) )
 			{
 				delete( tex );
 				pTexture->failed = true;
 				return;
 			}
 
+#if SFML_VERSION_MAJOR == 2
+            pTexture->height = tex->getSize().x;
+			pTexture->width = tex->getSize().y;
+#else
 			pTexture->height = tex->GetHeight();
 			pTexture->width = tex->GetWidth();
-			pTexture->data = tex;
+#endif
+			pTexture->data = new TextureData(tex);
 
 		};
 
 		void SFML::FreeTexture( Gwen::Texture* pTexture )
 		{
-#if SFML_VERSION_MAJOR == 2
-			sf::Texture* tex = static_cast<sf::Texture*>( pTexture->data );
-#else 
-			sf::Image* tex = static_cast<sf::Image*>( pTexture->data );
-#endif 
+            TextureData* data = static_cast<TextureData*>( pTexture->data );
 
-			if ( tex )
+			if ( data )
 			{
-				delete tex;
+				delete data;
 			}
 
 			pTexture->data = NULL;
@@ -217,10 +270,15 @@ namespace Gwen
 
 		void SFML::DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 )
 		{
+            TextureData* data = static_cast<TextureData*>( pTexture->data );
+
+            if ( !data )
+                return DrawMissingImage( rect );
+
 #if SFML_VERSION_MAJOR == 2
-			const sf::Texture* tex = static_cast<sf::Texture*>( pTexture->data );
+			const sf::Texture* tex = data->texture;
 #else 
-			const sf::Image* tex = static_cast<sf::Image*>( pTexture->data );
+			const sf::Image* tex = data->image;
 #endif 
 
 			if ( !tex ) 
@@ -229,21 +287,22 @@ namespace Gwen
 			Translate( rect );
 		
 #if SFML_VERSION_MAJOR == 2
-			u1 *= tex->GetWidth();
-			v1 *= tex->GetHeight();
+            sf::Vector2u texSize = tex->getSize();
+            u1 *= texSize.x;
+			v1 *= texSize.y;
 
-			u2 *= tex->GetWidth();
+			u2 *= texSize.x;
 			u2 -= u1;
 
-			v2 *= tex->GetHeight();
+			v2 *= texSize.y;
 			v2 -= v1;
 
 			sf::RectangleShape rectShape( sf::Vector2f( rect.w, rect.h ) );
-			rectShape.SetPosition( rect.x, rect.y );
-			rectShape.SetTexture( tex );
-			rectShape.SetTextureRect( sf::IntRect( u1, v1, u2, v2 ) );
+			rectShape.setPosition( rect.x, rect.y );
+			rectShape.setTexture( tex );
+			rectShape.setTextureRect( sf::IntRect( u1, v1, u2, v2 ) );
 			
-			m_Target.Draw( rectShape );
+			m_Target.draw( rectShape );
 #else
 			tex->Bind();
 
@@ -262,18 +321,23 @@ namespace Gwen
 
 		Gwen::Color SFML::PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default )
 		{
+            TextureData* data = static_cast<TextureData*>( pTexture->data );
+
 			#if SFML_VERSION_MAJOR == 2
 
-				const sf::Texture* tex = static_cast<sf::Texture*>( pTexture->data );
-				if ( !tex ) return col_default;
+				if ( !data->texture && !data->image ) return col_default;
+                if ( !data->image )
+                {
+                    sf::Image copy = data->texture->copyToImage();
+                    data->image = new sf::Image(copy);
+                }
 
-				sf::Image img = tex->CopyToImage();
-				sf::Color col = img.GetPixel( x, y );
+				sf::Color col = data->image->getPixel( x, y );
 				return Gwen::Color( col.r, col.g, col.b, col.a );
 
 			#else 
 
-				const sf::Image* tex = static_cast<sf::Image*>( pTexture->data );
+				const sf::Image* tex = data->image;
 				if ( !tex ) return col_default;
 
 				sf::Color col = tex->GetPixel( x, y );
