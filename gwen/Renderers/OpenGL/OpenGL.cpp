@@ -8,7 +8,8 @@
 #include <math.h>
 
 #include "GL/glew.h"
-#include "FreeImage/FreeImage.h"
+#include "stb_image.h"	/* @rlyeh: switched from freeimage to stb_image */
+#include "stb_image.c"	/* @rlyeh: switched from freeimage to stb_image */
 
 
 namespace Gwen
@@ -20,7 +21,6 @@ namespace Gwen
 			m_iVertNum = 0;
 			m_pContext = NULL;
 
-			::FreeImage_Initialise();
 
 			for ( int i=0; i<MaxVerts; i++ )
 			{
@@ -30,7 +30,6 @@ namespace Gwen
 
 		OpenGL::~OpenGL()
 		{
-			::FreeImage_DeInitialise();
 		}
 
 		void OpenGL::Init()
@@ -64,6 +63,10 @@ namespace Gwen
 			glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 
 			glDrawArrays( GL_TRIANGLES, 0, (GLsizei) m_iVertNum );
+
+			glDisableClientState( GL_TEXTURE_COORD_ARRAY ); // @rlyeh: added these to prevent potential visual artifacts
+			glDisableClientState( GL_COLOR_ARRAY );
+			glDisableClientState( GL_VERTEX_ARRAY );
 
 			m_iVertNum = 0;
 			glFlush();
@@ -173,50 +176,26 @@ namespace Gwen
 			AddVert( rect.x, rect.y + rect.h, u1, v2 );			
 		}
 
-		void OpenGL::LoadTexture( Gwen::Texture* pTexture )
+		void OpenGL::LoadTexture( Gwen::Texture* pTexture ) // @rlyeh: using stb_image now
 		{
-			const wchar_t *wFileName = pTexture->name.GetUnicode().c_str();
+			std::string sFileName = Gwen::Utility::UnicodeToString( pTexture->name.GetUnicode() ).c_str();
 
-			FREE_IMAGE_FORMAT imageFormat = FreeImage_GetFileTypeU( wFileName );
+			int width, height, depth;
+			unsigned char *data = stbi_load( sFileName.c_str(), &width, &height, &depth, 4 );
 
-			if ( imageFormat == FIF_UNKNOWN )
-				imageFormat = FreeImage_GetFIFFromFilenameU( wFileName );
-
-			// Image failed to load..
-			if ( imageFormat == FIF_UNKNOWN )
+			if ( !data )
 			{
 				pTexture->failed = true;
 				return;
 			}
-
-			// Try to load the image..
-			FIBITMAP* bits = FreeImage_LoadU( imageFormat, wFileName );
-			if ( !bits )
-			{
-				pTexture->failed = true;
-				return;
-			}
-
-			// Convert to 32bit
-			FIBITMAP * bits32 = FreeImage_ConvertTo32Bits( bits );
-			FreeImage_Unload( bits );
-			if ( !bits32 )
-			{
-				pTexture->failed = true;
-				return;
-			}
-
-			// Flip
-			::FreeImage_FlipVertical( bits32 );
-
 
 			// Create a little texture pointer..
 			GLuint* pglTexture = new GLuint;
 
 			// Sort out our GWEN texture
 			pTexture->data = pglTexture;
-			pTexture->width = FreeImage_GetWidth( bits32 );
-			pTexture->height = FreeImage_GetHeight( bits32 );
+			pTexture->width = width;
+			pTexture->height = height;
 
 			// Create the opengl texture
 			glGenTextures( 1, pglTexture );
@@ -224,16 +203,11 @@ namespace Gwen
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-			#ifdef FREEIMAGE_BIGENDIAN
 			GLenum format = GL_RGBA;
-			#else
-			GLenum format = GL_BGRA;
-			#endif
 
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pTexture->width, pTexture->height, 0, format, GL_UNSIGNED_BYTE, (const GLvoid*)FreeImage_GetBits( bits32 ) );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pTexture->width, pTexture->height, 0, format, GL_UNSIGNED_BYTE, (const GLvoid*)data );
 
-			FreeImage_Unload( bits32 );
-
+			stbi_image_free( data );
 		}
 
 		void OpenGL::FreeTexture( Gwen::Texture* pTexture )
