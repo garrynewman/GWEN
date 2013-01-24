@@ -857,7 +857,7 @@ void Base::RecurseLayout( Skin::Base* skin )
 
 	
 
-	if ( IsTabable() )
+	if ( IsTabable() && !IsDisabled() )
 	{
 		if ( !GetCanvas()->FirstTab ) GetCanvas()->FirstTab = this;
 		if ( !GetCanvas()->NextTab ) GetCanvas()->NextTab = this;
