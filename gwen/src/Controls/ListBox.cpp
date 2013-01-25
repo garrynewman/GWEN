@@ -30,13 +30,18 @@ class ListBoxRow : public Layout::TableRow
 		return m_bSelected;
 	}
 
+	void DoSelect()
+	{
+		SetSelected( true );
+		onRowSelected.Call( this );
+		Redraw();
+	}
+
 	void OnMouseClickLeft( int /*x*/, int /*y*/, bool bDown )
 	{
 		if ( bDown )
 		{
-			SetSelected( true );
-			onRowSelected.Call( this );
-			Redraw();
+			DoSelect();
 		}
 	}
 
@@ -179,4 +184,63 @@ void ListBox::SelectByString( const TextObject& strName, bool bClearOthers )
 		if ( Utility::Strings::Wildcard( strName, pChild->GetText( 0 ) ) )
 			SetSelectedRow( pChild, false );
 	}
+}
+
+bool ListBox::OnKeyDown(bool bDown)
+{
+	if (bDown)
+	{
+		Base::List& children = m_Table->Children;
+		Base::List::const_iterator begin = children.begin();
+		Base::List::const_iterator end = children.end();
+		Controls::Base* sel_row = GetSelectedRow();
+		if (sel_row == NULL && !children.empty()) // no user selection yet, so select first element
+			sel_row = children.front();
+
+		Base::List::const_iterator result = std::find(begin, end, sel_row);
+		if (result != end)
+		{
+			Base::List::const_iterator next = result;
+			++next;
+			if (next != end)
+				result = next;
+
+			ListBoxRow* pRow = gwen_cast<ListBoxRow>(*result);
+			if (pRow) {
+				pRow->DoSelect();
+				Controls::VerticalScrollBar* pScroll = gwen_cast<Controls::VerticalScrollBar>(m_VerticalScrollBar);
+				if (pScroll) pScroll->NudgeDown(this);
+				Redraw();
+			}
+		}
+	}
+	return true;
+}
+
+bool ListBox::OnKeyUp(bool bDown)
+{
+	if (bDown)
+	{
+		Base::List& children = m_Table->Children;
+		Base::List::const_iterator begin = children.begin();
+		Base::List::const_iterator end = children.end();
+		Controls::Base* sel_row = GetSelectedRow();
+		if (sel_row == NULL && !children.empty()) // no user selection yet, so select first element
+			sel_row = children.front();
+
+		Base::List::const_iterator result = std::find(begin, end, sel_row);
+		if (result != end) {
+			if (result != begin)
+				--result;
+
+			ListBoxRow* pRow = gwen_cast<ListBoxRow>(*result);
+			if (pRow) {
+				pRow->DoSelect();
+				Controls::VerticalScrollBar* pScroll = gwen_cast<Controls::VerticalScrollBar>(m_VerticalScrollBar);
+				if (pScroll) pScroll->NudgeUp(this);
+				Redraw();
+			}
+		}
+	}
+	return true;
 }
