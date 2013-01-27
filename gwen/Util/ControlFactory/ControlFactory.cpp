@@ -96,9 +96,8 @@ namespace ControlFactory
 
 	Property* Base::GetProperty( const Gwen::String& name )
 	{
-		ControlFactory::Property::List::const_iterator it = Properties().begin();
-		ControlFactory::Property::List::const_iterator itEnd = Properties().end();
-		for ( it; it != itEnd; ++it )
+		for ( ControlFactory::Property::List::const_iterator it = Properties().begin(), itEnd = Properties().end();
+              it != itEnd; ++it )
 		{
 			if ( (*it)->Name() != name ) continue;
 
@@ -142,9 +141,9 @@ namespace ControlFactory
 
 		while ( pFactory )
 		{
-			ControlFactory::Property::List::const_iterator it = pFactory->Properties().begin();
-			ControlFactory::Property::List::const_iterator itEnd = pFactory->Properties().end();
-			for ( it; it != itEnd; ++it )
+			for ( ControlFactory::Property::List::const_iterator
+                  it = pFactory->Properties().begin(), itEnd = pFactory->Properties().end();
+                  it != itEnd; ++it )
 			{
 				(*it)->SetValue( pControl, (*it)->GetValue( pSource ) );
 			}

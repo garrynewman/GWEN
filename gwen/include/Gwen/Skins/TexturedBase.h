@@ -643,8 +643,6 @@ namespace Gwen
 
 				virtual void DrawWindow( Gwen::Controls::Base* control, int topHeight, bool inFocus )
 				{
-					Gwen::Rect rect = control->GetRenderBounds();
-
 					if ( inFocus ) Textures.Window.Normal.Draw( GetRender(), control->GetRenderBounds() );
 					else Textures.Window.Inactive.Draw( GetRender(), control->GetRenderBounds() );	
 				}
@@ -725,10 +723,12 @@ namespace Gwen
 				virtual void DrawListBoxLine( Gwen::Controls::Base* control, bool bSelected, bool bEven )
 				{
 					if ( bSelected )
+                    {
 						if ( bEven )
 							return Textures.Input.ListBox.EvenLineSelected.Draw( GetRender(), control->GetRenderBounds() );
 						else 
 							return Textures.Input.ListBox.OddLineSelected.Draw( GetRender(), control->GetRenderBounds() );
+                    }
 
 					if ( control->IsHovered() )
 							return Textures.Input.ListBox.Hovered.Draw( GetRender(), control->GetRenderBounds() );
