@@ -260,8 +260,7 @@ void Text::RefreshSizeWrap()
 
 	Gwen::UnicodeString strLine;
 
-	std::vector<Gwen::UnicodeString>::iterator it = words.begin();
-	for ( it; it != words.end(); ++it )
+	for ( std::vector<Gwen::UnicodeString>::iterator it = words.begin(); it != words.end(); ++it )
 	{
 		bool bFinishLine = false;
 		bool bWrapped = false;

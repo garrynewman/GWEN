@@ -53,7 +53,6 @@ namespace Gwen
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-			GLenum format = GL_RGB;
 			unsigned char* texdata = new unsigned char[256*256*4];
 			for (int i=0;i<256*256;i++)
 			{
