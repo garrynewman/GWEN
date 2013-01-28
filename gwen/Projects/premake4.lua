@@ -29,7 +29,7 @@ configuration "Release"
 configuration "Debug"
 	defines { "_DEBUG" }
 	includedirs { "../include/" }
-	targetextension( "d" )
+	targetsuffix( "d" )
 
 project "GWEN-DLL"
 	defines { "GWEN_COMPILE_DLL" }
