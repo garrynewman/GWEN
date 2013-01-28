@@ -63,7 +63,7 @@ bool Gwen::Platform::FolderOpen( const String& Name, const String& StartPath, Gw
 
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String& strWindowTitle )
 {
-	
+    return NULL;
 }
 
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )

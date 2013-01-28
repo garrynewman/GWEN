@@ -13,7 +13,8 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 
-int main()
+
+int main(int argc, char **argv)
 {
 	if ( !al_init() ) return -1;
 
@@ -31,7 +32,6 @@ int main()
 	al_install_mouse();
 	al_install_keyboard();
 
-
 	al_register_event_source( event_queue, al_get_display_event_source(display) );
 	al_register_event_source( event_queue, al_get_mouse_event_source() );
 	al_register_event_source( event_queue, al_get_keyboard_event_source() );
@@ -44,7 +44,7 @@ int main()
 	//
 	// Create a GWEN skin
 	//
-	Gwen::Skin::TexturedBase skin;
+	Gwen::Skin::TexturedBase skin(pRenderer);
 	skin.SetRender( pRenderer );
 	skin.Init( "DefaultSkin.png" );
 
