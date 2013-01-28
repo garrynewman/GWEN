@@ -1,4 +1,3 @@
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -179,7 +178,7 @@ int main()
 	wglMakeCurrent( NULL, NULL );
 	wglDeleteContext( OpenGLContext );
 
-	delete pCanvas;
-	delete pRenderer;
+	if(!pCanvas) delete pCanvas;
+	if(!pRenderer) delete pRenderer;
 
 }
