@@ -239,9 +239,9 @@ void Text::RefreshSizeWrap()
 {
 	RemoveAllChildren();
 
-        for (TextLines::iterator it = m_Lines.begin(); it != m_Lines.end(); ++it) {
-            delete *it;
-        }
+	for (TextLines::iterator it = m_Lines.begin(); it != m_Lines.end(); ++it) {
+		delete *it;
+	}
 	m_Lines.clear();
 
 	std::vector<Gwen::UnicodeString> words;
