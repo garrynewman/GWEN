@@ -6,6 +6,7 @@
 #include "Gwen/Renderers/SFML.h"
 #include <SFML/Graphics.hpp>
 #include <GL/gl.h>
+#include <cmath>
 
 namespace Gwen 
 {
@@ -78,7 +79,7 @@ namespace Gwen
 
             sf::Vertex vert( sf::Vector2f( x, y ), m_Color );
 
-            m_Target.draw( &vert, 1, sf::PrimitiveType::Points );
+            m_Target.draw( &vert, 1, sf::Points );
 #else
             Base::DrawPixel( x, y );
 #endif
