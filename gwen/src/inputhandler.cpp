@@ -102,9 +102,9 @@ void UpdateHoveredControl( Controls::Base* pInCanvas )
 
 }
 
-void FindKeyboardFocus( Controls::Base* pControl )
+bool FindKeyboardFocus( Controls::Base* pControl )
 {
-	if ( !pControl ) return;
+	if ( !pControl ) return false;
 	if ( pControl->GetKeyboardInputEnabled() )
 	{
 		//Make sure none of our children have keyboard focus first - todo recursive
@@ -112,11 +112,11 @@ void FindKeyboardFocus( Controls::Base* pControl )
 		{
 			Controls::Base* pChild = *iter;
 			if ( pChild == Gwen::KeyboardFocus )
-				return;
+				return false;
 		}
 
 		pControl->Focus();
-		return;
+		return true;
 	}
 
 	return FindKeyboardFocus( pControl->GetParent() );
@@ -226,7 +226,10 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 
 	if ( bDown )
 	{
-		FindKeyboardFocus( Gwen::HoveredControl );
+		if (!FindKeyboardFocus( Gwen::HoveredControl ))
+        {
+            Gwen::KeyboardFocus = NULL;
+        }
 	}
 
 	Gwen::HoveredControl->UpdateCursor();
