@@ -410,7 +410,7 @@ void TextBox::MakeCaratVisible()
 	}
 
 	// The ideal position is for the carat to be right in the middle
-	int idealx = -iCaratPos + Width() * 0.5f;;
+	int idealx = -iCaratPos + Width() * 0.5f;
 
 	// Don't show too much whitespace to the right
 	if ( idealx + m_Text->Width() < Width() - GetPadding().right )
@@ -429,6 +429,10 @@ void TextBox::Layout( Skin::Base* skin )
 	BaseClass::Layout( skin );
 
 	RefreshCursorBounds();
+}
+
+void TextBox::PostLayout( Skin::Base* skin )
+{
 }
 
 void TextBox::OnTextChanged()
