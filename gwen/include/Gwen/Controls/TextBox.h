@@ -24,6 +24,7 @@ namespace Gwen
 				virtual void Render( Skin::Base* skin );
 				virtual void RenderFocus( Gwen::Skin::Base* /*skin*/){};
 				virtual void Layout( Skin::Base* skin );
+				virtual void PostLayout( Skin::Base* skin );
 
 				#ifndef GWEN_NO_ANIMATION
 				virtual void UpdateCaretColor();
