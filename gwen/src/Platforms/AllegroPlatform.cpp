@@ -46,7 +46,7 @@ void Gwen::Platform::Sleep( unsigned int iMS )
 
 void Gwen::Platform::SetCursor( unsigned char iCursor )
 {
-    al_set_system_mouse_cursor(g_display, g_CursorConversion[iCursor]);
+	al_set_system_mouse_cursor(g_display, g_CursorConversion[iCursor]);
 }
 
 Gwen::UnicodeString Gwen::Platform::GetClipboardText()
@@ -62,161 +62,161 @@ bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString& str )
 
 float Gwen::Platform::GetTimeInSeconds()
 {
-    return al_get_time();
+	return al_get_time();
 }
 
 bool Gwen::Platform::FileOpen( const String& Name, const String& StartPath,
-                               const String& Extension, Gwen::Event::Handler* pHandler,
-                               Event::Handler::FunctionWithInformation fnCallback )
+							   const String& Extension, Gwen::Event::Handler* pHandler,
+							   Event::Handler::FunctionWithInformation fnCallback )
 {
-    ALLEGRO_FILECHOOSER *chooser = al_create_native_file_dialog(StartPath.c_str(),
-                                                                Name.c_str(),
-                                                                "*.*", // Extension.c_str(),
-                                                                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
+	ALLEGRO_FILECHOOSER *chooser = al_create_native_file_dialog(StartPath.c_str(),
+																Name.c_str(),
+																"*.*", // Extension.c_str(),
+																ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
 
-    if ( al_show_native_file_dialog(g_display, chooser) )
-    {
-        if ( al_get_native_file_dialog_count(chooser) != 0)
-        {
-            if ( pHandler && fnCallback )
-            {
-                Gwen::Event::Information info;
-                info.Control		= NULL;
-                info.ControlCaller	= NULL;
-                info.String			= al_get_native_file_dialog_path(chooser, 0);
-                
-                (pHandler->*fnCallback)( info );
-            }
-        }
-    }
-    
-    al_destroy_native_file_dialog(chooser);
+	if ( al_show_native_file_dialog(g_display, chooser) )
+	{
+		if ( al_get_native_file_dialog_count(chooser) != 0)
+		{
+			if ( pHandler && fnCallback )
+			{
+				Gwen::Event::Information info;
+				info.Control		= NULL;
+				info.ControlCaller	= NULL;
+				info.String			= al_get_native_file_dialog_path(chooser, 0);
+
+				(pHandler->*fnCallback)( info );
+			}
+		}
+	}
+
+	al_destroy_native_file_dialog(chooser);
 
 	return true;
 }
 
 bool Gwen::Platform::FileSave( const String& Name, const String& StartPath,
-                               const String& Extension, Gwen::Event::Handler* pHandler,
-                               Gwen::Event::Handler::FunctionWithInformation fnCallback )
+							   const String& Extension, Gwen::Event::Handler* pHandler,
+							   Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
-    ALLEGRO_FILECHOOSER *chooser = al_create_native_file_dialog(StartPath.c_str(),
-                                                                Name.c_str(),
-                                                                "*.*", // Extension.c_str(),
-                                                                ALLEGRO_FILECHOOSER_SAVE);
-    
-    if ( al_show_native_file_dialog(g_display, chooser) )
-    {
-        if ( al_get_native_file_dialog_count(chooser) != 0)
-        {
-            if ( pHandler && fnCallback )
-            {
-                Gwen::Event::Information info;
-                info.Control		= NULL;
-                info.ControlCaller	= NULL;
-                info.String			= al_get_native_file_dialog_path(chooser, 0);
-                
-                (pHandler->*fnCallback)( info );
-            }
-        }
-    }
-    
-    al_destroy_native_file_dialog(chooser);
-    
+	ALLEGRO_FILECHOOSER *chooser = al_create_native_file_dialog(StartPath.c_str(),
+																Name.c_str(),
+																"*.*", // Extension.c_str(),
+																ALLEGRO_FILECHOOSER_SAVE);
+
+	if ( al_show_native_file_dialog(g_display, chooser) )
+	{
+		if ( al_get_native_file_dialog_count(chooser) != 0)
+		{
+			if ( pHandler && fnCallback )
+			{
+				Gwen::Event::Information info;
+				info.Control		= NULL;
+				info.ControlCaller	= NULL;
+				info.String			= al_get_native_file_dialog_path(chooser, 0);
+
+				(pHandler->*fnCallback)( info );
+			}
+		}
+	}
+
+	al_destroy_native_file_dialog(chooser);
+
 	return true;
 }
 
 bool Gwen::Platform::FolderOpen( const String& Name, const String& StartPath,
-                                 Gwen::Event::Handler* pHandler,
-                                 Event::Handler::FunctionWithInformation fnCallback )
+								 Gwen::Event::Handler* pHandler,
+								 Event::Handler::FunctionWithInformation fnCallback )
 {
-    ALLEGRO_FILECHOOSER *chooser = al_create_native_file_dialog(StartPath.c_str(),
-                                                                Name.c_str(),
-                                                                "*.*", // Extension.c_str(),
-                                                                ALLEGRO_FILECHOOSER_FOLDER);
-    
-    if ( al_show_native_file_dialog(g_display, chooser) )
-    {
-        if ( al_get_native_file_dialog_count(chooser) != 0)
-        {
-            if ( pHandler && fnCallback )
-            {
-                Gwen::Event::Information info;
-                info.Control		= NULL;
-                info.ControlCaller	= NULL;
-                info.String			= al_get_native_file_dialog_path(chooser, 0);
-                
-                (pHandler->*fnCallback)( info );
-            }
-        }
-    }
+	ALLEGRO_FILECHOOSER *chooser = al_create_native_file_dialog(StartPath.c_str(),
+																Name.c_str(),
+																"*.*", // Extension.c_str(),
+																ALLEGRO_FILECHOOSER_FOLDER);
 
-    al_destroy_native_file_dialog(chooser);
+	if ( al_show_native_file_dialog(g_display, chooser) )
+	{
+		if ( al_get_native_file_dialog_count(chooser) != 0)
+		{
+			if ( pHandler && fnCallback )
+			{
+				Gwen::Event::Information info;
+				info.Control		= NULL;
+				info.ControlCaller	= NULL;
+				info.String			= al_get_native_file_dialog_path(chooser, 0);
+
+				(pHandler->*fnCallback)( info );
+			}
+		}
+	}
+
+	al_destroy_native_file_dialog(chooser);
 
 	return true;
 }
 
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String& strWindowTitle )
 {
-    if ( !al_init() ) return NULL;
-    
-    al_set_new_window_position( x, y );
-    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_FRAMELESS);
+	if ( !al_init() ) return NULL;
+
+	al_set_new_window_position( x, y );
+	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_FRAMELESS);
 	ALLEGRO_DISPLAY *display = al_create_display( w, h );
 	if ( !display) return NULL;
-    g_display = display;
-    
+	g_display = display;
+
 	g_event_queue = al_create_event_queue();
 	if ( !g_event_queue ) return NULL;
-    
+
 	al_init_image_addon();
 	al_init_font_addon();
 	al_init_primitives_addon();
 	al_init_ttf_addon();
-    
+
 	al_install_mouse();
 	al_install_keyboard();
-    
+
 	al_register_event_source( g_event_queue, al_get_display_event_source(display) );
 	al_register_event_source( g_event_queue, al_get_mouse_event_source() );
 	al_register_event_source( g_event_queue, al_get_keyboard_event_source() );
-    
-    return display;
+
+	return display;
 }
 
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
-    ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
+	ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
 	al_destroy_display( display );
 	al_destroy_event_queue( g_event_queue );
-    g_event_queue = NULL;
+	g_event_queue = NULL;
 }
 
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget )
 {
-    static bool firstCall = true;
-    if (firstCall)
-    {
-        firstCall = false;
-        g_GwenInput.Initialize( ptarget );
-    }
-    
-    ALLEGRO_EVENT ev;    
-    while ( al_get_next_event( g_event_queue, &ev) )
-    {
-        g_GwenInput.ProcessMessage( ev );
-    }
+	static bool firstCall = true;
+	if (firstCall)
+	{
+		firstCall = false;
+		g_GwenInput.Initialize( ptarget );
+	}
+
+	ALLEGRO_EVENT ev;
+	while ( al_get_next_event( g_event_queue, &ev) )
+	{
+		g_GwenInput.ProcessMessage( ev );
+	}
 }
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
-	
+
 }
 
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point& pNewPos, Gwen::Point& pNewSize )
 {
-    ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
-    al_set_window_position(display, pNewPos.x, pNewPos.y);
-    al_resize_display(display, pNewSize.x, pNewSize.y);
+	ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
+	al_set_window_position(display, pNewPos.x, pNewPos.y);
+	al_resize_display(display, pNewSize.x, pNewSize.y);
 }
 
 void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
@@ -236,7 +236,7 @@ void Gwen::Platform::GetDesktopSize( int& w, int &h )
 
 void Gwen::Platform::GetCursorPos( Gwen::Point &po )
 {
-    
+
 }
 
 #endif // GWEN_ALLEGRO_PLATFORM
