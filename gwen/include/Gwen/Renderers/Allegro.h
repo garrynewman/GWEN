@@ -47,8 +47,8 @@ namespace Gwen
 				void DrawLinedRect( Gwen::Rect rect );
 				void DrawPixel( int x, int y );
 
-                bool BeginContext( Gwen::WindowProvider* pWindow)   { return true; }
-                bool EndContext( Gwen::WindowProvider* pWindow )    { return true; }
+				bool BeginContext( Gwen::WindowProvider* pWindow);
+				bool EndContext( Gwen::WindowProvider* pWindow );
                 bool PresentContext( Gwen::WindowProvider* pWindow );
 
 			protected:

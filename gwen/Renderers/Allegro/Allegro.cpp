@@ -30,13 +30,6 @@ namespace Gwen
 			m_Color = al_map_rgba(color.r, color.g, color.b, color.a);
 		}
 
-		void Allegro::DrawFilledRect( Gwen::Rect rect )
-		{
-			Translate( rect );
-
-			al_draw_filled_rectangle( rect.x,rect.y, rect.x+rect.w, rect.y+rect.h, m_Color );
-		}
-
 		void Allegro::LoadFont( Gwen::Font* font )
 		{
 			font->realsize = font->size * Scale();
@@ -140,9 +133,9 @@ namespace Gwen
 			const unsigned int h = pTexture->height;
 
 			al_draw_scaled_bitmap( bmp,
-				u1*w,v1*h, (u2-u1)*w,(v2-v1)*h,   // source
-				rect.x,rect.y, rect.w,rect.h,     // destination
-				0);
+								   u1*w,v1*h, (u2-u1)*w,(v2-v1)*h,   // source
+								   rect.x,rect.y, rect.w,rect.h,     // destination
+								   0);
 		}
 
 		Gwen::Color Allegro::PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default )
@@ -159,9 +152,24 @@ namespace Gwen
 			return gcol;
 		}
 
+		void Allegro::DrawFilledRect( Gwen::Rect rect )
+		{
+			Translate( rect );
+						
+			rect.x += 0.5f;	// Draw at pixel centre.
+			rect.y += 0.5f;
+			al_draw_filled_rectangle( rect.x,rect.y, rect.x+rect.w, rect.y+rect.h, m_Color );
+		}
+		
 		void Allegro::DrawLinedRect( Gwen::Rect rect )
 		{
-			al_draw_rectangle(rect.x+0.5f,rect.y+0.5f, rect.x+0.5f+rect.w,rect.y+0.5f+rect.h, m_Color, 1.f);
+			Translate( rect );
+			
+			rect.x += 0.5f;	// Draw at pixel centre.
+			rect.y += 0.5f;
+			
+			// Width of 0 draws a line, not a rect of width 1.
+			al_draw_rectangle(rect.x,rect.y, rect.x+rect.w,rect.y+rect.h, m_Color, 0.f);
 		}
 
 		void Allegro::DrawPixel( int x, int y )
@@ -169,11 +177,23 @@ namespace Gwen
 			al_put_pixel(x+0.5f, y+0.5f, m_Color);
 		}
 
-        bool Allegro::PresentContext( Gwen::WindowProvider* pWindow )
-        {
-            al_flip_display();
-            return true;
-        }
+		bool Allegro::BeginContext( Gwen::WindowProvider* pWindow )
+		{
+			al_clear_to_color( al_map_rgba_f(0.f,0.f,0.f,0.f) );
+			return true;
+		}
+		
+		bool Allegro::EndContext( Gwen::WindowProvider* pWindow )
+		{
+			return true;
+		}
+		
+		bool Allegro::PresentContext( Gwen::WindowProvider* pWindow )
+		{
+			al_flip_display();
+			return true;
+		}
 
 	}
 }
+
