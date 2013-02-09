@@ -62,8 +62,7 @@ bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString& str )
 
 float Gwen::Platform::GetTimeInSeconds()
 {
-	float fSeconds = (float) clock() / (float)CLOCKS_PER_SEC;
-	return fSeconds;
+    return al_get_time();
 }
 
 bool Gwen::Platform::FileOpen( const String& Name, const String& StartPath,
@@ -77,15 +76,18 @@ bool Gwen::Platform::FileOpen( const String& Name, const String& StartPath,
 
     if ( al_show_native_file_dialog(g_display, chooser) )
     {
-		if ( pHandler && fnCallback )
-		{
-			Gwen::Event::Information info;
-            info.Control		= NULL;
-            info.ControlCaller	= NULL;
-            info.String			= al_get_native_file_dialog_path(chooser, 0);
-            
-			(pHandler->*fnCallback)( info );
-		}
+        if ( al_get_native_file_dialog_count(chooser) != 0)
+        {
+            if ( pHandler && fnCallback )
+            {
+                Gwen::Event::Information info;
+                info.Control		= NULL;
+                info.ControlCaller	= NULL;
+                info.String			= al_get_native_file_dialog_path(chooser, 0);
+                
+                (pHandler->*fnCallback)( info );
+            }
+        }
     }
     
     al_destroy_native_file_dialog(chooser);
@@ -104,15 +106,18 @@ bool Gwen::Platform::FileSave( const String& Name, const String& StartPath,
     
     if ( al_show_native_file_dialog(g_display, chooser) )
     {
-		if ( pHandler && fnCallback )
-		{
-			Gwen::Event::Information info;
-            info.Control		= NULL;
-            info.ControlCaller	= NULL;
-            info.String			= al_get_native_file_dialog_path(chooser, 0);
-            
-			(pHandler->*fnCallback)( info );
-		}
+        if ( al_get_native_file_dialog_count(chooser) != 0)
+        {
+            if ( pHandler && fnCallback )
+            {
+                Gwen::Event::Information info;
+                info.Control		= NULL;
+                info.ControlCaller	= NULL;
+                info.String			= al_get_native_file_dialog_path(chooser, 0);
+                
+                (pHandler->*fnCallback)( info );
+            }
+        }
     }
     
     al_destroy_native_file_dialog(chooser);
@@ -131,15 +136,18 @@ bool Gwen::Platform::FolderOpen( const String& Name, const String& StartPath,
     
     if ( al_show_native_file_dialog(g_display, chooser) )
     {
-		if ( pHandler && fnCallback )
-		{
-			Gwen::Event::Information info;
-            info.Control		= NULL;
-            info.ControlCaller	= NULL;
-            info.String			= al_get_native_file_dialog_path(chooser, 0);
-            
-			(pHandler->*fnCallback)( info );
-		}
+        if ( al_get_native_file_dialog_count(chooser) != 0)
+        {
+            if ( pHandler && fnCallback )
+            {
+                Gwen::Event::Information info;
+                info.Control		= NULL;
+                info.ControlCaller	= NULL;
+                info.String			= al_get_native_file_dialog_path(chooser, 0);
+                
+                (pHandler->*fnCallback)( info );
+            }
+        }
     }
 
     al_destroy_native_file_dialog(chooser);
