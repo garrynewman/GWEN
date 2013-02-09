@@ -41,7 +41,7 @@ static const ALLEGRO_SYSTEM_MOUSE_CURSOR g_CursorConversion[] =
 
 void Gwen::Platform::Sleep( unsigned int iMS )
 {
-	al_rest(iMS * 0.0001);
+	al_rest(iMS * 0.001);
 }
 
 void Gwen::Platform::SetCursor( unsigned char iCursor )
