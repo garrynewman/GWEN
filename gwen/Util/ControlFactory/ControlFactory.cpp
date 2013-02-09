@@ -1,10 +1,9 @@
 
 #include "Gwen/Util/ControlFactory.h"
 
-namespace Gwen 
-{
-namespace ControlFactory
-{
+namespace Gwen {
+namespace ControlFactory {
+    
 	const Gwen::UnicodeString PropertyBool::True	= L"true";
 	const Gwen::UnicodeString PropertyBool::False	= L"false";
 
@@ -34,13 +33,8 @@ namespace ControlFactory
 		DECLARE_GWEN_CONTROL_FACTORY( ComboBox_Factory );
 
 		DECLARE_GWEN_CONTROL_FACTORY( HorizontalSlider_Factory );
-
 		
-		
-		
-		DECLARE_GWEN_CONTROL_FACTORY( DesignerCanvas_Factory );
-
-		
+		DECLARE_GWEN_CONTROL_FACTORY( DesignerCanvas_Factory );		
 	}
 
 
@@ -125,7 +119,7 @@ namespace ControlFactory
 		pProp->SetValue( ctrl, str );
 	}
 
-	void Base::AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child, Gwen::Point& pos )
+	void Base::AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child, const Gwen::Point& pos )
 	{
 		child->SetParent( ctrl );
 	}
@@ -165,5 +159,5 @@ namespace ControlFactory
 
 		return ctrl->UserData.Get<int>( "ParentPage");
 	}
-}
-}
+    
+} }

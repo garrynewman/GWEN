@@ -123,7 +123,7 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 {
 	Bootil::Data::Tree* me = &tree;
 
-	if ( pRoot->GetTypeName() == "DocumentCanvas" )
+	if ( strcmp(pRoot->GetTypeName(), "DocumentCanvas")==0 )
 	{
 		me = &tree.AddChild( "Controls" );
 	}
@@ -153,9 +153,9 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 
 		while ( pCF )
 		{
-			ControlFactory::Property::List::const_iterator it = pCF->Properties().begin();
-			ControlFactory::Property::List::const_iterator itEnd = pCF->Properties().end();
-			for ( it; it != itEnd; ++it )
+			for ( ControlFactory::Property::List::const_iterator
+                    it = pCF->Properties().begin(), itEnd = pCF->Properties().end();
+                    it != itEnd; ++it )
 			{
 				if ( (*it)->NumCount() > 0 )
 				{

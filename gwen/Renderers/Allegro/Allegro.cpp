@@ -10,9 +10,9 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 
-namespace Gwen 
+namespace Gwen
 {
-	namespace Renderer 
+	namespace Renderer
 	{
 
 		Allegro::Allegro()
@@ -42,7 +42,7 @@ namespace Gwen
 			font->realsize = font->size * Scale();
 
 			std::string fontName = Utility::UnicodeToString( font->facename );
-			if ( fontName.find(".ttf" ) == std::string::npos ) 
+			if ( fontName.find(".ttf" ) == std::string::npos )
 			{
 				fontName += ".ttf";
 			}
@@ -56,7 +56,7 @@ namespace Gwen
 			if ( !pFont->data )
 				return;
 
-			al_destroy_font( (ALLEGRO_FONT*)pFont->data );            
+			al_destroy_font( (ALLEGRO_FONT*)pFont->data );
 			pFont->data = NULL;
 		}
 
@@ -65,7 +65,7 @@ namespace Gwen
 			Translate( pos.x, pos.y );
 
 			ALLEGRO_FONT *afont = (ALLEGRO_FONT*) pFont->data;
-			al_draw_text( afont, m_Color, pos.x,pos.y, ALLEGRO_ALIGN_LEFT, Utility::UnicodeToString( text ).c_str() );            
+			al_draw_text( afont, m_Color, pos.x,pos.y, ALLEGRO_ALIGN_LEFT, Utility::UnicodeToString( text ).c_str() );
 		}
 
 		Gwen::Point Allegro::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text )
@@ -92,15 +92,15 @@ namespace Gwen
 		void Allegro::StartClip()
 		{
 			Gwen::Rect rect = ClipRegion();
-			al_set_clipping_rectangle( rect.x, rect.y, rect.w, rect.h );   
-		};
+			al_set_clipping_rectangle( rect.x, rect.y, rect.w, rect.h );
+		}
 
 
 		void Allegro::EndClip()
 		{
 			ALLEGRO_BITMAP *targ = al_get_target_bitmap();
-			al_set_clipping_rectangle( 0, 0, al_get_bitmap_width(targ), al_get_bitmap_height(targ) ); 
-		};
+			al_set_clipping_rectangle( 0, 0, al_get_bitmap_width(targ), al_get_bitmap_height(targ) );
+		}
 
 		void Allegro::LoadTexture( Gwen::Texture* pTexture )
 		{
@@ -108,19 +108,19 @@ namespace Gwen
 			if ( pTexture->data ) FreeTexture( pTexture );
 
 			ALLEGRO_BITMAP *bmp = al_load_bitmap( pTexture->name.Get().c_str() );
-			if ( bmp ) 
+			if ( bmp )
 			{
 				pTexture->data = bmp;
 				pTexture->width = al_get_bitmap_width( bmp );
 				pTexture->height = al_get_bitmap_height( bmp );
 				pTexture->failed = false;
 			}
-			else 
+			else
 			{
 				pTexture->data = NULL;
 				pTexture->failed = true;
 			}
-		};
+		}
 
 		void Allegro::FreeTexture( Gwen::Texture* pTexture )
 		{
@@ -169,6 +169,11 @@ namespace Gwen
 			al_put_pixel(x+0.5f, y+0.5f, m_Color);
 		}
 
-	
+        bool Allegro::PresentContext( Gwen::WindowProvider* pWindow )
+        {
+            al_flip_display();
+            return true;
+        }
+
 	}
 }
