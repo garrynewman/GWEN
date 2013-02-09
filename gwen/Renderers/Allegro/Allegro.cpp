@@ -169,6 +169,11 @@ namespace Gwen
 			al_put_pixel(x+0.5f, y+0.5f, m_Color);
 		}
 
+        bool Allegro::PresentContext( Gwen::WindowProvider* pWindow )
+        {
+            al_flip_display();
+            return true;
+        }
 
 	}
 }
