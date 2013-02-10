@@ -209,7 +209,12 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
-
+	ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
+	
+	al_set_window_position(display, x, y);
+	
+	if (al_get_display_width(display) != w || al_get_display_height(display) != h)
+		al_resize_display(display, w, h);
 }
 
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point& pNewPos, Gwen::Point& pNewSize )
@@ -230,13 +235,18 @@ bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 
 void Gwen::Platform::GetDesktopSize( int& w, int &h )
 {
-	w = 1024;
-	h = 768;
+	w = 1280;
+	h = 800;
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point &po )
 {
-
+	ALLEGRO_MOUSE_STATE mouse;
+	al_get_mouse_state(&mouse);
+	int wx,wy;
+	al_get_window_position(g_display, &wx, &wy);
+	po.x = mouse.x + wx;
+	po.y = mouse.y + wy;
 }
 
 #endif // GWEN_ALLEGRO_PLATFORM
