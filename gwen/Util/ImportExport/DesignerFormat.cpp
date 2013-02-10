@@ -27,7 +27,7 @@ GWEN_IMPORTEXPORT( DesignerFormat );
 
 DesignerFormat::DesignerFormat()
 {
-	
+
 }
 
 void DesignerFormat::Import( Gwen::Controls::Base* pRoot, const Gwen::String& strFilename )
@@ -101,7 +101,7 @@ void DesignerFormat::ImportFromTree( Gwen::Controls::Base* pRoot, Bootil::Data::
 
 			ImportFromTree( pControl, *c );
 
-			
+
 		}
 	}
 }
@@ -131,7 +131,7 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 	{
 		me = &tree.AddChild();
 	}
-		
+
 	me->SetChild( "Type", pRoot->GetTypeName() );
 
 	//
@@ -174,8 +174,8 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 			pCF = pCF->GetBaseFactory();
 		}
 	}
-	
-	
+
+
 	ControlList list = ImportExport::Tools::GetExportableChildren( pRoot );
 
 	if ( !list.list.empty() )

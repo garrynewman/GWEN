@@ -3,7 +3,7 @@
 
 namespace Gwen {
 namespace ControlFactory {
-    
+
 	const Gwen::UnicodeString PropertyBool::True	= L"true";
 	const Gwen::UnicodeString PropertyBool::False	= L"false";
 
@@ -33,8 +33,8 @@ namespace ControlFactory {
 		DECLARE_GWEN_CONTROL_FACTORY( ComboBox_Factory );
 
 		DECLARE_GWEN_CONTROL_FACTORY( HorizontalSlider_Factory );
-		
-		DECLARE_GWEN_CONTROL_FACTORY( DesignerCanvas_Factory );		
+
+		DECLARE_GWEN_CONTROL_FACTORY( DesignerCanvas_Factory );
 	}
 
 
@@ -46,7 +46,7 @@ namespace ControlFactory {
 		if ( !Initialized )
 		{
 			Initialized = true;
-			InitializeControls();			
+			InitializeControls();
 		}
 
 		return list;
@@ -91,7 +91,7 @@ namespace ControlFactory {
 	Property* Base::GetProperty( const Gwen::String& name )
 	{
 		for ( ControlFactory::Property::List::const_iterator it = Properties().begin(), itEnd = Properties().end();
-              it != itEnd; ++it )
+			  it != itEnd; ++it )
 		{
 			if ( (*it)->Name() != name ) continue;
 
@@ -107,7 +107,7 @@ namespace ControlFactory {
 	void Base::SetControlValue( Gwen::Controls::Base* ctrl, const Gwen::String& name, const Gwen::UnicodeString& str )
 	{
 		Property* pProp = GetProperty( name );
-		
+
 		if ( !pProp )
 		{
 			Base* pBase = GetBaseFactory();
@@ -136,8 +136,8 @@ namespace ControlFactory {
 		while ( pFactory )
 		{
 			for ( ControlFactory::Property::List::const_iterator
-                  it = pFactory->Properties().begin(), itEnd = pFactory->Properties().end();
-                  it != itEnd; ++it )
+				  it = pFactory->Properties().begin(), itEnd = pFactory->Properties().end();
+				  it != itEnd; ++it )
 			{
 				(*it)->SetValue( pControl, (*it)->GetValue( pSource ) );
 			}
@@ -159,5 +159,5 @@ namespace ControlFactory {
 
 		return ctrl->UserData.Get<int>( "ParentPage");
 	}
-    
+
 } }
