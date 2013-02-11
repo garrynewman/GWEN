@@ -400,28 +400,45 @@ void TextBox::OnMouseMoved( int x, int y, int /*deltaX*/, int /*deltaY*/ )
 
 void TextBox::MakeCaratVisible()
 {
-	int iCaratPos = m_Text->GetCharacterPosition( m_iCursorPos ).x;
+    if( m_Text->Width() < Width() )
+    {
+        m_Text->Position( m_iAlign );
+    }else
+    {
+        int iCaratPos = m_Text->GetCharacterPosition( m_iCursorPos ).x;        
+	    int iRealCaratPos = iCaratPos + m_Text->X();
+        int iSlidingZone = m_Text->GetFont()->size+1; //Width()*0.1f
 
-	// If the carat is already in a semi-good position, leave it.
-	{
-		int iRealCaratPos = iCaratPos + m_Text->X();
-		if ( iRealCaratPos > Width() * 0.1f && iRealCaratPos < Width() * 0.9f )
+	    // If the carat is already in a semi-good position, leave it.
+        if ( iRealCaratPos >= iSlidingZone && iRealCaratPos <= Width() - iSlidingZone )
 			return;
-	}
 
-	// The ideal position is for the carat to be right in the middle
-	int idealx = -iCaratPos + Width() * 0.5f;
+        int x = 0;
+        if(iRealCaratPos > Width() - iSlidingZone)
+        {            
+            x = Width() - iCaratPos - iSlidingZone;
+        }
 
-	// Don't show too much whitespace to the right
-	if ( idealx + m_Text->Width() < Width() - GetPadding().right )
-		idealx = -m_Text->Width() + (Width() - GetPadding().right );
+        if(iRealCaratPos < iSlidingZone)
+        {
+            x = -iCaratPos + iSlidingZone;          
+        }     
+        
+	    // Don't show too much whitespace to the right
+	    if ( x + m_Text->Width() < Width() - GetPadding().right )
+            x = -m_Text->Width() + (Width() - GetPadding().right );
 
-	// Or the left
-	if ( idealx > GetPadding().left )
-		idealx = GetPadding().left;
+	    // Or the left
+	    if ( x > GetPadding().left )
+		    x = GetPadding().left;
 
-	m_Text->SetPos( idealx, m_Text->Y() );
+        int y = 0;
+        if ( m_iAlign & Pos::Top ) y = GetPadding().top;
+        if ( m_iAlign & Pos::Bottom ) y = Height() - m_Text->Height() - GetPadding().bottom ;
+	    if ( m_iAlign & Pos::CenterV ) y = ( Height() - m_Text->Height() ) * 0.5;
 
+        m_Text->SetPos( x, y);
+    }
 }
 
 void TextBox::Layout( Skin::Base* skin )
