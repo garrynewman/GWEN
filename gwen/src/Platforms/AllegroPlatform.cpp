@@ -157,13 +157,16 @@ bool Gwen::Platform::FolderOpen( const String& Name, const String& StartPath,
 
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String& strWindowTitle )
 {
-	if ( !al_init() ) return NULL;
+	if ( !al_is_system_installed() && !al_init() )
+		return NULL;
 
 	al_set_new_window_position( x, y );
 	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_FRAMELESS);
 	ALLEGRO_DISPLAY *display = al_create_display( w, h );
 	if ( !display) return NULL;
 	g_display = display;
+	
+	al_set_window_title(display, strWindowTitle.c_str());	// invisible as frameless?
 
 	g_event_queue = al_create_event_queue();
 	if ( !g_event_queue ) return NULL;
@@ -209,14 +212,46 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
-
+	ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
+	
+	al_set_window_position(display, x, y);
+	
+	if (al_get_display_width(display) != w || al_get_display_height(display) != h)
+		al_resize_display(display, w, h);
 }
 
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point& pNewPos, Gwen::Point& pNewSize )
 {
 	ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
-	al_set_window_position(display, pNewPos.x, pNewPos.y);
-	al_resize_display(display, pNewSize.x, pNewSize.y);
+	
+	if ( bMax )
+	{
+		// Go full screen allowing for any other screen real estate.
+		ALLEGRO_MONITOR_INFO info;
+		al_get_monitor_info(0, &info);
+		int w = info.x2 - info.x1, h = info.y2 - info.y1;
+#if defined(ALLEGRO_MACOSX)
+		const int c_titleBarHeight = 20;
+		al_resize_display(display, w, h-c_titleBarHeight);
+		al_set_window_position(display, 0,c_titleBarHeight);
+#else
+		al_resize_display(display, w, h);
+		al_set_window_position(display, 0,0);
+#endif
+	}
+	else
+	{
+		// Restore to a reasonable size.
+		ALLEGRO_MONITOR_INFO info;
+		al_get_monitor_info(0, &info);
+		int w = info.x2 - info.x1, h = info.y2 - info.y1;
+		al_resize_display(display, w/2, h/2);
+		al_set_window_position(display, w/4, h/4);
+	}
+
+	al_get_window_position(display, &pNewPos.x, &pNewPos.y);
+	pNewSize.x = al_get_display_width(display);
+	pNewSize.y = al_get_display_height(display);
 }
 
 void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
@@ -230,13 +265,23 @@ bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 
 void Gwen::Platform::GetDesktopSize( int& w, int &h )
 {
-	w = 1024;
-	h = 768;
+	if ( !al_is_system_installed() )
+		al_init();
+
+	ALLEGRO_MONITOR_INFO info;
+	al_get_monitor_info(0, &info);
+	w = info.x2 - info.x1;
+	h = info.y2 - info.y1;
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point &po )
 {
-
+	ALLEGRO_MOUSE_STATE mouse;
+	al_get_mouse_state(&mouse);
+	int wx,wy;
+	al_get_window_position(g_display, &wx, &wy);
+	po.x = mouse.x + wx;
+	po.y = mouse.y + wy;
 }
 
 #endif // GWEN_ALLEGRO_PLATFORM
