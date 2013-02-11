@@ -35,7 +35,7 @@ GWEN_CONTROL_CONSTRUCTOR( ScrollControl )
 	m_InnerPanel->SetPos(0, 0);
 	m_InnerPanel->SetMargin( Margin(5,5,5,5));
 	m_InnerPanel->SendToBack();
-	m_InnerPanel->SetMouseInputEnabled( false );
+	m_InnerPanel->SetMouseInputEnabled( true );
 
 	m_bAutoHideBars = true;
 }
