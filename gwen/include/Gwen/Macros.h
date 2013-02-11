@@ -7,10 +7,6 @@
 #include <memory.h>
 #include <algorithm>
 
-// Not tied to platform api.
-#define GwenUtil_Min( a, b ) ( ( (a) < (b) ) ? (a) : (b) )
-#define GwenUtil_Max( a, b ) ( ( (a) > (b) ) ? (a) : (b) )
-
 #ifdef _WIN32
 
 	#ifndef NOMINMAX
@@ -46,7 +42,19 @@
 namespace Gwen
 {
 	template <typename T>
-	T Clamp( T current, T vmin, T vmax )
+	inline T Min( T a, T b )
+	{
+		return a < b ? a : b;
+	}
+
+	template <typename T>
+	inline T Max( T a, T b )
+	{
+		return a > b ? a : b;
+	}
+	
+	template <typename T>
+	inline T Clamp( T current, T vmin, T vmax )
 	{
 		if ( current >= vmax ) return vmax;
 		if ( current <= vmin ) return vmin;

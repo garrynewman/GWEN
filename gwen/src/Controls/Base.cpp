@@ -1008,8 +1008,8 @@ Gwen::Point Base::ChildrenSize()
 		if ( pChild->Hidden() ) continue;
 		if ( !pChild->ShouldIncludeInSize() ) continue;
 
-		size.x = GwenUtil_Max( size.x, pChild->Right() );
-		size.y = GwenUtil_Max( size.y, pChild->Bottom() );
+		size.x = Gwen::Max( size.x, pChild->Right() );
+		size.y = Gwen::Max( size.y, pChild->Bottom() );
 	}
 
 	return size;
