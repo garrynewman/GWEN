@@ -88,7 +88,8 @@ namespace Gwen
 						case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
 						case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
 							{
-								return m_Canvas->InputMouseButton( event.mouse.button-1, event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN );
+								return m_Canvas->InputMouseButton( event.mouse.button-1,
+                                                                   event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN );
 							}
 
 						case ALLEGRO_EVENT_KEY_CHAR:
@@ -101,7 +102,10 @@ namespace Gwen
 							{
 								bool bPressed = (event.type == ALLEGRO_EVENT_KEY_DOWN);
 
-								if ( event.keyboard.keycode && bPressed && event.keyboard.keycode >= 'a' && event.keyboard.keycode <= 'z' )
+								if ( event.keyboard.keycode
+                                     && bPressed
+                                     && event.keyboard.keycode >= 'a'
+                                     && event.keyboard.keycode <= 'z' )
 								{
 									return m_Canvas->InputCharacter( event.keyboard.keycode );
 								}

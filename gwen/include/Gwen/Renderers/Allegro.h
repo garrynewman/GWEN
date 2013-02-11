@@ -37,13 +37,19 @@ namespace Gwen
 				void StartClip();
 				void EndClip();
 			
-				void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1=0.0f, float v1=0.0f, float u2=1.0f, float v2=1.0f );
+				void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect,
+                                       float u1=0.0f, float v1=0.0f, float u2=1.0f, float v2=1.0f );
 				void LoadTexture( Gwen::Texture* pTexture );
 				void FreeTexture( Gwen::Texture* pTexture );
-				Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default );
+				Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y,
+                                         const Gwen::Color& col_default );
 
 				void DrawLinedRect( Gwen::Rect rect );
 				void DrawPixel( int x, int y );
+
+				bool BeginContext( Gwen::WindowProvider* pWindow);
+				bool EndContext( Gwen::WindowProvider* pWindow );
+                bool PresentContext( Gwen::WindowProvider* pWindow );
 
 			protected:
 

@@ -2,10 +2,13 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-using namespace Gwen;
+namespace Gwen {
+namespace ControlFactory {
 
-class VerticalSplitter_Factory : public Gwen::ControlFactory::Base
-{
+	using namespace Gwen;
+
+	class VerticalSplitter_Factory : public Gwen::ControlFactory::Base
+	{
 	public:
 
 		GWEN_CONTROL_FACTORY_CONSTRUCTOR( VerticalSplitter_Factory, Gwen::ControlFactory::Base )
@@ -38,7 +41,10 @@ class VerticalSplitter_Factory : public Gwen::ControlFactory::Base
 		{
 			child->SetParent( ctrl );
 		}
-};
+	};
 
 
-GWEN_CONTROL_FACTORY( VerticalSplitter_Factory );
+	GWEN_CONTROL_FACTORY( VerticalSplitter_Factory );
+
+} }
+

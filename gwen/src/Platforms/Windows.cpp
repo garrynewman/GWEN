@@ -74,7 +74,7 @@ Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 	}
 	
 	wchar_t* buffer = (wchar_t *)GlobalLock( hData );
-		UnicodeString str = buffer;
+	UnicodeString str = buffer;
 	GlobalUnlock( hData );
 	CloseClipboard();
 	return str;
