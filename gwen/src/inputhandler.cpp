@@ -228,7 +228,8 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 	{
 		if (!FindKeyboardFocus( Gwen::HoveredControl ))
         {
-            Gwen::KeyboardFocus = NULL;
+			if (Gwen::KeyboardFocus)
+				Gwen::KeyboardFocus->Blur();
         }
 	}
 
