@@ -45,11 +45,11 @@
 
 namespace Gwen
 {
-	template <typename T1, typename T2, typename T3 >
-	T1 Clamp( T1 current, T2 vmin, T3 vmax )
+	template <typename T>
+	T Clamp( T current, T vmin, T vmax )
 	{
-		if ( current > vmax ) return (T1)vmax;
-		if ( current < vmin ) return (T1)vmin;
+		if ( current >= vmax ) return vmax;
+		if ( current <= vmin ) return vmin;
 		return current;
 	}
 
