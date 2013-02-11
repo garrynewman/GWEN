@@ -165,6 +165,8 @@ void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gw
 	ALLEGRO_DISPLAY *display = al_create_display( w, h );
 	if ( !display) return NULL;
 	g_display = display;
+	
+	al_set_window_title(display, strWindowTitle.c_str());	// invisible as frameless?
 
 	g_event_queue = al_create_event_queue();
 	if ( !g_event_queue ) return NULL;
@@ -221,8 +223,35 @@ void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, i
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point& pNewPos, Gwen::Point& pNewSize )
 {
 	ALLEGRO_DISPLAY *display = (ALLEGRO_DISPLAY*)pPtr;
-	al_set_window_position(display, pNewPos.x, pNewPos.y);
-	al_resize_display(display, pNewSize.x, pNewSize.y);
+	
+	if ( bMax )
+	{
+		// Go full screen allowing for any other screen real estate.
+		ALLEGRO_MONITOR_INFO info;
+		al_get_monitor_info(0, &info);
+		int w = info.x2 - info.x1, h = info.y2 - info.y1;
+#if defined(ALLEGRO_MACOSX)
+		const int c_titleBarHeight = 20;
+		al_resize_display(display, w, h-c_titleBarHeight);
+		al_set_window_position(display, 0,c_titleBarHeight);
+#else
+		al_resize_display(display, w, h);
+		al_set_window_position(display, 0,0);
+#endif
+	}
+	else
+	{
+		// Restore to a reasonable size.
+		ALLEGRO_MONITOR_INFO info;
+		al_get_monitor_info(0, &info);
+		int w = info.x2 - info.x1, h = info.y2 - info.y1;
+		al_resize_display(display, w/2, h/2);
+		al_set_window_position(display, w/4, h/4);
+	}
+
+	al_get_window_position(display, &pNewPos.x, &pNewPos.y);
+	pNewSize.x = al_get_display_width(display);
+	pNewSize.y = al_get_display_height(display);
 }
 
 void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
