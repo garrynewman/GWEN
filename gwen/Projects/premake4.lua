@@ -70,9 +70,13 @@ DefineRenderer( "Allegro",
 if ( os.get() == "windows" ) then
 	DefineRenderer( "DirectX9",
                     { "../Renderers/DirectX9/DirectX9.cpp" } )
+	includedirs { "$(DXSDK_DIR)/Include" }
+	libdirs { "$(DXSDK_DIR)/lib/x86" }
 
 	DefineRenderer( "Direct2D",
                     { "../Renderers/Direct2D/Direct2D.cpp" } )
+	includedirs { "$(DXSDK_DIR)/Include" }
+	libdirs { "$(DXSDK_DIR)/lib/x86" }
 
 	DefineRenderer( "GDI",
                     { "../Renderers/GDIPlus/GDIPlus.cpp",
@@ -103,10 +107,14 @@ if ( os.get() == "windows" ) then
                   { "../Samples/Direct2D/Direct2DSample.cpp" },
                   { "UnitTest", "Renderer-Direct2D", "GWEN-Static", "d2d1",
                     "dwrite", "windowscodecs" } )
+	includedirs { "$(DXSDK_DIR)/Include" }
+	libdirs { "$(DXSDK_DIR)/lib/x86" }
 
 	DefineSample( "DirectX9",
                   { "../Samples/Direct3D/Direct3DSample.cpp" },
                   { "UnitTest", "Renderer-DirectX9", "GWEN-Static" } )
+	includedirs { "$(DXSDK_DIR)/Include" }
+	libdirs { "$(DXSDK_DIR)/lib/x86" }
 
 	DefineSample( "WindowsGDI",
                   { "../Samples/WindowsGDI/WindowsGDI.cpp" },
