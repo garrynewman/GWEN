@@ -2,42 +2,45 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-using namespace Gwen;
+namespace Gwen {
+namespace ControlFactory {
 
-namespace Property 
-{
-	class CycleSpeed: public ControlFactory::Property 
+	using namespace Gwen;
+
+	namespace Properties
 	{
-		GWEN_CONTROL_FACTORY_PROPERTY( CycleSpeed, "" );
-
-		UnicodeString GetValue( Controls::Base* ctrl )
+		class CycleSpeed: public ControlFactory::Property
 		{
-			return Utility::Format( L"%f", (float)gwen_cast<Controls::ProgressBar>(ctrl)->GetCycleSpeed() );
-		}
+			GWEN_CONTROL_FACTORY_PROPERTY( CycleSpeed, "" );
 
-		void SetValue( Controls::Base* ctrl, const UnicodeString& str )
-		{
-			float num;
-			if ( swscanf( str.c_str(), L"%f", &num ) != 1 ) return;
+			UnicodeString GetValue( Controls::Base* ctrl )
+			{
+				return Utility::Format( L"%f", (float)gwen_cast<Controls::ProgressBar>(ctrl)->GetCycleSpeed() );
+			}
 
-			gwen_cast<Controls::ProgressBar>(ctrl)->SetCycleSpeed( num );
-		}
+			void SetValue( Controls::Base* ctrl, const UnicodeString& str )
+			{
+				float num;
+				if ( swscanf( str.c_str(), L"%f", &num ) != 1 ) return;
 
-	};
+				gwen_cast<Controls::ProgressBar>(ctrl)->SetCycleSpeed( num );
+			}
 
-}
+		};
 
-class ProgressBar_Factory : public Gwen::ControlFactory::Base
-{
+	}
+
+	class ProgressBar_Factory : public Gwen::ControlFactory::Base
+	{
 	public:
 
 		GWEN_CONTROL_FACTORY_CONSTRUCTOR( ProgressBar_Factory, Gwen::ControlFactory::Base )
 		{
-			AddProperty( new Property::CycleSpeed() );
+			AddProperty( new Properties::CycleSpeed() );
 		}
 
-		virtual Gwen::String Name(){ return "ProgressBar"; }
-		virtual Gwen::String BaseName(){ return "Base"; }
+		virtual Gwen::String Name()     { return "ProgressBar"; }
+		virtual Gwen::String BaseName() { return "Base"; }
 
 		virtual Gwen::Controls::Base* CreateInstance( Gwen::Controls::Base* parent )
 		{
@@ -45,7 +48,9 @@ class ProgressBar_Factory : public Gwen::ControlFactory::Base
 			pControl->SetSize( 200, 20 );
 			return pControl;
 		}
-};
+	};
 
 
-GWEN_CONTROL_FACTORY( ProgressBar_Factory );
+	GWEN_CONTROL_FACTORY( ProgressBar_Factory );
+
+} }

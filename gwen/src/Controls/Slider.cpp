@@ -71,7 +71,7 @@ void Slider::SetValueInternal( float val )
 {
 	if ( m_bClampToNotches )
 	{
-		val = floor( (val * (float)m_iNumNotches) + 0.5f );
+		val = floorf( (val * (float)m_iNumNotches) + 0.5f );
 		val /= (float) m_iNumNotches;
 	}
 

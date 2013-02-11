@@ -75,10 +75,12 @@ namespace Gwen
 				const Property::List& Properties(){ return m_Properties; }
 
 				// Called when the control is drag and dropped onto the parent, even when just moving in the designer
-				virtual void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child, Gwen::Point& pos );
+				virtual void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child,
+                                       const Gwen::Point& pos );
 
 				// Called when creating the control - param might be empty
-				virtual void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child, int iPage = 0 );
+				virtual void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child,
+                                       int iPage = 0 );
 
 				// Called when a child is clicked on in an editor
 				virtual bool ChildTouched( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* pChildControl ){ return false; };
@@ -99,22 +101,25 @@ namespace Gwen
 	}
 
 }
+
 #define GWEN_CONTROL_FACTORY_CONSTRUCTOR( ThisName, BaseName )\
 	typedef BaseName BaseClass;\
 	typedef ThisName ThisClass;\
 	ThisName() : BaseClass()
 
 #define GWEN_CONTROL_FACTORY( ThisName ) \
-void GWENCONTROLFACTORY##ThisName()\
-{\
-	new ThisName();\
-};
+    void GWENCONTROLFACTORY##ThisName()\
+    {\
+        new ThisName();\
+    }
 
 #define DECLARE_GWEN_CONTROL_FACTORY( ThisName )\
-void GWENCONTROLFACTORY##ThisName();\
-GWENCONTROLFACTORY##ThisName();
+    extern void GWENCONTROLFACTORY##ThisName();\
+    GWENCONTROLFACTORY##ThisName();
 
 #define GWEN_CONTROL_FACTORY_PROPERTY( _name_, _description_ )\
 	public:\
 	Gwen::String Name() { return #_name_; }\
 	Gwen::String Description() { return _description_; }
+
+
