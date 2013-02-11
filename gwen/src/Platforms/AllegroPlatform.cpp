@@ -157,7 +157,8 @@ bool Gwen::Platform::FolderOpen( const String& Name, const String& StartPath,
 
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String& strWindowTitle )
 {
-	if ( !al_init() ) return NULL;
+	if ( !al_is_system_installed() && !al_init() )
+		return NULL;
 
 	al_set_new_window_position( x, y );
 	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_FRAMELESS);
@@ -235,8 +236,13 @@ bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 
 void Gwen::Platform::GetDesktopSize( int& w, int &h )
 {
-	w = 1280;
-	h = 800;
+	if ( !al_is_system_installed() )
+		al_init();
+
+	ALLEGRO_MONITOR_INFO info;
+	al_get_monitor_info(0, &info);
+	w = info.x2 - info.x1;
+	h = info.y2 - info.y1;
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point &po )
