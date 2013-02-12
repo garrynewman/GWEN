@@ -400,45 +400,45 @@ void TextBox::OnMouseMoved( int x, int y, int /*deltaX*/, int /*deltaY*/ )
 
 void TextBox::MakeCaratVisible()
 {
-    if( m_Text->Width() < Width() )
-    {
-        m_Text->Position( m_iAlign );
-    }else
-    {
-        int iCaratPos = m_Text->GetCharacterPosition( m_iCursorPos ).x;        
-	    int iRealCaratPos = iCaratPos + m_Text->X();
-        int iSlidingZone = m_Text->GetFont()->size+1; //Width()*0.1f
+	if( m_Text->Width() < Width() )
+	{
+		m_Text->Position( m_iAlign );
+	}else
+	{
+		int iCaratPos = m_Text->GetCharacterPosition( m_iCursorPos ).x;
+		int iRealCaratPos = iCaratPos + m_Text->X();
+		int iSlidingZone = m_Text->GetFont()->size+1; //Width()*0.1f
 
-	    // If the carat is already in a semi-good position, leave it.
-        if ( iRealCaratPos >= iSlidingZone && iRealCaratPos <= Width() - iSlidingZone )
+		// If the carat is already in a semi-good position, leave it.
+		if ( iRealCaratPos >= iSlidingZone && iRealCaratPos <= Width() - iSlidingZone )
 			return;
 
-        int x = 0;
-        if(iRealCaratPos > Width() - iSlidingZone)
-        {            
-            x = Width() - iCaratPos - iSlidingZone;
-        }
+		int x = 0;
+		if(iRealCaratPos > Width() - iSlidingZone)
+		{            
+			x = Width() - iCaratPos - iSlidingZone;
+		}
 
-        if(iRealCaratPos < iSlidingZone)
-        {
-            x = -iCaratPos + iSlidingZone;          
-        }     
-        
-	    // Don't show too much whitespace to the right
-	    if ( x + m_Text->Width() < Width() - GetPadding().right )
-            x = -m_Text->Width() + (Width() - GetPadding().right );
+		if(iRealCaratPos < iSlidingZone)
+		{
+			x = -iCaratPos + iSlidingZone;          
+		}     
+		
+		// Don't show too much whitespace to the right
+		if ( x + m_Text->Width() < Width() - GetPadding().right )
+			x = -m_Text->Width() + (Width() - GetPadding().right );
 
-	    // Or the left
-	    if ( x > GetPadding().left )
-		    x = GetPadding().left;
+		// Or the left
+		if ( x > GetPadding().left )
+			x = GetPadding().left;
 
-        int y = 0;
-        if ( m_iAlign & Pos::Top ) y = GetPadding().top;
-        if ( m_iAlign & Pos::Bottom ) y = Height() - m_Text->Height() - GetPadding().bottom ;
-	    if ( m_iAlign & Pos::CenterV ) y = ( Height() - m_Text->Height() ) * 0.5;
+		int y = 0;
+		if ( m_iAlign & Pos::Top ) y = GetPadding().top;
+		if ( m_iAlign & Pos::Bottom ) y = Height() - m_Text->Height() - GetPadding().bottom ;
+		if ( m_iAlign & Pos::CenterV ) y = ( Height() - m_Text->Height() ) * 0.5;
 
-        m_Text->SetPos( x, y);
-    }
+		m_Text->SetPos( x, y);
+	}
 }
 
 void TextBox::Layout( Skin::Base* skin )
@@ -496,9 +496,133 @@ bool TextBoxMultiline::OnKeyReturn( bool bDown )
 	return true;
 }
 
+
+void TextBoxMultiline::Render( Skin::Base* skin )
+{
+	if ( ShouldDrawBackground() )
+		skin->DrawTextBox( this );
+	
+	if ( !HasFocus() ) return;
+	
+	if ( m_iCursorPos != m_iCursorEnd )
+	{
+		int iCursorStartLine = m_Text->GetLineFromChar( m_iCursorPos );
+		int iCursorEndLine = m_Text->GetLineFromChar( m_iCursorEnd );
+
+		if ( iCursorStartLine > m_Text->NumLines()-1 ) iCursorStartLine =  m_Text->NumLines()-1;
+		if ( iCursorEndLine > m_Text->NumLines()-1 ) iCursorEndLine =  m_Text->NumLines()-1;
+
+		int iSelectionStartLine = (m_iCursorPos < m_iCursorEnd) ? iCursorStartLine : iCursorEndLine;
+		int iSelectionEndLine =   (m_iCursorPos < m_iCursorEnd) ? iCursorEndLine : iCursorStartLine;
+
+		int iSelectionStartPos =  (m_iCursorPos < m_iCursorEnd) ? m_iCursorPos : m_iCursorEnd;
+		int iSelectionEndPos =    (m_iCursorPos < m_iCursorEnd) ? m_iCursorEnd : m_iCursorPos;
+
+		int iFirstChar = 0;
+		int iLastChar = 0;
+		skin->GetRender()->SetDrawColor( Gwen::Color( 50, 170, 255, 200 ) );
+		m_rectSelectionBounds.h = m_Text->GetFont()->size + 2;
+		
+		for(int iLine = iSelectionStartLine; iLine <= iSelectionEndLine; ++iLine)
+		{
+			ControlsInternal::Text* line = m_Text->GetLine(iLine);
+			Gwen::Rect box = m_Text->GetLineBox(iLine);
+			box.x+=m_Text->X();
+			box.y+=m_Text->Y();
+
+			if (iLine == iSelectionStartLine)
+			{
+				Gwen::Rect pos = GetCharacterPosition( iSelectionStartPos );
+				m_rectSelectionBounds.x = pos.x;
+				m_rectSelectionBounds.y = pos.y - 1;
+			}else
+			{   
+				m_rectSelectionBounds.x = box.x;
+				m_rectSelectionBounds.y = box.y -1;
+			}
+
+			if (iLine == iSelectionEndLine)
+			{
+				Gwen::Rect pos = GetCharacterPosition( iSelectionEndPos );
+				m_rectSelectionBounds.w = pos.x - m_rectSelectionBounds.x;
+			}else
+			{   
+				m_rectSelectionBounds.w = box.x + box.w - m_rectSelectionBounds.x;             
+			}
+			if(m_rectSelectionBounds.w < 1)
+				m_rectSelectionBounds.w=1;
+			skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );           
+		} 
+	}
+
+
+	
+	// Draw selection.. if selected..
+	if ( m_iCursorPos != m_iCursorEnd )
+	{
+		//skin->GetRender()->SetDrawColor( Gwen::Color( 50, 170, 255, 200 ) );
+	//	skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );	   
+	}
+	
+	// Draw caret
+	skin->GetRender()->SetDrawColor( m_CaretColor );
+	skin->GetRender()->DrawFilledRect( m_rectCaretBounds );	
+}
+
+
 void TextBoxMultiline::MakeCaratVisible()
 {
-	// TODO. scroll vertically
+	if( m_Text->Height() < Height() )
+	{
+		m_Text->Position( m_iAlign );
+	}else
+	{   
+		//const Rect& bounds = GetInnerBounds();	    
+
+		//if ( pos & Pos::Top ) y = bounds.y + ypadding;
+		//if ( pos & Pos::Bottom ) y = bounds.y + ( bounds.h - Height() - ypadding );
+		//if ( pos & Pos::CenterV ) y = bounds.y + ( bounds.h - Height() )  * 0.5;
+		
+		Rect pos = m_Text->GetCharacterPosition( m_iCursorPos );
+		int iCaratPos = pos.y;// + pos.h;
+		int iRealCaratPos = iCaratPos + m_Text->Y();
+		//int iSlidingZone =  m_Text->GetFont()->size; //Width()*0.1f
+
+		// If the carat is already in a semi-good position, leave it.
+		int mi = GetPadding().top;
+		int ma = Height() - pos.h - GetPadding().bottom;
+		if ( iRealCaratPos >= GetPadding().top && iRealCaratPos <= Height() - pos.h - GetPadding().bottom )
+			return;
+
+		int y = 0;
+		// bottom of carat too low
+		if(iRealCaratPos > Height() - pos.h - GetPadding().bottom )
+		{
+			//align bottom
+			y = Height() - iCaratPos - pos.h - GetPadding().bottom;
+		}
+
+		// top of carat too low
+		if(iRealCaratPos < GetPadding().top)
+		{
+			y = -iCaratPos + GetPadding().top;          
+		}     
+		
+		// Don't show too much whitespace to the bottom
+		if ( y + m_Text->Height() < Height() - GetPadding().bottom )
+			y = -m_Text->Height() + (Height() - GetPadding().bottom );
+
+		// Or the top
+		if ( y > GetPadding().top )
+			y = GetPadding().top;
+
+		int x = 0;
+		if ( m_iAlign & Pos::Left ) x = GetPadding().left;
+		if ( m_iAlign & Pos::Right ) x = Width() - m_Text->Width() - GetPadding().right ;
+		if ( m_iAlign & Pos::CenterH ) x = ( Width() - m_Text->Width() ) * 0.5;        
+
+		m_Text->SetPos( x, y);
+	}
 }
 
 int TextBoxMultiline::GetCurrentLine()
@@ -533,7 +657,14 @@ bool TextBoxMultiline::OnKeyEnd( bool bDown )
 	int iChar = m_Text->GetEndCharFromLine( iCurrentLine );
 
 	m_iCursorLine = 0;
-	m_iCursorPos = iChar-1; // NAUGHTY
+	m_iCursorPos = iChar;
+	
+	int iLastLine = m_Text->NumLines()-1;
+	
+	if(iCurrentLine < iLastLine && iChar > 0)
+		m_iCursorPos = iChar-1; // NAUGHTY
+	else
+		m_iCursorPos = m_Text->Length();
 
 	if ( !Gwen::Input::IsShiftDown() )
 	{
@@ -548,13 +679,14 @@ bool TextBoxMultiline::OnKeyUp( bool bDown )
 {
 	if ( !bDown ) return true;
 
-	if ( m_iCursorLine == 0 ) m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos );
+	//if ( m_iCursorLine == 0 ) 
+	m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos );
 
 	int iLine = m_Text->GetLineFromChar( m_iCursorPos );
 	if ( iLine == 0 ) return true;
 
 	m_iCursorPos = m_Text->GetStartCharFromLine( iLine - 1 );
-	m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine - 1)->Length() );
+	m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine - 1)->Length()-1 );
 	m_iCursorPos = Clamp( m_iCursorPos, 0, m_Text->Length() );
 
 	if ( !Gwen::Input::IsShiftDown() )
@@ -570,13 +702,21 @@ bool TextBoxMultiline::OnKeyDown( bool bDown )
 {
 	if ( !bDown ) return true;
 
-	if ( m_iCursorLine == 0 ) m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos );
+	//if ( m_iCursorLine == 0 ) 
+	m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos );
 
 	int iLine = m_Text->GetLineFromChar( m_iCursorPos );
-	if ( iLine >= m_Text->NumLines()-1 ) return true;
+	int iLastLine = m_Text->NumLines()-1;
+	if ( iLine >= iLastLine || iLastLine<1) return true;
 
 	m_iCursorPos = m_Text->GetStartCharFromLine( iLine + 1 );
-	m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine + 1)->Length() );
+	if(iLine+1 >=iLastLine)
+	{
+		m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine + 1)->Length() );
+	}else
+	{
+		m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine + 1)->Length()-1 );
+	}
 	m_iCursorPos = Clamp( m_iCursorPos, 0, m_Text->Length() );
 
 	if ( !Gwen::Input::IsShiftDown() )

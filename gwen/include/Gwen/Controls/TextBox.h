@@ -117,6 +117,7 @@ namespace Gwen
 				GWEN_CONTROL( TextBoxMultiline, TextBox );
 
 				virtual bool OnKeyReturn( bool bDown );
+				virtual void Render( Skin::Base* skin );
 				virtual void MakeCaratVisible();
 
 				virtual bool OnKeyHome( bool bDown );
