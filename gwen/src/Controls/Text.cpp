@@ -199,25 +199,19 @@ int Text::GetClosestCharacter( Gwen::Point p )
 		TextLines::iterator it = m_Lines.begin();
 		TextLines::iterator itEnd = m_Lines.end();
 		int iChars = 0;
-
+        Text* pLine;
 		while ( it != itEnd )
 		{
-			Text* pLine = *it;
+			pLine = *it;
 			++it;
 
 			iChars += pLine->Length();
 
-			if ( p.y < pLine->Y() ) continue;
-			if ( p.y > pLine->Bottom() ) continue;
-
-			iChars -= pLine->Length();
-
-			int iLinePos = pLine->GetClosestCharacter( Gwen::Point( p.x - pLine->X(), p.y - pLine->Y() ) );
-			//if ( iLinePos > 0 && iLinePos == pLine->Length() ) iLinePos--;
-			iLinePos--;
-
-			return iChars + iLinePos;
+			if ( p.y < pLine->Bottom()) break;
 		}
+        iChars -= pLine->Length();
+        int iLinePos = pLine->GetClosestCharacter( Gwen::Point( p.x - pLine->X(), p.y - pLine->Y() ) );
+		return iChars + iLinePos;
 	}
 
 
@@ -281,7 +275,7 @@ void Text::SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeStr
 	Gwen::UnicodeString str;
 
     int w = GetParent()->Width() - GetParent()->GetPadding().left-GetParent()->GetPadding().right;
-	for ( int i=0; i<s.length(); i++ )
+	for ( int i=0; i<(int)s.length(); i++ )
 	{
 		if ( s[i] == L'\n' )
 		{

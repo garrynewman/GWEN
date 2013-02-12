@@ -547,14 +547,10 @@ void TextBoxMultiline::Render( Skin::Base* skin )
 	            m_rectSelectionBounds.w = pos.x - m_rectSelectionBounds.x;
             }else
             {   
-                m_rectSelectionBounds.w = box.x + box.w - m_rectSelectionBounds.x;
-                /*
-                if (iLine == iSelectionStartLine)
-                {
-                    m_rectSelectionBounds.w -= m_rectSelectionBounds.x;
-                }*/
+                m_rectSelectionBounds.w = box.x + box.w - m_rectSelectionBounds.x;             
             }
-            
+            if(m_rectSelectionBounds.w < 1)
+                m_rectSelectionBounds.w=1;
             skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );           
         } 
     }
