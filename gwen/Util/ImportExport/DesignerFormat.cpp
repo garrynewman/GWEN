@@ -27,7 +27,7 @@ GWEN_IMPORTEXPORT( DesignerFormat );
 
 DesignerFormat::DesignerFormat()
 {
-	
+
 }
 
 void DesignerFormat::Import( Gwen::Controls::Base* pRoot, const Gwen::String& strFilename )
@@ -101,7 +101,7 @@ void DesignerFormat::ImportFromTree( Gwen::Controls::Base* pRoot, Bootil::Data::
 
 			ImportFromTree( pControl, *c );
 
-			
+
 		}
 	}
 }
@@ -123,7 +123,7 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 {
 	Bootil::Data::Tree* me = &tree;
 
-	if ( pRoot->GetTypeName() == "DocumentCanvas" )
+	if ( strcmp(pRoot->GetTypeName(), "DocumentCanvas")==0 )
 	{
 		me = &tree.AddChild( "Controls" );
 	}
@@ -131,7 +131,7 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 	{
 		me = &tree.AddChild();
 	}
-		
+
 	me->SetChild( "Type", pRoot->GetTypeName() );
 
 	//
@@ -153,9 +153,9 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 
 		while ( pCF )
 		{
-			ControlFactory::Property::List::const_iterator it = pCF->Properties().begin();
-			ControlFactory::Property::List::const_iterator itEnd = pCF->Properties().end();
-			for ( it; it != itEnd; ++it )
+			for ( ControlFactory::Property::List::const_iterator
+                    it = pCF->Properties().begin(), itEnd = pCF->Properties().end();
+                    it != itEnd; ++it )
 			{
 				if ( (*it)->NumCount() > 0 )
 				{
@@ -174,8 +174,8 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 			pCF = pCF->GetBaseFactory();
 		}
 	}
-	
-	
+
+
 	ControlList list = ImportExport::Tools::GetExportableChildren( pRoot );
 
 	if ( !list.list.empty() )

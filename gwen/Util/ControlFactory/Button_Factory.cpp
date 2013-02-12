@@ -2,13 +2,15 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-class Button_Factory : public Gwen::ControlFactory::Base
-{
+namespace Gwen {
+namespace ControlFactory {
+
+	class Button_Factory : public Gwen::ControlFactory::Base
+	{
 	public:
 
 		GWEN_CONTROL_FACTORY_CONSTRUCTOR( Button_Factory, Gwen::ControlFactory::Base )
 		{
-
 		}
 
 		virtual Gwen::String Name(){ return "Button"; }
@@ -21,7 +23,9 @@ class Button_Factory : public Gwen::ControlFactory::Base
 			pControl->SetText( "New Button" );
 			return pControl;
 		}
-};
+	};
 
 
-GWEN_CONTROL_FACTORY( Button_Factory );
+	GWEN_CONTROL_FACTORY( Button_Factory );
+
+} }

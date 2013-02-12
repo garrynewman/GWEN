@@ -2,61 +2,66 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-using namespace Gwen;
 
-namespace Property 
-{
-	class Min: public ControlFactory::Property 
+namespace Gwen {
+namespace ControlFactory {
+
+	using namespace Gwen;
+
+	namespace Properties
 	{
-		GWEN_CONTROL_FACTORY_PROPERTY( Min, "The minimum value" );
 
-		UnicodeString GetValue( Controls::Base* ctrl )
+		class Min: public ControlFactory::Property
 		{
-			return Gwen::Utility::Format( L"%f", (int) gwen_cast<Controls::Slider>(ctrl)->GetMin() );
-		}
+			GWEN_CONTROL_FACTORY_PROPERTY( Min, "The minimum value" );
 
-		void SetValue( Controls::Base* ctrl, const UnicodeString& str )
+			UnicodeString GetValue( Controls::Base* ctrl )
+			{
+				return Gwen::Utility::Format( L"%f", (int) gwen_cast<Controls::Slider>(ctrl)->GetMin() );
+			}
+
+			void SetValue( Controls::Base* ctrl, const UnicodeString& str )
+			{
+				float val;
+				if ( swscanf( str.c_str(), L"%f", &val ) != 1 ) return;
+
+				if ( val == gwen_cast<Controls::Slider>(ctrl)->GetMin() ) return;
+
+				gwen_cast<Controls::Slider>(ctrl)->SetRange( val, gwen_cast<Controls::Slider>(ctrl)->GetMax() );
+			}
+
+		};
+
+		class Max: public ControlFactory::Property
 		{
-			float val;
-			if ( swscanf( str.c_str(), L"%f", &val ) != 1 ) return;
+			GWEN_CONTROL_FACTORY_PROPERTY( Max, "The max value" );
 
-			if ( val == gwen_cast<Controls::Slider>(ctrl)->GetMin() ) return;
+			UnicodeString GetValue( Controls::Base* ctrl )
+			{
+				return Gwen::Utility::Format( L"%f", (int) gwen_cast<Controls::Slider>(ctrl)->GetMax() );
+			}
 
-			gwen_cast<Controls::Slider>(ctrl)->SetRange( val, gwen_cast<Controls::Slider>(ctrl)->GetMax() );
-		}
+			void SetValue( Controls::Base* ctrl, const UnicodeString& str )
+			{
+				float val;
+				if ( swscanf( str.c_str(), L"%f", &val ) != 1 ) return;
 
-	};
+				if ( val == gwen_cast<Controls::Slider>(ctrl)->GetMax() ) return;
 
-	class Max: public ControlFactory::Property 
+				gwen_cast<Controls::Slider>(ctrl)->SetRange( gwen_cast<Controls::Slider>(ctrl)->GetMin(), val );
+			}
+
+		};
+	}
+
+	class HorizontalSlider_Factory : public Gwen::ControlFactory::Base
 	{
-		GWEN_CONTROL_FACTORY_PROPERTY( Max, "The max value" );
-
-		UnicodeString GetValue( Controls::Base* ctrl )
-		{
-			return Gwen::Utility::Format( L"%f", (int) gwen_cast<Controls::Slider>(ctrl)->GetMax() );
-		}
-
-		void SetValue( Controls::Base* ctrl, const UnicodeString& str )
-		{
-			float val;
-			if ( swscanf( str.c_str(), L"%f", &val ) != 1 ) return;
-
-			if ( val == gwen_cast<Controls::Slider>(ctrl)->GetMax() ) return;
-
-			gwen_cast<Controls::Slider>(ctrl)->SetRange( gwen_cast<Controls::Slider>(ctrl)->GetMin(), val );
-		}
-
-	};
-}
-
-class HorizontalSlider_Factory : public Gwen::ControlFactory::Base
-{
 	public:
 
 		GWEN_CONTROL_FACTORY_CONSTRUCTOR( HorizontalSlider_Factory, Gwen::ControlFactory::Base )
 		{
-				AddProperty( new Property::Min() );
-				AddProperty( new Property::Max() );
+			AddProperty( new Properties::Min() );
+			AddProperty( new Properties::Max() );
 		}
 
 		virtual Gwen::String Name(){ return "HorizontalSlider"; }
@@ -69,7 +74,9 @@ class HorizontalSlider_Factory : public Gwen::ControlFactory::Base
 			pControl->SetRange( 0, 1 );
 			return pControl;
 		}
-};
+	};
 
 
-GWEN_CONTROL_FACTORY( HorizontalSlider_Factory );
+	GWEN_CONTROL_FACTORY( HorizontalSlider_Factory );
+
+} }

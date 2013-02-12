@@ -103,7 +103,7 @@ int DockBase::GetDroppedTabDirection( int x, int y )
 	float right = (float)(w - x) /(float) w;
 	float bottom = (float)(h - y) / (float) h;
 
-	float minimum = GwenUtil_Min( GwenUtil_Min( GwenUtil_Min( top, left ), right ), bottom );
+	float minimum = Gwen::Min( Gwen::Min( Gwen::Min( top, left ), right ), bottom );
 	m_bDropFar = ( minimum < 0.2f );
 	if ( minimum > 0.3 ) return Pos::Fill;
 

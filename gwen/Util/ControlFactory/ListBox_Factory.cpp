@@ -2,8 +2,11 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-class ListBox_Factory : public Gwen::ControlFactory::Base
-{
+namespace Gwen {
+namespace ControlFactory {
+
+	class ListBox_Factory : public Gwen::ControlFactory::Base
+	{
 	public:
 
 		GWEN_CONTROL_FACTORY_CONSTRUCTOR( ListBox_Factory, Gwen::ControlFactory::Base )
@@ -11,8 +14,8 @@ class ListBox_Factory : public Gwen::ControlFactory::Base
 
 		}
 
-		virtual Gwen::String Name(){ return "ListBox"; }
-		virtual Gwen::String BaseName(){ return "Base"; }
+		virtual Gwen::String Name()     { return "ListBox"; }
+		virtual Gwen::String BaseName() { return "Base"; }
 
 		virtual Gwen::Controls::Base* CreateInstance( Gwen::Controls::Base* parent )
 		{
@@ -20,7 +23,9 @@ class ListBox_Factory : public Gwen::ControlFactory::Base
 			pControl->SetSize( 100, 100 );
 			return pControl;
 		}
-};
+	};
 
 
-GWEN_CONTROL_FACTORY( ListBox_Factory );
+	GWEN_CONTROL_FACTORY( ListBox_Factory );
+
+} }

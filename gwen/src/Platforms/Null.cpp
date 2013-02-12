@@ -7,7 +7,7 @@
 #include "Gwen/Macros.h"
 #include "Gwen/Platform.h"
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(GWEN_ALLEGRO_PLATFORM)
 
 #include <time.h>
 
