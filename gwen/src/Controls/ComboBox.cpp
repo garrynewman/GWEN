@@ -127,7 +127,7 @@ void ComboBox::ClearItems()
 	}
 }
 
-void ComboBox::SelectItem( MenuItem* pItem )
+void ComboBox::SelectItem( MenuItem* pItem, bool bFireChangeEvents )
 {
 	if ( m_SelectedItem == pItem ) return;
 
@@ -135,6 +135,12 @@ void ComboBox::SelectItem( MenuItem* pItem )
 	SetText( m_SelectedItem->GetText() );
 	m_Menu->SetHidden( true );
 	Invalidate();
+    
+    if (bFireChangeEvents)
+    {
+        onSelection.Call(this);
+        Focus();
+    }
 }
 
 void ComboBox::OnItemSelected( Controls::Base* pControl )
@@ -144,9 +150,6 @@ void ComboBox::OnItemSelected( Controls::Base* pControl )
 	if ( !pItem ) return;
 
 	SelectItem( pItem );
-
-	onSelection.Call( this );
-	Focus();
 }
 
 void ComboBox::SelectItemByName( const Gwen::String& name, bool bFireChangeEvents )
@@ -160,10 +163,7 @@ void ComboBox::SelectItemByName( const Gwen::String& name, bool bFireChangeEvent
 
 		if ( pChild->GetName() == name )
 		{
-			if ( bFireChangeEvents )
-				return OnItemSelected( pChild );
-
-			return SelectItem( pChild );
+			return SelectItem( pChild, bFireChangeEvents );
 		}
 
 		++it;

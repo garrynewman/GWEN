@@ -110,7 +110,7 @@ float HorizontalScrollBar::CalculateScrolledAmount()
 
 bool HorizontalScrollBar::SetScrolledAmount( float amount, bool forceUpdate )
 {
-	amount = Gwen::Clamp( amount, 0, 1 );
+	amount = Gwen::Clamp( amount, 0.f, 1.f );
 
 	if  ( !BaseClass::SetScrolledAmount( amount, forceUpdate ) )
 		return false;

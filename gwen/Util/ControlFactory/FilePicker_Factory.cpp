@@ -2,39 +2,44 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-using namespace Gwen;
+namespace Gwen {
+namespace ControlFactory {
 
-namespace Property 
-{
-	class FileType: public ControlFactory::Property 
+	using namespace Gwen;
+
+	namespace Properties
 	{
-		GWEN_CONTROL_FACTORY_PROPERTY( FileType, "In the format \"PNG file | *.png\"" );
+		using namespace Gwen;
 
-		UnicodeString GetValue( Controls::Base* ctrl )
+		class FileType: public ControlFactory::Property
 		{
-			return Utility::StringToUnicode( gwen_cast<Controls::FilePicker>(ctrl)->GetFileType() );
-		}
+			GWEN_CONTROL_FACTORY_PROPERTY( FileType, "In the format \"PNG file | *.png\"" );
 
-		void SetValue( Controls::Base* ctrl, const UnicodeString& str )
-		{
-			gwen_cast<Controls::FilePicker>(ctrl)->SetFileType( Utility::UnicodeToString( str ) );
-		}
+			UnicodeString GetValue( Controls::Base* ctrl )
+			{
+				return Utility::StringToUnicode( gwen_cast<Controls::FilePicker>(ctrl)->GetFileType() );
+			}
 
-	};
+			void SetValue( Controls::Base* ctrl, const UnicodeString& str )
+			{
+				gwen_cast<Controls::FilePicker>(ctrl)->SetFileType( Utility::UnicodeToString( str ) );
+			}
 
-}
+		};
 
-class FilePicker_Factory : public Gwen::ControlFactory::Base
-{
+	}
+
+	class FilePicker_Factory : public Gwen::ControlFactory::Base
+	{
 	public:
 
 		GWEN_CONTROL_FACTORY_CONSTRUCTOR( FilePicker_Factory, ControlFactory::Base )
 		{
-			AddProperty( new Property::FileType() );		
+			AddProperty( new Properties::FileType() );
 		}
 
-		virtual Gwen::String Name(){ return "FilePicker"; }
-		virtual Gwen::String BaseName(){ return "Base"; }
+		virtual Gwen::String Name()     { return "FilePicker"; }
+		virtual Gwen::String BaseName() { return "Base"; }
 
 		virtual Gwen::Controls::Base* CreateInstance( Gwen::Controls::Base* parent )
 		{
@@ -43,6 +48,8 @@ class FilePicker_Factory : public Gwen::ControlFactory::Base
 			pControl->SetFileType( "EXE file | *.exe"  );
 			return pControl;
 		}
-};
+	};
 
-GWEN_CONTROL_FACTORY( FilePicker_Factory );
+	GWEN_CONTROL_FACTORY( FilePicker_Factory );
+
+} }

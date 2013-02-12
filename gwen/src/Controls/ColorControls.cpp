@@ -88,8 +88,8 @@ Color HSVToColor( float h, float s, float v )
 HSV RGBtoHSV( int r, int g, int b )
 {
 	double min,max,delta,temp;
-	min = GwenUtil_Min(r,GwenUtil_Min(g,b));
-	max = GwenUtil_Max(r,GwenUtil_Max(g,b));
+	min = Gwen::Min(r,Gwen::Min(g,b));
+	max = Gwen::Max(r,Gwen::Max(g,b));
 	delta = max - min;
 
 	HSV hsv;

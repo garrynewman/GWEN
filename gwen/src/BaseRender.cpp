@@ -89,16 +89,16 @@ namespace Gwen
 			x += m_RenderOffset.x;
 			y += m_RenderOffset.y;
 
-			x = ceil( ((float) x ) * m_fScale );
-			y = ceil( ((float) y ) * m_fScale );
+			x = ceilf( ((float) x ) * m_fScale );
+			y = ceilf( ((float) y ) * m_fScale );
 		}
 
 		void Base::Translate( Gwen::Rect& rect )
 		{
 			Translate( rect.x, rect.y );
 
-			rect.w = ceil(((float) rect.w ) * m_fScale);
-			rect.h = ceil(((float) rect.h ) * m_fScale);
+			rect.w = ceilf(((float) rect.w ) * m_fScale);
+			rect.h = ceilf(((float) rect.h ) * m_fScale);
 		}
 
 		void Gwen::Renderer::Base::SetClipRegion( Gwen::Rect rect )
