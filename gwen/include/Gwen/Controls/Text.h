@@ -37,10 +37,10 @@ namespace Gwen
 
 				Gwen::Rect GetCharacterPosition( int iChar );
 				int GetClosestCharacter( Gwen::Point p );
-                
-                /// return the encapsulating box of the given line
-                // @remark this function is necessary to implement multiline selection
-                virtual Gwen::Rect GetLineBox( int i );
+				
+				/// return the encapsulating box of the given line
+				// @remark this function is necessary to implement multiline selection
+				virtual Gwen::Rect GetLineBox( int i );
 
 				int Length() const { return (int)m_String.GetUnicode().size(); }
 
@@ -54,26 +54,24 @@ namespace Gwen
 				virtual void TextChanged(){ m_bTextChanged = true; }
 				virtual bool Wrap(){ return m_bWrap; }
 				virtual void SetWrap( bool b ){ if ( m_bWrap == b ) return; m_bWrap = b; m_bTextChanged = true; Invalidate(); }
-                
-                /// return a line by it's index
+				
+				/// return a line by it's index
 				virtual Text* GetLine( int i );
-                /// return the line index of the line containing the character in the global string
+				/// return the line index of the line containing the character in the global string
 				virtual int GetLineFromChar( int i );
-                /// return the global character id of the first character of the line
+				/// return the global character id of the first character of the line
 				virtual int GetStartCharFromLine( int i );
-                /// return the global character id of the last character of the line
-                /// @remark in a multiline context the last character is the first character of the next line !
+				/// return the global character id of the last character of the line
+				/// @remark in a multiline context the last character is the first character of the next line !
 				virtual int GetEndCharFromLine( int i );
-                /// return the relative character index of a global character index inside the line
+				/// return the relative character index of a global character index inside the line
 				virtual int GetCharPosOnLine( int i );
 
-                
-
 				virtual int NumLines();
-            protected:
-                virtual void SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeString> &elems);
+			protected:
+				virtual void SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeString> &elems);
 			private:
-                
+				
 				virtual void RefreshSizeWrap();
 
 				Gwen::TextObject	m_String;
