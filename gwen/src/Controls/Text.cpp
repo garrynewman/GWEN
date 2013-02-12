@@ -85,6 +85,56 @@ void Text::Render( Skin::Base* skin )
 	skin->GetRender()->RenderText( GetFont(), Gwen::Point( GetPadding().left, GetPadding().top ), m_String.GetUnicode() );
 }
 
+/*
+Gwen::Rect Text::GetCharacterPosition( int iChar )
+{
+	if ( !m_Lines.empty() )
+	{
+		TextLines::iterator it = m_Lines.begin();
+		TextLines::iterator itEnd = m_Lines.end();
+        int iLineBegin = 0;
+        int iLineEnd = 0;
+        //search the line containing the character, taking word wrapping and endline into account
+        Text* pLine;
+        for(;it!=itEnd; ++it)
+        {
+            pLine = *it;
+            iLineBegin = iLineEnd;
+            iLineEnd += pLine->Length();
+            if(iChar >= iLineBegin)
+            {
+                //if wrapped line
+                if(m_String.GetUnicode().at(iLineEnd-1) != L'\n')
+                {
+                    if( iChar <= iLineEnd)
+                        break;
+                }else
+                {
+                    if( iChar < iLineEnd)
+                        break;            
+                }
+            }
+        }
+
+        Gwen::Rect rect = pLine->GetCharacterPosition( iChar - iLineBegin );
+		rect.x += pLine->X();
+		rect.y += pLine->Y();
+		return rect;       
+	}
+
+	if ( Length() == 0 || iChar == 0 )
+	{
+		Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
+		return Gwen::Rect( 0, 0, 0, p.y );
+	}
+
+	UnicodeString sub = m_String.GetUnicode().substr( 0, iChar );
+	Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), sub );
+	
+	return Rect( p.x, 0, 0, p.y );
+}
+*/
+
 Gwen::Rect Text::GetCharacterPosition( int iChar )
 {
 	if ( !m_Lines.empty() )
@@ -92,10 +142,10 @@ Gwen::Rect Text::GetCharacterPosition( int iChar )
 		TextLines::iterator it = m_Lines.begin(); 
 		TextLines::iterator itEnd = m_Lines.end();
 		int iChars = 0;
-
+        Text* pLine;
 		while ( it != itEnd )
 		{
-			Text* pLine = *it;
+			pLine = *it;
 			++it;
 			iChars += pLine->Length();
 
@@ -109,18 +159,37 @@ Gwen::Rect Text::GetCharacterPosition( int iChar )
 
 			return rect;
 		}
+        //manage special case of the last character
+        Gwen::Rect rect = pLine->GetCharacterPosition( pLine->Length() );
+		rect.x += pLine->X();
+		rect.y += pLine->Y();
+		return rect;
 	}
 
 	if ( Length() == 0 || iChar == 0 )
 	{
 		Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
-		return Gwen::Rect( 1, 0, 0, p.y );
+		return Gwen::Rect( 0, 0, 0, p.y );
 	}
 
 	UnicodeString sub = m_String.GetUnicode().substr( 0, iChar );
 	Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), sub );
 	
 	return Rect( p.x, 0, 0, p.y );
+}
+
+Gwen::Rect Text::GetLineBox( int i )
+{
+    Text* line = GetLine(i);
+    if(line!=NULL)
+    {
+        Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), line->m_String.GetUnicode());
+		return Gwen::Rect(line->X(), line->Y(), Clamp(p.x, 1,p.x), Clamp(p.y, 1,p.y) );
+    }else
+    {
+        Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), m_String.GetUnicode());
+		return Gwen::Rect(0, 0, Clamp(p.x, 1,p.x), Clamp(p.y, 1,p.y) );
+    }
 }
 
 int Text::GetClosestCharacter( Gwen::Point p )
@@ -207,10 +276,11 @@ void Text::RefreshSize()
 	Invalidate();
 }
 
-void SplitWords(const Gwen::UnicodeString &s, wchar_t delim, std::vector<Gwen::UnicodeString> &elems) 
+void Text::SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeString> &elems) 
 {
 	Gwen::UnicodeString str;
 
+    int w = GetParent()->Width() - GetParent()->GetPadding().left-GetParent()->GetPadding().right;
 	for ( int i=0; i<s.length(); i++ )
 	{
 		if ( s[i] == L'\n' )
@@ -229,7 +299,20 @@ void SplitWords(const Gwen::UnicodeString &s, wchar_t delim, std::vector<Gwen::U
 			continue;
 		}
 
-		str += s[i];
+        str += s[i];
+
+        //if adding character makes the word bigger than the textbox size
+        Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), str );
+        if ( p.x > w ) 
+        {
+            int addSum = GetPadding().left+GetPadding().right;
+            //split words
+            str.pop_back();
+            elems.push_back( str );
+			str.clear();
+            --i;
+            continue;
+        }
 	}
 
 	if ( !str.empty() ) elems.push_back( str );
@@ -245,7 +328,7 @@ void Text::RefreshSizeWrap()
 	m_Lines.clear();
 
 	std::vector<Gwen::UnicodeString> words;
-	SplitWords( GetText().GetUnicode(), L' ', words );
+	SplitWords( GetText().GetUnicode(), words );
 
 	// Adding a bullshit word to the end simplifies the code below
 	// which is anything but simple.
@@ -259,7 +342,7 @@ void Text::RefreshSizeWrap()
 
 	Point pFontSize = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
 
-	int w = GetParent()->Width();
+	int w = GetParent()->Width() - GetParent()->GetPadding().left-GetParent()->GetPadding().right;
 	int x = 0, y = 0;
 
 	Gwen::UnicodeString strLine;
@@ -270,13 +353,17 @@ void Text::RefreshSizeWrap()
 		bool bWrapped = false;
 
 		// If this word is a newline - make a newline (we still add it to the text)
-		if ( (*it).c_str()[0] == L'\n' ) bFinishLine = true;
+		if ( (*it).c_str()[0] == L'\n' ) 
+        {
+            bFinishLine = true;
+        }
 
 		// Does adding this word drive us over the width?
 		{
 			strLine += (*it);
 			Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), strLine );
-			if ( p.x > Width() ) { bFinishLine = true; bWrapped = true; }
+            if ( p.x > w ) { bFinishLine = true; bWrapped = true; }
+
 		}
 
 		// If this is the last word then finish the line
@@ -289,13 +376,23 @@ void Text::RefreshSizeWrap()
 		{
 			Text* t = new Text( this );
 				t->SetFont( GetFont() );
-				t->SetString( strLine.substr( 0, strLine.length() - (*it).length() ) );
+                if(bWrapped)
+                {
+				    t->SetString( strLine.substr( 0, strLine.length() - (*it).length() ) );
+                    // newline should start with the word that was too big
+                    strLine = *it;
+                }else
+                {
+                    t->SetString( strLine.substr( 0, strLine.length()) );
+                    //new line is empty
+                    strLine.clear();
+                }
 				t->RefreshSize();
 				t->SetPos( x, y );
 			m_Lines.push_back( t );
 
-			// newline should start with the word that was too big
-			strLine = *it;
+			
+			//strLine = *it;
 
 			// Position the newline
 			y += pFontSize.y;
@@ -353,7 +450,7 @@ int Text::GetLineFromChar( int i )
 		if ( iChars > i ) return iLine;
 		iLine++;
 	}
-
+    if(iLine>0) return iLine-1;
 	return iLine;
 }
 
