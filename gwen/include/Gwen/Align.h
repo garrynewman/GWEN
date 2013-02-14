@@ -9,7 +9,7 @@
 #define GWEN_ALIGN_H
 #include "Gwen/Controls/Base.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Align
 	{

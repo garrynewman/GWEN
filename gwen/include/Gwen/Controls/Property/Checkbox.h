@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Property/BaseProperty.h"
 #include "Gwen/Controls/CheckBox.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -29,7 +29,6 @@ namespace Gwen
 						m_Checkbox->SetTabable( true );
 						m_Checkbox->SetKeyboardInputEnabled( true );
 						m_Checkbox->SetPos( 2, 1 );
-
 						SetHeight( 18 );
 					}
 
@@ -38,10 +37,10 @@ namespace Gwen
 						return m_Checkbox->IsChecked() ? L"1" : L"0";
 					}
 
-					virtual void SetPropertyValue( const TextObject& v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
 					{
 						if ( v == L"1" || v == L"true" || v == L"TRUE" || v == L"yes" || v == L"YES" )
-							return m_Checkbox->SetChecked( true );
+						{ return m_Checkbox->SetChecked( true ); }
 
 						return m_Checkbox->SetChecked( false );
 					}

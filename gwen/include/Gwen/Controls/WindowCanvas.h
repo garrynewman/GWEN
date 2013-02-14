@@ -15,7 +15,7 @@
 #include "Gwen/Controls/Label.h"
 #include "Gwen/Controls/WindowButtons.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -25,12 +25,12 @@ namespace Gwen
 
 				GWEN_CLASS( WindowCanvas, Controls::Canvas );
 
-				WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pRenderer, const Gwen::String& strWindowTitle = "" );
+				WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pRenderer, const Gwen::String & strWindowTitle = "" );
 				~WindowCanvas();
 
 				virtual void DoThink();
-				
-				virtual bool WantsQuit(){ return m_bQuit; }
+
+				virtual bool WantsQuit() { return m_bQuit; }
 
 				// Gwen::WindowProvider
 				virtual void* GetWindow();
@@ -46,12 +46,12 @@ namespace Gwen
 
 				virtual void Layout( Skin::Base* skin );
 
-				virtual bool CanMaximize(){ return m_bCanMaximize; }
+				virtual bool CanMaximize() { return m_bCanMaximize; }
 				virtual void SetCanMaximize( bool b );
 				virtual void SetMaximize( bool b );
 
-				virtual void SetSizable( bool b ){ m_Sizer->SetHidden( !b ); }
-				virtual bool GetSizable(){ return m_Sizer->Visible(); }
+				virtual void SetSizable( bool b ) { m_Sizer->SetHidden( !b ); }
+				virtual bool GetSizable() { return m_Sizer->Visible(); }
 
 			protected:
 

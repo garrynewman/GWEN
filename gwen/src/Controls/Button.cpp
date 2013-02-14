@@ -19,7 +19,6 @@ GWEN_CONTROL_CONSTRUCTOR( Button )
 	m_Image = NULL;
 	m_bDepressed = false;
 	m_bCenterImage = false;
-
 	SetSize( 100, 20 );
 	SetMouseInputEnabled( true );
 	SetIsToggle( false );
@@ -32,19 +31,19 @@ GWEN_CONTROL_CONSTRUCTOR( Button )
 
 void Button::Render( Skin::Base* skin )
 {
-	if ( !ShouldDrawBackground() ) return;
-	
+	if ( !ShouldDrawBackground() ) { return; }
+
 	bool bDrawDepressed = IsDepressed() && IsHovered();
-	if ( IsToggle() ) bDrawDepressed = bDrawDepressed || GetToggleState();
+
+	if ( IsToggle() ) { bDrawDepressed = bDrawDepressed || GetToggleState(); }
 
 	bool bDrawHovered = IsHovered() && ShouldDrawHover();
-
 	skin->DrawButton( this, bDrawDepressed, bDrawHovered, IsDisabled() );
 }
 
 void Button::OnMouseClickLeft( int /*x*/, int /*y*/, bool bDown )
 {
-	if ( IsDisabled() ) return;
+	if ( IsDisabled() ) { return; }
 
 	if ( bDown )
 	{
@@ -67,7 +66,7 @@ void Button::OnMouseClickLeft( int /*x*/, int /*y*/, bool bDown )
 
 void Button::OnMouseClickRight( int /*x*/, int /*y*/, bool bDown )
 {
-	if ( IsDisabled() ) return;
+	if ( IsDisabled() ) { return; }
 
 	if ( bDown )
 	{
@@ -91,7 +90,7 @@ void Button::OnMouseClickRight( int /*x*/, int /*y*/, bool bDown )
 
 void Button::SetDepressed( bool b )
 {
-	if ( m_bDepressed == b ) return;
+	if ( m_bDepressed == b ) { return; }
 
 	m_bDepressed = b;
 	Redraw();
@@ -113,7 +112,7 @@ void Button::OnPress()
 }
 
 
-void Button::SetImage( const TextObject& strName, bool bCenter )
+void Button::SetImage( const TextObject & strName, bool bCenter )
 {
 	if ( strName.GetUnicode() == L"" )
 	{
@@ -135,19 +134,17 @@ void Button::SetImage( const TextObject& strName, bool bCenter )
 	m_Image->SizeToContents();
 	m_Image->SetMargin( Margin( 2, 0, 2, 0 ) );
 	m_bCenterImage = bCenter;
-
 	// Ugh.
 	Padding padding = GetTextPadding();
 	padding.left = m_Image->Right() + 2;
 	SetTextPadding( padding );
 }
 
-void Button::SetToggleState( bool b ) 
-{ 
-	if ( m_bToggleStatus == b ) return;
+void Button::SetToggleState( bool b )
+{
+	if ( m_bToggleStatus == b ) { return; }
 
 	m_bToggleStatus = b;
-
 	onToggle.Call( this );
 
 	if ( m_bToggleStatus )
@@ -169,6 +166,7 @@ void Button::SizeToContents()
 	if ( m_Image )
 	{
 		int height = m_Image->Height() + 4;
+
 		if ( Height() < height )
 		{
 			SetHeight( height );
@@ -193,42 +191,44 @@ void Button::AcceleratePressed()
 
 void Button::UpdateColours()
 {
-	if ( IsDisabled() )		return SetTextColor( GetSkin()->Colors.Button.Disabled );
-	if ( IsDepressed() || GetToggleState() )	return SetTextColor( GetSkin()->Colors.Button.Down );
-	if ( IsHovered() )		return SetTextColor( GetSkin()->Colors.Button.Hover );
-	
+	if ( IsDisabled() )		{ return SetTextColor( GetSkin()->Colors.Button.Disabled ); }
+
+	if ( IsDepressed() || GetToggleState() )	{ return SetTextColor( GetSkin()->Colors.Button.Down ); }
+
+	if ( IsHovered() )		{ return SetTextColor( GetSkin()->Colors.Button.Hover ); }
+
 	SetTextColor( GetSkin()->Colors.Button.Normal );
 }
 
 void Button::PostLayout( Skin::Base* pSkin )
 {
-	BaseClass::PostLayout( pSkin );	
+	BaseClass::PostLayout( pSkin );
 
-	if ( m_Image )	
-	{		
+	if ( m_Image )
+	{
 		if ( m_bCenterImage )
-			m_Image->Position( Pos::Center );
+		{ m_Image->Position( Pos::Center ); }
 		else
-			m_Image->Position( Pos::Left | Pos::CenterV );
+		{ m_Image->Position( Pos::Left | Pos::CenterV ); }
 	}
 }
 
 void Button::OnMouseDoubleClickLeft( int x, int y )
-{ 
-	if ( IsDisabled() ) return;
+{
+	if ( IsDisabled() ) { return; }
 
-	OnMouseClickLeft( x, y, true ); 
+	OnMouseClickLeft( x, y, true );
 	onDoubleClick.Call( this );
 }
 
 void Button::SetImageAlpha( float f )
 {
-	if ( !m_Image ) return;
+	if ( !m_Image ) { return; }
 
 	m_Image->SetDrawColor( Gwen::Color( 255, 255, 255, 255.0f * f ) );
 }
 
-void Button::SetAction( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, const Gwen::Event::Packet& packet )
+void Button::SetAction( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, const Gwen::Event::Packet & packet )
 {
 	onPress.Add( pObject, pFunction, packet );
 }

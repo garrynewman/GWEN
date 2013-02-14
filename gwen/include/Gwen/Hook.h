@@ -21,12 +21,12 @@ namespace Gwen
 		{
 			public:
 
-				virtual bool OnControlClicked( Gwen::Controls::Base*, int /*iMouseX*/, int /*iMouseY*/ ){ return false; };
+				virtual bool OnControlClicked( Gwen::Controls::Base*, int /*iMouseX*/, int /*iMouseY*/ ) { return false; };
 		};
 
 		typedef std::list<BaseHook*> HookList;
 
-		GWEN_EXPORT HookList& GetHookList();
+		GWEN_EXPORT HookList & GetHookList();
 
 		GWEN_EXPORT void AddHook( BaseHook* pHook );
 		GWEN_EXPORT void RemoveHook( BaseHook* pHook );
@@ -36,7 +36,7 @@ namespace Gwen
 		{
 			for ( HookList::iterator it = GetHookList().begin(); it != GetHookList().end(); ++it )
 			{
-				if ( ((*it)->*f)() ) return true;
+				if ( ( ( *it )->*f )() ) { return true; }
 			}
 
 			return false;
@@ -47,7 +47,7 @@ namespace Gwen
 		{
 			for ( HookList::iterator it = GetHookList().begin(); it != GetHookList().end(); ++it )
 			{
-				if ( ((*it)->*f)( a ) ) return true;
+				if ( ( ( *it )->*f )( a ) ) { return true; }
 			}
 
 			return false;
@@ -58,7 +58,7 @@ namespace Gwen
 		{
 			for ( HookList::iterator it = GetHookList().begin(); it != GetHookList().end(); ++it )
 			{
-				if ( ((*it)->*f)( a, b ) ) return true;
+				if ( ( ( *it )->*f )( a, b ) ) { return true; }
 			}
 
 			return false;
@@ -69,7 +69,7 @@ namespace Gwen
 		{
 			for ( HookList::iterator it = GetHookList().begin(); it != GetHookList().end(); ++it )
 			{
-				if ( ((*it)->*f)( a, b, c ) ) return true;
+				if ( ( ( *it )->*f )( a, b, c ) ) { return true; }
 			}
 
 			return false;

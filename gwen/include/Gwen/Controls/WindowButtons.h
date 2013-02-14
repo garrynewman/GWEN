@@ -13,29 +13,29 @@
 #include "Gwen/Skin.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
 		class GWEN_EXPORT WindowCloseButton : public Button
 		{
-			GWEN_CONTROL_INLINE( WindowCloseButton, Button ) 
-			{ 
-				m_pWindow = NULL; 
-				SetSize( 31, 31 ); 
-				SetText( "" );
-			}
+				GWEN_CONTROL_INLINE( WindowCloseButton, Button )
+				{
+					m_pWindow = NULL;
+					SetSize( 31, 31 );
+					SetText( "" );
+				}
 
 				virtual void Render( Skin::Base* skin )
 				{
-					if ( !m_pWindow ) return;
+					if ( !m_pWindow ) { return; }
 
 					skin->DrawWindowCloseButton( this, IsDepressed() && IsHovered(), IsHovered() && ShouldDrawHover(), IsDisabled() );
 				}
 
-				void SetWindow( Gwen::Controls::Base* p ) 
-				{ 
-					m_pWindow = p; 
+				void SetWindow( Gwen::Controls::Base* p )
+				{
+					m_pWindow = p;
 				}
 
 			protected:
@@ -45,11 +45,12 @@ namespace Gwen
 
 		class GWEN_EXPORT WindowMaximizeButton : public WindowCloseButton
 		{
-			GWEN_CONTROL_INLINE( WindowMaximizeButton, WindowCloseButton ){ m_bMaximized = false; };
+				GWEN_CONTROL_INLINE( WindowMaximizeButton, WindowCloseButton ) { m_bMaximized = false; };
 
 				virtual void Render( Skin::Base* skin )
 				{
-					if ( !m_pWindow ) return;
+					if ( !m_pWindow ) { return; }
+
 					skin->DrawWindowMaximizeButton( this, IsDepressed() && IsHovered(), IsHovered() && ShouldDrawHover(), IsDisabled(), m_bMaximized );
 				}
 
@@ -65,11 +66,12 @@ namespace Gwen
 
 		class GWEN_EXPORT WindowMinimizeButton : public WindowCloseButton
 		{
-			GWEN_CONTROL_INLINE( WindowMinimizeButton, WindowCloseButton ){};
+				GWEN_CONTROL_INLINE( WindowMinimizeButton, WindowCloseButton ) {};
 
 				virtual void Render( Skin::Base* skin )
 				{
-					if ( !m_pWindow ) return;
+					if ( !m_pWindow ) { return; }
+
 					skin->DrawWindowMinimizeButton( this, IsDepressed() && IsHovered(), IsHovered() && ShouldDrawHover(), IsDisabled() );
 				}
 

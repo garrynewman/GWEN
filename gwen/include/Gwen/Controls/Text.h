@@ -11,7 +11,7 @@
 #include "Gwen/BaseRender.h"
 #include "Gwen/Controls/Base.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{
@@ -24,8 +24,8 @@ namespace Gwen
 				virtual ~Text();
 				Gwen::Font* GetFont();
 
-				void SetString( const TextObject& str );
-				
+				void SetString( const TextObject & str );
+
 				void Render( Skin::Base* skin );
 				void Layout( Skin::Base* skin );
 
@@ -33,23 +33,23 @@ namespace Gwen
 
 				void SetFont( Gwen::Font* pFont );
 
-				const TextObject& GetText() const { return m_String; }
+				const TextObject & GetText() const { return m_String; }
 
 				Gwen::Rect GetCharacterPosition( int iChar );
 				int GetClosestCharacter( Gwen::Point p );
 
-				int Length() const { return (int)m_String.GetUnicode().size(); }
+				int Length() const { return ( int )m_String.GetUnicode().size(); }
 
-				virtual void SetTextColor( const Gwen::Color& col ){ m_Color = col; }
-				virtual void SetTextColorOverride( const Gwen::Color& col ){ m_ColorOverride = col; }
+				virtual void SetTextColor( const Gwen::Color & col ) { m_Color = col; }
+				virtual void SetTextColorOverride( const Gwen::Color & col ) { m_ColorOverride = col; }
 
 				virtual void OnScaleChanged();
 
-				inline const Gwen::Color &TextColor() const { return m_Color; }
+				inline const Gwen::Color & TextColor() const { return m_Color; }
 
-				virtual void TextChanged(){ m_bTextChanged = true; }
-				virtual bool Wrap(){ return m_bWrap; }
-				virtual void SetWrap( bool b ){ if ( m_bWrap == b ) return; m_bWrap = b; m_bTextChanged = true; Invalidate(); }
+				virtual void TextChanged() { m_bTextChanged = true; }
+				virtual bool Wrap() { return m_bWrap; }
+				virtual void SetWrap( bool b ) { if ( m_bWrap == b ) { return; } m_bWrap = b; m_bTextChanged = true; Invalidate(); }
 
 				virtual Text* GetLine( int i );
 				virtual int GetLineFromChar( int i );

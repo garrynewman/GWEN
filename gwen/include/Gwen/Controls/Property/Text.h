@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Property/BaseProperty.h"
 #include "Gwen/Controls/TextBox.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -34,7 +34,7 @@ namespace Gwen
 						return m_TextBox->GetText();
 					}
 
-					virtual void SetPropertyValue( const TextObject& v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
 					{
 						m_TextBox->SetText( v, bFireChangeEvents );
 					}

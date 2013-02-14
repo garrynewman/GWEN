@@ -13,7 +13,7 @@
 #include "Gwen/Skin.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -26,12 +26,12 @@ namespace Gwen
 				virtual void Render( Skin::Base* skin );
 
 				virtual void SetVertical()  { m_bHorizontal = false; }
-				virtual void SetHorizontal(){ m_bHorizontal = true; }
+				virtual void SetHorizontal() { m_bHorizontal = true; }
 
 				virtual void SetValue( float val );
 				virtual float GetValue() const { return m_fProgress; }
 
-				virtual void SetAutoLabel( bool b ){ m_bAutoLabel = b; }
+				virtual void SetAutoLabel( bool b ) { m_bAutoLabel = b; }
 
 				virtual float GetCycleSpeed();
 				virtual void SetCycleSpeed( float f );

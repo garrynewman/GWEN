@@ -20,9 +20,7 @@ GWEN_CONTROL_CONSTRUCTOR( Menu )
 {
 	SetBounds( 0, 0, 10, 10 );
 	SetPadding( Padding( 2, 2, 2, 2 ) );
-
 	SetDisableIconMargin( false );
-
 	SetAutoHideBars( true );
 	SetScroll( false, true );
 	SetDeleteOnClose( false );
@@ -43,34 +41,32 @@ void Menu::RenderUnder( Skin::Base* skin )
 void Menu::Layout( Skin::Base* skin )
 {
 	int childrenHeight = 0;
+
 	for ( Base::List::iterator it = m_InnerPanel->Children.begin(); it != m_InnerPanel->Children.end(); ++it )
 	{
-		Base* pChild = (*it);
+		Base* pChild = ( *it );
+
 		if ( !pChild )
-			continue;
+		{ continue; }
 
 		childrenHeight += pChild->Height();
 	}
 
 	if ( Y() + childrenHeight > GetCanvas()->Height() )
-		childrenHeight = GetCanvas()->Height() - Y();
+	{ childrenHeight = GetCanvas()->Height() - Y(); }
 
 	SetSize( Width(), childrenHeight );
-
 	BaseClass::Layout( skin );
 }
 
-MenuItem* Menu::AddItem( const TextObject& strName, const TextObject& strIconName, const TextObject& strAccelerator )
+MenuItem* Menu::AddItem( const TextObject & strName, const TextObject & strIconName, const TextObject & strAccelerator )
 {
 	MenuItem* pItem = new MenuItem( this );
-
-		pItem->SetPadding( Padding( 2, 4, 4, 4 ) );
-		pItem->SetText( strName );
-		pItem->SetImage( strIconName );
-		pItem->SetAccelerator( strAccelerator );
-
-		OnAddItem( pItem );		
-
+	pItem->SetPadding( Padding( 2, 4, 4, 4 ) );
+	pItem->SetText( strName );
+	pItem->SetImage( strIconName );
+	pItem->SetAccelerator( strAccelerator );
+	OnAddItem( pItem );
 	return pItem;
 }
 
@@ -81,10 +77,11 @@ void Menu::OnAddItem( MenuItem* item )
 	item->SizeToContents();
 	item->SetAlignment( Pos::CenterV | Pos::Left );
 	item->onHoverEnter.Add( this, &Menu::OnHoverItem );
-
 	// Do this here - after Top Docking these values mean nothing in layout
 	int w = item->Width() + 10 + 32;
-	if ( w < Width() ) w = Width();
+
+	if ( w < Width() ) { w = Width(); }
+
 	SetSize( w, Height() );
 }
 
@@ -94,7 +91,8 @@ void Menu::ClearItems()
 	{
 		Base* pChild = *it;
 
-		if ( !pChild ) continue;
+		if ( !pChild ) { continue; }
+
 		pChild->DelayedDelete();
 	}
 }
@@ -104,8 +102,9 @@ void Menu::CloseAll()
 	for ( Base::List::iterator it = m_InnerPanel->Children.begin(); it != m_InnerPanel->Children.end(); ++it )
 	{
 		Base* pChild = *it;
-		MenuItem* pItem = gwen_cast<MenuItem>(pChild);
-		if ( !pItem ) continue;
+		MenuItem* pItem = gwen_cast<MenuItem>( pChild );
+
+		if ( !pItem ) { continue; }
 
 		pItem->CloseMenu();
 	}
@@ -116,11 +115,12 @@ bool Menu::IsMenuOpen()
 	for ( Base::List::iterator it = m_InnerPanel->Children.begin(); it != m_InnerPanel->Children.end(); ++it )
 	{
 		Base* pChild = *it;
-		MenuItem* pItem = gwen_cast<MenuItem>(pChild);
-		if ( !pItem ) continue;
+		MenuItem* pItem = gwen_cast<MenuItem>( pChild );
+
+		if ( !pItem ) { continue; }
 
 		if ( pItem->IsMenuOpen() )
-			return true;
+		{ return true; }
 	}
 
 	return false;
@@ -128,11 +128,13 @@ bool Menu::IsMenuOpen()
 
 void Menu::OnHoverItem( Gwen::Controls::Base* pControl )
 {
-	if ( !ShouldHoverOpenMenu() ) return;
+	if ( !ShouldHoverOpenMenu() ) { return; }
 
-	MenuItem* pItem = gwen_cast<MenuItem>(pControl);
-	if (!pItem) return;
-	if ( pItem->IsMenuOpen() ) return;
+	MenuItem* pItem = gwen_cast<MenuItem>( pControl );
+
+	if ( !pItem ) { return; }
+
+	if ( pItem->IsMenuOpen() ) { return; }
 
 	CloseAll();
 	pItem->OpenMenu();
@@ -142,7 +144,6 @@ void Menu::Open( unsigned int iPos )
 {
 	SetHidden( false );
 	BringToFront();
-
 	Gwen::Point MousePos = Input::GetMousePosition();
 	SetPos( MousePos.x, MousePos.y );
 }
@@ -160,7 +161,6 @@ void Menu::Close()
 void Menu::CloseMenus()
 {
 	BaseClass::CloseMenus();
-
 	CloseAll();
 	Close();
 }

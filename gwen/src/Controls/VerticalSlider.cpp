@@ -20,12 +20,12 @@ GWEN_CONTROL_CONSTRUCTOR( VerticalSlider )
 
 float VerticalSlider::CalculateValue()
 {
-	return  1 - (float)m_SliderBar->Y() / (float)( Height() - m_SliderBar->Height() );
+	return  1 - ( float )m_SliderBar->Y() / ( float )( Height() - m_SliderBar->Height() );
 }
 
 void VerticalSlider::UpdateBarFromValue()
 {
-	m_SliderBar->MoveTo( m_SliderBar->X(), ( Height() - m_SliderBar->Height() ) * ( 1 - m_fValue ));
+	m_SliderBar->MoveTo( m_SliderBar->X(), ( Height() - m_SliderBar->Height() ) * ( 1 - m_fValue ) );
 }
 
 
@@ -37,7 +37,7 @@ void VerticalSlider::OnMouseClickLeft( int x, int y, bool bDown )
 }
 
 
-void VerticalSlider::Layout(Skin::Base* /*skin*/)
+void VerticalSlider::Layout( Skin::Base* /*skin*/ )
 {
 	m_SliderBar->SetSize( Width(), 15 );
 }

@@ -14,7 +14,7 @@
 #include "Gwen/Utility.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -31,7 +31,7 @@ namespace Gwen
 
 					virtual TextObject GetPropertyValue() = 0;
 
-					virtual void SetPropertyValue( const TextObject& v, bool bFireChangeEvents = false ) = 0;
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents = false ) = 0;
 
 					virtual bool IsEditing() = 0;
 
@@ -39,7 +39,6 @@ namespace Gwen
 					{
 						Event::Information info;
 						info.String = GetPropertyValue();
-
 						onChange.Call( this, info );
 					}
 

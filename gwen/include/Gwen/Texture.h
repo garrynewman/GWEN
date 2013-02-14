@@ -39,7 +39,7 @@ namespace Gwen
 		{
 		}
 
-		void Load( const TextObject& str, Gwen::Renderer::Base* render )
+		void Load( const TextObject & str, Gwen::Renderer::Base* render )
 		{
 			name = str;
 			Gwen::Debug::AssertCheck( render != NULL, "No renderer!" );

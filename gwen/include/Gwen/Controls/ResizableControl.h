@@ -17,7 +17,7 @@
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -31,18 +31,18 @@ namespace Gwen
 				virtual void SetClampMovement( bool shouldClamp ) { m_bClampMovement = shouldClamp; }
 				virtual bool GetClampMovement() { return m_bClampMovement; }
 
-				virtual void SetMinimumSize( const Gwen::Point& minSize ) { m_MinimumSize = minSize; }
+				virtual void SetMinimumSize( const Gwen::Point & minSize ) { m_MinimumSize = minSize; }
 				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
 
 				virtual void DisableResizing();
 
 				virtual bool SetBounds( int x, int y, int w, int h );
 
-				virtual void OnResized(){};
+				virtual void OnResized() {};
 
 				Event::Caller	onResize;
 
-				virtual ControlsInternal::Resizer* GetResizer( int iResizer ){ return m_Resizer[iResizer]; } 
+				virtual ControlsInternal::Resizer* GetResizer( int iResizer ) { return m_Resizer[iResizer]; }
 
 			protected:
 
@@ -54,7 +54,7 @@ namespace Gwen
 
 				ControlsInternal::Resizer* m_Resizer[10];
 
-				
+
 		};
 	}
 }

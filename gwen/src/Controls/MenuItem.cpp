@@ -40,7 +40,6 @@ GWEN_CONTROL_CONSTRUCTOR( MenuItem )
 
 MenuItem::~MenuItem()
 {
-
 }
 
 void MenuItem::Render( Skin::Base* skin )
@@ -87,17 +86,16 @@ Menu* MenuItem::GetMenu()
 
 void MenuItem::SetChecked( bool bCheck )
 {
-	if ( bCheck == m_bChecked)
-		return;
+	if ( bCheck == m_bChecked )
+	{ return; }
 
 	m_bChecked = bCheck;
-
 	onCheckChange.Call( this );
 
 	if ( bCheck )
-		onChecked.Call( this );
+	{ onChecked.Call( this ); }
 	else
-		onUnChecked.Call( this );
+	{ onUnChecked.Call( this ); }
 }
 
 void MenuItem::OnPress()
@@ -118,24 +116,23 @@ void MenuItem::OnPress()
 
 void MenuItem::ToggleMenu()
 {
-	if ( IsMenuOpen() ) CloseMenu();
-	else OpenMenu();
+	if ( IsMenuOpen() ) { CloseMenu(); }
+	else { OpenMenu(); }
 }
 
 bool MenuItem::IsMenuOpen()
 {
-	if ( !m_Menu ) return false;
+	if ( !m_Menu ) { return false; }
 
 	return !m_Menu->Hidden();
 }
 
 void MenuItem::OpenMenu()
 {
-	if ( !m_Menu ) return;
+	if ( !m_Menu ) { return; }
 
 	m_Menu->SetHidden( false );
 	m_Menu->BringToFront();
-
 	Gwen::Point p = LocalPosToCanvas( Gwen::Point( 0, 0 ) );
 
 	// Strip menus open downwards
@@ -146,33 +143,32 @@ void MenuItem::OpenMenu()
 	// Submenus open sidewards
 	else
 	{
-		m_Menu->SetPos( p.x + Width(), p.y);
+		m_Menu->SetPos( p.x + Width(), p.y );
 	}
 
 	// TODO: Option this.
-	// TODO: Make sure on screen, open the other side of the 
+	// TODO: Make sure on screen, open the other side of the
 	// parent if it's better...
-
-
 }
 
 void MenuItem::CloseMenu()
 {
-	if ( !m_Menu ) return;
+	if ( !m_Menu ) { return; }
+
 	m_Menu->Close();
 	m_Menu->CloseAll();
 }
 
-void MenuItem::SetAccelerator( const TextObject& strAccelerator )
+void MenuItem::SetAccelerator( const TextObject & strAccelerator )
 {
-	if ( m_Accelerator ) 
+	if ( m_Accelerator )
 	{
 		m_Accelerator->DelayedDelete();
 		m_Accelerator = NULL;
 	}
 
 	if ( strAccelerator.GetUnicode() == L"" )
-		return;
+	{ return; }
 
 	m_Accelerator = new Controls::Label( this );
 	m_Accelerator->Dock( Pos::Right );

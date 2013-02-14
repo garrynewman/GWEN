@@ -14,17 +14,17 @@
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{
 		class GWEN_EXPORT SliderBar : public ControlsInternal::Dragger
 		{
-			GWEN_CONTROL( SliderBar, ControlsInternal::Dragger );
+				GWEN_CONTROL( SliderBar, ControlsInternal::Dragger );
 
 				virtual void Render( Skin::Base* skin );
-				virtual void SetHorizontal( bool b ){ m_bHorizontal = b; }
-				virtual bool IsHorizontal(){ return m_bHorizontal; }
+				virtual void SetHorizontal( bool b ) { m_bHorizontal = b; }
+				virtual bool IsHorizontal() { return m_bHorizontal; }
 
 			protected:
 
@@ -52,35 +52,35 @@ namespace Gwen
 				virtual void SetFloatValue( float val, bool forceUpdate = true );
 
 				virtual float CalculateValue();
-				virtual void OnMoved( Controls::Base * control );
+				virtual void OnMoved( Controls::Base* control );
 
-				virtual void OnMouseClickLeft( int /*x*/, int /*y*/, bool /*bDown*/ ){};
+				virtual void OnMouseClickLeft( int /*x*/, int /*y*/, bool /*bDown*/ ) {};
 
-				virtual bool OnKeyRight( bool bDown )	{	if ( bDown ) SetFloatValue( GetFloatValue() + 1, true ); return true; }
-				virtual bool OnKeyLeft( bool bDown )	{	if ( bDown ) SetFloatValue( GetFloatValue() - 1, true ); return true; }
-				virtual bool OnKeyUp( bool bDown )		{	if ( bDown ) SetFloatValue( GetFloatValue() + 1, true ); return true; }
-				virtual bool OnKeyDown( bool bDown )	{	if ( bDown ) SetFloatValue( GetFloatValue() - 1, true ); return true; }
+				virtual bool OnKeyRight( bool bDown )	{	if ( bDown ) { SetFloatValue( GetFloatValue() + 1, true ); } return true; }
+				virtual bool OnKeyLeft( bool bDown )	{	if ( bDown ) { SetFloatValue( GetFloatValue() - 1, true ); } return true; }
+				virtual bool OnKeyUp( bool bDown )		{	if ( bDown ) { SetFloatValue( GetFloatValue() + 1, true ); } return true; }
+				virtual bool OnKeyDown( bool bDown )	{	if ( bDown ) { SetFloatValue( GetFloatValue() - 1, true ); } return true; }
 
-				virtual void RenderFocus( Gwen::Skin::Base* skin);
-				
+				virtual void RenderFocus( Gwen::Skin::Base* skin );
+
 				Gwen::Event::Caller	onValueChanged;
 
-				virtual float GetMin(){ return m_fMin; }
-				virtual float GetMax(){ return m_fMax; }
+				virtual float GetMin() { return m_fMin; }
+				virtual float GetMax() { return m_fMax; }
 
 			protected:
 
 				virtual void SetValueInternal( float fVal );
 				virtual void UpdateBarFromValue() = 0;
 
-				ControlsInternal::SliderBar * m_SliderBar;
+				ControlsInternal::SliderBar* m_SliderBar;
 				bool m_bClampToNotches;
 				int m_iNumNotches;
 				float m_fValue;
 
 				float m_fMin;
 				float m_fMax;
-				
+
 		};
 	}
 

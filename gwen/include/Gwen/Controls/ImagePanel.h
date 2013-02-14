@@ -13,7 +13,7 @@
 #include "Gwen/BaseRender.h"
 #include "Gwen/Texture.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -26,7 +26,6 @@ namespace Gwen
 					SetUV( 0, 0, 1, 1 );
 					SetMouseInputEnabled( false );
 					m_DrawColor = Colors::White;
-
 					SetStretch( true );
 				}
 
@@ -34,7 +33,7 @@ namespace Gwen
 				{
 					m_Texture.Release( GetSkin()->GetRender() );
 				}
-				
+
 				virtual void SetUV( float u1, float v1, float u2, float v2 )
 				{
 					m_uv[0] = u1;
@@ -43,13 +42,13 @@ namespace Gwen
 					m_uv[3] = v2;
 				}
 
-				virtual void SetImage( const TextObject& imageName )
-				{ 
+				virtual void SetImage( const TextObject & imageName )
+				{
 					m_Texture.Load( imageName, GetSkin()->GetRender() );
 				}
 
-				virtual TextObject& GetImage()
-				{ 
+				virtual TextObject & GetImage()
+				{
 					return m_Texture.name;
 				}
 
@@ -63,7 +62,7 @@ namespace Gwen
 					return m_Texture.height;
 				}
 
-				virtual const TextObject& GetImageName()
+				virtual const TextObject & GetImageName()
 				{
 					return m_Texture.name;
 				}
@@ -73,9 +72,9 @@ namespace Gwen
 					skin->GetRender()->SetDrawColor( m_DrawColor );
 
 					if ( m_bStretch )
-						skin->GetRender()->DrawTexturedRect( &m_Texture, GetRenderBounds(), m_uv[0], m_uv[1], m_uv[2], m_uv[3] );
-					else 
-						skin->GetRender()->DrawTexturedRect( &m_Texture, Gwen::Rect( 0, 0, m_Texture.width, m_Texture.height ), m_uv[0], m_uv[1], m_uv[2], m_uv[3] );
+					{ skin->GetRender()->DrawTexturedRect( &m_Texture, GetRenderBounds(), m_uv[0], m_uv[1], m_uv[2], m_uv[3] ); }
+					else
+					{ skin->GetRender()->DrawTexturedRect( &m_Texture, Gwen::Rect( 0, 0, m_Texture.width, m_Texture.height ), m_uv[0], m_uv[1], m_uv[2], m_uv[3] ); }
 				}
 
 				virtual void SizeToContents()
@@ -93,8 +92,8 @@ namespace Gwen
 					return m_Texture.FailedToLoad();
 				}
 
-				virtual bool GetStretch(){ return m_bStretch; }
-				virtual void SetStretch( bool b ){ m_bStretch = b; }
+				virtual bool GetStretch() { return m_bStretch; }
+				virtual void SetStretch( bool b ) { m_bStretch = b; }
 
 			protected:
 

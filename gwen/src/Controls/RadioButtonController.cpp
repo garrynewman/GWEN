@@ -25,13 +25,15 @@ void RadioButtonController::OnRadioClicked( Gwen::Controls::Base* pFromPanel )
 	RadioButton* pCheckedRadioButton = gwen_cast<RadioButton>( pFromPanel );
 
 	//Iterate through all other buttons and set them to false;
-	for (Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter)
+	for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 	{
 		Base* pChild = *iter;
-		LabeledRadioButton* pLRB = gwen_cast<LabeledRadioButton>(pChild);
+		LabeledRadioButton* pLRB = gwen_cast<LabeledRadioButton>( pChild );
+
 		if ( pLRB )
 		{
 			RadioButton* pChildRadioButton = pLRB->GetRadioButton();
+
 			if ( pChildRadioButton == pCheckedRadioButton )
 			{
 				m_Selected = pLRB;
@@ -51,15 +53,14 @@ void RadioButtonController::OnChange()
 	onSelectionChange.Call( this );
 }
 
-LabeledRadioButton* RadioButtonController::AddOption( const Gwen::String& strText, const Gwen::String& strOptionName )
+LabeledRadioButton* RadioButtonController::AddOption( const Gwen::String & strText, const Gwen::String & strOptionName )
 {
 	return AddOption( Gwen::Utility::StringToUnicode( strText ), strOptionName );
 }
 
-LabeledRadioButton* RadioButtonController::AddOption( const Gwen::UnicodeString& strText, const Gwen::String& strOptionName )
+LabeledRadioButton* RadioButtonController::AddOption( const Gwen::UnicodeString & strText, const Gwen::String & strOptionName )
 {
 	LabeledRadioButton* lrb = new LabeledRadioButton( this );
-
 	lrb->SetName( strOptionName );
 	lrb->GetLabel()->SetText( strText );
 	lrb->GetRadioButton()->onChecked.Add( this, &RadioButtonController::OnRadioClicked );
@@ -67,8 +68,6 @@ LabeledRadioButton* RadioButtonController::AddOption( const Gwen::UnicodeString&
 	lrb->SetMargin( Margin( 0, 1, 0, 1 ) );
 	lrb->SetKeyboardInputEnabled( false );
 	lrb->SetTabable( false );
-
 	Invalidate();
-
 	return lrb;
 }

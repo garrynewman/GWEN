@@ -14,7 +14,7 @@
 #include "Gwen/Controls/TabStrip.h"
 #include "Gwen/Controls/TabTitleBar.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{
@@ -25,7 +25,7 @@ namespace Gwen
 	{
 		class GWEN_EXPORT TabControl : public Base
 		{
-			GWEN_CONTROL( TabControl, Base );
+				GWEN_CONTROL( TabControl, Base );
 
 				virtual TabButton* AddPage( const TextObject strText, Controls::Base* pPage = NULL );
 
@@ -37,14 +37,14 @@ namespace Gwen
 
 				virtual int TabCount( void );
 				virtual TabButton* GetTab( int iNum );
-				virtual TabButton* GetCurrentButton(){ return m_pCurrentButton; }
-				virtual TabStrip* GetTabStrip(){ return m_TabStrip; }
+				virtual TabButton* GetCurrentButton() { return m_pCurrentButton; }
+				virtual TabStrip* GetTabStrip() { return m_TabStrip; }
 
 				virtual void SetTabStripPosition( int iDock );
 
 				virtual bool DoesAllowDrag();
 
-				virtual void SetAllowReorder( bool b ){ GetTabStrip()->SetAllowReorder( b ); }
+				virtual void SetAllowReorder( bool b ) { GetTabStrip()->SetAllowReorder( b ); }
 
 				Gwen::Event::Caller	onLoseTab;
 				Gwen::Event::Caller	onAddTab;

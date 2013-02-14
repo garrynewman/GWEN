@@ -12,7 +12,6 @@ class CollapsibleList : public GUnit
 			Gwen::Controls::CollapsibleList* pControl = new Gwen::Controls::CollapsibleList( this );
 			pControl->SetSize( 100, 200 );
 			pControl->SetPos( 10, 10 );
-
 			{
 				Gwen::Controls::CollapsibleCategory* cat = pControl->Add( "Category One" );
 				cat->Add( "Hello" );
@@ -20,7 +19,6 @@ class CollapsibleList : public GUnit
 				cat->Add( "Three" );
 				cat->Add( "Four" );
 			}
-
 			{
 				Gwen::Controls::CollapsibleCategory* cat = pControl->Add( "Shopping" );
 				cat->Add( "Special" );
@@ -39,7 +37,6 @@ class CollapsibleList : public GUnit
 				cat->Add( "Beer" );
 				cat->Add( "Three Eyes" );
 			}
-
 			{
 				Gwen::Controls::CollapsibleCategory* cat = pControl->Add( "Category One" );
 				cat->Add( "Hello" );

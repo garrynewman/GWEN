@@ -11,11 +11,11 @@ namespace Gwen
 		class Base;
 		typedef std::list< ControlFactory::Base* > List;
 
-		List& GetList();
-		ControlFactory::Base* Find( const Gwen::String& name );
+		List & GetList();
+		ControlFactory::Base* Find( const Gwen::String & name );
 		Controls::Base* Clone( Controls::Base* pEnt, ControlFactory::Base* pFactory );
 
-		class Property 
+		class Property
 		{
 			public:
 
@@ -25,21 +25,21 @@ namespace Gwen
 				virtual Gwen::String			Description() = 0;
 
 				virtual Gwen::UnicodeString		GetValue( Gwen::Controls::Base* ctrl ) = 0;
-				virtual void					SetValue( Gwen::Controls::Base* ctrl, const Gwen::UnicodeString& str ) = 0;
+				virtual void					SetValue( Gwen::Controls::Base* ctrl, const Gwen::UnicodeString & str ) = 0;
 
-				virtual int						OptionNum(){ return 0; }
-				virtual Gwen::UnicodeString		OptionGet( int i ){ return L"";}
+				virtual int						OptionNum() { return 0; }
+				virtual Gwen::UnicodeString		OptionGet( int i ) { return L"";}
 
-				virtual int						NumCount(){ return 0; };
-				virtual Gwen::String			NumName( int i ){ return "unknown"; };
-				virtual float					NumGet( Gwen::Controls::Base* ctrl, int i ){ return 0.0f; };
-				virtual void					NumSet( Gwen::Controls::Base* ctrl, int i, float f ){};
+				virtual int						NumCount() { return 0; };
+				virtual Gwen::String			NumName( int i ) { return "unknown"; };
+				virtual float					NumGet( Gwen::Controls::Base* ctrl, int i ) { return 0.0f; };
+				virtual void					NumSet( Gwen::Controls::Base* ctrl, int i, float f ) {};
 
-				inline void NumSet( Gwen::Controls::Base* ctrl, const Gwen::String& str, float f )
+				inline void NumSet( Gwen::Controls::Base* ctrl, const Gwen::String & str, float f )
 				{
-					for (int i=0; i<NumCount(); i++ )
+					for ( int i=0; i<NumCount(); i++ )
 					{
-						if ( NumName( i ) == str ) NumSet( ctrl, i, f );
+						if ( NumName( i ) == str ) { NumSet( ctrl, i, f ); }
 					}
 				};
 		};
@@ -47,12 +47,12 @@ namespace Gwen
 		class PropertyBool : public Property
 		{
 			public:
-				
+
 				static const Gwen::UnicodeString		True;
 				static const Gwen::UnicodeString		False;
 
-				virtual int						OptionNum(){ return 2; }
-				virtual Gwen::UnicodeString		OptionGet( int i ){ if ( i == 0 ) return False; return True; }
+				virtual int						OptionNum() { return 2; }
+				virtual Gwen::UnicodeString		OptionGet( int i ) { if ( i == 0 ) { return False; } return True; }
 		};
 
 		class Base
@@ -69,21 +69,21 @@ namespace Gwen
 				Base* GetBaseFactory();
 				void AddProperty( Property* pProp );
 
-				Property* GetProperty( const Gwen::String& name );
-				void SetControlValue( Gwen::Controls::Base* ctrl, const Gwen::String& name, const Gwen::UnicodeString& str );
+				Property* GetProperty( const Gwen::String & name );
+				void SetControlValue( Gwen::Controls::Base* ctrl, const Gwen::String & name, const Gwen::UnicodeString & str );
 
-				const Property::List& Properties(){ return m_Properties; }
+				const Property::List & Properties() { return m_Properties; }
 
 				// Called when the control is drag and dropped onto the parent, even when just moving in the designer
 				virtual void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child,
-                                       const Gwen::Point& pos );
+									   const Gwen::Point & pos );
 
 				// Called when creating the control - param might be empty
 				virtual void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child,
-                                       int iPage = 0 );
+									   int iPage = 0 );
 
 				// Called when a child is clicked on in an editor
-				virtual bool ChildTouched( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* pChildControl ){ return false; };
+				virtual bool ChildTouched( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* pChildControl ) { return false; };
 
 
 				//

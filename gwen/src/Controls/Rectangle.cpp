@@ -19,5 +19,5 @@ GWEN_CONTROL_CONSTRUCTOR( Rectangle )
 void Rectangle::Render( Skin::Base* skin )
 {
 	skin->GetRender()->SetDrawColor( m_Color );
-	skin->GetRender()->DrawFilledRect( GetRenderBounds() ); 
+	skin->GetRender()->DrawFilledRect( GetRenderBounds() );
 }

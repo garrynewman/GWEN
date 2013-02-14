@@ -21,7 +21,7 @@ GWEN_CONTROL_CONSTRUCTOR( PageControl )
 	m_iCurrentPage = 0;
 	SetUseFinishButton( true );
 
-	for (int i=0; i<MaxPages; i++)
+	for ( int i=0; i<MaxPages; i++ )
 	{
 		m_pPages[i] = NULL;
 	}
@@ -30,7 +30,6 @@ GWEN_CONTROL_CONSTRUCTOR( PageControl )
 	pControls->Dock( Pos::Bottom );
 	pControls->SetSize( 24, 24 );
 	pControls->SetMargin( Margin( 10, 10, 10, 10 ) );
-
 	m_Finish = new Controls::Button( pControls );
 	m_Finish->SetText( "Finish" );
 	m_Finish->Dock( Pos::Right );
@@ -38,20 +37,17 @@ GWEN_CONTROL_CONSTRUCTOR( PageControl )
 	m_Finish->SetSize( 70 );
 	m_Finish->SetMargin( Margin( 4, 0, 0, 0 ) );
 	m_Finish->Hide();
-
 	m_Next = new Controls::Button( pControls );
 	m_Next->SetText( "Next >" );
 	m_Next->Dock( Pos::Right );
 	m_Next->onPress.Add( this, &ThisClass::NextPage );
 	m_Next->SetSize( 70 );
 	m_Next->SetMargin( Margin( 4, 0, 0, 0 ) );
-
 	m_Back = new Controls::Button( pControls );
 	m_Back->SetText( "< Back" );
 	m_Back->Dock( Pos::Right );
 	m_Back->onPress.Add( this, &ThisClass::PreviousPage );
 	m_Back->SetSize( 70 );
-
 	m_Label = new Controls::Label( pControls );
 	m_Label->Dock( Pos::Fill );
 	m_Label->SetAlignment( Pos::Left | Pos::CenterV );
@@ -60,9 +56,9 @@ GWEN_CONTROL_CONSTRUCTOR( PageControl )
 
 void PageControl::SetPageCount( unsigned int iNum )
 {
-	if ( iNum >= MaxPages ) iNum = MaxPages;
+	if ( iNum >= MaxPages ) { iNum = MaxPages; }
 
-	for (int i=0; i<iNum; i++)
+	for ( int i=0; i<iNum; i++ )
 	{
 		if ( !m_pPages[i] )
 		{
@@ -70,9 +66,8 @@ void PageControl::SetPageCount( unsigned int iNum )
 			m_pPages[i]->Dock( Pos::Fill );
 		}
 	}
-	
-	m_iPages = iNum;
 
+	m_iPages = iNum;
 	// Setting to -1 to force the page to change
 	m_iCurrentPage = -1;
 	HideAll();
@@ -81,17 +76,17 @@ void PageControl::SetPageCount( unsigned int iNum )
 
 void PageControl::HideAll()
 {
-	for (int i=0; i<MaxPages; i++)
+	for ( int i=0; i<MaxPages; i++ )
 	{
-		if ( !m_pPages[i] ) continue;
-		
+		if ( !m_pPages[i] ) { continue; }
+
 		m_pPages[i]->Hide();
 	}
 }
 
 void PageControl::ShowPage( unsigned int i )
 {
-	if ( m_iCurrentPage == i ) return;
+	if ( m_iCurrentPage == i ) { return; }
 
 	if ( m_pPages[i] )
 	{
@@ -100,10 +95,8 @@ void PageControl::ShowPage( unsigned int i )
 	}
 
 	m_iCurrentPage = i;
-
 	m_Back->SetDisabled( m_iCurrentPage == 0 );
 	m_Next->SetDisabled( m_iCurrentPage >= m_iPages );
-
 	m_Label->SetText( Utility::Format( L"Page %i of %i", m_iCurrentPage+1, m_iPages ) );
 
 	if ( GetUseFinishButton() )
@@ -117,7 +110,6 @@ void PageControl::ShowPage( unsigned int i )
 		Event::Information info;
 		info.Integer = i;
 		info.Control = m_pPages[i];
-
 		onPageChanged.Call( this, info );
 	}
 }
@@ -134,7 +126,7 @@ Controls::Base* PageControl::GetCurrentPage()
 
 void PageControl::NextPage()
 {
-	if ( m_iCurrentPage >= m_iPages-1 ) return;
+	if ( m_iCurrentPage >= m_iPages-1 ) { return; }
 
 	if ( m_pPages[m_iCurrentPage] )
 	{
@@ -153,7 +145,7 @@ void PageControl::NextPage()
 
 void PageControl::PreviousPage()
 {
-	if ( m_iCurrentPage == 0 ) return;
+	if ( m_iCurrentPage == 0 ) { return; }
 
 	if ( m_pPages[m_iCurrentPage] )
 	{

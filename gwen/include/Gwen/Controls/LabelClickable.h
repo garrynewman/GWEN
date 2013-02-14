@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/Button.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -20,7 +20,7 @@ namespace Gwen
 			public:
 
 				GWEN_CONTROL( LabelClickable, Button );
-				
+
 				virtual void Render( Skin::Base* skin );
 
 		};

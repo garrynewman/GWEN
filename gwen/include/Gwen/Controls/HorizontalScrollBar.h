@@ -15,7 +15,7 @@
 #include "Gwen/Controls/Dragger.h"
 #include "Gwen/Controls/ScrollBar.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -40,11 +40,11 @@ namespace Gwen
 				virtual void NudgeLeft( Base* control );
 				virtual void NudgeRight( Base* control );
 				virtual float GetNudgeAmount();
-		
-				virtual float CalculateScrolledAmount();
-				virtual bool SetScrolledAmount(float amount, bool forceUpdate);
 
-				virtual bool IsHorizontal(){ return true; }
+				virtual float CalculateScrolledAmount();
+				virtual bool SetScrolledAmount( float amount, bool forceUpdate );
+
+				virtual bool IsHorizontal() { return true; }
 		};
 	}
 }

@@ -26,23 +26,18 @@ void SliderBar::Render( Skin::Base* skin )
 
 GWEN_CONTROL_CONSTRUCTOR( Slider )
 {
-	SetBounds( Gwen::Rect( 0, 0, 32, 128) );
-
+	SetBounds( Gwen::Rect( 0, 0, 32, 128 ) );
 	m_SliderBar = new SliderBar( this );
 	m_SliderBar->onDragged.Add( this, &Slider::OnMoved );
-
 	m_fMin = 0.0f;
 	m_fMax = 1.0f;
-
 	m_bClampToNotches = false;
 	m_iNumNotches = 5;
 	m_fValue = 0.0f;
-
 	SetTabable( true );
-
 }
 
-void Slider::OnMoved( Controls::Base * /*control*/ )
+void Slider::OnMoved( Controls::Base* /*control*/ )
 {
 	SetValueInternal( CalculateValue() );
 }
@@ -57,12 +52,14 @@ float Slider::CalculateValue()
 	return 0;
 }
 
-void Slider::SetFloatValue( float val, bool /*forceUpdate*/ ) 
+void Slider::SetFloatValue( float val, bool /*forceUpdate*/ )
 {
-	if (val < m_fMin) val = m_fMin;
-	if (val > m_fMax) val = m_fMax;
+	if ( val < m_fMin ) { val = m_fMin; }
+
+	if ( val > m_fMax ) { val = m_fMax; }
+
 	// Normalize Value
-	val = (val - m_fMin) / (m_fMax - m_fMin);
+	val = ( val - m_fMin ) / ( m_fMax - m_fMin );
 	SetValueInternal( val );
 	Redraw();
 }
@@ -71,8 +68,8 @@ void Slider::SetValueInternal( float val )
 {
 	if ( m_bClampToNotches )
 	{
-		val = floorf( (val * (float)m_iNumNotches) + 0.5f );
-		val /= (float) m_iNumNotches;
+		val = floorf( ( val * ( float )m_iNumNotches ) + 0.5f );
+		val /= ( float ) m_iNumNotches;
 	}
 
 	if ( m_fValue != val )
@@ -81,12 +78,12 @@ void Slider::SetValueInternal( float val )
 		onValueChanged.Call( this );
 	}
 
-	UpdateBarFromValue();	
+	UpdateBarFromValue();
 }
 
 float Slider::GetFloatValue()
 {
-	return m_fMin + (m_fValue * (m_fMax - m_fMin));
+	return m_fMin + ( m_fValue * ( m_fMax - m_fMin ) );
 }
 
 void Slider::SetRange( float fMin, float fMax )
@@ -97,8 +94,9 @@ void Slider::SetRange( float fMin, float fMax )
 
 void Slider::RenderFocus( Gwen::Skin::Base* skin )
 {
-	if ( Gwen::KeyboardFocus != this ) return;
-	if ( !IsTabable() ) return;
+	if ( Gwen::KeyboardFocus != this ) { return; }
+
+	if ( !IsTabable() ) { return; }
 
 	skin->DrawKeyboardHighlight( this, GetRenderBounds(), 0 );
 }

@@ -16,7 +16,7 @@ GWEN_CONTROL_CONSTRUCTOR( MenuStrip )
 {
 	SetBounds( 0, 0, 200, 22 );
 	Dock( Pos::Top );
-	m_InnerPanel->SetPadding( Padding( 5, 0, 0, 0 ) );	
+	m_InnerPanel->SetPadding( Padding( 5, 0, 0, 0 ) );
 }
 
 void MenuStrip::Render( Skin::Base* skin )

@@ -8,18 +8,16 @@ class StatusBar : public GUnit
 {
 	public:
 
-	GWEN_CONTROL_INLINE( StatusBar, GUnit )
-	{
-		Dock( Pos::Fill );
+		GWEN_CONTROL_INLINE( StatusBar, GUnit )
+		{
+			Dock( Pos::Fill );
+			Gwen::Controls::StatusBar* pStatus = new Gwen::Controls::StatusBar( this );
+			Gwen::Controls::Label* pRight = new Gwen::Controls::Label( pStatus );
+			pRight->SetText( L"Label Added to Right" );
+			pStatus->AddControl( pRight, true );
+		}
 
-		Gwen::Controls::StatusBar* pStatus = new Gwen::Controls::StatusBar( this );
-
-		Gwen::Controls::Label* pRight = new Gwen::Controls::Label( pStatus );
-		pRight->SetText( L"Label Added to Right" );
-		pStatus->AddControl( pRight, true );
-	}
-
-	void Layout( Gwen::Skin::Base* skin ){}
+		void Layout( Gwen::Skin::Base* skin ) {}
 };
 
 

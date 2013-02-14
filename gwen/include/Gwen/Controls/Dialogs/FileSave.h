@@ -4,7 +4,7 @@
 
 #include "Gwen/Gwen.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Dialogs
 	{
@@ -16,22 +16,22 @@ namespace Gwen
 		//
 		// Callback function, for success
 		//
-		typedef void (Event::Handler::*FileSaveSuccessCallback)( const String& filename );
+		typedef void ( Event::Handler::*FileSaveSuccessCallback )( const String & filename );
 
 		//
 		// The REAL function.
 		// If bUseSystem is used, it may use the system's modal dialog - which
 		// will steal focus and pause the rest of GWEN until it's continued.
 		//
-		void GWEN_EXPORT FileSaveEx( bool bUseSystem, const String& Name, const String& StartPath, const String& Extension, Gwen::Event::Handler* pHandler = NULL, Gwen::Event::Handler::FunctionWithInformation fnCallback = NULL );
+		void GWEN_EXPORT FileSaveEx( bool bUseSystem, const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler = NULL, Gwen::Event::Handler::FunctionWithInformation fnCallback = NULL );
 
 		//
 		// Templated function simply to avoid having to manually cast the callback function.
 		//
 		template< typename A>
-		void FileSave( bool bUseSystem, const String& Name, const String& StartPath, const String& Extension, Gwen::Event::Handler* pHandler = NULL, A fnCallback = NULL )
+		void FileSave( bool bUseSystem, const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler = NULL, A fnCallback = NULL )
 		{
-			FileSaveEx( bUseSystem, Name, StartPath, Extension, pHandler, static_cast<Gwen::Event::Handler::FunctionWithInformation>(fnCallback) );
+			FileSaveEx( bUseSystem, Name, StartPath, Extension, pHandler, static_cast<Gwen::Event::Handler::FunctionWithInformation>( fnCallback ) );
 		}
 
 

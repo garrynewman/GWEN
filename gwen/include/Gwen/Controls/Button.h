@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/Label.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -22,7 +22,7 @@ namespace Gwen
 			public:
 
 				GWEN_CONTROL( Button, Label );
-				
+
 				virtual void Render( Skin::Base* skin );
 				virtual void OnMouseClickLeft( int x, int y, bool bDown );
 				virtual void OnMouseClickRight( int x, int y, bool bDown );
@@ -38,17 +38,17 @@ namespace Gwen
 				virtual void SetDepressed( bool b );
 
 				//
-				// Buttons can be toggle type, which means that it is 
+				// Buttons can be toggle type, which means that it is
 				// toggled on and off. Its toggle status is in IsDepressed.
 				//
-				virtual void SetIsToggle( bool b ){ m_bToggle = b; }
+				virtual void SetIsToggle( bool b ) { m_bToggle = b; }
 				virtual bool IsToggle() const { return m_bToggle; }
 				virtual bool GetToggleState() const { return m_bToggleStatus; }
 				virtual void SetToggleState( bool b );
-				virtual void Toggle(){ SetToggleState( !GetToggleState() ); }
+				virtual void Toggle() { SetToggleState( !GetToggleState() ); }
 
 
-				virtual void SetImage( const TextObject& strName, bool bCenter = false );
+				virtual void SetImage( const TextObject & strName, bool bCenter = false );
 
 				virtual void SizeToContents();
 				virtual void PostLayout( Skin::Base* pSkin );
@@ -56,8 +56,8 @@ namespace Gwen
 
 				virtual void SetImageAlpha( float fMultiply );
 
-				virtual void DoAction(){ OnPress(); }
-				virtual void SetAction( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, const Gwen::Event::Packet& packet );
+				virtual void DoAction() { OnPress(); }
+				virtual void SetAction( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, const Gwen::Event::Packet & packet );
 
 			public:
 

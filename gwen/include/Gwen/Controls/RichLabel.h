@@ -13,7 +13,7 @@
 #include "Gwen/Controls/Text.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -22,9 +22,9 @@ namespace Gwen
 			public:
 
 				GWEN_CONTROL( RichLabel, Gwen::Controls::Base );
-	
+
 				void AddLineBreak();
-				void AddText( const Gwen::TextObject& text, Gwen::Color color, Gwen::Font* font = NULL );
+				void AddText( const Gwen::TextObject & text, Gwen::Color color, Gwen::Font* font = NULL );
 
 				virtual bool SizeToChildren( bool w = true, bool h = true );
 
@@ -46,9 +46,9 @@ namespace Gwen
 				};
 
 				void Layout( Gwen::Skin::Base* skin );
-				void SplitLabel( const Gwen::UnicodeString& text, Gwen::Font* pFont, const DividedText& txt, int& x, int& y, int& lineheight );
-				void CreateNewline( int& x, int& y, int& lineheight );
-				void CreateLabel( const Gwen::UnicodeString& text, const DividedText& txt, int& x, int& y, int& lineheight, bool NoSplit );
+				void SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont, const DividedText & txt, int & x, int & y, int & lineheight );
+				void CreateNewline( int & x, int & y, int & lineheight );
+				void CreateLabel( const Gwen::UnicodeString & text, const DividedText & txt, int & x, int & y, int & lineheight, bool NoSplit );
 				void Rebuild();
 
 				void OnBoundsChanged( Gwen::Rect oldBounds );

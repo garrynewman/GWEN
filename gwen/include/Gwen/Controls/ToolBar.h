@@ -12,51 +12,50 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Skin.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
 
 		class ToolBarButton : public Gwen::Controls::Button
 		{
-			GWEN_CONTROL_INLINE( ToolBarButton, Gwen::Controls::Button )
-			{
-				SetSize( 20, 20 );
-				Dock( Pos::Left );
-			}
+				GWEN_CONTROL_INLINE( ToolBarButton, Gwen::Controls::Button )
+				{
+					SetSize( 20, 20 );
+					Dock( Pos::Left );
+				}
 
-			virtual bool ShouldDrawBackground()
-			{ 
-				return IsHovered(); 
-			}
+				virtual bool ShouldDrawBackground()
+				{
+					return IsHovered();
+				}
 
 		};
 
 		class ToolBarStrip : public Base
 		{
-			GWEN_CONTROL_INLINE( ToolBarStrip, Base )
-			{
-				SetSize( 25, 25 );
-				SetPadding( Padding( 2, 2, 2, 2 ) );
-			}
+				GWEN_CONTROL_INLINE( ToolBarStrip, Base )
+				{
+					SetSize( 25, 25 );
+					SetPadding( Padding( 2, 2, 2, 2 ) );
+				}
 
-			virtual void Render( Skin::Base* skin )
-			{
-				skin->DrawMenuStrip( this );
-			}
+				virtual void Render( Skin::Base* skin )
+				{
+					skin->DrawMenuStrip( this );
+				}
 
-			virtual ToolBarButton* Add( const TextObject& Text, const TextObject& Icon )
-			{
-				ToolBarButton* pButton = new ToolBarButton( this );
-				pButton->SetToolTip( Text );
-				pButton->SetImage( Icon );
-
-				return pButton;
-			}
+				virtual ToolBarButton* Add( const TextObject & Text, const TextObject & Icon )
+				{
+					ToolBarButton* pButton = new ToolBarButton( this );
+					pButton->SetToolTip( Text );
+					pButton->SetImage( Icon );
+					return pButton;
+				}
 
 		};
 
-		
+
 	}
 
 }

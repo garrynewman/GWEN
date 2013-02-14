@@ -99,20 +99,21 @@ void UpdateHoveredControl( Controls::Base* pInCanvas )
 
 		Gwen::HoveredControl = Gwen::MouseFocus;
 	}
-
 }
 
 bool FindKeyboardFocus( Controls::Base* pControl )
 {
-	if ( !pControl ) return false;
+	if ( !pControl ) { return false; }
+
 	if ( pControl->GetKeyboardInputEnabled() )
 	{
 		//Make sure none of our children have keyboard focus first - todo recursive
-		for (Controls::Base::List::iterator iter = pControl->Children.begin(); iter != pControl->Children.end(); ++iter)
+		for ( Controls::Base::List::iterator iter = pControl->Children.begin(); iter != pControl->Children.end(); ++iter )
 		{
 			Controls::Base* pChild = *iter;
+
 			if ( pChild == Gwen::KeyboardFocus )
-				return false;
+			{ return false; }
 		}
 
 		pControl->Focus();
@@ -130,13 +131,14 @@ Gwen::Point Gwen::Input::GetMousePosition()
 void Gwen::Input::OnCanvasThink( Controls::Base* pControl )
 {
 	if ( Gwen::MouseFocus && !Gwen::MouseFocus->Visible() )
-		Gwen::MouseFocus = NULL;
-	
-	if ( Gwen::KeyboardFocus && ( !Gwen::KeyboardFocus->Visible() ||  !KeyboardFocus->GetKeyboardInputEnabled() ) )
-		Gwen::KeyboardFocus = NULL;
+	{ Gwen::MouseFocus = NULL; }
 
-	if ( !KeyboardFocus ) return;
-	if ( KeyboardFocus->GetCanvas() != pControl ) return;
+	if ( Gwen::KeyboardFocus && ( !Gwen::KeyboardFocus->Visible() ||  !KeyboardFocus->GetKeyboardInputEnabled() ) )
+	{ Gwen::KeyboardFocus = NULL; }
+
+	if ( !KeyboardFocus ) { return; }
+
+	if ( KeyboardFocus->GetCanvas() != pControl ) { return; }
 
 	float fTime = Gwen::Platform::GetTimeInSeconds();
 
@@ -182,7 +184,6 @@ void Gwen::Input::OnMouseMoved( Controls::Base* pCanvas, int x, int y, int /*del
 {
 	MousePosition.x = x;
 	MousePosition.y = y;
-
 	UpdateHoveredControl( pCanvas );
 }
 
@@ -190,30 +191,33 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 {
 	// If we click on a control that isn't a menu we want to close
 	// all the open menus. Menus are children of the canvas.
-	if ( bDown && (!Gwen::HoveredControl || !Gwen::HoveredControl->IsMenuComponent()) )
+	if ( bDown && ( !Gwen::HoveredControl || !Gwen::HoveredControl->IsMenuComponent() ) )
 	{
 		pCanvas->CloseMenus();
 	}
 
-	if ( !Gwen::HoveredControl ) return false;
-	if ( Gwen::HoveredControl->GetCanvas() != pCanvas ) return false;
-	if ( !Gwen::HoveredControl->Visible() ) return false;
-	if ( Gwen::HoveredControl == pCanvas ) return false;
+	if ( !Gwen::HoveredControl ) { return false; }
+
+	if ( Gwen::HoveredControl->GetCanvas() != pCanvas ) { return false; }
+
+	if ( !Gwen::HoveredControl->Visible() ) { return false; }
+
+	if ( Gwen::HoveredControl == pCanvas ) { return false; }
 
 	if ( iMouseButton > MAX_MOUSE_BUTTONS )
-		return false;
+	{ return false; }
 
-	if ( iMouseButton == 0 )		KeyData.LeftMouseDown = bDown;
-	else if ( iMouseButton == 1 )	KeyData.RightMouseDown = bDown;
+	if ( iMouseButton == 0 )		{ KeyData.LeftMouseDown = bDown; }
+	else if ( iMouseButton == 1 )	{ KeyData.RightMouseDown = bDown; }
 
 	// Double click.
 	// Todo: Shouldn't double click if mouse has moved significantly
 	bool bIsDoubleClick = false;
 
-	if ( bDown && 
-		g_pntLastClickPos.x == MousePosition.x && 
-		g_pntLastClickPos.y == MousePosition.y &&
-		( Gwen::Platform::GetTimeInSeconds() - g_fLastClickTime[ iMouseButton ] ) < DOUBLE_CLICK_SPEED )
+	if ( bDown &&
+			g_pntLastClickPos.x == MousePosition.x &&
+			g_pntLastClickPos.y == MousePosition.y &&
+			( Gwen::Platform::GetTimeInSeconds() - g_fLastClickTime[ iMouseButton ] ) < DOUBLE_CLICK_SPEED )
 	{
 		bIsDoubleClick = true;
 	}
@@ -226,11 +230,11 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 
 	if ( bDown )
 	{
-		if (!FindKeyboardFocus( Gwen::HoveredControl ))
-        {
-			if (Gwen::KeyboardFocus)
-				Gwen::KeyboardFocus->Blur();
-        }
+		if ( !FindKeyboardFocus( Gwen::HoveredControl ) )
+		{
+			if ( Gwen::KeyboardFocus )
+			{ Gwen::KeyboardFocus->Blur(); }
+		}
 	}
 
 	Gwen::HoveredControl->UpdateCursor();
@@ -240,34 +244,38 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 	// This is basically so that Windows can pop themselves
 	// to the top when one of their children have been clicked.
 	if ( bDown )
-		Gwen::HoveredControl->Touch();
+	{ Gwen::HoveredControl->Touch(); }
 
 #ifdef GWEN_HOOKSYSTEM
+
 	if ( bDown )
 	{
 		if ( Hook::CallHook( &Hook::BaseHook::OnControlClicked, Gwen::HoveredControl, MousePosition.x, MousePosition.y ) )
-			return true;
+		{ return true; }
 	}
+
 #endif
 
 	switch ( iMouseButton )
 	{
-		case 0:
-			{
-				if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
-					return true;
+	case 0:
+	{
+		if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
+		{ return true; }
 
-				if ( bIsDoubleClick )	Gwen::HoveredControl->OnMouseDoubleClickLeft( MousePosition.x, MousePosition.y );
-				else					Gwen::HoveredControl->OnMouseClickLeft( MousePosition.x, MousePosition.y, bDown );
-				return true;
-			}
+		if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( MousePosition.x, MousePosition.y ); }
+		else					{ Gwen::HoveredControl->OnMouseClickLeft( MousePosition.x, MousePosition.y, bDown ); }
 
-		case 1:
-			{
-				if ( bIsDoubleClick )	Gwen::HoveredControl->OnMouseDoubleClickRight( MousePosition.x, MousePosition.y );
-				else					Gwen::HoveredControl->OnMouseClickRight( MousePosition.x, MousePosition.y, bDown );
-				return true;
-			}
+		return true;
+	}
+
+	case 1:
+	{
+		if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( MousePosition.x, MousePosition.y ); }
+		else					{ Gwen::HoveredControl->OnMouseClickRight( MousePosition.x, MousePosition.y, bDown ); }
+
+		return true;
+	}
 	}
 
 	return false;
@@ -279,68 +287,72 @@ bool Gwen::Input::HandleAccelerator( Controls::Base* pCanvas, Gwen::UnicodeChar 
 	Gwen::UnicodeString accelString;
 
 	if ( Gwen::Input::IsControlDown() )
-		accelString += L"CTRL+";
+	{ accelString += L"CTRL+"; }
 
 	if ( Gwen::Input::IsShiftDown() )
-		accelString += L"SHIFT+";
+	{ accelString += L"SHIFT+"; }
 
 	chr = towupper( chr );
-
 	accelString += chr;
 
 	//Debug::Msg("Accelerator string :%S\n", accelString.c_str());
 
 	if ( Gwen::KeyboardFocus && Gwen::KeyboardFocus->HandleAccelerator( accelString ) )
-		return true;
+	{ return true; }
 
 	if ( Gwen::MouseFocus && Gwen::MouseFocus->HandleAccelerator( accelString ) )
-		return true;
+	{ return true; }
 
 	if ( pCanvas->HandleAccelerator( accelString ) )
-		return true;
+	{ return true; }
 
 	return false;
 }
 
 bool Gwen::Input::DoSpecialKeys( Controls::Base* pCanvas, Gwen::UnicodeChar chr )
 {
-	if ( !Gwen::KeyboardFocus ) return false;
-	if ( Gwen::KeyboardFocus->GetCanvas() != pCanvas ) return false;
-	if ( !Gwen::KeyboardFocus->Visible() ) return false;
-	if ( !Gwen::Input::IsControlDown() ) return false;
+	if ( !Gwen::KeyboardFocus ) { return false; }
+
+	if ( Gwen::KeyboardFocus->GetCanvas() != pCanvas ) { return false; }
+
+	if ( !Gwen::KeyboardFocus->Visible() ) { return false; }
+
+	if ( !Gwen::Input::IsControlDown() ) { return false; }
 
 	if ( chr == L'C' || chr == L'c' )
 	{
-		Gwen::KeyboardFocus->OnCopy(NULL);
+		Gwen::KeyboardFocus->OnCopy( NULL );
 		return true;
 	}
 
 	if ( chr == L'V' || chr == L'v' )
 	{
-		Gwen::KeyboardFocus->OnPaste(NULL);
+		Gwen::KeyboardFocus->OnPaste( NULL );
 		return true;
 	}
 
 	if ( chr == L'X' || chr == L'x' )
 	{
-		Gwen::KeyboardFocus->OnCut(NULL);
+		Gwen::KeyboardFocus->OnCut( NULL );
 		return true;
 	}
 
 	if ( chr == L'A' || chr == L'a' )
 	{
-		Gwen::KeyboardFocus->OnSelectAll(NULL);
+		Gwen::KeyboardFocus->OnSelectAll( NULL );
 		return true;
 	}
-	
+
 	return false;
 }
 
 bool Gwen::Input::OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown )
 {
 	Gwen::Controls::Base* pTarget = Gwen::KeyboardFocus;
-	if ( pTarget && pTarget->GetCanvas() != pCanvas ) pTarget = NULL;
-	if ( pTarget && !pTarget->Visible() ) pTarget = NULL;
+
+	if ( pTarget && pTarget->GetCanvas() != pCanvas ) { pTarget = NULL; }
+
+	if ( pTarget && !pTarget->Visible() ) { pTarget = NULL; }
 
 	if ( bDown )
 	{
@@ -351,7 +363,7 @@ bool Gwen::Input::OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown )
 			KeyData.Target = pTarget;
 
 			if ( pTarget )
-				return pTarget->OnKeyPress( iKey );
+			{ return pTarget->OnKeyPress( iKey ); }
 		}
 	}
 	else
@@ -365,9 +377,9 @@ bool Gwen::Input::OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown )
 			//KeyData.Target = NULL;
 
 			if ( pTarget )
-				return pTarget->OnKeyRelease( iKey );
+			{ return pTarget->OnKeyRelease( iKey ); }
 		}
 	}
-	
+
 	return false;
 }

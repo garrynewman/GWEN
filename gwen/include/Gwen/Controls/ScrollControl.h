@@ -17,7 +17,7 @@
 #include "Gwen/Controls/HorizontalScrollBar.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -31,19 +31,19 @@ namespace Gwen
 				virtual void Render( Skin::Base* skin );
 
 				virtual void SetScroll( bool h, bool v );
-				virtual void SetAutoHideBars(bool should) { m_bAutoHideBars = should; }
+				virtual void SetAutoHideBars( bool should ) { m_bAutoHideBars = should; }
 				virtual bool CanScrollH() { return m_bCanScrollH; }
 				virtual bool CanScrollV() { return m_bCanScrollV; }
 				virtual void OnChildBoundsChanged( Gwen::Rect oldChildBounds, Base* pChild );
 				virtual void UpdateScrollBars();
 
-				virtual void SetVScrollRequired(bool req);
-				virtual void SetHScrollRequired(bool req);
+				virtual void SetVScrollRequired( bool req );
+				virtual void SetHScrollRequired( bool req );
 
 				virtual void SetInnerSize( int w, int h );
 
-				virtual void VBarMoved(Controls::Base * control);
-				virtual void HBarMoved(Controls::Base * control);
+				virtual void VBarMoved( Controls::Base* control );
+				virtual void HBarMoved( Controls::Base* control );
 
 				virtual bool OnMouseWheeled( int iDelta );
 

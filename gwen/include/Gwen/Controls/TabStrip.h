@@ -12,7 +12,7 @@
 #include "Gwen/Controls/Button.h"
 #include "Gwen/Controls/TabButton.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -35,10 +35,10 @@ namespace Gwen
 
 				virtual void SetTabPosition( int iPos );
 
-				virtual void SetAllowReorder( bool b ){ m_bAllowReorder = b; }
+				virtual void SetAllowReorder( bool b ) { m_bAllowReorder = b; }
 				virtual bool AllowsTabReorder() { return m_bAllowReorder; }
 
-				virtual bool ShouldClip(){ return false; }
+				virtual bool ShouldClip() { return false; }
 
 			private:
 

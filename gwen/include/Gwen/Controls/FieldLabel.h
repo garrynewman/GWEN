@@ -11,7 +11,7 @@
 #include "Gwen/BaseRender.h"
 #include "Gwen/Controls/Label.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -19,16 +19,15 @@ namespace Gwen
 		{
 			public:
 
-			static inline FieldLabel* Setup( Controls::Base* pControl, const Gwen::TextObject& text )
-			{
-				FieldLabel* plbl = new FieldLabel( pControl->GetParent() );
-				plbl->SetText( text );
-				plbl->SetSize( pControl->Width(), pControl->Height() );
-				plbl->Dock( pControl->GetDock() );
-
-				plbl->SetField( pControl );
-				return plbl;
-			}
+				static inline FieldLabel* Setup( Controls::Base* pControl, const Gwen::TextObject & text )
+				{
+					FieldLabel* plbl = new FieldLabel( pControl->GetParent() );
+					plbl->SetText( text );
+					plbl->SetSize( pControl->Width(), pControl->Height() );
+					plbl->Dock( pControl->GetDock() );
+					plbl->SetField( pControl );
+					return plbl;
+				}
 
 			public:
 
@@ -49,7 +48,6 @@ namespace Gwen
 				void Layout( Gwen::Skin::Base* pskin )
 				{
 					m_pField->SetWidth( Width() - 70 );
-
 					BaseClass::Layout( pskin );
 				}
 

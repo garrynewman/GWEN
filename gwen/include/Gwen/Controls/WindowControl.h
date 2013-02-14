@@ -20,7 +20,7 @@
 #include "Gwen/Skin.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -37,17 +37,17 @@ namespace Gwen
 				virtual void RenderUnder( Skin::Base* skin );
 
 				virtual void SetTitle( Gwen::UnicodeString title );
-				virtual void SetTitle( Gwen::String title ){ SetTitle( Gwen::Utility::StringToUnicode( title ) ); }
-				virtual void SetClosable(bool closeable);
+				virtual void SetTitle( Gwen::String title ) { SetTitle( Gwen::Utility::StringToUnicode( title ) ); }
+				virtual void SetClosable( bool closeable );
 
 				virtual void Touch();
 				bool IsOnTop();
 
-				virtual void SetHidden(bool hidden);
+				virtual void SetHidden( bool hidden );
 
 				void CloseButtonPressed();
 				void RenderFocus( Gwen::Skin::Base* skin );
-				void SetDeleteOnClose( bool b ){ m_bDeleteOnClose = b; }
+				void SetDeleteOnClose( bool b ) { m_bDeleteOnClose = b; }
 
 				void MakeModal( bool bDrawBackground = true );
 				void DestroyModal();
