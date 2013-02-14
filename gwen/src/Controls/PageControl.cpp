@@ -62,7 +62,7 @@ void PageControl::SetPageCount( unsigned int iNum )
 {
 	if ( iNum >= MaxPages ) iNum = MaxPages;
 
-	for (int i=0; i<iNum; i++)
+	for (unsigned int i=0; i<iNum; i++)
 	{
 		if ( !m_pPages[i] )
 		{

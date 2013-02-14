@@ -90,12 +90,12 @@ bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString& str )
 	EmptyClipboard();
 
 	// Create a buffer to hold the string
-	size_t iDataSize = (str.length()+1) * sizeof(wchar_t);
+	const size_t iDataSize = (str.length()+1) * sizeof(wchar_t);
 	HGLOBAL clipbuffer = GlobalAlloc( GMEM_DDESHARE, iDataSize );
 
 	// Copy the string into the buffer
 	wchar_t* buffer = (wchar_t*) GlobalLock( clipbuffer );
-		wcscpy( buffer, str.c_str() );
+	wcscpy_s( buffer, iDataSize, str.c_str() );
 	GlobalUnlock(clipbuffer);
 
 	// Place it on the clipboard
