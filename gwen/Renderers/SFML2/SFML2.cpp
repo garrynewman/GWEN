@@ -60,16 +60,16 @@ void Gwen::Renderer::SFML2::StartClip()
 	Flush();
 
 	Gwen::Rect rect = ClipRegion();
-	float x = rect.x, y = rect.y, w = rect.w, h = rect.h;
+	float x = rect.x-1, y = rect.y, w = rect.w+1, h = rect.h+1;
 
 	// OpenGL's coords are from the bottom left
 	// so we need to translate them here.
-	rect.y = myHeight - (rect.y + rect.h);
+	y = myHeight - (y + h);
 
 	float scale = Scale();
 
 	glEnable(GL_SCISSOR_TEST);
-	glScissor(rect.x * scale, rect.y * scale, rect.w * scale, rect.h * scale);
+	glScissor(x * scale, y * scale, w * scale, h * scale);
 }
 
 void Gwen::Renderer::SFML2::EndClip()
@@ -87,7 +87,8 @@ void Gwen::Renderer::SFML2::DrawPixel( int x, int y )
 {
 	EnsurePrimitiveType(sf::Points);
 	EnsureTexture(NULL);
-	AddVert(x, y);
+	Translate(x, y);
+	AddVert(x, y+1);
 }
 
 void Gwen::Renderer::SFML2::DrawLinedRect(Gwen::Rect rect)
@@ -95,10 +96,23 @@ void Gwen::Renderer::SFML2::DrawLinedRect(Gwen::Rect rect)
 	EnsurePrimitiveType(sf::Lines);
 	EnsureTexture(NULL);
 
+	Translate (rect);
+
+	//   (x,y) ---------- (x+w, y)
+	//         |        |
+	// (x,y+h) ---------- (x+w,y+h)
+
 	AddVert( rect.x, rect.y);
 	AddVert( rect.x+rect.w, rect.y	);
-	AddVert( rect.x+rect.w, rect.y );
+
+	AddVert( rect.x+rect.w, rect.y	);
 	AddVert( rect.x+rect.w, rect.y+rect.h);
+
+	AddVert( rect.x+rect.w, rect.y+rect.h);
+	AddVert( rect.x, rect.y + rect.h );
+
+	AddVert( rect.x, rect.y + rect.h );
+	AddVert( rect.x, rect.y);
 }
 
 void Gwen::Renderer::SFML2::DrawFilledRect(Gwen::Rect rect)

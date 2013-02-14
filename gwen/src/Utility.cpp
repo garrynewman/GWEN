@@ -20,15 +20,14 @@ using namespace Gwen;
 
 UnicodeString Gwen::Utility::Format( const wchar_t* fmt, ... )
 {
-	wchar_t strOut[ 4096 ];
+	UnicodeString strOut( 4096, 0 );
 
 	va_list s;
 	va_start( s, fmt ); 
-	vswprintf( strOut, sizeof(strOut), fmt, s );
+	size_t len = vswprintf( &strOut[0], strOut.size(), fmt, s );
 	va_end(s);
-
-	UnicodeString str = strOut;
-	return str;
+	strOut.resize(len - 1);
+	return strOut;
 }
 
 
