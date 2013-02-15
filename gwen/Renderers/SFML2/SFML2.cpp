@@ -188,6 +188,8 @@ void Gwen::Renderer::SFML2::FreeFont(Gwen::Font* pFont)
 
 void Gwen::Renderer::SFML2::RenderText(Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString& text)
 {
+	Flush();
+
 	Translate( pos.x, pos.y );
 
 	// If the font doesn't exist, or the font size should be changed
@@ -222,6 +224,7 @@ Gwen::Point Gwen::Renderer::SFML2::MeasureText(Gwen::Font* pFont, const Gwen::Un
 	sf::Text sfStr;
 	sfStr.setString( text );
 	sfStr.setFont( *pSFFont );
+	sfStr.setScale(Scale(), Scale());
 	sfStr.setCharacterSize( pFont->realsize );
 	sf::FloatRect sz = sfStr.getLocalBounds();
 	return Gwen::Point( sz.left + sz.width, sz.top + sz.height );
