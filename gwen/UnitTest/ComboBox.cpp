@@ -48,7 +48,7 @@ class ComboBox : public GUnit
 	{
 		Gwen::Controls::ComboBox* combo = (Gwen::Controls::ComboBox*)pControl;
 
-		UnitPrint( Utility::Format( L"Combo Changed: %s", combo->GetSelectedItem()->GetText().GetUnicode().c_str() ) );
+		UnitPrint( Utility::Format( L"Combo Changed: %ls", combo->GetSelectedItem()->GetText().GetUnicode().c_str() ) );
 	}
 };
 
