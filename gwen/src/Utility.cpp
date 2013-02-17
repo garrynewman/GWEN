@@ -7,6 +7,8 @@
 #include "Gwen/ToolTip.h"
 #include "Gwen/Utility.h"
 
+#include <cstdio>
+
 using namespace Gwen;
 
 #ifdef _MSC_VER
@@ -18,15 +20,45 @@ using namespace Gwen;
 #define vswprintf _vsnwprintf
 #endif
 
+#ifdef _MSC_VER
+#define GWEN_FNULL "NUL"
+#else
+#define GWEN_FNULL "/dev/null"
+#endif
+
 UnicodeString Gwen::Utility::Format( const wchar_t* fmt, ... )
 {
-	wchar_t strOut[ 4096 ];
 	va_list s;
+	int len = 0;
+	
 	va_start( s, fmt );
-	vswprintf( strOut, sizeof( strOut ), fmt, s );
+	
+	// Determine the length of the resulting string, this method is much faster
+	// than looping and reallocating a bigger buffer size.
+	{	
+		FILE* fnull = fopen( GWEN_FNULL, "wb" );
+		va_list c;
+		va_copy( c, s );
+		len = vfwprintf( fnull, fmt, c );
+		va_end( c );
+		fclose( fnull );
+	} 
+	
+	UnicodeString strOut;
+	
+	if (len > 0)
+	{
+		strOut.resize( len + 1 );
+		va_list c;
+		va_copy( c, s );
+		len = vswprintf( &strOut[0], strOut.size(), fmt, c );
+		va_end( c );
+		strOut.resize( len );
+	}
+	
 	va_end( s );
-	UnicodeString str = strOut;
-	return str;
+	
+	return strOut;
 }
 
 
