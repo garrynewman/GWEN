@@ -54,15 +54,13 @@ namespace Gwen
 			this->right = right_;
 		}
 
-		Margin operator +( const Margin& margin ) const
+		Margin operator +( const Margin & margin ) const
 		{
 			Margin m;
-
 			m.top		= top + margin.top;
 			m.bottom	= bottom + margin.bottom;
 			m.left		= left + margin.left;
 			m.right		= right + margin.right;
-
 			return m;
 		}
 
@@ -73,7 +71,7 @@ namespace Gwen
 	typedef Margin Padding;
 
 
-	struct GWEN_EXPORT Rect 
+	struct GWEN_EXPORT Rect
 	{
 		Rect( int x_ = 0, int y_ = 0, int w_ = 0, int h_ = 0 )
 		{
@@ -83,15 +81,13 @@ namespace Gwen
 			this->h = h_;
 		}
 
-		Rect operator +( const Rect& rct ) const
+		Rect operator +( const Rect & rct ) const
 		{
 			Rect m;
-
 			m.x		= x + rct.x;
 			m.y		= y + rct.y;
 			m.w		= w + rct.w;
 			m.h		= h + rct.h;
-
 			return m;
 		}
 
@@ -101,30 +97,30 @@ namespace Gwen
 
 	struct GWEN_EXPORT Point
 	{
-		Point(int x_ = 0, int y_ = 0) 
-		{ 
-			this->x = x_; 
+		Point( int x_ = 0, int y_ = 0 )
+		{
+			this->x = x_;
 			this->y = y_;
 		}
 
-		void operator +=( const Point& p )
+		void operator +=( const Point & p )
 		{
 			x += p.x;
 			y += p.y;
 		}
 
-		Point operator +( const Point& p ) const
+		Point operator +( const Point & p ) const
 		{
 			return Point( x + p.x, p.y + y );
 		}
 
-		void operator -=( const Point& p )
+		void operator -=( const Point & p )
 		{
 			x -= p.x;
 			y -= p.y;
 		}
 
-		Point operator -( const Point& p ) const
+		Point operator -( const Point & p ) const
 		{
 			return Point( x - p.x, y - p.y );
 		}
@@ -132,7 +128,7 @@ namespace Gwen
 		int x, y;
 	};
 
-	struct GWEN_EXPORT HSV 
+	struct GWEN_EXPORT HSV
 	{
 		float h;
 		float s;
@@ -184,39 +180,39 @@ namespace Gwen
 
 		Color operator *( float f )
 		{
-			return Color( 
-				(float)this->r*f, 
-				(float)this->g*f, 
-				(float)this->b*f, 
-				(float)this->a*f 
-				);
+			return Color(
+					   ( float )this->r*f,
+					   ( float )this->g*f,
+					   ( float )this->b*f,
+					   ( float )this->a*f
+				   );
 		}
 
 		Color operator - ( Color c )
 		{
-			return Color( 
-				this->r - c.r, 
-				this->g - c.g, 
-				this->b - c.b, 
-				this->a - c.a 
-				);
+			return Color(
+					   this->r - c.r,
+					   this->g - c.g,
+					   this->b - c.b,
+					   this->a - c.a
+				   );
 		}
 
 		Color operator + ( Color c )
 		{
-			return Color( 
-				this->r + c.r, 
-				this->g + c.g, 
-				this->b + c.b, 
-				this->a + c.a 
-				);
+			return Color(
+					   this->r + c.r,
+					   this->g + c.g,
+					   this->b + c.b,
+					   this->a + c.a
+				   );
 		}
 
-		bool operator ==( const Color& c ) const
+		bool operator ==( const Color & c ) const
 		{
 			return c.r==r && c.g==g && c.b==b && c.a==a;
 		}
-		
+
 
 		unsigned char r, g, b, a;
 	};

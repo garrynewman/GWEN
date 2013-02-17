@@ -35,26 +35,23 @@ namespace Gwen
 
 		void OpenGL_DebugFont::CreateDebugFont()
 		{
-			if ( m_pFontTexture ) return;
+			if ( m_pFontTexture ) { return; }
 
 			m_pFontTexture = new Gwen::Texture();
-
 			// Create a little texture pointer..
 			GLuint* pglTexture = new GLuint;
-
 			// Sort out our GWEN texture
 			m_pFontTexture->data = pglTexture;
 			m_pFontTexture->width = 256;
 			m_pFontTexture->height = 256;
-
 			// Create the opengl texture
 			glGenTextures( 1, pglTexture );
 			glBindTexture( GL_TEXTURE_2D, *pglTexture );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
 			unsigned char* texdata = new unsigned char[256*256*4];
-			for (int i=0;i<256*256;i++)
+
+			for ( int i=0; i<256*256; i++ )
 			{
 				texdata[i*4] = sGwenFontData[i];
 				texdata[i*4+1] = sGwenFontData[i];
@@ -62,74 +59,70 @@ namespace Gwen
 				texdata[i*4+3] = sGwenFontData[i];
 			}
 
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_pFontTexture->width, m_pFontTexture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const GLvoid*)texdata );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_pFontTexture->width, m_pFontTexture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ( const GLvoid* )texdata );
 			delete[]texdata;
 		}
 
 		void OpenGL_DebugFont::DestroyDebugFont()
 		{
-			if ( !m_pFontTexture ) return;
+			if ( !m_pFontTexture ) { return; }
 
-			GLuint* tex = (GLuint*)m_pFontTexture->data;
-			if ( !tex ) return;
+			GLuint* tex = ( GLuint* )m_pFontTexture->data;
+
+			if ( !tex ) { return; }
 
 			glDeleteTextures( 1, tex );
 			delete tex;
-
 			m_pFontTexture->data = NULL;
-
 			delete m_pFontTexture;
 			m_pFontTexture = NULL;
 		}
 
-		void OpenGL_DebugFont::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString& text )
+		void OpenGL_DebugFont::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text )
 		{
 			float fSize = pFont->size * Scale();
 
 			if ( !text.length() )
-				return;
+			{ return; }
 
 			Gwen::String converted_string = Gwen::Utility::UnicodeToString( text );
-
 			float yOffset=0.0f;
+
 			for ( int i=0; i<text.length(); i++ )
 			{
 				char ch = converted_string[i];
 				float curSpacing = sGwenDebugFontSpacing[ch] * m_fLetterSpacing * fSize * m_fFontScale[0];
-				Gwen::Rect r( pos.x + yOffset, pos.y-fSize*0.5, (fSize * m_fFontScale[0]), fSize * m_fFontScale[1] );
+				Gwen::Rect r( pos.x + yOffset, pos.y-fSize*0.5, ( fSize * m_fFontScale[0] ), fSize * m_fFontScale[1] );
 
 				if ( m_pFontTexture )
 				{
-					float uv_texcoords[8]={0.,0.,1.,1.};
+					float uv_texcoords[8]= {0.,0.,1.,1.};
 
 					if ( ch >= 0 )
 					{
-						float cx= (ch%16)/16.0;
-						float cy= (ch/16)/16.0;
-						uv_texcoords[0] = cx;			
+						float cx= ( ch%16 )/16.0;
+						float cy= ( ch/16 )/16.0;
+						uv_texcoords[0] = cx;
 						uv_texcoords[1] = cy;
-						uv_texcoords[4] = float(cx+1.0f/16.0f);	
-						uv_texcoords[5] = float(cy+1.0f/16.0f);
+						uv_texcoords[4] = float( cx+1.0f/16.0f );
+						uv_texcoords[5] = float( cy+1.0f/16.0f );
 					}
 
 					DrawTexturedRect( m_pFontTexture, r, uv_texcoords[0], uv_texcoords[5], uv_texcoords[4], uv_texcoords[1] );
 					yOffset+=curSpacing;
-				} 
+				}
 				else
 				{
 					DrawFilledRect( r );
 					yOffset+=curSpacing;
-
 				}
 			}
-
 		}
 
-		Gwen::Point OpenGL_DebugFont::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text )
+		Gwen::Point OpenGL_DebugFont::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
 			Gwen::Point p;
 			float fSize = pFont->size * Scale();
-
 			Gwen::String converted_string = Gwen::Utility::UnicodeToString( text );
 			float spacing = 0.0f;
 

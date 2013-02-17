@@ -16,7 +16,7 @@
 #include "Gwen/Controls/Menu.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -30,8 +30,8 @@ namespace Gwen
 				virtual void Layout( Skin::Base* skin );
 				virtual void UpdateColours();
 
-                virtual void SelectItem( MenuItem* pItem, bool bFireChangeEvents = true );
-				virtual void SelectItemByName( const Gwen::String& name, bool bFireChangeEvents = true );
+				virtual void SelectItem( MenuItem* pItem, bool bFireChangeEvents = true );
+				virtual void SelectItemByName( const Gwen::String & name, bool bFireChangeEvents = true );
 				virtual Gwen::Controls::Label* GetSelectedItem();
 
 				virtual void OnPress();
@@ -41,7 +41,7 @@ namespace Gwen
 
 				virtual void ClearItems();
 
-				virtual MenuItem* AddItem( const UnicodeString& strLabel, const String& strName = "" );
+				virtual MenuItem* AddItem( const UnicodeString & strLabel, const String & strName = "" );
 				virtual bool OnKeyUp( bool bDown );
 				virtual bool OnKeyDown( bool bDown );
 
@@ -51,7 +51,7 @@ namespace Gwen
 
 				virtual bool IsMenuOpen();
 
-				virtual bool IsMenuComponent(){ return true; }
+				virtual bool IsMenuComponent() { return true; }
 
 				Gwen::Event::Caller	onSelection;
 
@@ -63,7 +63,7 @@ namespace Gwen
 				Controls::Base*	m_Button;
 
 		};
-		
+
 	}
 }
 #endif

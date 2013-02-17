@@ -12,34 +12,34 @@
 #include "Gwen/Controls/Button.h"
 #include "Gwen/Controls/TextBox.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
 		class GWEN_EXPORT NumericUpDownButton_Up : public Button
 		{
-			GWEN_CONTROL_INLINE( NumericUpDownButton_Up, Button )
-			{
-				SetSize( 7, 7 );
-			}
+				GWEN_CONTROL_INLINE( NumericUpDownButton_Up, Button )
+				{
+					SetSize( 7, 7 );
+				}
 
-			virtual void Render( Skin::Base* skin )
-			{
-				skin->DrawNumericUpDownButton( this, IsDepressed(), true );
-			}
+				virtual void Render( Skin::Base* skin )
+				{
+					skin->DrawNumericUpDownButton( this, IsDepressed(), true );
+				}
 		};
 
 		class GWEN_EXPORT NumericUpDownButton_Down : public Button
 		{
-			GWEN_CONTROL_INLINE( NumericUpDownButton_Down, Button )
-			{
-				SetSize( 7, 7 );
-			}
+				GWEN_CONTROL_INLINE( NumericUpDownButton_Down, Button )
+				{
+					SetSize( 7, 7 );
+				}
 
-			virtual void Render( Skin::Base* skin )
-			{
-				skin->DrawNumericUpDownButton( this, IsDepressed(), false );
-			}
+				virtual void Render( Skin::Base* skin )
+				{
+					skin->DrawNumericUpDownButton( this, IsDepressed(), false );
+				}
 		};
 
 		class GWEN_EXPORT NumericUpDown : public TextBoxNumeric
@@ -63,13 +63,13 @@ namespace Gwen
 				virtual void OnButtonUp( Base* control );
 				virtual void OnButtonDown( Base* control );
 
-				virtual bool OnKeyUp( bool bDown )	{	if ( bDown ) OnButtonUp( NULL ); return true;   }
-				virtual bool OnKeyDown( bool bDown ){	if ( bDown ) OnButtonDown( NULL ); return true; }
+				virtual bool OnKeyUp( bool bDown )	{	if ( bDown ) { OnButtonUp( NULL ); } return true;   }
+				virtual bool OnKeyDown( bool bDown ) {	if ( bDown ) { OnButtonDown( NULL ); } return true; }
 
 				virtual void SyncTextFromNumber();
 				virtual void SyncNumberFromText();
 
-				
+
 
 				int m_iNumber;
 				int m_iMax;

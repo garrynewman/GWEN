@@ -20,7 +20,7 @@ GWEN_CONTROL_CONSTRUCTOR( HorizontalSlider )
 
 float HorizontalSlider::CalculateValue()
 {
-	return  (float)m_SliderBar->X() / (float)( Width() - m_SliderBar->Width() );
+	return  ( float )m_SliderBar->X() / ( float )( Width() - m_SliderBar->Width() );
 }
 
 void HorizontalSlider::UpdateBarFromValue()
@@ -35,7 +35,7 @@ void HorizontalSlider::OnMouseClickLeft( int x, int y, bool bDown )
 	OnMoved( m_SliderBar );
 }
 
-void HorizontalSlider::Layout(Skin::Base* /*skin*/)
+void HorizontalSlider::Layout( Skin::Base* /*skin*/ )
 {
 	m_SliderBar->SetSize( 15, Height() );
 }

@@ -7,7 +7,7 @@ namespace Gwen
 	/*
 
 		Allows you to store multiple and various user data
-		
+
 		//
 		// Valid
 		//
@@ -36,24 +36,24 @@ namespace Gwen
 	*/
 	class UserDataStorage
 	{
-			struct ValueBase 
-			{ 
-				virtual void DeleteThis() = 0; 
+			struct ValueBase
+			{
+				virtual void DeleteThis() = 0;
 			};
 
-			template<typename T> struct Value : public ValueBase 
-			{ 
-				T val; 
+			template<typename T> struct Value : public ValueBase
+			{
+				T val;
 
-				Value( const T& v )
-				{ 
-					val = v; 
+				Value( const T & v )
+				{
+					val = v;
 				}
-				
+
 				virtual void DeleteThis()
 				{
 					delete this;
-				}				
+				}
 			};
 
 		public:
@@ -67,40 +67,39 @@ namespace Gwen
 				std::map< Gwen::String, void*>::iterator it = m_List.begin();
 				std::map< Gwen::String, void*>::iterator itEnd = m_List.end();
 
-				while( it != itEnd )
+				while ( it != itEnd )
 				{
-					((ValueBase*)it->second)->DeleteThis();
+					( ( ValueBase* )it->second )->DeleteThis();
 					++it;
 				}
 			}
 
 			template<typename T>
-			void Set( const Gwen::String& str, const T& var )
+			void Set( const Gwen::String & str, const T & var )
 			{
 				Value<T>* val = NULL;
-
 				std::map< Gwen::String, void*>::iterator it = m_List.find( str );
+
 				if ( it != m_List.end() )
 				{
-					((Value<T>*)it->second)->val = var;
+					( ( Value<T>* )it->second )->val = var;
 				}
 				else
 				{
 					val = new Value<T>( var );
-					m_List[ str ] = (void*) val;
+					m_List[ str ] = ( void* ) val;
 				}
-				
 			};
-			
-			bool Exists( const Gwen::String& str )
+
+			bool Exists( const Gwen::String & str )
 			{
 				return m_List.find( str ) != m_List.end();
 			};
 
 			template <typename T>
-			T& Get( const Gwen::String& str )
+			T & Get( const Gwen::String & str )
 			{
-				Value<T>* v = (Value<T>*) m_List[ str ];
+				Value<T>* v = ( Value<T>* ) m_List[ str ];
 				return v->val;
 			}
 

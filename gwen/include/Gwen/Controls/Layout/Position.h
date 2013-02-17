@@ -12,7 +12,7 @@
 #include "Gwen/Utility.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -33,16 +33,15 @@ namespace Gwen
 						{
 							Base* pChild = *it;
 
-							if ( pChild->GetDock() != Pos::None ) continue;
+							if ( pChild->GetDock() != Pos::None ) { continue; }
 
 							pChild->Position( m_iPosition );
-
 						}
 					}
 
 					void SetPosition( int p )
 					{
-						if ( m_iPosition == p ) return;
+						if ( m_iPosition == p ) { return; }
 
 						m_iPosition = p;
 						Invalidate();
@@ -55,10 +54,10 @@ namespace Gwen
 
 			class GWEN_EXPORT Center : public Position
 			{
-				GWEN_CONTROL_INLINE( Center, Position )
-				{
-					SetPosition( Pos::Center );
-				}
+					GWEN_CONTROL_INLINE( Center, Position )
+					{
+						SetPosition( Pos::Center );
+					}
 			};
 		}
 	}

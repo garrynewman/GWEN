@@ -17,7 +17,7 @@
 #include "Gwen/Skin.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -32,9 +32,9 @@ namespace Gwen
 
 				virtual void PostLayout( Gwen::Skin::Base* skin );
 
-				PropertyRow* Add( const TextObject& text, const TextObject& value = L"" );
-				PropertyRow* Add( const TextObject& text, Property::Base* pProp, const TextObject& value = L"" );
-				PropertyRow* Find( const TextObject& text );
+				PropertyRow* Add( const TextObject & text, const TextObject & value = L"" );
+				PropertyRow* Add( const TextObject & text, Property::Base* pProp, const TextObject & value = L"" );
+				PropertyRow* Find( const TextObject & text );
 
 				virtual int GetSplitWidth();
 
@@ -42,7 +42,7 @@ namespace Gwen
 
 			protected:
 
-				virtual void OnSplitterMoved( Controls::Base * control );
+				virtual void OnSplitterMoved( Controls::Base* control );
 
 				Controls::SplitterBar*	m_SplitterBar;
 
@@ -54,15 +54,15 @@ namespace Gwen
 
 				GWEN_CONTROL( PropertyRow, Base );
 
-				virtual Label* GetLabel(){ return m_Label; }
+				virtual Label* GetLabel() { return m_Label; }
 				virtual void SetProperty( Property::Base* prop );
-				virtual Property::Base* GetProperty(){ return m_Property; }
+				virtual Property::Base* GetProperty() { return m_Property; }
 
 				virtual void Layout( Gwen::Skin::Base* skin );
 				virtual void Render( Gwen::Skin::Base* skin );
 
-				virtual bool IsEditing(){ return m_Property && m_Property->IsEditing(); }
-				virtual bool IsHovered(){ return BaseClass::IsHovered() || (m_Property && m_Property->IsHovered()); }
+				virtual bool IsEditing() { return m_Property && m_Property->IsEditing(); }
+				virtual bool IsHovered() { return BaseClass::IsHovered() || ( m_Property && m_Property->IsHovered() ); }
 				virtual void OnEditingChanged();
 				virtual void OnHoverChanged();
 

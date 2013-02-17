@@ -14,7 +14,7 @@
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/LabelClickable.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -39,7 +39,7 @@ namespace Gwen
 			private:
 
 				// For derived controls
-				virtual bool AllowUncheck(){ return true; }
+				virtual bool AllowUncheck() { return true; }
 
 				void OnCheckStatusChanged();
 
@@ -53,23 +53,20 @@ namespace Gwen
 				GWEN_CONTROL_INLINE( CheckBoxWithLabel, Base )
 				{
 					SetSize( 200, 19 );
-
 					m_Checkbox = new CheckBox( this );
 					m_Checkbox->Dock( Pos::Left );
 					m_Checkbox->SetMargin( Margin( 0, 2, 2, 2 ) );
 					m_Checkbox->SetTabable( false );
-
 					m_Label = new LabelClickable( this );
 					m_Label->Dock( Pos::Fill );
 					m_Label->onPress.Add( m_Checkbox, &CheckBox::OnPress );
 					m_Label->SetTabable( false );
-
 					SetTabable( false );
 				}
 
 				virtual CheckBox* Checkbox() { return m_Checkbox; }
 				virtual LabelClickable* Label() { return m_Label; }
-				virtual bool OnKeySpace( bool bDown ) { if ( !bDown ) m_Checkbox->SetChecked( !m_Checkbox->IsChecked() ); return true; }
+				virtual bool OnKeySpace( bool bDown ) { if ( !bDown ) { m_Checkbox->SetChecked( !m_Checkbox->IsChecked() ); } return true; }
 
 			private:
 

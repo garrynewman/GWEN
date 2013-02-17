@@ -10,7 +10,7 @@
 
 #include "Gwen/Controls/Button.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{

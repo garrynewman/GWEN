@@ -12,7 +12,7 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Skin.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{
@@ -22,7 +22,6 @@ namespace Gwen
 
 				GWEN_CONTROL_INLINE( Highlight, Controls::Base )
 				{
-
 				}
 
 				void Render( Skin::Base* skin )

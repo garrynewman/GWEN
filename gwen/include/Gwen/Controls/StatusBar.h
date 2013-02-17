@@ -5,7 +5,7 @@
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/Label.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{

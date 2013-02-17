@@ -25,27 +25,25 @@ void RichLabel::AddLineBreak()
 {
 	DividedText t;
 	t.type = Type_Newline;
-
-	m_TextBlocks.push_back( t );		
+	m_TextBlocks.push_back( t );
 }
 
-void RichLabel::AddText( const Gwen::TextObject& text, Gwen::Color color, Gwen::Font* font )
+void RichLabel::AddText( const Gwen::TextObject & text, Gwen::Color color, Gwen::Font* font )
 {
-	if ( text.length() == 0 ) return;
+	if ( text.length() == 0 ) { return; }
 
 	Gwen::Utility::Strings::UnicodeList lst;
 	Gwen::Utility::Strings::Split( text.GetUnicode(), L"\n", lst, false );
 
-	for (size_t i=0; i<lst.size(); i++ )
+	for ( size_t i=0; i<lst.size(); i++ )
 	{
-		if ( i > 0 ) AddLineBreak();
+		if ( i > 0 ) { AddLineBreak(); }
 
 		DividedText t;
 		t.type = Type_Text;
 		t.text = lst[i];
 		t.color = color;
 		t.font = font;
-
 		m_TextBlocks.push_back( t );
 		m_bNeedsRebuild = true;
 		Invalidate();
@@ -58,40 +56,43 @@ bool RichLabel::SizeToChildren( bool w, bool h )
 	return BaseClass::SizeToChildren( w, h );
 }
 
-void RichLabel::SplitLabel( const Gwen::UnicodeString& text, Gwen::Font* pFont, const DividedText& txt, int& x, int& y, int& lineheight )
+void RichLabel::SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont, const DividedText & txt, int & x, int & y, int & lineheight )
 {
 	Gwen::Utility::Strings::UnicodeList lst;
 	Gwen::Utility::Strings::Split( text, L" ", lst, true );
-	if ( lst.size() == 0 ) return;
+
+	if ( lst.size() == 0 ) { return; }
 
 	int iSpaceLeft = Width() - x;
-
 	// Does the whole word fit in?
 	{
 		Gwen::Point StringSize = GetSkin()->GetRender()->MeasureText( pFont, text );
+
 		if ( iSpaceLeft > StringSize.x )
 		{
 			return CreateLabel( text, txt, x, y, lineheight, true );
 		}
 	}
-
 	// If the first word is bigger than the line, just give up.
 	{
 		Gwen::Point WordSize = GetSkin()->GetRender()->MeasureText( pFont, lst[0] );
+
 		if ( WordSize.x >= iSpaceLeft )
 		{
 			CreateLabel( lst[0], txt, x, y, lineheight, true );
-			if ( lst[0].size() >= text.size() ) return;
+
+			if ( lst[0].size() >= text.size() ) { return; }
 
 			Gwen::UnicodeString LeftOver = text.substr( lst[0].size() + 1 );
 			return SplitLabel( LeftOver, pFont, txt, x, y, lineheight );
 		}
 	}
-
 	Gwen::UnicodeString strNewString = L"";
+
 	for ( size_t i=0; i<lst.size(); i++ )
 	{
 		Gwen::Point WordSize = GetSkin()->GetRender()->MeasureText( pFont, strNewString + lst[i] );
+
 		if ( WordSize.x > iSpaceLeft )
 		{
 			CreateLabel( strNewString, txt, x, y, lineheight, true );
@@ -107,14 +108,14 @@ void RichLabel::SplitLabel( const Gwen::UnicodeString& text, Gwen::Font* pFont, 
 	return SplitLabel( LeftOver, pFont, txt, x, y, lineheight );
 }
 
-void RichLabel::CreateLabel( const Gwen::UnicodeString& text, const DividedText& txt, int& x, int& y, int& lineheight, bool NoSplit )
+void RichLabel::CreateLabel( const Gwen::UnicodeString & text, const DividedText & txt, int & x, int & y, int & lineheight, bool NoSplit )
 {
-
 	//
 	// Use default font or is one set?
 	//
 	Gwen::Font* pFont = GetSkin()->GetDefaultFont();
-	if ( txt.font ) pFont = txt.font;
+
+	if ( txt.font ) { pFont = txt.font; }
 
 	//
 	// This string is too long for us, split it up.
@@ -130,7 +131,7 @@ void RichLabel::CreateLabel( const Gwen::UnicodeString& text, const DividedText&
 	{
 		if ( x + p.x > Width() )
 		{
-			return SplitLabel( text, pFont, txt, x, y, lineheight );			
+			return SplitLabel( text, pFont, txt, x, y, lineheight );
 		}
 	}
 
@@ -148,9 +149,7 @@ void RichLabel::CreateLabel( const Gwen::UnicodeString& text, const DividedText&
 	pLabel->SetFont( pFont );
 	pLabel->SizeToContents();
 	pLabel->SetPos( x, y );
-
-	//lineheight = (lineheight + pLabel->Height()) / 2;			
-
+	//lineheight = (lineheight + pLabel->Height()) / 2;
 	x += pLabel->Width();
 
 	if ( x >= Width() )
@@ -159,7 +158,7 @@ void RichLabel::CreateLabel( const Gwen::UnicodeString& text, const DividedText&
 	}
 }
 
-void RichLabel::CreateNewline( int& x, int& y, int& lineheight )
+void RichLabel::CreateNewline( int & x, int & y, int & lineheight )
 {
 	x = 0;
 	y += lineheight;
@@ -168,10 +167,10 @@ void RichLabel::CreateNewline( int& x, int& y, int& lineheight )
 void RichLabel::Rebuild()
 {
 	RemoveAllChildren();
-
 	int x = 0;
 	int y = 0;
 	int lineheight = -1;
+
 	for ( DividedText::List::iterator it = m_TextBlocks.begin(); it != m_TextBlocks.end(); ++it )
 	{
 		if ( it->type == Type_Newline )
@@ -182,10 +181,9 @@ void RichLabel::Rebuild()
 
 		if ( it->type == Type_Text )
 		{
-			CreateLabel( (*it).text, *it, x, y, lineheight, false );
+			CreateLabel( ( *it ).text, *it, x, y, lineheight, false );
 			continue;
 		}
-
 	}
 
 	m_bNeedsRebuild = false;
@@ -194,7 +192,6 @@ void RichLabel::Rebuild()
 void RichLabel::OnBoundsChanged( Gwen::Rect oldBounds )
 {
 	BaseClass::OnBoundsChanged( oldBounds );
-
 	Rebuild();
 }
 

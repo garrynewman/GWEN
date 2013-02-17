@@ -11,7 +11,7 @@
 using namespace Gwen;
 using namespace Gwen::Dialogs;
 
-void Gwen::Dialogs::FileOpenEx( bool bUseSystem, const String& Name, const String& StartPath, const String& Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
+void Gwen::Dialogs::FileOpenEx( bool bUseSystem, const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
 	if ( bUseSystem && Gwen::Platform::FileOpen( Name, StartPath, Extension, pHandler, fnCallback ) )
 	{

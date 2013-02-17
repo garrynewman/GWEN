@@ -13,7 +13,7 @@
 #include "Gwen/Controls/TextBox.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -29,18 +29,15 @@ namespace Gwen
 					m_Button->SetText( ".." );
 					m_Button->SetSize( 20, 20 );
 					m_Button->onPress.Add( this, &FolderPicker::OnBrowse );
-
 					m_TextBox = new Controls::TextBox( this );
 					m_TextBox->Dock( Pos::Fill );
-
 					this->SetSize( 100, 20 );
-
 					m_BrowseName = "Find Folder";
 				}
 
 
 
-				void SetFolder( const TextObject& strValue )
+				void SetFolder( const TextObject & strValue )
 				{
 					m_TextBox->SetText( strValue );
 					m_TextBox->MoveCaretToEnd();
@@ -48,7 +45,7 @@ namespace Gwen
 				}
 
 
-				const Gwen::TextObject& GetFolder()
+				const Gwen::TextObject & GetFolder()
 				{
 					return m_TextBox->GetText();
 				}
@@ -58,8 +55,8 @@ namespace Gwen
 					Gwen::Dialogs::FolderOpen( true, "Name", GetFolder().Get(), this, &FolderPicker::SetFolderCallback );
 				}
 
-				virtual TextObject GetValue(){ return GetFolder(); }
-				virtual void SetValue( const TextObject& strValue ){ return SetFolder( strValue ); }
+				virtual TextObject GetValue() { return GetFolder(); }
+				virtual void SetValue( const TextObject & strValue ) { return SetFolder( strValue ); }
 
 				Event::Caller	onFolderChanged;
 

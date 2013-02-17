@@ -29,18 +29,18 @@ namespace Gwen
 			{
 				RECT rect;
 				GetClientRect( m_HWND, &rect );
-
 				int width = rect.right - rect.left;
 				int height = rect.bottom - rect.top;
 
-				if ( m_iWidth != width ) DestroyBackbuffer();
-				if ( m_iHeight != height ) DestroyBackbuffer();
+				if ( m_iWidth != width ) { DestroyBackbuffer(); }
+
+				if ( m_iHeight != height ) { DestroyBackbuffer(); }
 
 				m_iWidth = width;
 				m_iHeight = height;
 			}
 
-			if ( m_Bitmap ) return;
+			if ( m_Bitmap ) { return; }
 
 			Gdiplus::Graphics gfx( m_hDC );
 			m_Bitmap = new Gdiplus::Bitmap( m_iWidth, m_iHeight, &gfx );
@@ -50,9 +50,9 @@ namespace Gwen
 		void GDIPlusBuffered::DestroyBackbuffer()
 		{
 			if ( m_Bitmap )
-			{ 
-				delete m_Bitmap; 
-				m_Bitmap = NULL; 
+			{
+				delete m_Bitmap;
+				m_Bitmap = NULL;
 			}
 
 			if ( graphics )
@@ -72,7 +72,6 @@ namespace Gwen
 		{
 			Gdiplus::Graphics gfx( m_hDC );
 			gfx.DrawImage( m_Bitmap, 0, 0 );
-
 			ReleaseDC( m_HWND, m_hDC );
 			m_hDC = NULL;
 		}

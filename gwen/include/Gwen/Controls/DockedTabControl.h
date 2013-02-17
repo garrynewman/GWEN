@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/TabControl.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -21,7 +21,7 @@ namespace Gwen
 
 				GWEN_CONTROL( DockedTabControl, TabControl );
 
-				void SetShowTitlebar( bool bShow ){ m_pTitleBar->SetHidden( !bShow ); }
+				void SetShowTitlebar( bool bShow ) { m_pTitleBar->SetHidden( !bShow ); }
 
 				void Layout( Skin::Base* skin );
 				void UpdateTitleBar();

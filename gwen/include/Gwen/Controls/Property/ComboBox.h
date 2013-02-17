@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Property/BaseProperty.h"
 #include "Gwen/Controls/ComboBox.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -29,19 +29,19 @@ namespace Gwen
 						m_ComboBox->SetTabable( true );
 						m_ComboBox->SetKeyboardInputEnabled( true );
 						m_ComboBox->SetShouldDrawBackground( false );
-
 						SetHeight( 18 );
 					}
 
 					virtual TextObject GetPropertyValue()
 					{
 						Gwen::Controls::Label* pControl = m_ComboBox->GetSelectedItem();
-						if ( !pControl ) return L"";
+
+						if ( !pControl ) { return L""; }
 
 						return pControl->GetName();
 					}
 
-					virtual void SetPropertyValue( const TextObject& v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
 					{
 						m_ComboBox->SelectItemByName( v.Get(), bFireChangeEvents );
 					}
@@ -61,7 +61,7 @@ namespace Gwen
 						return m_ComboBox;
 					}
 
-					protected:
+				protected:
 
 					Gwen::Controls::ComboBox* m_ComboBox;
 			};

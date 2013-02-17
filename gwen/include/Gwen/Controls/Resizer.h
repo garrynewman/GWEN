@@ -14,7 +14,7 @@
 #include "Gwen/Controls/Dragger.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{
@@ -32,7 +32,7 @@ namespace Gwen
 			protected:
 
 				int		m_iResizeDir;
-				
+
 		};
 	}
 }

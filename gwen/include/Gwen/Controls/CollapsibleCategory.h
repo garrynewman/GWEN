@@ -14,7 +14,7 @@
 #include "Gwen/Skin.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -28,13 +28,13 @@ namespace Gwen
 
 				virtual void Render( Skin::Base* skin );
 
-				virtual void SetText( const TextObject& text );
+				virtual void SetText( const TextObject & text );
 
-				virtual Button* Add( const TextObject& name );
+				virtual Button* Add( const TextObject & name );
 
 				virtual void PostLayout( Skin::Base* /*skin*/ );
 
-				virtual void SetList( Controls::CollapsibleList* p ){ m_pList = p; }
+				virtual void SetList( Controls::CollapsibleList* p ) { m_pList = p; }
 
 				virtual void UnselectAll();
 				virtual Button* GetSelected();
@@ -50,7 +50,7 @@ namespace Gwen
 				Controls::Button*			m_pButton;
 				Controls::CollapsibleList*	m_pList;
 		};
-		
+
 	}
 }
 #endif

@@ -60,18 +60,18 @@ int main()
 		// Handle events
 		sf::Event Event;
 
-		while ( App.pollEvent(Event) )
+		while ( App.pollEvent( Event ) )
 		{
 			// Window closed or escape key pressed : exit
-			if ((Event.type == sf::Event::Closed) || 
-				((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape)))
+			if ( (Event.type == sf::Event::Closed) || 
+				( (Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape) ) )
 			{
 				App.close();
 				break;
 			}
-			else if (Event.type == sf::Event::Resized)
+			else if ( Event.type == sf::Event::Resized )
 			{
-				pCanvas->SetSize(Event.size.width, Event.size.height);
+				pCanvas->SetSize( Event.size.width, Event.size.height );
 			}
 
 			GwenInput.ProcessMessage( Event );

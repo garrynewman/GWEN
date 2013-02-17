@@ -6,7 +6,7 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/Dragger.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{

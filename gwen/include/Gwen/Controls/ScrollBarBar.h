@@ -12,7 +12,7 @@
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace ControlsInternal
 	{
@@ -28,7 +28,7 @@ namespace Gwen
 				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY );
 				virtual void OnMouseClickLeft( int x, int y, bool bDown );
 
-				virtual void MoveTo(int x, int y);
+				virtual void MoveTo( int x, int y );
 
 				virtual void SetHorizontal()	{ m_bHorizontal = true; }
 				virtual void SetVertical()		{ m_bHorizontal = false; }

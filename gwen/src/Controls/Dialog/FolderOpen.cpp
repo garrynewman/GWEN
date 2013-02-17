@@ -11,7 +11,7 @@
 using namespace Gwen;
 using namespace Gwen::Dialogs;
 
-void Gwen::Dialogs::FolderOpenEx( bool bUseSystem, const String& Name, const String& StartPath, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
+void Gwen::Dialogs::FolderOpenEx( bool bUseSystem, const String & Name, const String & StartPath, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
 	if ( bUseSystem && Gwen::Platform::FolderOpen( Name, StartPath, pHandler, fnCallback ) )
 	{

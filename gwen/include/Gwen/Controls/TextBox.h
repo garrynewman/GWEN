@@ -13,26 +13,26 @@
 #include "Gwen/Controls/Label.h"
 #include "Gwen/Controls/ScrollControl.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
 		class GWEN_EXPORT TextBox : public Label
 		{
-			GWEN_CONTROL( TextBox, Label );
+				GWEN_CONTROL( TextBox, Label );
 
 				virtual void Render( Skin::Base* skin );
-				virtual void RenderFocus( Gwen::Skin::Base* /*skin*/){};
+				virtual void RenderFocus( Gwen::Skin::Base* /*skin*/ ) {};
 				virtual void Layout( Skin::Base* skin );
 				virtual void PostLayout( Skin::Base* skin );
 
-				#ifndef GWEN_NO_ANIMATION
+#ifndef GWEN_NO_ANIMATION
 				virtual void UpdateCaretColor();
-				#endif
+#endif
 
 				virtual bool OnChar( Gwen::UnicodeChar c );
 
-				virtual void InsertText( const Gwen::UnicodeString& str );
+				virtual void InsertText( const Gwen::UnicodeString & str );
 				virtual void DeleteText( int iStartPos, int iLength );
 
 				virtual void RefreshCursorBounds();
@@ -64,13 +64,13 @@ namespace Gwen
 				virtual void OnMouseClickLeft( int x, int y, bool bDown );
 				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY );
 
-				virtual void SetSelectAllOnFocus( bool b ){ m_bSelectAll = b; if ( b ) OnSelectAll( this ); }
+				virtual void SetSelectAllOnFocus( bool b ) { m_bSelectAll = b; if ( b ) { OnSelectAll( this ); } }
 
 				virtual void MakeCaratVisible();
 
 				virtual void OnEnter();
 
-				virtual bool NeedsInputChars(){ return true; }
+				virtual bool NeedsInputChars() { return true; }
 
 				virtual void MoveCaretToEnd();
 				virtual void MoveCaretToStart();
@@ -81,14 +81,14 @@ namespace Gwen
 			protected:
 
 				virtual void OnTextChanged();
-				virtual bool IsTextAllowed( const Gwen::UnicodeString& /*str*/, int /*iPos*/ ){ return true; }
+				virtual bool IsTextAllowed( const Gwen::UnicodeString & /*str*/, int /*iPos*/ ) { return true; }
 
 				bool m_bSelectAll;
 
 				int m_iCursorPos;
 				int m_iCursorEnd;
 				int m_iCursorLine;
-				
+
 				Gwen::Rect m_rectSelectionBounds;
 				Gwen::Rect m_rectCaretBounds;
 
@@ -106,8 +106,8 @@ namespace Gwen
 
 			private:
 
-				virtual bool IsTextAllowed( const Gwen::UnicodeString& str, int iPos );
-			
+				virtual bool IsTextAllowed( const Gwen::UnicodeString & str, int iPos );
+
 		};
 
 		class GWEN_EXPORT TextBoxMultiline : public TextBox

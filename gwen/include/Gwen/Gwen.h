@@ -59,7 +59,7 @@ namespace Gwen
 		class Base;
 	}
 
-	namespace Debug 
+	namespace Debug
 	{
 		void GWEN_EXPORT Msg( const wchar_t* str, ... );
 		void GWEN_EXPORT Msg( const char* str, ... );
@@ -78,8 +78,8 @@ namespace Gwen
 		static const Color Grey		( 200, 200, 200, 255 );
 		static const Color GreyLight( 230, 230, 230, 255 );
 		static const Color GwenPink	( 255, 65, 199, 255 );
-		
-		
+
+
 	};
 
 	extern GWEN_EXPORT Controls::Base*	HoveredControl;
@@ -91,7 +91,7 @@ namespace Gwen
 		inline void Blur()
 		{
 			if ( KeyboardFocus )
-				KeyboardFocus->Blur();
+			{ KeyboardFocus->Blur(); }
 		}
 	}
 

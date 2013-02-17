@@ -2,54 +2,57 @@
 #include "Gwen/Util/ControlFactory.h"
 #include "Gwen/Controls.h"
 
-namespace Gwen {
-namespace ControlFactory {
-
-	using namespace Gwen;
-
-	namespace Properties
+namespace Gwen
+{
+	namespace ControlFactory
 	{
+
 		using namespace Gwen;
 
-		class FileType: public ControlFactory::Property
+		namespace Properties
 		{
-			GWEN_CONTROL_FACTORY_PROPERTY( FileType, "In the format \"PNG file | *.png\"" );
+			using namespace Gwen;
 
-			UnicodeString GetValue( Controls::Base* ctrl )
+			class FileType: public ControlFactory::Property
 			{
-				return Utility::StringToUnicode( gwen_cast<Controls::FilePicker>(ctrl)->GetFileType() );
-			}
+					GWEN_CONTROL_FACTORY_PROPERTY( FileType, "In the format \"PNG file | *.png\"" );
 
-			void SetValue( Controls::Base* ctrl, const UnicodeString& str )
-			{
-				gwen_cast<Controls::FilePicker>(ctrl)->SetFileType( Utility::UnicodeToString( str ) );
-			}
+					UnicodeString GetValue( Controls::Base* ctrl )
+					{
+						return Utility::StringToUnicode( gwen_cast<Controls::FilePicker>( ctrl )->GetFileType() );
+					}
 
+					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
+					{
+						gwen_cast<Controls::FilePicker>( ctrl )->SetFileType( Utility::UnicodeToString( str ) );
+					}
+
+			};
+
+		}
+
+		class FilePicker_Factory : public Gwen::ControlFactory::Base
+		{
+			public:
+
+				GWEN_CONTROL_FACTORY_CONSTRUCTOR( FilePicker_Factory, ControlFactory::Base )
+				{
+					AddProperty( new Properties::FileType() );
+				}
+
+				virtual Gwen::String Name()     { return "FilePicker"; }
+				virtual Gwen::String BaseName() { return "Base"; }
+
+				virtual Gwen::Controls::Base* CreateInstance( Gwen::Controls::Base* parent )
+				{
+					Gwen::Controls::FilePicker* pControl = new Gwen::Controls::FilePicker( parent );
+					pControl->SetSize( 100, 20 );
+					pControl->SetFileType( "EXE file | *.exe"  );
+					return pControl;
+				}
 		};
 
+		GWEN_CONTROL_FACTORY( FilePicker_Factory );
+
 	}
-
-	class FilePicker_Factory : public Gwen::ControlFactory::Base
-	{
-	public:
-
-		GWEN_CONTROL_FACTORY_CONSTRUCTOR( FilePicker_Factory, ControlFactory::Base )
-		{
-			AddProperty( new Properties::FileType() );
-		}
-
-		virtual Gwen::String Name()     { return "FilePicker"; }
-		virtual Gwen::String BaseName() { return "Base"; }
-
-		virtual Gwen::Controls::Base* CreateInstance( Gwen::Controls::Base* parent )
-		{
-			Gwen::Controls::FilePicker* pControl = new Gwen::Controls::FilePicker( parent );
-			pControl->SetSize( 100, 20 );
-			pControl->SetFileType( "EXE file | *.exe"  );
-			return pControl;
-		}
-	};
-
-	GWEN_CONTROL_FACTORY( FilePicker_Factory );
-
-} }
+}

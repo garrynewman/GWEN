@@ -26,9 +26,9 @@ GWEN_CONTROL_CONSTRUCTOR( TabStrip )
 bool TabStrip::DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* /*pPackage*/, int x, int y )
 {
 	Gwen::Point LocalPos = CanvasPosToLocal( Gwen::Point( x, y ) );
-
 	TabButton* pButton = gwen_cast<TabButton>( DragAndDrop::SourceControl );
 	TabControl* pTabControl = gwen_cast<TabControl>( GetParent() );
+
 	if ( pTabControl && pButton )
 	{
 		if ( pButton->GetTabControl() != pTabControl )
@@ -39,6 +39,7 @@ bool TabStrip::DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* /*pPackage*/,
 	}
 
 	Base* DroppedOn = GetControlAt( LocalPos.x, LocalPos.y );
+
 	if ( DroppedOn )
 	{
 		Gwen::Point DropPos = DroppedOn->CanvasPosToLocal( Gwen::Point( x, y ) );
@@ -48,16 +49,17 @@ bool TabStrip::DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* /*pPackage*/,
 	{
 		DragAndDrop::SourceControl->BringToFront();
 	}
+
 	return true;
 }
 
 bool TabStrip::DragAndDrop_CanAcceptPackage( Gwen::DragAndDrop::Package* pPackage )
 {
 	if ( !m_bAllowReorder )
-		return false;
+	{ return false; }
 
 	if ( pPackage->name == "TabButtonMove" )
-		return true;
+	{ return true; }
 
 	return false;
 }
@@ -65,15 +67,15 @@ bool TabStrip::DragAndDrop_CanAcceptPackage( Gwen::DragAndDrop::Package* pPackag
 void TabStrip::Layout( Skin::Base* skin )
 {
 	Gwen::Point pLargestTab( 5, 5 );
-
 	int iNum = 0;
+
 	for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 	{
-		TabButton* pButton = gwen_cast<TabButton>(*iter);
-		if ( !pButton ) continue;
+		TabButton* pButton = gwen_cast<TabButton>( *iter );
+
+		if ( !pButton ) { continue; }
 
 		pButton->SizeToContents();
-
 		Margin m;
 		int iNotFirst = iNum > 0 ? -1 : 0;
 
@@ -103,16 +105,15 @@ void TabStrip::Layout( Skin::Base* skin )
 
 		pLargestTab.x = Utility::Max( pLargestTab.x, pButton->Width() );
 		pLargestTab.y = Utility::Max( pLargestTab.y, pButton->Height() );
-
 		pButton->SetMargin( m );
 		iNum++;
 	}
 
 	if ( m_iDock == Pos::Top || m_iDock == Pos::Bottom )
-		SetSize( Width(), pLargestTab.y );
+	{ SetSize( Width(), pLargestTab.y ); }
 
 	if ( m_iDock == Pos::Left || m_iDock == Pos::Right )
-		SetSize( pLargestTab.x, Height() );
+	{ SetSize( pLargestTab.x, Height() ); }
 
 	BaseClass::Layout( skin );
 }
@@ -138,8 +139,8 @@ void TabStrip::DragAndDrop_HoverLeave( Gwen::DragAndDrop::Package* /*pPackage*/ 
 void TabStrip::DragAndDrop_Hover( Gwen::DragAndDrop::Package* /*pPackage*/, int x, int y )
 {
 	Gwen::Point LocalPos = CanvasPosToLocal( Gwen::Point( x, y ) );
-
 	Base* DroppedOn = GetControlAt( LocalPos.x, LocalPos.y );
+
 	if ( DroppedOn && DroppedOn != this )
 	{
 		Gwen::Point DropPos = DroppedOn->CanvasPosToLocal( Gwen::Point( x, y ) );
@@ -151,6 +152,7 @@ void TabStrip::DragAndDrop_Hover( Gwen::DragAndDrop::Package* /*pPackage*/, int 
 		{
 			m_TabDragControl->MoveBy( DroppedOn->Width()-1, 0 );
 		}
+
 		m_TabDragControl->Dock( Pos::None );
 	}
 	else

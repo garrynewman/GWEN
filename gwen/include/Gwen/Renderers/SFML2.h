@@ -26,40 +26,40 @@ namespace Gwen
 			SFML2( sf::RenderTarget& target );
 			virtual ~SFML2();
 
-			inline void EnsurePrimitiveType(sf::PrimitiveType type)
+			inline void EnsurePrimitiveType( sf::PrimitiveType type )
 			{
-				if (myBuffer.getPrimitiveType() != type)
+				if ( m_Buffer.getPrimitiveType() != type )
 				{
 					Flush();
-					myBuffer.setPrimitiveType(type);
+					m_Buffer.setPrimitiveType( type );
 				}
 			}
 
-			inline void EnsureTexture(const sf::Texture *texture)
+			inline void EnsureTexture( const sf::Texture *texture )
 			{
-				if (myRenderStates.texture != texture)
+				if ( m_RenderStates.texture != texture )
 				{
 					Flush();
-					myRenderStates.texture = texture;
+					m_RenderStates.texture = texture;
 				}
 			}
 
 			inline void AddVert( int x, int y, float u = 0.0f , float v = 0.0f )
 			{
-				if (myRenderStates.texture)
+				if ( m_RenderStates.texture )
 				{
-					u *= myRenderStates.texture->getSize().x;
-					v *= myRenderStates.texture->getSize().y;
+					u *= m_RenderStates.texture->getSize().x;
+					v *= m_RenderStates.texture->getSize().y;
 				}
-				myBuffer.append(sf::Vertex(sf::Vector2f(x, y), myColor, sf::Vector2f(u, v)));
+				m_Buffer.append( sf::Vertex( sf::Vector2f( x, y ), m_Color, sf::Vector2f( u, v ) ) );
 			}
 
 			inline void Flush()
 			{
-				if (myBuffer.getVertexCount() > 0)
+				if ( m_Buffer.getVertexCount() > 0 )
 				{
-					myTarget.draw(myBuffer, myRenderStates);
-					myBuffer.clear();
+					m_Target.draw( m_Buffer, m_RenderStates );
+					m_Buffer.clear();
 				}
 			}
 
@@ -69,11 +69,11 @@ namespace Gwen
 			virtual void StartClip();
 			virtual void EndClip();
 
-			virtual void SetDrawColor(Gwen::Color color);
+			virtual void SetDrawColor( Gwen::Color color );
 			virtual void DrawPixel( int x, int y );
 			virtual void DrawLinedRect( Gwen::Rect rect );
 			virtual void DrawFilledRect( Gwen::Rect rect );
-			virtual void DrawShavedCornerRect(Gwen::Rect rect, bool bSlight = false);
+			virtual void DrawShavedCornerRect( Gwen::Rect rect, bool bSlight = false );
 			virtual void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 );
 
 			virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString& text );
@@ -86,12 +86,12 @@ namespace Gwen
 			virtual Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default );
 
 		protected:
-			sf::RenderTarget&	myTarget;
-			sf::Color	myColor;
-			sf::VertexArray myBuffer;
-			sf::RenderStates myRenderStates;
-			sf::View myOriginalView;
-			int myHeight;
+			sf::RenderTarget& m_Target;
+			sf::Color m_Color;
+			sf::VertexArray m_Buffer;
+			sf::RenderStates m_RenderStates;
+			sf::View m_OriginalView;
+			int m_Height;
 		};
 	}
 }

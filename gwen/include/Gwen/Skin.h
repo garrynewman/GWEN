@@ -11,14 +11,14 @@
 #include "Gwen/BaseRender.h"
 #include "Gwen/Font.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
 		class Base;
 	}
 
-	namespace Skin 
+	namespace Skin
 	{
 		namespace Symbol
 		{
@@ -46,26 +46,27 @@ namespace Gwen
 
 				virtual void ReleaseFont( Gwen::Font* fnt )
 				{
-					if ( !fnt ) return;
-					if ( !m_Render ) return;
+					if ( !fnt ) { return; }
+
+					if ( !m_Render ) { return; }
 
 					m_Render->FreeFont( fnt );
 				}
-				
+
 				virtual void DrawGenericPanel( Controls::Base* control ) = 0;
 
 				virtual void DrawButton( Controls::Base* control, bool bDepressed, bool bHovered, bool bDisabled ) = 0;
 				virtual void DrawTabButton( Controls::Base* control, bool bActive, int dir ) = 0;
 				virtual void DrawTabControl( Controls::Base* control ) = 0;
 				virtual void DrawTabTitleBar( Controls::Base* control ) = 0;
-				
-				
+
+
 				virtual void DrawMenuItem( Controls::Base* control, bool bSubmenuOpen, bool bChecked ) = 0;
 				virtual void DrawMenuStrip( Controls::Base* control ) = 0;
 				virtual void DrawMenu( Controls::Base* control, bool bPaddingDisabled ) = 0;
 				virtual void DrawMenuRightArrow( Controls::Base* control ) = 0;
 
-				virtual void DrawRadioButton(Controls::Base* control, bool bSelected, bool bDepressed) = 0;
+				virtual void DrawRadioButton( Controls::Base* control, bool bSelected, bool bDepressed ) = 0;
 				virtual void DrawCheckBox( Controls::Base* control, bool bSelected, bool bDepressed ) = 0;
 				virtual void DrawGroupBox( Controls::Base* control, int textStart, int textHeight, int textWidth ) = 0;
 				virtual void DrawTextBox( Controls::Base* control ) = 0;
@@ -74,7 +75,7 @@ namespace Gwen
 				virtual void DrawWindowCloseButton( Gwen::Controls::Base* control, bool bDepressed, bool bHovered, bool bDisabled ) = 0;
 				virtual void DrawWindowMaximizeButton( Gwen::Controls::Base* control, bool bDepressed, bool bHovered, bool bDisabled, bool bMaximized ) = 0;
 				virtual void DrawWindowMinimizeButton( Gwen::Controls::Base* control, bool bDepressed, bool bHovered, bool bDisabled ) = 0;
-				
+
 
 				virtual void DrawHighlight( Controls::Base* control ) = 0;
 				virtual void DrawStatusBar( Controls::Base* control ) = 0;
@@ -83,7 +84,7 @@ namespace Gwen
 				virtual void DrawScrollBarBar( Controls::Base* control, bool bDepressed, bool isHovered, bool isHorizontal ) = 0;
 				virtual void DrawScrollBar( Controls::Base* control, bool isHorizontal, bool bDepressed ) = 0;
 				virtual void DrawScrollButton( Controls::Base* control, int iDirection, bool bDepressed, bool bHovered, bool bDisabled ) = 0;
-				virtual void DrawProgressBar( Controls::Base* control, bool isHorizontal, float progress) = 0;
+				virtual void DrawProgressBar( Controls::Base* control, bool isHorizontal, float progress ) = 0;
 
 				virtual void DrawListBox( Controls::Base* control ) = 0;
 				virtual void DrawListBoxLine( Controls::Base* control, bool bSelected, bool bEven ) = 0;
@@ -93,7 +94,7 @@ namespace Gwen
 
 				virtual void DrawComboBox( Controls::Base* control, bool bIsDown, bool bIsMenuOpen ) = 0;
 				virtual void DrawComboDownArrow( Gwen::Controls::Base* control, bool bHovered, bool bDown, bool bOpen, bool bDisabled ) = 0;
-				virtual void DrawKeyboardHighlight( Controls::Base* control, const Gwen::Rect& rect, int offset ) = 0;
+				virtual void DrawKeyboardHighlight( Controls::Base* control, const Gwen::Rect & rect, int offset ) = 0;
 				virtual void DrawToolTip( Controls::Base* control ) = 0;
 
 				virtual void DrawNumericUpDownButton( Controls::Base* control, bool bDepressed, bool bUp ) = 0;
@@ -110,7 +111,7 @@ namespace Gwen
 
 				virtual void DrawCategoryHolder( Controls::Base* ctrl ) = 0;
 				virtual void DrawCategoryInner( Controls::Base* ctrl, bool bCollapsed ) = 0;
-				
+
 
 				virtual void SetRender( Gwen::Renderer::Base* renderer )
 				{
@@ -231,7 +232,7 @@ namespace Gwen
 					Gwen::Color TooltipText;
 
 				} Colors;
-				
+
 
 			public:
 
@@ -240,7 +241,7 @@ namespace Gwen
 					return &m_DefaultFont;
 				}
 
-				virtual void SetDefaultFont( const Gwen::UnicodeString& strFacename, float fSize = 10.0f )
+				virtual void SetDefaultFont( const Gwen::UnicodeString & strFacename, float fSize = 10.0f )
 				{
 					m_DefaultFont.facename = strFacename;
 					m_DefaultFont.size = fSize;

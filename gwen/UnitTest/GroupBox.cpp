@@ -7,12 +7,12 @@ class GroupBox : public GUnit
 {
 	public:
 
-	GWEN_CONTROL_INLINE( GroupBox, GUnit )
-	{
-		Gwen::Controls::GroupBox* pGroup = new Gwen::Controls::GroupBox( this );
-		pGroup->SetText( "Group Box" );
-		pGroup->SetSize( 300, 200 );
-	}
+		GWEN_CONTROL_INLINE( GroupBox, GUnit )
+		{
+			Gwen::Controls::GroupBox* pGroup = new Gwen::Controls::GroupBox( this );
+			pGroup->SetText( "Group Box" );
+			pGroup->SetSize( 300, 200 );
+		}
 };
 
 

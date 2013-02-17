@@ -13,7 +13,7 @@
 
 #ifndef GWEN_NO_ANIMATION
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Anim
 	{
@@ -22,10 +22,10 @@ namespace Gwen
 			public:
 
 				typedef std::list<Animation*> ChildList;
-				typedef std::map< Gwen::Controls::Base *, ChildList > List;
+				typedef std::map< Gwen::Controls::Base*, ChildList > List;
 
 				virtual void Think() = 0;
-				virtual bool Finished(){ return false; }
+				virtual bool Finished() { return false; }
 
 				virtual ~Animation() {}
 
@@ -50,10 +50,10 @@ namespace Gwen
 
 				//
 				// These are the magic functions you should be overriding
-				// 
-				virtual void OnStart(){}
-				virtual void Run( float /*delta*/ ){}
-				virtual void OnFinish(){}
+				//
+				virtual void OnStart() {}
+				virtual void Run( float /*delta*/ ) {}
+				virtual void OnFinish() {}
 
 			protected:
 
@@ -77,9 +77,9 @@ namespace Gwen
 						m_bHide = bHide;
 					}
 
-					virtual void OnStart(){ m_Control->SetHeight( m_iStartSize ); }
-					virtual void Run( float delta ){ m_Control->SetHeight( m_iStartSize + (((float)m_iDelta) * delta) ); }
-					virtual void OnFinish(){ m_Control->SetHeight( m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
+					virtual void OnStart() { m_Control->SetHeight( m_iStartSize ); }
+					virtual void Run( float delta ) { m_Control->SetHeight( m_iStartSize + ( ( ( float )m_iDelta ) * delta ) ); }
+					virtual void OnFinish() { m_Control->SetHeight( m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
 
@@ -99,9 +99,9 @@ namespace Gwen
 						m_bHide = bHide;
 					}
 
-					virtual void OnStart(){ m_Control->SetWidth( m_iStartSize ); }
-					virtual void Run( float delta ){ m_Control->SetWidth( m_iStartSize + (((float)m_iDelta) * delta) ); }
-					virtual void OnFinish(){ m_Control->SetWidth( m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
+					virtual void OnStart() { m_Control->SetWidth( m_iStartSize ); }
+					virtual void Run( float delta ) { m_Control->SetWidth( m_iStartSize + ( ( ( float )m_iDelta ) * delta ) ); }
+					virtual void OnFinish() { m_Control->SetWidth( m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
 
@@ -124,9 +124,9 @@ namespace Gwen
 						m_bHide = bHide;
 					}
 
-					virtual void OnStart(){ m_Control->SetPos( m_iStartSize, m_Control->GetPos().y ); }
-					virtual void Run( float delta ){ m_Control->SetPos( m_iStartSize + (((float)m_iDelta) * delta), m_Control->GetPos().y ); }
-					virtual void OnFinish(){ m_Control->SetPos( m_iStartSize + m_iDelta, m_Control->GetPos().y ); m_Control->SetHidden( m_bHide ); }
+					virtual void OnStart() { m_Control->SetPos( m_iStartSize, m_Control->GetPos().y ); }
+					virtual void Run( float delta ) { m_Control->SetPos( m_iStartSize + ( ( ( float )m_iDelta ) * delta ), m_Control->GetPos().y ); }
+					virtual void OnFinish() { m_Control->SetPos( m_iStartSize + m_iDelta, m_Control->GetPos().y ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
 
@@ -146,9 +146,9 @@ namespace Gwen
 						m_bHide = bHide;
 					}
 
-					virtual void OnStart(){ m_Control->SetPos( m_Control->GetPos().x, m_iStartSize ); }
-					virtual void Run( float delta ){ m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + (((float)m_iDelta) * delta) ); }
-					virtual void OnFinish(){ m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
+					virtual void OnStart() { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize ); }
+					virtual void Run( float delta ) { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + ( ( ( float )m_iDelta ) * delta ) ); }
+					virtual void OnFinish() { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
 
@@ -164,8 +164,8 @@ namespace Gwen
 			{
 				public:
 
-					Remove( float fDelay = 0.0f ) : TimedAnimation( 0.0f, fDelay ){}
-					virtual void OnFinish(){ m_Control->DelayedDelete(); }
+					Remove( float fDelay = 0.0f ) : TimedAnimation( 0.0f, fDelay ) {}
+					virtual void OnFinish() { m_Control->DelayedDelete(); }
 			};
 		}
 

@@ -14,7 +14,7 @@
 #include "Gwen/Skin.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -28,7 +28,7 @@ namespace Gwen
 				virtual void Render( Skin::Base* skin );
 				virtual void Layout( Skin::Base* skin );
 
-				virtual void SetInnerMargin( int i ){ m_InnerMargin = i; }
+				virtual void SetInnerMargin( int i ) { m_InnerMargin = i; }
 
 			protected:
 

@@ -16,9 +16,9 @@
 #include "Gwen/BaseRender.h"
 #include "Gwen/Texture.h"
 
-namespace Gwen 
+namespace Gwen
 {
-	namespace Renderer 
+	namespace Renderer
 	{
 
 		class GWEN_EXPORT Direct2D : public Gwen::Renderer::Base
@@ -33,14 +33,14 @@ namespace Gwen
 				virtual void End();
 				virtual void Release();
 
-				virtual void SetDrawColor(Gwen::Color color);
+				virtual void SetDrawColor( Gwen::Color color );
 
 				virtual void DrawFilledRect( Gwen::Rect rect );
 
 				virtual void LoadFont( Gwen::Font* pFont );
 				virtual void FreeFont( Gwen::Font* pFont );
-				virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString& text );
-				virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text );
+				virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text );
+				virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text );
 
 				virtual void DeviceLost();
 				virtual void DeviceAcquired( ID2D1RenderTarget* pRT );
@@ -51,7 +51,7 @@ namespace Gwen
 				void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1=0.0f, float v1=0.0f, float u2=1.0f, float v2=1.0f );
 				void LoadTexture( Gwen::Texture* pTexture );
 				void FreeTexture( Gwen::Texture* pTexture );
-				Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default );
+				Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default );
 
 				void DrawLinedRect( Gwen::Rect rect );
 				void DrawShavedCornerRect( Gwen::Rect rect, bool bSlight = false );

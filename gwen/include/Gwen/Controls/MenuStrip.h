@@ -13,16 +13,16 @@
 #include "Gwen/Controls/Menu.h"
 #include "Gwen/Controls/MenuItem.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
 		class GWEN_EXPORT MenuStrip : public Menu
 		{
-			GWEN_CONTROL( MenuStrip, Menu );
+				GWEN_CONTROL( MenuStrip, Menu );
 
 				virtual void Render( Skin::Base* skin );
-				virtual void RenderUnder( Skin::Base* /*skin*/ ){}
+				virtual void RenderUnder( Skin::Base* /*skin*/ ) {}
 				virtual void Layout( Skin::Base* skin );
 
 			protected:

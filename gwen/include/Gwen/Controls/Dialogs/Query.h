@@ -4,7 +4,7 @@
 
 #include "Gwen/Gwen.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Dialogs
 	{

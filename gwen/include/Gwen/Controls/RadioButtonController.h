@@ -13,7 +13,7 @@
 #include "Gwen/Controls/RadioButton.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -24,18 +24,18 @@ namespace Gwen
 
 				GWEN_CONTROL( RadioButtonController, Base );
 
-				virtual void Render( Skin::Base* /*skin*/ ){};
+				virtual void Render( Skin::Base* /*skin*/ ) {};
 				virtual void OnRadioClicked( Base* pFromPanel );
 
 				virtual void OnChange();
 
-				virtual LabeledRadioButton* AddOption( const Gwen::String& strText, const Gwen::String& strOptionName = "" );
-				virtual LabeledRadioButton* AddOption( const Gwen::UnicodeString& strText, const Gwen::String& strOptionName = "" );
+				virtual LabeledRadioButton* AddOption( const Gwen::String & strText, const Gwen::String & strOptionName = "" );
+				virtual LabeledRadioButton* AddOption( const Gwen::UnicodeString & strText, const Gwen::String & strOptionName = "" );
 
-				virtual LabeledRadioButton*	GetSelected(){ return m_Selected; }
+				virtual LabeledRadioButton*	GetSelected() { return m_Selected; }
 
-				virtual const Gwen::String& GetSelectedName(){ return m_Selected->GetName(); }
-				virtual const TextObject& GetSelectedLabel(){ return m_Selected->GetLabel()->GetText(); }
+				virtual const Gwen::String & GetSelectedName() { return m_Selected->GetName(); }
+				virtual const TextObject & GetSelectedLabel() { return m_Selected->GetLabel()->GetText(); }
 
 				Event::Caller		onSelectionChange;
 

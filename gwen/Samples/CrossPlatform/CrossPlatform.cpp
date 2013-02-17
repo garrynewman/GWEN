@@ -24,7 +24,6 @@ int main()
 	// Note: Order is important here. you need to create the WindowCanvas before
 	// you setup the skin - because the renderer won't be properly set up
 	// if you try to do it before (The window canvas initializes the renderer)
-
 	//
 	// Create the skin and renderer
 	//
@@ -33,7 +32,6 @@ int main()
 	//Gwen::Renderer::DirectX9				renderer;
 	Gwen::Renderer::OpenGL_DebugFont		renderer;
 	Gwen::Skin::TexturedBase			skin( &renderer );
-
 	//
 	// The window canvas is a cross between a window and a canvas
 	// It's cool because it takes care of creating an OS specific
@@ -41,12 +39,10 @@ int main()
 	//
 	//
 	Gwen::Controls::WindowCanvas window_canvas( -1, -1, 700, 500, &skin, "Gwen's Cross Platform Example" );
-
 	//
 	// Now it's safe to set up the skin
 	//
 	skin.Init( "DefaultSkin.png" );
-
 	//
 	// Create our unittest control
 	//

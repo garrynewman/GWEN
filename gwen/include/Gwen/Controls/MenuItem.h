@@ -13,7 +13,7 @@
 #include "Gwen/Controls/Button.h"
 #include "Gwen/Controls/Menu.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -41,8 +41,8 @@ namespace Gwen
 				void CloseMenu();
 				void ToggleMenu();
 
-				void SetOnStrip( bool b ){ m_bOnStrip = b;}
-				bool OnStrip(){ return m_bOnStrip; }
+				void SetOnStrip( bool b ) { m_bOnStrip = b;}
+				bool OnStrip() { return m_bOnStrip; }
 
 				virtual void SetCheckable( bool bCheck ) { m_bCheckable = bCheck; }
 				virtual void SetChecked( bool bCheck );
@@ -51,12 +51,13 @@ namespace Gwen
 				template <typename T>
 				MenuItem* SetAction( Gwen::Event::Handler* pHandler, T fn )
 				{
-					if ( m_Accelerator ) AddAccelerator( m_Accelerator->GetText(), fn, pHandler );
+					if ( m_Accelerator ) { AddAccelerator( m_Accelerator->GetText(), fn, pHandler ); }
+
 					onMenuItemSelected.Add( pHandler, fn );
 					return this;
 				}
 
-				void SetAccelerator( const TextObject& strAccelerator );
+				void SetAccelerator( const TextObject & strAccelerator );
 
 				Gwen::Event::Caller	onMenuItemSelected;
 				Gwen::Event::Caller	onChecked;
@@ -71,9 +72,9 @@ namespace Gwen
 				bool	m_bChecked;
 
 				Label*	m_Accelerator;
-				
 
-				Controls::Base	*	m_SubmenuArrow;
+
+				Controls::Base*		m_SubmenuArrow;
 		};
 	}
 

@@ -41,7 +41,7 @@ namespace Gwen
 		// This is the real font size, after it's
 		// been scaled by Render->Scale()
 		float realsize;
-		
+
 	};
 
 } //namespace Gwen

@@ -13,7 +13,7 @@
 #include "Gwen/Controls/TextBox.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -29,26 +29,23 @@ namespace Gwen
 					m_Button->SetText( ".." );
 					m_Button->SetSize( 20, 20 );
 					m_Button->onPress.Add( this, &FilePicker::OnBrowse );
-
 					m_TextBox = new Controls::TextBox( this );
 					m_TextBox->Dock( Pos::Fill );
-
 					this->SetSize( 100, 20 );
-
 					SetFileType( "Any Type | *.*" );
 				}
 
-				void SetFileType( const Gwen::String& string ) { m_FileType = string; }
+				void SetFileType( const Gwen::String & string ) { m_FileType = string; }
 				Gwen::String GetFileType() { return m_FileType; }
 
-				void SetFileName( const TextObject& strValue )
+				void SetFileName( const TextObject & strValue )
 				{
 					m_TextBox->SetText( strValue );
 					m_TextBox->MoveCaretToEnd();
 					onFileChanged.Call( this );
 				}
 
-				const Gwen::TextObject& GetFileName()
+				const Gwen::TextObject & GetFileName()
 				{
 					return m_TextBox->GetText();
 				}
@@ -58,8 +55,8 @@ namespace Gwen
 					Gwen::Dialogs::FileOpen( true, "Name", "Start Path", m_FileType, this, &FilePicker::SetFileNameEvent );
 				}
 
-				virtual TextObject GetValue(){ return GetFileName(); }
-				virtual void SetValue( const TextObject& strValue ){ return SetFileName( strValue ); }
+				virtual TextObject GetValue() { return GetFileName(); }
+				virtual void SetValue( const TextObject & strValue ) { return SetFileName( strValue ); }
 
 				Event::Caller	onFileChanged;
 

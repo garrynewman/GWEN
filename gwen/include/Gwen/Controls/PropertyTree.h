@@ -16,7 +16,7 @@
 #include "Gwen/Controls/Properties.h"
 
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -42,11 +42,10 @@ namespace Gwen
 
 				GWEN_CONTROL_INLINE( PropertyTree, TreeControl )
 				{
-
 				}
 
-				Properties* Add( const TextObject& text );
-				Properties* Find( const TextObject& text );
+				Properties* Add( const TextObject & text );
+				Properties* Find( const TextObject & text );
 		};
 
 	}

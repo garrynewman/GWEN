@@ -33,7 +33,7 @@ void Properties::PostLayout( Gwen::Skin::Base* /*skin*/ )
 	m_SplitterBar->SetSize( 3, Height() );
 }
 
-void Properties::OnSplitterMoved( Controls::Base * /*control*/ )
+void Properties::OnSplitterMoved( Controls::Base* /*control*/ )
 {
 	InvalidateChildren();
 }
@@ -43,33 +43,32 @@ int Properties::GetSplitWidth()
 	return m_SplitterBar->X();
 }
 
-PropertyRow* Properties::Add( const TextObject& text, const TextObject& value )
+PropertyRow* Properties::Add( const TextObject & text, const TextObject & value )
 {
 	return Add( text, new Property::Text( this ), value );
 }
 
-PropertyRow* Properties::Add( const TextObject& text, Property::Base* pProp, const TextObject& value )
+PropertyRow* Properties::Add( const TextObject & text, Property::Base* pProp, const TextObject & value )
 {
 	PropertyRow* row = new PropertyRow( this );
 	row->Dock( Pos::Top );
 	row->GetLabel()->SetText( text );
 	row->SetProperty( pProp );
-
 	pProp->SetPropertyValue( value, true );
-
 	m_SplitterBar->BringToFront();
 	return row;
 }
 
-PropertyRow* Properties::Find( const TextObject& text )
+PropertyRow* Properties::Find( const TextObject & text )
 {
 	for ( Base::List::iterator it = GetChildren().begin(); it != GetChildren().end(); ++it )
 	{
-		PropertyRow* row = gwen_cast<PropertyRow>(*it);
-		if ( !row ) continue;
+		PropertyRow* row = gwen_cast<PropertyRow>( *it );
+
+		if ( !row ) { continue; }
 
 		if ( row->GetLabel()->GetText() == text )
-			return row;
+		{ return row; }
 	}
 
 	return NULL;
@@ -78,51 +77,54 @@ PropertyRow* Properties::Find( const TextObject& text )
 void Properties::Clear()
 {
 	Base::List ChildListCopy = GetChildren();
+
 	for ( Base::List::iterator it = ChildListCopy.begin(); it != ChildListCopy.end(); ++it )
 	{
-		PropertyRow* row = gwen_cast<PropertyRow>(*it);
-		if ( !row ) continue;
+		PropertyRow* row = gwen_cast<PropertyRow>( *it );
+
+		if ( !row ) { continue; }
 
 		row->DelayedDelete();
 	}
 }
 
-class PropertyRowLabel : public Label 
+class PropertyRowLabel : public Label
 {
-	GWEN_CONTROL_INLINE ( PropertyRowLabel, Label )
-	{
-		SetAlignment( Pos::Left | Pos::CenterV );
-		m_pPropertyRow = NULL;
-	}
+		GWEN_CONTROL_INLINE ( PropertyRowLabel, Label )
+		{
+			SetAlignment( Pos::Left | Pos::CenterV );
+			m_pPropertyRow = NULL;
+		}
 
-	void UpdateColours()
-	{
-		if ( IsDisabled() )										return SetTextColor( GetSkin()->Colors.Button.Disabled );
-		if ( m_pPropertyRow && m_pPropertyRow->IsEditing() )	return SetTextColor( GetSkin()->Colors.Properties.Label_Selected );
-		if ( m_pPropertyRow && m_pPropertyRow->IsHovered() )	return SetTextColor( GetSkin()->Colors.Properties.Label_Hover );
+		void UpdateColours()
+		{
+			if ( IsDisabled() )										{ return SetTextColor( GetSkin()->Colors.Button.Disabled ); }
 
-		SetTextColor( GetSkin()->Colors.Properties.Label_Normal );
-	}
+			if ( m_pPropertyRow && m_pPropertyRow->IsEditing() )	{ return SetTextColor( GetSkin()->Colors.Properties.Label_Selected ); }
 
-	void SetPropertyRow( PropertyRow * p ){ m_pPropertyRow = p; }
+			if ( m_pPropertyRow && m_pPropertyRow->IsHovered() )	{ return SetTextColor( GetSkin()->Colors.Properties.Label_Hover ); }
 
-protected:
+			SetTextColor( GetSkin()->Colors.Properties.Label_Normal );
+		}
 
-	PropertyRow*	m_pPropertyRow;
+		void SetPropertyRow( PropertyRow* p ) { m_pPropertyRow = p; }
+
+	protected:
+
+		PropertyRow*	m_pPropertyRow;
 };
 
 
 GWEN_CONTROL_CONSTRUCTOR( PropertyRow )
 {
 	m_Property = NULL;
-
 	PropertyRowLabel* pLabel = new PropertyRowLabel( this );
 	pLabel->SetPropertyRow( this );
 	pLabel->Dock( Pos::Left );
 	pLabel->SetAlignment( Pos::Left | Pos::Top );
 	pLabel->SetMargin( Margin( 2, 2, 0, 0 ) );
 	m_Label = pLabel;
-}	
+}
 
 void PropertyRow::Render( Gwen::Skin::Base* skin )
 {
@@ -138,15 +140,16 @@ void PropertyRow::Render( Gwen::Skin::Base* skin )
 		OnHoverChanged();
 		m_bLastHover = IsHovered();
 	}
-	/* SORRY */
 
+	/* SORRY */
 	skin->DrawPropertyRow( this, m_Label->Right(), IsEditing(), IsHovered() | m_Property->IsHovered() );
 }
 
 void PropertyRow::Layout( Gwen::Skin::Base* /*skin*/ )
 {
 	Properties* pParent = gwen_cast<Properties>( GetParent() );
-	if ( !pParent ) return;
+
+	if ( !pParent ) { return; }
 
 	m_Label->SetWidth( pParent->GetSplitWidth() );
 
@@ -168,7 +171,6 @@ void PropertyRow::OnPropertyValueChanged( Gwen::Controls::Base* /*control*/ )
 {
 	Event::Information info;
 	info.String = GetProperty()->GetPropertyValue();
-
 	onChange.Call( this, info );
 }
 

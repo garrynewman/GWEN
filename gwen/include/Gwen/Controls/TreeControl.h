@@ -11,7 +11,7 @@
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/TreeNode.h"
 
-namespace Gwen 
+namespace Gwen
 {
 	namespace Controls
 	{
@@ -32,7 +32,7 @@ namespace Gwen
 				virtual void Layout( Skin::Base* skin );
 				virtual void PostLayout( Skin::Base* skin );
 
-				virtual void AllowMultiSelect( bool b ){ m_bAllowMultipleSelection = b; }
+				virtual void AllowMultiSelect( bool b ) { m_bAllowMultipleSelection = b; }
 
 				virtual void OnNodeAdded( TreeNode* pNode );
 
@@ -42,7 +42,7 @@ namespace Gwen
 
 				ScrollControl*		m_ScrollControl;
 				bool				m_bAllowMultipleSelection;
-				
+
 		};
 	}
 }

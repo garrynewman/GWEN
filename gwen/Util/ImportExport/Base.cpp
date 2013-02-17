@@ -30,7 +30,7 @@ ImportExport::Base* ImportExport::Find( Gwen::String strName )
 
 	while ( it != itEnd )
 	{
-		if ( (*it)->Name() == strName ) return (*it);
+		if ( ( *it )->Name() == strName ) { return ( *it ); }
 
 		++it;
 	}
@@ -44,33 +44,39 @@ Base::Base()
 }
 
 
-namespace Gwen{
-namespace ImportExport {
-namespace Tools{
-
-	ControlList GetExportableChildren( Gwen::Controls::Base* pRoot )
+namespace Gwen
+{
+	namespace ImportExport
 	{
-		ControlList list;
-
-		for ( int i=0; i<pRoot->NumChildren(); i++ )
+		namespace Tools
 		{
-			Gwen::Controls::Base* pBaseChild = pRoot->GetChild( i );
-			if  ( !pBaseChild ) continue;
 
-			//
-			// If we have a child is isn't exportable - maybe it has a child that is
-			// We will count it as one of our children.
-			//
-			if ( !pBaseChild->UserData.Exists( "ControlFactory" ) )
+			ControlList GetExportableChildren( Gwen::Controls::Base* pRoot )
 			{
-				list.Add( GetExportableChildren( pBaseChild ) );
-				continue;
+				ControlList list;
+
+				for ( int i=0; i<pRoot->NumChildren(); i++ )
+				{
+					Gwen::Controls::Base* pBaseChild = pRoot->GetChild( i );
+
+					if  ( !pBaseChild ) { continue; }
+
+					//
+					// If we have a child is isn't exportable - maybe it has a child that is
+					// We will count it as one of our children.
+					//
+					if ( !pBaseChild->UserData.Exists( "ControlFactory" ) )
+					{
+						list.Add( GetExportableChildren( pBaseChild ) );
+						continue;
+					}
+
+					list.Add( pBaseChild );
+				}
+
+				return list;
 			}
 
-			list.Add( pBaseChild );
 		}
-
-		return list;
 	}
-
-}}}
+}
