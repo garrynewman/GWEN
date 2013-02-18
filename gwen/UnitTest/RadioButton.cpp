@@ -22,8 +22,9 @@ class RadioButton : public GUnit
 		{
 			Gwen::Controls::RadioButtonController* rc = ( Gwen::Controls::RadioButtonController* ) pControl;
 			Gwen::Controls::LabeledRadioButton* pSelected = rc->GetSelected();
-			UnitPrint( Utility::Format( L"RadioButton changed (using 'OnChange' event)\n Chosen Item: '%s'", pSelected->GetLabel()->GetText().GetUnicode().c_str() ) );
+			UnitPrint( Utility::Format( L"RadioButton changed (using 'OnChange' event)\n Chosen Item: '%ls'", pSelected->GetLabel()->GetText().GetUnicode().c_str() ) );
 		}
+
 };
 
 

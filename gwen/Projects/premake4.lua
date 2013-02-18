@@ -64,6 +64,9 @@ DefineRenderer( "OpenGL_DebugFont",
 DefineRenderer( "SFML",
                 { "../Renderers/SFML/SFML.cpp" } )
 
+DefineRenderer( "SFML2",
+                { "../Renderers/SFML2/SFML2.cpp" } )
+
 DefineRenderer( "Allegro",
                 { "../Renderers/Allegro/Allegro.cpp" } )
 
@@ -89,13 +92,17 @@ end
 
 DefineSample( "CrossPlatform",
               { "../Samples/CrossPlatform/CrossPlatform.cpp" },
-              { "UnitTest", "Renderer-OpenGL_DebugFont", "GWEN-Static", "FreeImage", "opengl32" },
+              CROSS_LIBS,
               nil,
               { "USE_DEBUG_FONT" } )
 
 DefineSample( "SFML",
               { "../Samples/SFML/SFML.cpp" },
               SFML_LIBS, SFML_LIBS_D )
+
+DefineSample( "SFML2",
+              { "../Samples/SFML2/SFML2.cpp" },
+              SFML2_LIBS, SFML2_LIBS_D )
 
 DefineSample( "Allegro",
               { "../Samples/Allegro/AllegroSample.cpp" },

@@ -83,10 +83,11 @@ class MenuStrip : public GUnit
 			}
 		}
 
+
 		void MenuItemSelect( Base* pControl )
 		{
 			Gwen::Controls::MenuItem* pMenuItem = ( Gwen::Controls::MenuItem* ) pControl;
-			UnitPrint( Utility::Format( L"Menu Selected: %s", pMenuItem->GetText().GetUnicode().c_str() ) );
+			UnitPrint( Utility::Format( L"Menu Selected: %ls", pMenuItem->GetText().GetUnicode().c_str() ) );
 		}
 
 };
