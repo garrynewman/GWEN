@@ -54,7 +54,7 @@ namespace Gwen
 			this->right = right_;
 		}
 
-		Margin operator +( const Margin & margin ) const
+		Margin operator + ( const Margin & margin ) const
 		{
 			Margin m;
 			m.top		= top + margin.top;
@@ -81,7 +81,7 @@ namespace Gwen
 			this->h = h_;
 		}
 
-		Rect operator +( const Rect & rct ) const
+		Rect operator + ( const Rect & rct ) const
 		{
 			Rect m;
 			m.x		= x + rct.x;
@@ -103,24 +103,24 @@ namespace Gwen
 			this->y = y_;
 		}
 
-		void operator +=( const Point & p )
+		void operator += ( const Point & p )
 		{
 			x += p.x;
 			y += p.y;
 		}
 
-		Point operator +( const Point & p ) const
+		Point operator + ( const Point & p ) const
 		{
 			return Point( x + p.x, p.y + y );
 		}
 
-		void operator -=( const Point & p )
+		void operator -= ( const Point & p )
 		{
 			x -= p.x;
 			y -= p.y;
 		}
 
-		Point operator -( const Point & p ) const
+		Point operator - ( const Point & p ) const
 		{
 			return Point( x - p.x, y - p.y );
 		}
@@ -178,13 +178,13 @@ namespace Gwen
 			this->a *= f;
 		}
 
-		Color operator *( float f )
+		Color operator * ( float f )
 		{
 			return Color(
-					   ( float )this->r*f,
-					   ( float )this->g*f,
-					   ( float )this->b*f,
-					   ( float )this->a*f
+					   ( float ) this->r * f,
+					   ( float ) this->g * f,
+					   ( float ) this->b * f,
+					   ( float ) this->a * f
 				   );
 		}
 
@@ -208,9 +208,9 @@ namespace Gwen
 				   );
 		}
 
-		bool operator ==( const Color & c ) const
+		bool operator == ( const Color & c ) const
 		{
-			return c.r==r && c.g==g && c.b==b && c.a==a;
+			return c.r == r && c.g == g && c.b == b && c.a == a;
 		}
 
 

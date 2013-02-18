@@ -72,14 +72,14 @@ void Gwen::Utility::Strings::Split( const Gwen::String & str, const Gwen::String
 
 	while ( i != std::string::npos )
 	{
-		outbits.push_back( str.substr( iOffset, i-iOffset ) );
+		outbits.push_back( str.substr( iOffset, i - iOffset ) );
 		iOffset = i + iSepLen;
 		i = str.find( seperator, iOffset );
 
 		if ( bLeave ) { iOffset -= iSepLen; }
 	}
 
-	outbits.push_back( str.substr( iOffset, iLength-iOffset ) );
+	outbits.push_back( str.substr( iOffset, iLength - iOffset ) );
 }
 
 void Gwen::Utility::Strings::Split( const Gwen::UnicodeString & str, const Gwen::UnicodeString & seperator, Strings::UnicodeList & outbits, bool bLeave )
@@ -91,14 +91,14 @@ void Gwen::Utility::Strings::Split( const Gwen::UnicodeString & str, const Gwen:
 
 	while ( i != std::wstring::npos )
 	{
-		outbits.push_back( str.substr( iOffset, i-iOffset ) );
+		outbits.push_back( str.substr( iOffset, i - iOffset ) );
 		iOffset = i + iSepLen;
 		i = str.find( seperator, iOffset );
 
 		if ( bLeave ) { iOffset -= iSepLen; }
 	}
 
-	outbits.push_back( str.substr( iOffset, iLength-iOffset ) );
+	outbits.push_back( str.substr( iOffset, iLength - iOffset ) );
 }
 
 int Gwen::Utility::Strings::To::Int( const Gwen::String & str )
@@ -112,7 +112,7 @@ float Gwen::Utility::Strings::To::Float( const Gwen::String & str )
 {
 	if ( str == "" ) { return 0.0f; }
 
-	return ( float )atof( str.c_str() );
+	return ( float ) atof( str.c_str() );
 }
 
 float Gwen::Utility::Strings::To::Float( const Gwen::UnicodeString & str )
@@ -140,7 +140,7 @@ bool Gwen::Utility::Strings::To::Floats( const Gwen::String & str, float* f, siz
 
 	if ( lst.size() != iCount ) { return false; }
 
-	for ( size_t i=0; i<iCount; i++ )
+	for ( size_t i = 0; i < iCount; i++ )
 	{
 		f[i] = Strings::To::Float( lst[i] );
 	}
@@ -165,9 +165,9 @@ bool Gwen::Utility::Strings::Wildcard( const TextObject & strWildcard, const Tex
 	{ return false; }
 
 	// Second half matches
-	if ( iPos != W.length()-1 )
+	if ( iPos != W.length() - 1 )
 	{
-		UnicodeString strEnd = W.substr( iPos+1, W.length() );
+		UnicodeString strEnd = W.substr( iPos + 1, W.length() );
 
 		if ( strEnd != H.substr( H.length() - strEnd.length(), H.length() ) )
 		{ return false; }
@@ -188,7 +188,7 @@ void Gwen::Utility::Strings::Strip( Gwen::UnicodeString & str, const Gwen::Unico
 	Gwen::UnicodeString Source = str;
 	str = L"";
 
-	for ( int i =0; i<Source.length(); i++ )
+	for ( int i = 0; i < Source.length(); i++ )
 	{
 		if ( chars.find( Source[i] ) != Gwen::UnicodeString::npos )
 		{ continue; }

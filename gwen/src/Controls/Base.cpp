@@ -32,7 +32,7 @@ Base::Base( Base* pParent, const Gwen::String & Name )
 	SetName( Name );
 	SetParent( pParent );
 	m_bHidden = false;
-	m_Bounds = Gwen::Rect( 0,0,10,10 );
+	m_Bounds = Gwen::Rect( 0, 0, 10, 10 );
 	m_Padding = Padding( 0, 0, 0, 0 );
 	m_Margin = Margin( 0, 0, 0, 0 );
 	m_iDock = 0;
@@ -797,7 +797,7 @@ void Base::RecurseLayout( Skin::Base* skin )
 		{
 			// TODO: THIS MARGIN CODE MIGHT NOT BE FULLY FUNCTIONAL
 			const Margin & margin = pChild->GetMargin();
-			pChild->SetBounds( ( rBounds.x+rBounds.w )-pChild->Width()-margin.right, rBounds.y + margin.top, pChild->Width(), rBounds.h - margin.top - margin.bottom );
+			pChild->SetBounds( ( rBounds.x + rBounds.w ) - pChild->Width() - margin.right, rBounds.y + margin.top, pChild->Width(), rBounds.h - margin.top - margin.bottom );
 			int iWidth = margin.left + margin.right + pChild->Width();
 			rBounds.w -= iWidth;
 		}
@@ -806,7 +806,7 @@ void Base::RecurseLayout( Skin::Base* skin )
 		{
 			// TODO: THIS MARGIN CODE MIGHT NOT BE FULLY FUNCTIONAL
 			const Margin & margin = pChild->GetMargin();
-			pChild->SetBounds( rBounds.x + margin.left, ( rBounds.y+rBounds.h )-pChild->Height()-margin.bottom, rBounds.w - margin.left - margin.right, pChild->Height() );
+			pChild->SetBounds( rBounds.x + margin.left, ( rBounds.y + rBounds.h ) - pChild->Height() - margin.bottom, rBounds.w - margin.left - margin.right, pChild->Height() );
 			rBounds.h -= pChild->Height() + margin.bottom + margin.top;
 		}
 
@@ -1045,56 +1045,56 @@ bool Base::OnKeyPress( int iKey, bool bPress )
 
 	switch ( iKey )
 	{
-	case Key::Tab:
-		bHandled = OnKeyTab( bPress );
-		break;
+		case Key::Tab:
+			bHandled = OnKeyTab( bPress );
+			break;
 
-	case Key::Space:
-		bHandled = OnKeySpace( bPress );
-		break;
+		case Key::Space:
+			bHandled = OnKeySpace( bPress );
+			break;
 
-	case Key::Home:
-		bHandled = OnKeyHome( bPress );
-		break;
+		case Key::Home:
+			bHandled = OnKeyHome( bPress );
+			break;
 
-	case Key::End:
-		bHandled = OnKeyEnd( bPress );
-		break;
+		case Key::End:
+			bHandled = OnKeyEnd( bPress );
+			break;
 
-	case Key::Return:
-		bHandled = OnKeyReturn( bPress );
-		break;
+		case Key::Return:
+			bHandled = OnKeyReturn( bPress );
+			break;
 
-	case Key::Backspace:
-		bHandled = OnKeyBackspace( bPress );
-		break;
+		case Key::Backspace:
+			bHandled = OnKeyBackspace( bPress );
+			break;
 
-	case Key::Delete:
-		bHandled = OnKeyDelete( bPress );
-		break;
+		case Key::Delete:
+			bHandled = OnKeyDelete( bPress );
+			break;
 
-	case Key::Right:
-		bHandled = OnKeyRight( bPress );
-		break;
+		case Key::Right:
+			bHandled = OnKeyRight( bPress );
+			break;
 
-	case Key::Left:
-		bHandled = OnKeyLeft( bPress );
-		break;
+		case Key::Left:
+			bHandled = OnKeyLeft( bPress );
+			break;
 
-	case Key::Up:
-		bHandled = OnKeyUp( bPress );
-		break;
+		case Key::Up:
+			bHandled = OnKeyUp( bPress );
+			break;
 
-	case Key::Down:
-		bHandled = OnKeyDown( bPress );
-		break;
+		case Key::Down:
+			bHandled = OnKeyDown( bPress );
+			break;
 
-	case Key::Escape:
-		bHandled = OnKeyEscape( bPress );
-		break;
+		case Key::Escape:
+			bHandled = OnKeyEscape( bPress );
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	if ( !bHandled && GetParent() )

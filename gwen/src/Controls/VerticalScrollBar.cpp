@@ -113,7 +113,7 @@ bool VerticalScrollBar::SetScrolledAmount( float amount, bool forceUpdate )
 
 	if ( forceUpdate )
 	{
-		int newY = GetButtonSize() + ( amount * ( ( Height() - m_Bar->Height() ) - ( GetButtonSize()*2 ) ) );
+		int newY = GetButtonSize() + ( amount * ( ( Height() - m_Bar->Height() ) - ( GetButtonSize() * 2 ) ) );
 		m_Bar->MoveTo( m_Bar->X(), newY );
 	}
 

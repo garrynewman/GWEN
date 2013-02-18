@@ -31,10 +31,10 @@ void DragAndDrop::ControlDeleted( Gwen::Controls::Base* pControl )
 		LastPressedControl = NULL;
 	}
 
-	if  ( LastPressedControl == pControl )
+	if ( LastPressedControl == pControl )
 	{ LastPressedControl = NULL; }
 
-	if  ( HoveredControl == pControl )
+	if ( HoveredControl == pControl )
 	{ HoveredControl = NULL; }
 
 	if ( NewHoveredControl == pControl )
@@ -184,7 +184,7 @@ void UpdateHoveredControl( Gwen::Controls::Base* pCtrl, int x, int y )
 	DragAndDrop::HoveredControl = NewHoveredControl;
 
 	// If we exist, tell us that we've started hovering.
-	if ( DragAndDrop::HoveredControl  )
+	if ( DragAndDrop::HoveredControl )
 	{
 		DragAndDrop::HoveredControl->DragAndDrop_HoverEnter( DragAndDrop::CurrentPackage, x, y );
 	}

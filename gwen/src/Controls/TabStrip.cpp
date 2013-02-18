@@ -26,8 +26,8 @@ GWEN_CONTROL_CONSTRUCTOR( TabStrip )
 bool TabStrip::DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* /*pPackage*/, int x, int y )
 {
 	Gwen::Point LocalPos = CanvasPosToLocal( Gwen::Point( x, y ) );
-	TabButton* pButton = gwen_cast<TabButton>( DragAndDrop::SourceControl );
-	TabControl* pTabControl = gwen_cast<TabControl>( GetParent() );
+	TabButton* pButton = gwen_cast<TabButton> ( DragAndDrop::SourceControl );
+	TabControl* pTabControl = gwen_cast<TabControl> ( GetParent() );
 
 	if ( pTabControl && pButton )
 	{
@@ -71,7 +71,7 @@ void TabStrip::Layout( Skin::Base* skin )
 
 	for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 	{
-		TabButton* pButton = gwen_cast<TabButton>( *iter );
+		TabButton* pButton = gwen_cast<TabButton> ( *iter );
 
 		if ( !pButton ) { continue; }
 
@@ -150,7 +150,7 @@ void TabStrip::DragAndDrop_Hover( Gwen::DragAndDrop::Package* /*pPackage*/, int 
 
 		if ( DropPos.x > DroppedOn->Width() / 2 )
 		{
-			m_TabDragControl->MoveBy( DroppedOn->Width()-1, 0 );
+			m_TabDragControl->MoveBy( DroppedOn->Width() - 1, 0 );
 		}
 
 		m_TabDragControl->Dock( Pos::None );

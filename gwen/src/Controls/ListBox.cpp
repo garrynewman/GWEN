@@ -152,7 +152,7 @@ void ListBox::SetSelectedRow( Gwen::Controls::Base* pControl, bool bClearOthers 
 	if ( bClearOthers )
 	{ UnselectAll(); }
 
-	ListBoxRow* pRow = gwen_cast<ListBoxRow>( pControl );
+	ListBoxRow* pRow = gwen_cast<ListBoxRow> ( pControl );
 
 	if ( !pRow ) { return; }
 
@@ -173,7 +173,7 @@ void ListBox::SelectByString( const TextObject & strName, bool bClearOthers )
 
 	for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
 	{
-		ListBoxRow* pChild = gwen_cast<ListBoxRow>( *iter );
+		ListBoxRow* pChild = gwen_cast<ListBoxRow> ( *iter );
 
 		if ( !pChild ) { continue; }
 
@@ -204,12 +204,12 @@ bool ListBox::OnKeyDown( bool bDown )
 			if ( next != end )
 			{ result = next; }
 
-			ListBoxRow* pRow = gwen_cast<ListBoxRow>( *result );
+			ListBoxRow* pRow = gwen_cast<ListBoxRow> ( *result );
 
 			if ( pRow )
 			{
 				pRow->DoSelect();
-				Controls::VerticalScrollBar* pScroll = gwen_cast<Controls::VerticalScrollBar>( m_VerticalScrollBar );
+				Controls::VerticalScrollBar* pScroll = gwen_cast<Controls::VerticalScrollBar> ( m_VerticalScrollBar );
 
 				if ( pScroll ) { pScroll->NudgeDown( this ); }
 
@@ -240,12 +240,12 @@ bool ListBox::OnKeyUp( bool bDown )
 			if ( result != begin )
 			{ --result; }
 
-			ListBoxRow* pRow = gwen_cast<ListBoxRow>( *result );
+			ListBoxRow* pRow = gwen_cast<ListBoxRow> ( *result );
 
 			if ( pRow )
 			{
 				pRow->DoSelect();
-				Controls::VerticalScrollBar* pScroll = gwen_cast<Controls::VerticalScrollBar>( m_VerticalScrollBar );
+				Controls::VerticalScrollBar* pScroll = gwen_cast<Controls::VerticalScrollBar> ( m_VerticalScrollBar );
 
 				if ( pScroll ) { pScroll->NudgeUp( this ); }
 

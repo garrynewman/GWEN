@@ -55,11 +55,11 @@ namespace Gwen
 			{
 				ControlList list;
 
-				for ( int i=0; i<pRoot->NumChildren(); i++ )
+				for ( int i = 0; i < pRoot->NumChildren(); i++ )
 				{
 					Gwen::Controls::Base* pBaseChild = pRoot->GetChild( i );
 
-					if  ( !pBaseChild ) { continue; }
+					if ( !pBaseChild ) { continue; }
 
 					//
 					// If we have a child is isn't exportable - maybe it has a child that is

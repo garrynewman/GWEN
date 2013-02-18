@@ -37,12 +37,12 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						return gwen_cast<Controls::CheckBoxWithLabel>( ctrl )->Label()->GetText().GetUnicode();
+						return gwen_cast<Controls::CheckBoxWithLabel> ( ctrl )->Label()->GetText().GetUnicode();
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
-						gwen_cast<Controls::CheckBoxWithLabel>( ctrl )->Label()->SetText( str );
+						gwen_cast<Controls::CheckBoxWithLabel> ( ctrl )->Label()->SetText( str );
 					}
 
 			};

@@ -19,12 +19,12 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						return Utility::StringToUnicode( gwen_cast<Controls::FilePicker>( ctrl )->GetFileType() );
+						return Utility::StringToUnicode( gwen_cast<Controls::FilePicker> ( ctrl )->GetFileType() );
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
-						gwen_cast<Controls::FilePicker>( ctrl )->SetFileType( Utility::UnicodeToString( str ) );
+						gwen_cast<Controls::FilePicker> ( ctrl )->SetFileType( Utility::UnicodeToString( str ) );
 					}
 
 			};
@@ -47,7 +47,7 @@ namespace Gwen
 				{
 					Gwen::Controls::FilePicker* pControl = new Gwen::Controls::FilePicker( parent );
 					pControl->SetSize( 100, 20 );
-					pControl->SetFileType( "EXE file | *.exe"  );
+					pControl->SetFileType( "EXE file | *.exe" );
 					return pControl;
 				}
 		};

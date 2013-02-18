@@ -177,20 +177,20 @@ namespace Gwen
 					{
 						switch ( ctrl->GetDock() )
 						{
-						case Pos::Left:
-							return L"Left";
+							case Pos::Left:
+								return L"Left";
 
-						case Pos::Fill:
-							return L"Fill";
+							case Pos::Fill:
+								return L"Fill";
 
-						case Pos::Right:
-							return L"Right";
+							case Pos::Right:
+								return L"Right";
 
-						case Pos::Top:
-							return L"Top";
+							case Pos::Top:
+								return L"Top";
 
-						case Pos::Bottom:
-							return L"Bottom";
+							case Pos::Bottom:
+								return L"Bottom";
 						}
 
 						return L"None";

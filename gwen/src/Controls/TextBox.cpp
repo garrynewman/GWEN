@@ -24,7 +24,7 @@ class ChangeCaretColor : public Gwen::Anim::Animation
 
 		virtual void Think()
 		{
-			gwen_cast<TextBox>( m_Control )->UpdateCaretColor();
+			gwen_cast<TextBox> ( m_Control )->UpdateCaretColor();
 		}
 };
 #endif
@@ -41,7 +41,7 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	m_iCursorEnd = 0;
 	m_iCursorLine = 0;
 	m_bSelectAll = false;
-	SetTextColor( Gwen::Color( 50, 50, 50, 255 ) ); // TODO: From Skin
+	SetTextColor( Gwen::Color( 50, 50, 50, 255 ) );   // TODO: From Skin
 	SetTabable( true );
 	AddAccelerator( L"Ctrl + C", &TextBox::OnCopy );
 	AddAccelerator( L"Ctrl + X", &TextBox::OnCut );
@@ -70,7 +70,7 @@ void TextBox::InsertText( const Gwen::UnicodeString & strInsert )
 
 	if ( m_iCursorPos > TextLength() ) { m_iCursorPos = TextLength(); }
 
-	if ( !IsTextAllowed( strInsert, m_iCursorPos )  )
+	if ( !IsTextAllowed( strInsert, m_iCursorPos ) )
 	{ return; }
 
 	UnicodeString str = GetText().GetUnicode();
@@ -212,7 +212,7 @@ bool TextBox::OnKeyBackspace( bool bDown )
 
 	if ( m_iCursorPos == 0 ) { return true; }
 
-	DeleteText( m_iCursorPos-1, 1 );
+	DeleteText( m_iCursorPos - 1, 1 );
 	return true;
 }
 
@@ -388,7 +388,7 @@ void TextBox::MakeCaratVisible()
 	{
 		int iCaratPos = m_Text->GetCharacterPosition( m_iCursorPos ).x;
 		int iRealCaratPos = iCaratPos + m_Text->X();
-		int iSlidingZone = m_Text->GetFont()->size+1; //Width()*0.1f
+		int iSlidingZone = m_Text->GetFont()->size + 1; //Width()*0.1f
 
 		// If the carat is already in a semi-good position, leave it.
 		if ( iRealCaratPos >= iSlidingZone && iRealCaratPos <= Width() - iSlidingZone )
@@ -516,7 +516,7 @@ bool TextBoxMultiline::OnKeyEnd( bool bDown )
 	int iCurrentLine = GetCurrentLine();
 	int iChar = m_Text->GetEndCharFromLine( iCurrentLine );
 	m_iCursorLine = 0;
-	m_iCursorPos = iChar-1; // NAUGHTY
+	m_iCursorPos = iChar - 1; // NAUGHTY
 
 	if ( !Gwen::Input::IsShiftDown() )
 	{
@@ -558,7 +558,7 @@ bool TextBoxMultiline::OnKeyDown( bool bDown )
 
 	int iLine = m_Text->GetLineFromChar( m_iCursorPos );
 
-	if ( iLine >= m_Text->NumLines()-1 ) { return true; }
+	if ( iLine >= m_Text->NumLines() - 1 ) { return true; }
 
 	m_iCursorPos = m_Text->GetStartCharFromLine( iLine + 1 );
 	m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine + 1 )->Length() );

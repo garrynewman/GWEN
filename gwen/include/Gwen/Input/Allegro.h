@@ -38,59 +38,59 @@ namespace Gwen
 				{
 					switch ( iKeyCode )
 					{
-					case ALLEGRO_KEY_BACKSPACE:
-						return Gwen::Key::Backspace;
+						case ALLEGRO_KEY_BACKSPACE:
+							return Gwen::Key::Backspace;
 
-					case ALLEGRO_KEY_ENTER:
-						return Gwen::Key::Return;
+						case ALLEGRO_KEY_ENTER:
+							return Gwen::Key::Return;
 
-					case ALLEGRO_KEY_ESCAPE:
-						return Gwen::Key::Escape;
+						case ALLEGRO_KEY_ESCAPE:
+							return Gwen::Key::Escape;
 
-					case ALLEGRO_KEY_TAB:
-						return Gwen::Key::Tab;
+						case ALLEGRO_KEY_TAB:
+							return Gwen::Key::Tab;
 
-					case ALLEGRO_KEY_SPACE:
-						return Gwen::Key::Space;
+						case ALLEGRO_KEY_SPACE:
+							return Gwen::Key::Space;
 
-					case ALLEGRO_KEY_UP:
-						return Gwen::Key::Up;
+						case ALLEGRO_KEY_UP:
+							return Gwen::Key::Up;
 
-					case ALLEGRO_KEY_DOWN:
-						return Gwen::Key::Down;
+						case ALLEGRO_KEY_DOWN:
+							return Gwen::Key::Down;
 
-					case ALLEGRO_KEY_LEFT:
-						return Gwen::Key::Left;
+						case ALLEGRO_KEY_LEFT:
+							return Gwen::Key::Left;
 
-					case ALLEGRO_KEY_RIGHT:
-						return Gwen::Key::Right;
+						case ALLEGRO_KEY_RIGHT:
+							return Gwen::Key::Right;
 
-					case ALLEGRO_KEY_HOME:
-						return Gwen::Key::Home;
+						case ALLEGRO_KEY_HOME:
+							return Gwen::Key::Home;
 
-					case ALLEGRO_KEY_END:
-						return Gwen::Key::End;
+						case ALLEGRO_KEY_END:
+							return Gwen::Key::End;
 
-					case ALLEGRO_KEY_DELETE:
-						return Gwen::Key::Delete;
+						case ALLEGRO_KEY_DELETE:
+							return Gwen::Key::Delete;
 
-					case ALLEGRO_KEY_LCTRL:
-						return Gwen::Key::Control;
+						case ALLEGRO_KEY_LCTRL:
+							return Gwen::Key::Control;
 
-					case ALLEGRO_KEY_ALT:
-						return Gwen::Key::Alt;
+						case ALLEGRO_KEY_ALT:
+							return Gwen::Key::Alt;
 
-					case ALLEGRO_KEY_LSHIFT:
-						return Gwen::Key::Shift;
+						case ALLEGRO_KEY_LSHIFT:
+							return Gwen::Key::Shift;
 
-					case ALLEGRO_KEY_RCTRL:
-						return Gwen::Key::Control;
+						case ALLEGRO_KEY_RCTRL:
+							return Gwen::Key::Control;
 
-					case ALLEGRO_KEY_ALTGR:
-						return Gwen::Key::Alt;
+						case ALLEGRO_KEY_ALTGR:
+							return Gwen::Key::Alt;
 
-					case ALLEGRO_KEY_RSHIFT:
-						return Gwen::Key::Shift;
+						case ALLEGRO_KEY_RSHIFT:
+							return Gwen::Key::Shift;
 					}
 
 					return Gwen::Key::Invalid;
@@ -102,49 +102,49 @@ namespace Gwen
 
 					switch ( event.type )
 					{
-					case ALLEGRO_EVENT_MOUSE_AXES:
-					{
-						int dx = event.mouse.x - m_MouseX;
-						int dy = event.mouse.y - m_MouseY;
+						case ALLEGRO_EVENT_MOUSE_AXES:
+							{
+								int dx = event.mouse.x - m_MouseX;
+								int dy = event.mouse.y - m_MouseY;
 
-						if ( event.mouse.dz != 0 )
-						{
-							return m_Canvas->InputMouseWheel( event.mouse.dz * 60 );
-						}
+								if ( event.mouse.dz != 0 )
+								{
+									return m_Canvas->InputMouseWheel( event.mouse.dz * 60 );
+								}
 
-						m_MouseX = event.mouse.x;
-						m_MouseY = event.mouse.y;
-						return m_Canvas->InputMouseMoved( m_MouseX, m_MouseY, dx, dy );
-					}
+								m_MouseX = event.mouse.x;
+								m_MouseY = event.mouse.y;
+								return m_Canvas->InputMouseMoved( m_MouseX, m_MouseY, dx, dy );
+							}
 
-					case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-					case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-					{
-						return m_Canvas->InputMouseButton( event.mouse.button-1,
-														   event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN );
-					}
+						case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+						case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+							{
+								return m_Canvas->InputMouseButton( event.mouse.button - 1,
+																   event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN );
+							}
 
-					case ALLEGRO_EVENT_KEY_CHAR:
-					{
-						return m_Canvas->InputCharacter( event.keyboard.unichar );
-					}
+						case ALLEGRO_EVENT_KEY_CHAR:
+							{
+								return m_Canvas->InputCharacter( event.keyboard.unichar );
+							}
 
-					case ALLEGRO_EVENT_KEY_DOWN:
-					case ALLEGRO_EVENT_KEY_UP:
-					{
-						bool bPressed = ( event.type == ALLEGRO_EVENT_KEY_DOWN );
+						case ALLEGRO_EVENT_KEY_DOWN:
+						case ALLEGRO_EVENT_KEY_UP:
+							{
+								bool bPressed = ( event.type == ALLEGRO_EVENT_KEY_DOWN );
 
-						if ( event.keyboard.keycode
-								&& bPressed
-								&& event.keyboard.keycode >= 'a'
-								&& event.keyboard.keycode <= 'z' )
-						{
-							return m_Canvas->InputCharacter( event.keyboard.keycode );
-						}
+								if ( event.keyboard.keycode
+										&& bPressed
+										&& event.keyboard.keycode >= 'a'
+										&& event.keyboard.keycode <= 'z' )
+								{
+									return m_Canvas->InputCharacter( event.keyboard.keycode );
+								}
 
-						unsigned char iKey = TranslateKeyCode( event.keyboard.keycode );
-						return m_Canvas->InputKey( iKey, bPressed );
-					}
+								unsigned char iKey = TranslateKeyCode( event.keyboard.keycode );
+								return m_Canvas->InputKey( iKey, bPressed );
+							}
 					}
 
 					return false;

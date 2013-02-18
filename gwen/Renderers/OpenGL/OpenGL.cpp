@@ -21,7 +21,7 @@ namespace Gwen
 			m_pContext = NULL;
 			::FreeImage_Initialise();
 
-			for ( int i=0; i<MaxVerts; i++ )
+			for ( int i = 0; i < MaxVerts; i++ )
 			{
 				m_Vertices[ i ].z = 0.5f;
 			}
@@ -40,7 +40,7 @@ namespace Gwen
 		{
 			glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 			glAlphaFunc( GL_GREATER, 1.0f );
-			glEnable ( GL_BLEND );
+			glEnable( GL_BLEND );
 		}
 
 		void OpenGL::End()
@@ -54,7 +54,7 @@ namespace Gwen
 
 			glVertexPointer( 3, GL_FLOAT,  sizeof( Vertex ), ( void* ) &m_Vertices[0].x );
 			glEnableClientState( GL_VERTEX_ARRAY );
-			glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), ( void* )&m_Vertices[0].r );
+			glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), ( void* ) &m_Vertices[0].r );
 			glEnableClientState( GL_COLOR_ARRAY );
 			glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), ( void* ) &m_Vertices[0].u );
 			glEnableClientState( GL_TEXTURE_COORD_ARRAY );
@@ -65,13 +65,13 @@ namespace Gwen
 
 		void OpenGL::AddVert( int x, int y, float u, float v )
 		{
-			if ( m_iVertNum >= MaxVerts-1 )
+			if ( m_iVertNum >= MaxVerts - 1 )
 			{
 				Flush();
 			}
 
-			m_Vertices[ m_iVertNum ].x = ( float )x;
-			m_Vertices[ m_iVertNum ].y = ( float )y;
+			m_Vertices[ m_iVertNum ].x = ( float ) x;
+			m_Vertices[ m_iVertNum ].y = ( float ) y;
 			m_Vertices[ m_iVertNum ].u = u;
 			m_Vertices[ m_iVertNum ].v = v;
 			m_Vertices[ m_iVertNum ].r = m_Color.r;
@@ -94,16 +94,16 @@ namespace Gwen
 
 			Translate( rect );
 			AddVert( rect.x, rect.y );
-			AddVert( rect.x+rect.w, rect.y );
+			AddVert( rect.x + rect.w, rect.y );
 			AddVert( rect.x, rect.y + rect.h );
-			AddVert( rect.x+rect.w, rect.y );
-			AddVert( rect.x+rect.w, rect.y+rect.h );
+			AddVert( rect.x + rect.w, rect.y );
+			AddVert( rect.x + rect.w, rect.y + rect.h );
 			AddVert( rect.x, rect.y + rect.h );
 		}
 
 		void OpenGL::SetDrawColor( Gwen::Color color )
 		{
-			glColor4ubv( ( GLubyte* )&color );
+			glColor4ubv( ( GLubyte* ) &color );
 			m_Color = color;
 		}
 
@@ -130,7 +130,7 @@ namespace Gwen
 
 		void OpenGL::DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 )
 		{
-			GLuint* tex = ( GLuint* )pTexture->data;
+			GLuint* tex = ( GLuint* ) pTexture->data;
 
 			// Missing image, not loaded properly?
 			if ( !tex )
@@ -142,7 +142,7 @@ namespace Gwen
 			GLuint boundtex;
 			GLboolean texturesOn;
 			glGetBooleanv( GL_TEXTURE_2D, &texturesOn );
-			glGetIntegerv( GL_TEXTURE_BINDING_2D, ( GLint* )&boundtex );
+			glGetIntegerv( GL_TEXTURE_BINDING_2D, ( GLint* ) &boundtex );
 
 			if ( !texturesOn || *tex != boundtex )
 			{
@@ -152,10 +152,10 @@ namespace Gwen
 			}
 
 			AddVert( rect.x, rect.y,			u1, v1 );
-			AddVert( rect.x+rect.w, rect.y,		u2, v1 );
+			AddVert( rect.x + rect.w, rect.y,		u2, v1 );
 			AddVert( rect.x, rect.y + rect.h,	u1, v2 );
-			AddVert( rect.x+rect.w, rect.y,		u2, v1 );
-			AddVert( rect.x+rect.w, rect.y+rect.h, u2, v2 );
+			AddVert( rect.x + rect.w, rect.y,		u2, v1 );
+			AddVert( rect.x + rect.w, rect.y + rect.h, u2, v2 );
 			AddVert( rect.x, rect.y + rect.h, u1, v2 );
 		}
 
@@ -211,13 +211,13 @@ namespace Gwen
 #else
 			GLenum format = GL_BGRA;
 #endif
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pTexture->width, pTexture->height, 0, format, GL_UNSIGNED_BYTE, ( const GLvoid* )FreeImage_GetBits( bits32 ) );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pTexture->width, pTexture->height, 0, format, GL_UNSIGNED_BYTE, ( const GLvoid* ) FreeImage_GetBits( bits32 ) );
 			FreeImage_Unload( bits32 );
 		}
 
 		void OpenGL::FreeTexture( Gwen::Texture* pTexture )
 		{
-			GLuint* tex = ( GLuint* )pTexture->data;
+			GLuint* tex = ( GLuint* ) pTexture->data;
 
 			if ( !tex ) { return; }
 
@@ -228,7 +228,7 @@ namespace Gwen
 
 		Gwen::Color OpenGL::PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default )
 		{
-			GLuint* tex = ( GLuint* )pTexture->data;
+			GLuint* tex = ( GLuint* ) pTexture->data;
 
 			if ( !tex ) { return col_default; }
 
@@ -297,7 +297,7 @@ namespace Gwen
 		bool OpenGL::ShutdownContext( Gwen::WindowProvider* pWindow )
 		{
 #ifdef _WIN32
-			wglDeleteContext( ( HGLRC )m_pContext );
+			wglDeleteContext( ( HGLRC ) m_pContext );
 			return true;
 #endif
 			return false;
@@ -322,7 +322,7 @@ namespace Gwen
 #ifdef _WIN32
 			RECT r;
 
-			if ( GetClientRect( ( HWND )pWindow->GetWindow(), &r ) )
+			if ( GetClientRect( ( HWND ) pWindow->GetWindow(), &r ) )
 			{
 				glMatrixMode( GL_PROJECTION );
 				glLoadIdentity();

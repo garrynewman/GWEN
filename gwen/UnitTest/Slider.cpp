@@ -51,8 +51,8 @@ class Slider : public GUnit
 
 		void SliderMoved( Base* pControl )
 		{
-			Gwen::Controls::Slider* pSlider = ( Gwen::Controls::Slider* )pControl;
-			UnitPrint( Utility::Format( L"Slider Value: %.2f", ( float )pSlider->GetFloatValue() ) );
+			Gwen::Controls::Slider* pSlider = ( Gwen::Controls::Slider* ) pControl;
+			UnitPrint( Utility::Format( L"Slider Value: %.2f", ( float ) pSlider->GetFloatValue() ) );
 		}
 
 };

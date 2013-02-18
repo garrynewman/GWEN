@@ -25,7 +25,7 @@ class ProgressBarThink : public Gwen::Anim::Animation
 		virtual void Think()
 		{
 			float fDiff = Platform::GetTimeInSeconds() - m_fLastFrame;
-			gwen_cast<ProgressBar>( m_Control )->CycleThink( Gwen::Clamp( fDiff, 0.f, 0.3f ) );
+			gwen_cast<ProgressBar> ( m_Control )->CycleThink( Gwen::Clamp( fDiff, 0.f, 0.3f ) );
 			m_fLastFrame = Platform::GetTimeInSeconds();
 		}
 

@@ -39,7 +39,7 @@ void DesignerFormat::Import( Gwen::Controls::Base* pRoot, const Gwen::String & s
 	Bootil::Data::Tree tree;
 	Bootil::Data::Json::Import( tree, strContents );
 
-	if ( !tree.HasChild( "Controls" ) ) { return; } // false
+	if ( !tree.HasChild( "Controls" ) ) { return; }  // false
 
 	ImportFromTree( pRoot, tree.GetChild( "Controls" ) );
 }
@@ -49,7 +49,7 @@ void DesignerFormat::ImportFromTree( Gwen::Controls::Base* pRoot, Bootil::Data::
 	ControlFactory::Base* pRootFactory = ControlFactory::Find( "Base" );
 
 	if ( pRoot->UserData.Exists( "ControlFactory" ) )
-	{ pRootFactory = pRoot->UserData.Get<ControlFactory::Base*>( "ControlFactory" ); }
+	{ pRootFactory = pRoot->UserData.Get<ControlFactory::Base*> ( "ControlFactory" ); }
 
 	if ( tree.HasChild( "Properties" ) )
 	{
@@ -64,7 +64,7 @@ void DesignerFormat::ImportFromTree( Gwen::Controls::Base* pRoot, Bootil::Data::
 			{
 				BOOTIL_FOREACH( pc, p->Children(), Bootil::Data::Tree::List )
 				{
-					prop->NumSet( pRoot, pc->Name(), pc->Var<float>()  );
+					prop->NumSet( pRoot, pc->Name(), pc->Var<float>() );
 				}
 			}
 			else
@@ -90,7 +90,7 @@ void DesignerFormat::ImportFromTree( Gwen::Controls::Base* pRoot, Bootil::Data::
 
 			// Tell the control we're here and we're queer
 			{
-				int iPage = c->ChildVar<int>( "Page", 0 );
+				int iPage = c->ChildVar<int> ( "Page", 0 );
 				pRootFactory->AddChild( pRoot, pControl, iPage );
 			}
 			pControl->SetMouseInputEnabled( true );
@@ -116,7 +116,7 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 {
 	Bootil::Data::Tree* me = &tree;
 
-	if ( strcmp( pRoot->GetTypeName(), "DocumentCanvas" )==0 )
+	if ( strcmp( pRoot->GetTypeName(), "DocumentCanvas" ) == 0 )
 	{
 		me = &tree.AddChild( "Controls" );
 	}
@@ -133,7 +133,7 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 	if ( pRoot->UserData.Exists( "ControlFactory" ) )
 	{
 		Bootil::Data::Tree & props = me->AddChild( "Properties" );
-		ControlFactory::Base* pCF = pRoot->UserData.Get<ControlFactory::Base*>( "ControlFactory" );
+		ControlFactory::Base* pCF = pRoot->UserData.Get<ControlFactory::Base*> ( "ControlFactory" );
 		// Save the ParentPage
 		{
 			int iParentPage = pCF->GetParentPage( pRoot );
@@ -154,9 +154,9 @@ void DesignerFormat::ExportToTree( Gwen::Controls::Base* pRoot, Bootil::Data::Tr
 				{
 					Bootil::Data::Tree & prop = props.AddChild( ( *it )->Name() );
 
-					for ( int i=0; i<( *it )->NumCount(); i++ )
+					for ( int i = 0; i < ( *it )->NumCount(); i++ )
 					{
-						prop.SetChildVar<float>( ( *it )->NumName( i ), ( *it )->NumGet( pRoot, i ) );
+						prop.SetChildVar<float> ( ( *it )->NumName( i ), ( *it )->NumGet( pRoot, i ) );
 					}
 
 					continue;

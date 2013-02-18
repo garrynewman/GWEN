@@ -25,7 +25,7 @@ GWEN_CONTROL_CONSTRUCTOR( TabButton )
 	SetTextPadding( Padding( 2, 2, 2, 2 ) );
 }
 
-void TabButton::Layout( Skin::Base* skin  )
+void TabButton::Layout( Skin::Base* skin )
 {
 	int iParentDock = m_Control->GetTabStrip()->GetDock();
 

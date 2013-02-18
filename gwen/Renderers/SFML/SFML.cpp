@@ -14,8 +14,8 @@ namespace Gwen
 	{
 		struct TextureData
 		{
-			TextureData( sf::Image* img ): image( img ), texture( NULL ) { }
-			TextureData( sf::Texture* text ): texture( text ), image( NULL ) { }
+			TextureData( sf::Image* img ) : image( img ), texture( NULL ) { }
+			TextureData( sf::Texture* text ) : texture( text ), image( NULL ) { }
 			~TextureData() { if ( texture != NULL ) { delete texture; } if ( image != NULL ) { delete image; } }
 
 			sf::Texture* texture;
@@ -96,7 +96,7 @@ namespace Gwen
 
 			const sf::Font* pSFFont = ( sf::Font* )( pFont->data );
 
-			if  ( !pSFFont )
+			if ( !pSFFont )
 			{
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pSFFont = &defaultFont;
@@ -122,7 +122,7 @@ namespace Gwen
 
 			const sf::Font* pSFFont = ( sf::Font* )( pFont->data );
 
-			if  ( !pSFFont )
+			if ( !pSFFont )
 			{
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pSFFont = &defaultFont;

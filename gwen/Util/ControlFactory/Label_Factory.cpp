@@ -17,18 +17,18 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						UnicodeString str = gwen_cast<Controls::Label>( ctrl )->GetText().GetUnicode();
-						Gwen::Utility::Replace<UnicodeString>( str, L"\n", L"\\n" );
-						Gwen::Utility::Replace<UnicodeString>( str, L"\t", L"\\t" );
+						UnicodeString str = gwen_cast<Controls::Label> ( ctrl )->GetText().GetUnicode();
+						Gwen::Utility::Replace<UnicodeString> ( str, L"\n", L"\\n" );
+						Gwen::Utility::Replace<UnicodeString> ( str, L"\t", L"\\t" );
 						return str;
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
 						UnicodeString strOut = str;
-						Gwen::Utility::Replace<UnicodeString>( strOut, L"\\n", L"\n" );
-						Gwen::Utility::Replace<UnicodeString>( strOut, L"\\t", L"\t" );
-						gwen_cast<Controls::Label>( ctrl )->SetText( strOut );
+						Gwen::Utility::Replace<UnicodeString> ( strOut, L"\\n", L"\n" );
+						Gwen::Utility::Replace<UnicodeString> ( strOut, L"\\t", L"\t" );
+						gwen_cast<Controls::Label> ( ctrl )->SetText( strOut );
 					}
 
 			};
@@ -39,15 +39,15 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						return gwen_cast<Controls::Label>( ctrl )->GetFont()->facename;
+						return gwen_cast<Controls::Label> ( ctrl )->GetFont()->facename;
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
 						if ( str == L"" ) { return; }
 
-						Gwen::Font* pFont = gwen_cast<Controls::Label>( ctrl )->GetFont();
-						gwen_cast<Controls::Label>( ctrl )->SetFont( str, pFont->size, pFont->bold );
+						Gwen::Font* pFont = gwen_cast<Controls::Label> ( ctrl )->GetFont();
+						gwen_cast<Controls::Label> ( ctrl )->SetFont( str, pFont->size, pFont->bold );
 					}
 
 			};
@@ -58,7 +58,7 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						return Gwen::Utility::Format( L"%i", ( int ) gwen_cast<Controls::Label>( ctrl )->GetFont()->size );
+						return Gwen::Utility::Format( L"%i", ( int ) gwen_cast<Controls::Label> ( ctrl )->GetFont()->size );
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
@@ -67,11 +67,11 @@ namespace Gwen
 
 						if ( swscanf( str.c_str(), L"%i", &size ) != 1 ) { return; }
 
-						Gwen::Font* pFont = gwen_cast<Controls::Label>( ctrl )->GetFont();
+						Gwen::Font* pFont = gwen_cast<Controls::Label> ( ctrl )->GetFont();
 
 						if ( size == pFont->size ) { return; }
 
-						gwen_cast<Controls::Label>( ctrl )->SetFont( pFont->facename, size, pFont->bold );
+						gwen_cast<Controls::Label> ( ctrl )->SetFont( pFont->facename, size, pFont->bold );
 					}
 
 			};
@@ -82,7 +82,7 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						if ( gwen_cast<Controls::Label>( ctrl )->GetFont()->bold ) { return True; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetFont()->bold ) { return True; }
 
 						return False;
 					}
@@ -90,11 +90,11 @@ namespace Gwen
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
 						bool bTrue = ( str == True );
-						Gwen::Font* pFont = gwen_cast<Controls::Label>( ctrl )->GetFont();
+						Gwen::Font* pFont = gwen_cast<Controls::Label> ( ctrl )->GetFont();
 
 						if ( bTrue == pFont->bold ) { return; }
 
-						gwen_cast<Controls::Label>( ctrl )->SetFont( pFont->facename, pFont->size, bTrue ? true : false );
+						gwen_cast<Controls::Label> ( ctrl )->SetFont( pFont->facename, pFont->size, bTrue ? true : false );
 					}
 
 			};
@@ -105,7 +105,7 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						if ( gwen_cast<Controls::Label>( ctrl )->Wrap() ) { return True; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->Wrap() ) { return True; }
 
 						return False;
 					}
@@ -114,9 +114,9 @@ namespace Gwen
 					{
 						bool bTrue = ( str == True );
 
-						if ( bTrue == gwen_cast<Controls::Label>( ctrl )->Wrap() ) { return; }
+						if ( bTrue == gwen_cast<Controls::Label> ( ctrl )->Wrap() ) { return; }
 
-						gwen_cast<Controls::Label>( ctrl )->SetWrap( bTrue );
+						gwen_cast<Controls::Label> ( ctrl )->SetWrap( bTrue );
 					}
 
 			};
@@ -127,27 +127,27 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						if ( gwen_cast<Controls::Label>( ctrl )->GetAlignment() & Pos::Top )	{ return L"Top"; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetAlignment() & Pos::Top )	{ return L"Top"; }
 
-						if ( gwen_cast<Controls::Label>( ctrl )->GetAlignment() & Pos::CenterV )	{ return L"Center"; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetAlignment() & Pos::CenterV )	{ return L"Center"; }
 
-						if ( gwen_cast<Controls::Label>( ctrl )->GetAlignment() & Pos::Bottom )	{ return L"Bottom"; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetAlignment() & Pos::Bottom )	{ return L"Bottom"; }
 
 						return L"Top";
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
-						int iAlign = gwen_cast<Controls::Label>( ctrl )->GetAlignment();
+						int iAlign = gwen_cast<Controls::Label> ( ctrl )->GetAlignment();
 						iAlign &= ~Pos::Top;
 						iAlign &= ~Pos::CenterV;
 						iAlign &= ~Pos::Bottom;
 
-						if ( str == L"Top" )	{ gwen_cast<Controls::Label>( ctrl )->SetAlignment( iAlign | Pos::Top ); }
+						if ( str == L"Top" )	{ gwen_cast<Controls::Label> ( ctrl )->SetAlignment( iAlign | Pos::Top ); }
 
-						if ( str == L"Center" ) { gwen_cast<Controls::Label>( ctrl )->SetAlignment( iAlign | Pos::CenterV ); }
+						if ( str == L"Center" ) { gwen_cast<Controls::Label> ( ctrl )->SetAlignment( iAlign | Pos::CenterV ); }
 
-						if ( str == L"Bottom" ) { gwen_cast<Controls::Label>( ctrl )->SetAlignment( iAlign | Pos::Bottom ); }
+						if ( str == L"Bottom" ) { gwen_cast<Controls::Label> ( ctrl )->SetAlignment( iAlign | Pos::Bottom ); }
 					}
 
 					int	OptionNum() { return 3; }
@@ -169,27 +169,27 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						if ( gwen_cast<Controls::Label>( ctrl )->GetAlignment() & Pos::Left )	{ return L"Left"; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetAlignment() & Pos::Left )	{ return L"Left"; }
 
-						if ( gwen_cast<Controls::Label>( ctrl )->GetAlignment() & Pos::CenterH )	{ return L"Center"; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetAlignment() & Pos::CenterH )	{ return L"Center"; }
 
-						if ( gwen_cast<Controls::Label>( ctrl )->GetAlignment() & Pos::Right )	{ return L"Right"; }
+						if ( gwen_cast<Controls::Label> ( ctrl )->GetAlignment() & Pos::Right )	{ return L"Right"; }
 
 						return L"Left";
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
-						int iAlign = gwen_cast<Controls::Label>( ctrl )->GetAlignment();
+						int iAlign = gwen_cast<Controls::Label> ( ctrl )->GetAlignment();
 						iAlign &= ~Pos::Left;
 						iAlign &= ~Pos::CenterH;
 						iAlign &= ~Pos::Right;
 
-						if ( str == L"Left" )	{ gwen_cast<Controls::Label>( ctrl )->SetAlignment( iAlign | Pos::Left ); }
+						if ( str == L"Left" )	{ gwen_cast<Controls::Label> ( ctrl )->SetAlignment( iAlign | Pos::Left ); }
 
-						if ( str == L"Center" ) { gwen_cast<Controls::Label>( ctrl )->SetAlignment( iAlign | Pos::CenterH ); }
+						if ( str == L"Center" ) { gwen_cast<Controls::Label> ( ctrl )->SetAlignment( iAlign | Pos::CenterH ); }
 
-						if ( str == L"Right" ) { gwen_cast<Controls::Label>( ctrl )->SetAlignment( iAlign | Pos::Right ); }
+						if ( str == L"Right" ) { gwen_cast<Controls::Label> ( ctrl )->SetAlignment( iAlign | Pos::Right ); }
 					}
 
 					int	OptionNum() { return 3; }

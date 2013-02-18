@@ -180,7 +180,7 @@ void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gw
 
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
-	ALLEGRO_DISPLAY* display = ( ALLEGRO_DISPLAY* )pPtr;
+	ALLEGRO_DISPLAY* display = ( ALLEGRO_DISPLAY* ) pPtr;
 	al_destroy_display( display );
 	al_destroy_event_queue( g_event_queue );
 	g_event_queue = NULL;
@@ -206,7 +206,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
-	ALLEGRO_DISPLAY* display = ( ALLEGRO_DISPLAY* )pPtr;
+	ALLEGRO_DISPLAY* display = ( ALLEGRO_DISPLAY* ) pPtr;
 	al_set_window_position( display, x, y );
 
 	if ( al_get_display_width( display ) != w || al_get_display_height( display ) != h )
@@ -215,7 +215,7 @@ void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, i
 
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pNewPos, Gwen::Point & pNewSize )
 {
-	ALLEGRO_DISPLAY* display = ( ALLEGRO_DISPLAY* )pPtr;
+	ALLEGRO_DISPLAY* display = ( ALLEGRO_DISPLAY* ) pPtr;
 
 	if ( bMax )
 	{
@@ -225,11 +225,11 @@ void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pN
 		int w = info.x2 - info.x1, h = info.y2 - info.y1;
 #if defined(ALLEGRO_MACOSX)
 		const int c_titleBarHeight = 20;
-		al_resize_display( display, w, h-c_titleBarHeight );
-		al_set_window_position( display, 0,c_titleBarHeight );
+		al_resize_display( display, w, h - c_titleBarHeight );
+		al_set_window_position( display, 0, c_titleBarHeight );
 #else
 		al_resize_display( display, w, h );
-		al_set_window_position( display, 0,0 );
+		al_set_window_position( display, 0, 0 );
 #endif
 	}
 	else
@@ -238,8 +238,8 @@ void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pN
 		ALLEGRO_MONITOR_INFO info;
 		al_get_monitor_info( 0, &info );
 		int w = info.x2 - info.x1, h = info.y2 - info.y1;
-		al_resize_display( display, w/2, h/2 );
-		al_set_window_position( display, w/4, h/4 );
+		al_resize_display( display, w / 2, h / 2 );
+		al_set_window_position( display, w / 4, h / 4 );
 	}
 
 	al_get_window_position( display, &pNewPos.x, &pNewPos.y );
@@ -271,7 +271,7 @@ void Gwen::Platform::GetCursorPos( Gwen::Point & po )
 {
 	ALLEGRO_MOUSE_STATE mouse;
 	al_get_mouse_state( &mouse );
-	int wx,wy;
+	int wx, wy;
 	al_get_window_position( g_display, &wx, &wy );
 	po.x = mouse.x + wx;
 	po.y = mouse.y + wy;

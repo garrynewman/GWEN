@@ -53,7 +53,7 @@ void Gwen::Anim::Cancel( Gwen::Controls::Base* control )
 		{
 			do
 			{
-				delete ( *iAnimationChild );
+				delete( *iAnimationChild );
 			}
 			while ( ++iAnimationChild != ChildAnimationsForControl.end() );
 		}
@@ -110,7 +110,7 @@ float GetEased( float fTime, float fEase )
 {
 	// Ease in and Out if ease is < 0
 	if ( fEase < 0 )
-	{ return -fTime/2 * ( cos( 3.14159f*fTime ) - 1 ); }
+	{ return -fTime / 2 * ( cos( 3.14159f * fTime ) - 1 ); }
 
 	return pow( fTime, fEase );
 }

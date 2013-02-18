@@ -21,7 +21,7 @@ GWEN_CONTROL_CONSTRUCTOR( PageControl )
 	m_iCurrentPage = 0;
 	SetUseFinishButton( true );
 
-	for ( int i=0; i<MaxPages; i++ )
+	for ( int i = 0; i < MaxPages; i++ )
 	{
 		m_pPages[i] = NULL;
 	}
@@ -58,7 +58,7 @@ void PageControl::SetPageCount( unsigned int iNum )
 {
 	if ( iNum >= MaxPages ) { iNum = MaxPages; }
 
-	for ( int i=0; i<iNum; i++ )
+	for ( int i = 0; i < iNum; i++ )
 	{
 		if ( !m_pPages[i] )
 		{
@@ -76,7 +76,7 @@ void PageControl::SetPageCount( unsigned int iNum )
 
 void PageControl::HideAll()
 {
-	for ( int i=0; i<MaxPages; i++ )
+	for ( int i = 0; i < MaxPages; i++ )
 	{
 		if ( !m_pPages[i] ) { continue; }
 
@@ -97,11 +97,11 @@ void PageControl::ShowPage( unsigned int i )
 	m_iCurrentPage = i;
 	m_Back->SetDisabled( m_iCurrentPage == 0 );
 	m_Next->SetDisabled( m_iCurrentPage >= m_iPages );
-	m_Label->SetText( Utility::Format( L"Page %i of %i", m_iCurrentPage+1, m_iPages ) );
+	m_Label->SetText( Utility::Format( L"Page %i of %i", m_iCurrentPage + 1, m_iPages ) );
 
 	if ( GetUseFinishButton() )
 	{
-		bool bFinished = m_iCurrentPage >= m_iPages-1;
+		bool bFinished = m_iCurrentPage >= m_iPages - 1;
 		m_Next->SetHidden( bFinished );
 		m_Finish->SetHidden( !bFinished );
 	}
@@ -126,7 +126,7 @@ Controls::Base* PageControl::GetCurrentPage()
 
 void PageControl::NextPage()
 {
-	if ( m_iCurrentPage >= m_iPages-1 ) { return; }
+	if ( m_iCurrentPage >= m_iPages - 1 ) { return; }
 
 	if ( m_pPages[m_iCurrentPage] )
 	{

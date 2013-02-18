@@ -20,7 +20,7 @@ GWEN_CONTROL_CONSTRUCTOR( VerticalSlider )
 
 float VerticalSlider::CalculateValue()
 {
-	return  1 - ( float )m_SliderBar->Y() / ( float )( Height() - m_SliderBar->Height() );
+	return  1 - ( float ) m_SliderBar->Y() / ( float )( Height() - m_SliderBar->Height() );
 }
 
 void VerticalSlider::UpdateBarFromValue()

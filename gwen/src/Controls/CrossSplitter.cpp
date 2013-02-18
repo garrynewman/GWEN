@@ -64,18 +64,18 @@ void CrossSplitter::OnVerticalMoved( Controls::Base* /*control*/ )
 
 void CrossSplitter::CalculateValueCenter()
 {
-	m_fHVal = ( float )m_CSplitter->X() / ( float )( Width() - m_CSplitter->Width() );
-	m_fVVal = ( float )m_CSplitter->Y() / ( float )( Height() - m_CSplitter->Height() );
+	m_fHVal = ( float ) m_CSplitter->X() / ( float )( Width() - m_CSplitter->Width() );
+	m_fVVal = ( float ) m_CSplitter->Y() / ( float )( Height() - m_CSplitter->Height() );
 }
 
 float CrossSplitter::CalculateValueHorizontal()
 {
-	return  ( float )m_HSplitter->X() / ( float )( Width() - m_HSplitter->Width() );
+	return ( float ) m_HSplitter->X() / ( float )( Width() - m_HSplitter->Width() );
 }
 
 float CrossSplitter::CalculateValueVertical()
 {
-	return  ( float )m_VSplitter->Y() / ( float )( Height() - m_VSplitter->Height() );
+	return ( float ) m_VSplitter->Y() / ( float )( Height() - m_VSplitter->Height() );
 }
 
 void CrossSplitter::Layout( Skin::Base* /*skin*/ )
@@ -87,7 +87,7 @@ void CrossSplitter::Layout( Skin::Base* /*skin*/ )
 	UpdateHSplitter();
 	UpdateCSplitter();
 
-	if (	m_iZoomedSection == -1 )
+	if ( m_iZoomedSection == -1 )
 	{
 		if ( m_Sections[0] )
 		{ m_Sections[0]->SetBounds( 0, 0, m_HSplitter->X(), m_VSplitter->Y() ); }

@@ -47,7 +47,7 @@ namespace Gwen
 			if ( !pFont->data )
 			{ return; }
 
-			al_destroy_font( ( ALLEGRO_FONT* )pFont->data );
+			al_destroy_font( ( ALLEGRO_FONT* ) pFont->data );
 			pFont->data = NULL;
 		}
 
@@ -55,7 +55,7 @@ namespace Gwen
 		{
 			Translate( pos.x, pos.y );
 			ALLEGRO_FONT* afont = ( ALLEGRO_FONT* ) pFont->data;
-			al_draw_text( afont, m_Color, pos.x,pos.y, ALLEGRO_ALIGN_LEFT, Utility::UnicodeToString( text ).c_str() );
+			al_draw_text( afont, m_Color, pos.x, pos.y, ALLEGRO_ALIGN_LEFT, Utility::UnicodeToString( text ).c_str() );
 		}
 
 		Gwen::Point Allegro::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
@@ -114,7 +114,7 @@ namespace Gwen
 
 		void Allegro::FreeTexture( Gwen::Texture* pTexture )
 		{
-			al_destroy_bitmap( ( ALLEGRO_BITMAP* )pTexture->data );
+			al_destroy_bitmap( ( ALLEGRO_BITMAP* ) pTexture->data );
 			pTexture->data = NULL;
 		}
 
@@ -128,8 +128,8 @@ namespace Gwen
 			const unsigned int w = pTexture->width;
 			const unsigned int h = pTexture->height;
 			al_draw_scaled_bitmap( bmp,
-								   u1*w,v1*h, ( u2-u1 )*w,( v2-v1 )*h, // source
-								   rect.x,rect.y, rect.w,rect.h,     // destination
+								   u1 * w, v1 * h, ( u2 - u1 ) *w, ( v2 - v1 ) *h, // source
+								   rect.x, rect.y, rect.w, rect.h,   // destination
 								   0 );
 		}
 
@@ -140,7 +140,7 @@ namespace Gwen
 			if ( !bmp )
 			{ return col_default; }
 
-			ALLEGRO_COLOR col = al_get_pixel( bmp, x,y );
+			ALLEGRO_COLOR col = al_get_pixel( bmp, x, y );
 			Gwen::Color gcol;
 			al_unmap_rgba( col, &gcol.r, &gcol.g, &gcol.b, &gcol.a );
 			return gcol;
@@ -151,7 +151,7 @@ namespace Gwen
 			Translate( rect );
 			rect.x += 0.5f;	// Draw at pixel centre.
 			rect.y += 0.5f;
-			al_draw_filled_rectangle( rect.x,rect.y, rect.x+rect.w, rect.y+rect.h, m_Color );
+			al_draw_filled_rectangle( rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, m_Color );
 		}
 
 		void Allegro::DrawLinedRect( Gwen::Rect rect )
@@ -160,17 +160,17 @@ namespace Gwen
 			rect.x += 0.5f;	// Draw at pixel centre.
 			rect.y += 0.5f;
 			// Width of 0 draws a line, not a rect of width 1.
-			al_draw_rectangle( rect.x,rect.y, rect.x+rect.w,rect.y+rect.h, m_Color, 0.f );
+			al_draw_rectangle( rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, m_Color, 0.f );
 		}
 
 		void Allegro::DrawPixel( int x, int y )
 		{
-			al_put_pixel( x+0.5f, y+0.5f, m_Color );
+			al_put_pixel( x + 0.5f, y + 0.5f, m_Color );
 		}
 
 		bool Allegro::BeginContext( Gwen::WindowProvider* pWindow )
 		{
-			al_clear_to_color( al_map_rgba_f( 0.f,0.f,0.f,0.f ) );
+			al_clear_to_color( al_map_rgba_f( 0.f, 0.f, 0.f, 0.f ) );
 			return true;
 		}
 

@@ -105,8 +105,8 @@
 
 // Bitmap types -------------------------------------------------------------
 
-FI_STRUCT ( FIBITMAP ) { void* data; };
-FI_STRUCT ( FIMULTIBITMAP ) { void* data; };
+FI_STRUCT( FIBITMAP ) { void* data; };
+FI_STRUCT( FIMULTIBITMAP ) { void* data; };
 
 // Types used in the library (directly copied from Windows) -----------------
 
@@ -361,7 +361,7 @@ typedef struct tagFICOMPLEX
 #define FIICC_DEFAULT			0x00
 #define FIICC_COLOR_IS_CMYK		0x01
 
-FI_STRUCT ( FIICCPROFILE )
+FI_STRUCT( FIICCPROFILE )
 {
 	WORD    flags;	// info flag
 	DWORD	size;	// profile's size measured in bytes
@@ -463,7 +463,7 @@ FI_ENUM( FREE_IMAGE_DITHER )
 			  FID_BAYER8x8	= 2,	// Bayer ordered dispersed dot dithering (order 3 dithering matrix)
 				 FID_CLUSTER6x6	= 3,	// Ordered clustered dot dithering (order 3 - 6x6 matrix)
 				  FID_CLUSTER8x8	= 4,	// Ordered clustered dot dithering (order 4 - 8x8 matrix)
-				   FID_CLUSTER16x16= 5,	// Ordered clustered dot dithering (order 8 - 16x16 matrix)
+				   FID_CLUSTER16x16 = 5,	// Ordered clustered dot dithering (order 8 - 16x16 matrix)
 				   FID_BAYER16x16	= 6		// Bayer ordered dispersed dot dithering (order 4 dithering matrix)
 };
 
@@ -571,12 +571,12 @@ FI_ENUM( FREE_IMAGE_MDMODEL )
 /**
   Handle to a metadata model
 */
-FI_STRUCT ( FIMETADATA ) { void* data; };
+FI_STRUCT( FIMETADATA ) { void* data; };
 
 /**
   Handle to a FreeImage tag
 */
-FI_STRUCT ( FITAG ) { void* data; };
+FI_STRUCT( FITAG ) { void* data; };
 
 // File IO routines ---------------------------------------------------------
 
@@ -584,10 +584,10 @@ FI_STRUCT ( FITAG ) { void* data; };
 #define FREEIMAGE_IO
 
 typedef void* fi_handle;
-typedef unsigned ( DLL_CALLCONV* FI_ReadProc ) ( void* buffer, unsigned size, unsigned count, fi_handle handle );
-typedef unsigned ( DLL_CALLCONV* FI_WriteProc ) ( void* buffer, unsigned size, unsigned count, fi_handle handle );
-typedef int ( DLL_CALLCONV* FI_SeekProc ) ( fi_handle handle, long offset, int origin );
-typedef long ( DLL_CALLCONV* FI_TellProc ) ( fi_handle handle );
+typedef unsigned( DLL_CALLCONV* FI_ReadProc )( void* buffer, unsigned size, unsigned count, fi_handle handle );
+typedef unsigned( DLL_CALLCONV* FI_WriteProc )( void* buffer, unsigned size, unsigned count, fi_handle handle );
+typedef int ( DLL_CALLCONV* FI_SeekProc )( fi_handle handle, long offset, int origin );
+typedef long( DLL_CALLCONV* FI_TellProc )( fi_handle handle );
 
 #if (defined(_WIN32) || defined(__WIN32__))
 #pragma pack(push, 1)
@@ -612,7 +612,7 @@ FI_STRUCT( FreeImageIO )
 /**
 Handle to a memory I/O stream
 */
-FI_STRUCT ( FIMEMORY ) { void* data; };
+FI_STRUCT( FIMEMORY ) { void* data; };
 
 #endif // FREEIMAGE_IO
 
@@ -638,7 +638,7 @@ typedef BOOL ( DLL_CALLCONV* FI_SupportsExportTypeProc )( FREE_IMAGE_TYPE type )
 typedef BOOL ( DLL_CALLCONV* FI_SupportsICCProfilesProc )( void );
 typedef BOOL ( DLL_CALLCONV* FI_SupportsNoPixelsProc )( void );
 
-FI_STRUCT ( Plugin )
+FI_STRUCT( Plugin )
 {
 	FI_FormatProc format_proc;
 	FI_DescriptionProc description_proc;

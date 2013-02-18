@@ -106,12 +106,12 @@ bool HorizontalScrollBar::SetScrolledAmount( float amount, bool forceUpdate )
 {
 	amount = Gwen::Clamp( amount, 0.f, 1.f );
 
-	if  ( !BaseClass::SetScrolledAmount( amount, forceUpdate ) )
+	if ( !BaseClass::SetScrolledAmount( amount, forceUpdate ) )
 	{ return false; }
 
 	if ( forceUpdate )
 	{
-		int newX = GetButtonSize() + ( amount * ( ( Width() - m_Bar->Width() ) - ( GetButtonSize()*2 ) ) );
+		int newX = GetButtonSize() + ( amount * ( ( Width() - m_Bar->Width() ) - ( GetButtonSize() * 2 ) ) );
 		m_Bar->MoveTo( newX, m_Bar->Y() );
 	}
 

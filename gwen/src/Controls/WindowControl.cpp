@@ -81,7 +81,7 @@ bool WindowControl::IsOnTop()
 {
 	for ( Base::List::reverse_iterator iter = GetParent()->Children.rbegin(); iter != GetParent()->Children.rend(); ++iter )
 	{
-		WindowControl* pWindow = gwen_cast<WindowControl>( *iter );
+		WindowControl* pWindow = gwen_cast<WindowControl> ( *iter );
 
 		if ( !pWindow )
 		{ continue; }

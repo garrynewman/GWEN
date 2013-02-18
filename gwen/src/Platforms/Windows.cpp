@@ -76,7 +76,7 @@ Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 		return L"";
 	}
 
-	wchar_t* buffer = ( wchar_t* )GlobalLock( hData );
+	wchar_t* buffer = ( wchar_t* ) GlobalLock( hData );
 	UnicodeString str = buffer;
 	GlobalUnlock( hData );
 	CloseClipboard();
@@ -89,7 +89,7 @@ bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString & str )
 
 	EmptyClipboard();
 	// Create a buffer to hold the string
-	size_t iDataSize = ( str.length()+1 ) * sizeof( wchar_t );
+	size_t iDataSize = ( str.length() + 1 ) * sizeof( wchar_t );
 	HGLOBAL clipbuffer = GlobalAlloc( GMEM_DDESHARE, iDataSize );
 	// Copy the string into the buffer
 	wchar_t* buffer = ( wchar_t* ) GlobalLock( clipbuffer );
@@ -108,8 +108,8 @@ double GetPerformanceFrequency()
 	if ( Frequency == 0.0f )
 	{
 		__int64 perfFreq;
-		QueryPerformanceFrequency( ( LARGE_INTEGER* )&perfFreq );
-		Frequency = 1.0 / ( double )perfFreq;
+		QueryPerformanceFrequency( ( LARGE_INTEGER* ) &perfFreq );
+		Frequency = 1.0 / ( double ) perfFreq;
 	}
 
 	return Frequency;
@@ -120,7 +120,7 @@ float Gwen::Platform::GetTimeInSeconds()
 	static float fCurrentTime = 0.0f;
 	static __int64 iLastTime = 0;
 	__int64 thistime;
-	QueryPerformanceCounter( ( LARGE_INTEGER* )&thistime );
+	QueryPerformanceCounter( ( LARGE_INTEGER* ) &thistime );
 	float fSecondsDifference = ( double )( thistime - iLastTime ) * GetPerformanceFrequency();
 
 	if ( fSecondsDifference > 0.1f ) { fSecondsDifference = 0.1f; }
@@ -141,7 +141,7 @@ bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, co
 		memset( FilterBuffer, 0, sizeof( FilterBuffer ) );
 		memcpy( FilterBuffer, Extension.c_str(), Gwen::Min( Extension.length(), sizeof( FilterBuffer ) ) );
 
-		for ( int i=0; i<FILTERBUFFER_SIZE; i++ )
+		for ( int i = 0; i < FILTERBUFFER_SIZE; i++ )
 		{
 			if ( FilterBuffer[i] == '|' )
 			{ FilterBuffer[i] = 0; }
@@ -157,7 +157,7 @@ bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, co
 	opf.lpstrFile[0] = '\0';
 	opf.nMaxFile = FILESTRING_SIZE;
 	opf.lpstrFileTitle = 0;
-	opf.nMaxFileTitle=50;
+	opf.nMaxFileTitle = 50;
 	opf.lpstrInitialDir = StartPath.c_str();
 	opf.lpstrTitle = Name.c_str();
 	opf.nFileOffset = 0;
@@ -249,7 +249,7 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 		memset( FilterBuffer, 0, sizeof( FilterBuffer ) );
 		memcpy( FilterBuffer, Extension.c_str(), Gwen::Min( Extension.size(), sizeof( FilterBuffer ) ) );
 
-		for ( int i=0; i<FILTERBUFFER_SIZE; i++ )
+		for ( int i = 0; i < FILTERBUFFER_SIZE; i++ )
 		{
 			if ( FilterBuffer[i] == '|' )
 			{ FilterBuffer[i] = 0; }
@@ -265,7 +265,7 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 	opf.lpstrFile[0] = '\0';
 	opf.nMaxFile = FILESTRING_SIZE;
 	opf.lpstrFileTitle = 0;
-	opf.nMaxFileTitle=50;
+	opf.nMaxFileTitle = 50;
 	opf.lpstrInitialDir = StartPath.c_str();
 	opf.lpstrTitle = Name.c_str();
 	opf.nFileOffset = 0;
@@ -309,15 +309,15 @@ void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gw
 	SetFocus( hWindow );
 	// Curve the corners
 	{
-		HRGN rgn = CreateRoundRectRgn( 0, 0, w+1, h+1, 4, 4 );
+		HRGN rgn = CreateRoundRectRgn( 0, 0, w + 1, h + 1, 4, 4 );
 		SetWindowRgn( hWindow, rgn, false );
 	}
-	return ( void* )hWindow;
+	return ( void* ) hWindow;
 }
 
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
-	DestroyWindow( ( HWND )pPtr );
+	DestroyWindow( ( HWND ) pPtr );
 	CoUninitialize();
 }
 
@@ -326,7 +326,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 	GwenInput.Initialize( ptarget );
 	MSG msg;
 
-	while ( PeekMessage( &msg, ( HWND )pWindow, 0, 0, PM_REMOVE ) )
+	while ( PeekMessage( &msg, ( HWND ) pWindow, 0, 0, PM_REMOVE ) )
 	{
 		if ( GwenInput.ProcessMessage( msg ) )
 		{ continue; }
@@ -355,11 +355,11 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
-	SetWindowPos( ( HWND )pPtr, HWND_NOTOPMOST, x, y, w, h, SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOSENDCHANGING );
+	SetWindowPos( ( HWND ) pPtr, HWND_NOTOPMOST, x, y, w, h, SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOSENDCHANGING );
 	// Curve the corners
 	{
-		HRGN rgn = CreateRoundRectRgn( 0, 0, w+1, h+1, 4, 4 );
-		SetWindowRgn( ( HWND )pPtr, rgn, false );
+		HRGN rgn = CreateRoundRectRgn( 0, 0, w + 1, h + 1, 4, 4 );
+		SetWindowRgn( ( HWND ) pPtr, rgn, false );
 	}
 }
 
@@ -367,29 +367,29 @@ void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pN
 {
 	if ( bMax )
 	{
-		ShowWindow( ( HWND )pPtr, SW_SHOWMAXIMIZED );
+		ShowWindow( ( HWND ) pPtr, SW_SHOWMAXIMIZED );
 		RECT rect;
-		SystemParametersInfo( SPI_GETWORKAREA, 0, &rect, 0 ); // size excluding task bar
-		SetWindowPos( ( HWND )pPtr, HWND_NOTOPMOST, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOSENDCHANGING );
+		SystemParametersInfo( SPI_GETWORKAREA, 0, &rect, 0 );  // size excluding task bar
+		SetWindowPos( ( HWND ) pPtr, HWND_NOTOPMOST, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOSENDCHANGING );
 		// Remove the corner curves
 		{
-			SetWindowRgn( ( HWND )pPtr, NULL, false );
+			SetWindowRgn( ( HWND ) pPtr, NULL, false );
 		}
 	}
 	else
 	{
-		ShowWindow( ( HWND )pPtr, SW_RESTORE );
+		ShowWindow( ( HWND ) pPtr, SW_RESTORE );
 		// Curve the corners
 		{
 			RECT r;
-			GetWindowRect( ( HWND )pPtr, &r );
-			HRGN rgn = CreateRoundRectRgn( 0, 0, ( r.right-r.left )+1, ( r.bottom-r.top )+1, 4, 4 );
-			SetWindowRgn( ( HWND )pPtr, rgn, false );
+			GetWindowRect( ( HWND ) pPtr, &r );
+			HRGN rgn = CreateRoundRectRgn( 0, 0, ( r.right - r.left ) + 1, ( r.bottom - r.top ) + 1, 4, 4 );
+			SetWindowRgn( ( HWND ) pPtr, rgn, false );
 		}
 	}
 
 	RECT r;
-	GetWindowRect( ( HWND )pPtr, &r );
+	GetWindowRect( ( HWND ) pPtr, &r );
 	pNewSize.x = r.right - r.left;
 	pNewSize.y = r.bottom - r.top ;
 	pNewPos.x = r.left;
@@ -400,17 +400,17 @@ void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
 {
 	if ( bMinimized )
 	{
-		ShowWindow( ( HWND )pPtr, SW_SHOWMINIMIZED );
+		ShowWindow( ( HWND ) pPtr, SW_SHOWMINIMIZED );
 	}
 	else
 	{
-		ShowWindow( ( HWND )pPtr, SW_RESTORE );
+		ShowWindow( ( HWND ) pPtr, SW_RESTORE );
 	}
 }
 
 bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 {
-	return GetActiveWindow() == ( HWND )pPtr;
+	return GetActiveWindow() == ( HWND ) pPtr;
 }
 
 void Gwen::Platform::Sleep( unsigned int iMS )

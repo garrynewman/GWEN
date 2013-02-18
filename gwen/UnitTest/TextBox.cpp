@@ -58,13 +58,14 @@ class TextBox : public GUnit
 
 		void OnEdit( Gwen::Controls::Base* pControl )
 		{
-			Gwen::Controls::TextBox* textbox = ( Gwen::Controls::TextBox* ) ( pControl );
+
+			Gwen::Controls::TextBox* textbox = ( Gwen::Controls::TextBox* )( pControl );
 			UnitPrint( Utility::Format( L"Textbox Edit: [%ls]\n", textbox->GetText().GetUnicode().c_str() ) );
 		}
 
 		void OnSubmit( Gwen::Controls::Base* pControl )
 		{
-			Gwen::Controls::TextBox* textbox = ( Gwen::Controls::TextBox* ) ( pControl );
+			Gwen::Controls::TextBox* textbox = ( Gwen::Controls::TextBox* )( pControl );
 			UnitPrint( Utility::Format( L"Textbox Submit: [%ls]\n", textbox->GetText().GetUnicode().c_str() ) );
 		}
 

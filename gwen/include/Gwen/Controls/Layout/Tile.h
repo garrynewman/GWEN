@@ -37,7 +37,7 @@ namespace Gwen
 
 							if ( pChild->GetDock() != Pos::None ) { continue; }
 
-							pChild->SetPos( pos.x + ( m_TileSize.x/2 ) - ( pChild->Width()/2 ), pos.y + ( m_TileSize.y/2 ) - ( pChild->Height()/2 ) );
+							pChild->SetPos( pos.x + ( m_TileSize.x / 2 ) - ( pChild->Width() / 2 ), pos.y + ( m_TileSize.y / 2 ) - ( pChild->Height() / 2 ) );
 							pos.x = pos.x + m_TileSize.x;
 
 							if ( pos.x + m_TileSize.x > bounds.x + bounds.w )

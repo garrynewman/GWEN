@@ -23,7 +23,7 @@ namespace Gwen
 			m_pDevice = pDevice;
 			m_iVertNum = 0;
 
-			for ( int i=0; i<MaxVerts; i++ )
+			for ( int i = 0; i < MaxVerts; i++ )
 			{
 				m_pVerts[ i ].z = 0.5f;
 				m_pVerts[ i ].rhw = 1.0f;
@@ -64,33 +64,33 @@ namespace Gwen
 			if ( m_iVertNum > 0 )
 			{
 				m_pDevice->SetFVF( D3DFVF_VERTEXFORMAT2D );
-				m_pDevice->DrawPrimitiveUP( D3DPT_TRIANGLELIST, m_iVertNum/3, &m_pVerts[0], sizeof( VertexFormat ) );
+				m_pDevice->DrawPrimitiveUP( D3DPT_TRIANGLELIST, m_iVertNum / 3, &m_pVerts[0], sizeof( VertexFormat ) );
 				m_iVertNum = 0;
 			}
 		}
 
 		void DirectX9::AddVert( int x, int y )
 		{
-			if ( m_iVertNum >= MaxVerts-1 )
+			if ( m_iVertNum >= MaxVerts - 1 )
 			{
 				Flush();
 			}
 
-			m_pVerts[ m_iVertNum ].x = ( float )x;
-			m_pVerts[ m_iVertNum ].y = ( float )y;
+			m_pVerts[ m_iVertNum ].x = ( float ) x;
+			m_pVerts[ m_iVertNum ].y = ( float ) y;
 			m_pVerts[ m_iVertNum ].color = m_Color;
 			m_iVertNum++;
 		}
 
 		void DirectX9::AddVert( int x, int y, float u, float v )
 		{
-			if ( m_iVertNum >= MaxVerts-1 )
+			if ( m_iVertNum >= MaxVerts - 1 )
 			{
 				Flush();
 			}
 
-			m_pVerts[ m_iVertNum ].x = -0.5f + ( float )x;
-			m_pVerts[ m_iVertNum ].y = -0.5f + ( float )y;
+			m_pVerts[ m_iVertNum ].x = -0.5f + ( float ) x;
+			m_pVerts[ m_iVertNum ].y = -0.5f + ( float ) y;
 			m_pVerts[ m_iVertNum ].u = u;
 			m_pVerts[ m_iVertNum ].v = v;
 			m_pVerts[ m_iVertNum ].color = m_Color;
@@ -108,10 +108,10 @@ namespace Gwen
 
 			Translate( rect );
 			AddVert( rect.x, rect.y );
-			AddVert( rect.x+rect.w, rect.y );
+			AddVert( rect.x + rect.w, rect.y );
 			AddVert( rect.x, rect.y + rect.h );
-			AddVert( rect.x+rect.w, rect.y );
-			AddVert( rect.x+rect.w, rect.y+rect.h );
+			AddVert( rect.x + rect.w, rect.y );
+			AddVert( rect.x + rect.w, rect.y + rect.h );
 			AddVert( rect.x, rect.y + rect.h );
 		}
 
@@ -148,9 +148,9 @@ namespace Gwen
 			// ID3DXFont doesn't measure trailing spaces, so we measure the width of a space here and store it
 			// in the font data - then we can add it to the width when we measure text with trailing spaces.
 			{
-				RECT rctA = {0,0,0,0};
+				RECT rctA = {0, 0, 0, 0};
 				pFontData->pFont->DrawTextW( NULL, L"A", -1, &rctA, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE, 0 );
-				RECT rctSpc = {0,0,0,0};
+				RECT rctSpc = {0, 0, 0, 0};
 				pFontData->pFont->DrawTextW( NULL, L"A A", -1, &rctSpc, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE, 0 );
 				pFontData->iSpaceWidth = rctSpc.right - rctA.right * 2;
 			}
@@ -206,15 +206,15 @@ namespace Gwen
 
 			if ( text.empty() )
 			{
-				RECT rct = {0,0,0,0};
+				RECT rct = {0, 0, 0, 0};
 				pFontData->pFont->DrawTextW( NULL, L"W", -1, &rct, DT_CALCRECT, 0 );
 				return Gwen::Point( 0, rct.bottom );
 			}
 
-			RECT rct = {0,0,0,0};
+			RECT rct = {0, 0, 0, 0};
 			pFontData->pFont->DrawTextW( NULL, text.c_str(), -1, &rct, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE, 0 );
 
-			for ( int i=text.length()-1; i>=0 && text[i] == L' '; i-- )
+			for ( int i = text.length() - 1; i >= 0 && text[i] == L' '; i-- )
 			{
 				rct.right += pFontData->iSpaceWidth;
 			}
@@ -228,9 +228,9 @@ namespace Gwen
 			m_pDevice->SetRenderState( D3DRS_SCISSORTESTENABLE, TRUE );
 			const Gwen::Rect & rect = ClipRegion();
 			RECT r;
-			r.left = ceil( ( ( float )rect.x ) * Scale() );
+			r.left = ceil( ( ( float ) rect.x ) * Scale() );
 			r.right = ceil( ( ( float )( rect.x + rect.w ) ) * Scale() );
-			r.top = ceil( ( float )rect.y * Scale() );
+			r.top = ceil( ( float ) rect.y * Scale() );
 			r.bottom = ceil( ( ( float )( rect.y + rect.h ) ) * Scale() );
 			m_pDevice->SetScissorRect( &r );
 		}
@@ -261,10 +261,10 @@ namespace Gwen
 			}
 
 			AddVert( rect.x, rect.y,			u1, v1 );
-			AddVert( rect.x+rect.w, rect.y,		u2, v1 );
+			AddVert( rect.x + rect.w, rect.y,		u2, v1 );
 			AddVert( rect.x, rect.y + rect.h,	u1, v2 );
-			AddVert( rect.x+rect.w, rect.y,		u2, v1 );
-			AddVert( rect.x+rect.w, rect.y+rect.h, u2, v2 );
+			AddVert( rect.x + rect.w, rect.y,		u2, v1 );
+			AddVert( rect.x + rect.w, rect.y + rect.h, u2, v2 );
 			AddVert( rect.x, rect.y + rect.h, u1, v2 );
 		}
 
@@ -309,11 +309,11 @@ namespace Gwen
 
 			D3DLOCKED_RECT lockedRect;
 			pSurface->LockRect( &lockedRect, NULL, D3DLOCK_READONLY );
-			DWORD* pixels = ( DWORD* )lockedRect.pBits;
+			DWORD* pixels = ( DWORD* ) lockedRect.pBits;
 			D3DXCOLOR color = pixels[lockedRect.Pitch / sizeof( DWORD ) * y + x];
 			pSurface->UnlockRect();
 			pSurface->Release();
-			return Gwen::Color( color.r*255, color.g*255, color.b*255, color.a*255 );
+			return Gwen::Color( color.r * 255, color.g * 255, color.b * 255, color.a * 255 );
 		}
 
 		void DirectX9::Release()
@@ -329,7 +329,7 @@ namespace Gwen
 
 		void DirectX9::FillPresentParameters( Gwen::WindowProvider* pWindow, D3DPRESENT_PARAMETERS & Params )
 		{
-			HWND pHWND = ( HWND )pWindow->GetWindow();
+			HWND pHWND = ( HWND ) pWindow->GetWindow();
 			RECT ClientRect;
 			GetClientRect( pHWND, &ClientRect );
 			ZeroMemory( &Params, sizeof( Params ) );
@@ -344,7 +344,7 @@ namespace Gwen
 
 		bool DirectX9::InitializeContext( Gwen::WindowProvider* pWindow )
 		{
-			HWND pHWND = ( HWND )pWindow->GetWindow();
+			HWND pHWND = ( HWND ) pWindow->GetWindow();
 			m_pD3D = Direct3DCreate9( D3D_SDK_VERSION );
 
 			if ( !m_pD3D ) { return false; }

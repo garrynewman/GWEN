@@ -295,7 +295,7 @@ namespace Gwen
 
 			if ( pTexture->data != NULL )
 			{
-				TextureData* texdata = ( TextureData* )pTexture->data;
+				TextureData* texdata = ( TextureData* ) pTexture->data;
 
 				if ( texdata->pWICBitmap != NULL )
 				{ texdata->pWICBitmap->Release(); }
@@ -413,7 +413,7 @@ namespace Gwen
 
 		bool Direct2D::InitializeContext( Gwen::WindowProvider* pWindow )
 		{
-			m_pHWND = ( HWND )pWindow->GetWindow();
+			m_pHWND = ( HWND ) pWindow->GetWindow();
 			HRESULT hr = D2D1CreateFactory(
 							 D2D1_FACTORY_TYPE_SINGLE_THREADED,
 							 &m_pD2DFactory
@@ -464,7 +464,7 @@ namespace Gwen
 
 		bool Direct2D::ResizedContext( Gwen::WindowProvider* pWindow, int w, int h )
 		{
-			HRESULT hr = ( ( ID2D1HwndRenderTarget* )m_pRT )->Resize( D2D1::SizeU( w, h ) );
+			HRESULT hr = ( ( ID2D1HwndRenderTarget* ) m_pRT )->Resize( D2D1::SizeU( w, h ) );
 			return SUCCEEDED( hr );
 		}
 

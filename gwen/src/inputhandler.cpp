@@ -32,7 +32,7 @@ struct t_KeyData
 {
 	t_KeyData()
 	{
-		for ( int i=0; i<Gwen::Key::Count; i++ )
+		for ( int i = 0; i < Gwen::Key::Count; i++ )
 		{
 			KeyState[i] = false;
 			NextRepeat[i] = 0;
@@ -145,7 +145,7 @@ void Gwen::Input::OnCanvasThink( Controls::Base* pControl )
 	//
 	// Simulate Key-Repeats
 	//
-	for ( int i=0; i<Gwen::Key::Count; i++ )
+	for ( int i = 0; i < Gwen::Key::Count; i++ )
 	{
 		if ( KeyData.KeyState[i] && KeyData.Target != KeyboardFocus )
 		{
@@ -258,24 +258,24 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 
 	switch ( iMouseButton )
 	{
-	case 0:
-	{
-		if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
-		{ return true; }
+		case 0:
+			{
+				if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
+				{ return true; }
 
-		if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( MousePosition.x, MousePosition.y ); }
-		else					{ Gwen::HoveredControl->OnMouseClickLeft( MousePosition.x, MousePosition.y, bDown ); }
+				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( MousePosition.x, MousePosition.y ); }
+				else					{ Gwen::HoveredControl->OnMouseClickLeft( MousePosition.x, MousePosition.y, bDown ); }
 
-		return true;
-	}
+				return true;
+			}
 
-	case 1:
-	{
-		if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( MousePosition.x, MousePosition.y ); }
-		else					{ Gwen::HoveredControl->OnMouseClickRight( MousePosition.x, MousePosition.y, bDown ); }
+		case 1:
+			{
+				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( MousePosition.x, MousePosition.y ); }
+				else					{ Gwen::HoveredControl->OnMouseClickRight( MousePosition.x, MousePosition.y, bDown ); }
 
-		return true;
-	}
+				return true;
+			}
 	}
 
 	return false;

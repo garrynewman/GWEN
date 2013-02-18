@@ -27,60 +27,60 @@ Color HSVToColor( float h, float s, float v )
 		r = g = b = v;
 	}
 
-	double min,max,delta,hue;
+	double min, max, delta, hue;
 	max = v;
-	delta = ( max * s )/255.0;
+	delta = ( max * s ) / 255.0;
 	min = max - delta;
 	hue = h;
 
 	if ( h > 300 || h <= 60 )
 	{
-		r = ( int )max;
+		r = ( int ) max;
 
 		if ( h > 300 )
 		{
-			g = ( int )min;
-			hue = ( hue - 360.0 )/60.0;
+			g = ( int ) min;
+			hue = ( hue - 360.0 ) / 60.0;
 			b = ( int )( ( hue * delta - min ) * -1 );
 		}
 		else
 		{
-			b = ( int )min;
+			b = ( int ) min;
 			hue = hue / 60.0;
 			g = ( int )( hue * delta + min );
 		}
 	}
 	else if ( h > 60 && h < 180 )
 	{
-		g = ( int )max;
+		g = ( int ) max;
 
 		if ( h < 120 )
 		{
-			b = ( int )min;
-			hue = ( hue/60.0 - 2.0 ) * delta;
+			b = ( int ) min;
+			hue = ( hue / 60.0 - 2.0 ) * delta;
 			r = ( int )( min - hue );
 		}
 		else
 		{
-			r = ( int )min;
-			hue = ( hue/60 - 2.0 ) * delta;
+			r = ( int ) min;
+			hue = ( hue / 60 - 2.0 ) * delta;
 			b = ( int )( min + hue );
 		}
 	}
 	else
 	{
-		b = ( int )max;
+		b = ( int ) max;
 
 		if ( h < 240 )
 		{
-			r = ( int )min;
-			hue = ( hue/60.0 - 4.0 ) * delta;
+			r = ( int ) min;
+			hue = ( hue / 60.0 - 4.0 ) * delta;
 			g = ( int )( min - hue );
 		}
 		else
 		{
-			g = ( int )min;
-			hue = ( hue/60 - 4.0 ) * delta;
+			g = ( int ) min;
+			hue = ( hue / 60 - 4.0 ) * delta;
 			r = ( int )( min + hue );
 		}
 	}
@@ -90,12 +90,12 @@ Color HSVToColor( float h, float s, float v )
 
 HSV RGBtoHSV( int r, int g, int b )
 {
-	double min,max,delta,temp;
-	min = Gwen::Min( r,Gwen::Min( g,b ) );
-	max = Gwen::Max( r,Gwen::Max( g,b ) );
+	double min, max, delta, temp;
+	min = Gwen::Min( r, Gwen::Min( g, b ) );
+	max = Gwen::Max( r, Gwen::Max( g, b ) );
 	delta = max - min;
 	HSV hsv;
-	hsv.v = ( int )max;
+	hsv.v = ( int ) max;
 
 	if ( !delta )
 	{
@@ -103,27 +103,27 @@ HSV RGBtoHSV( int r, int g, int b )
 	}
 	else
 	{
-		temp = delta/max;
-		hsv.s = ( int )( temp*255 );
+		temp = delta / max;
+		hsv.s = ( int )( temp * 255 );
 
-		if ( r == ( int )max )
+		if ( r == ( int ) max )
 		{
-			temp = ( double )( g-b )/delta;
+			temp = ( double )( g - b ) / delta;
 		}
-		else if ( g == ( int )max )
+		else if ( g == ( int ) max )
 		{
-			temp = 2.0 + ( ( double )( b-r )/delta );
+			temp = 2.0 + ( ( double )( b - r ) / delta );
 		}
 		else
 		{
-			temp = 4.0 + ( ( double )( r-g )/delta );
+			temp = 4.0 + ( ( double )( r - g ) / delta );
 		}
 
 		temp *= 60;
 
 		if ( temp < 0 )
 		{
-			temp+=360;
+			temp += 360;
 		}
 
 		if ( temp == 360 )
@@ -131,7 +131,7 @@ HSV RGBtoHSV( int r, int g, int b )
 			temp = 0;
 		}
 
-		hsv.h = ( int )temp;
+		hsv.h = ( int ) temp;
 	}
 
 	hsv.s /= 255.0f;
@@ -215,8 +215,8 @@ void ColorLerpBox::OnMouseClickLeft( int x, int y, bool bDown )
 
 Gwen::Color ColorLerpBox::GetColorAtPos( int x, int y )
 {
-	float xPercent =     ( ( float )x / ( float )Width()  );
-	float yPercent = 1 - ( ( float )y / ( float )Height() );
+	float xPercent = ( ( float ) x / ( float ) Width() );
+	float yPercent = 1 - ( ( float ) y / ( float ) Height() );
 	Gwen::Color result = HSVToColor( m_Hue, xPercent, yPercent );
 	result.a = 255;
 	return result;
@@ -226,9 +226,9 @@ void ColorLerpBox::Render( Gwen::Skin::Base* skin )
 	//Is there any way to move this into skin? Not for now, no idea how we'll "actually" render these
 	BaseClass::Render( skin );
 
-	for ( int x = 0; x<Width(); x++ )
+	for ( int x = 0; x < Width(); x++ )
 	{
-		for ( int y = 0; y<Height(); y++ )
+		for ( int y = 0; y < Height(); y++ )
 		{
 			skin->GetRender()->SetDrawColor( GetColorAtPos( x, y ) );
 			skin->GetRender()->DrawPixel( x, y );
@@ -244,7 +244,7 @@ void ColorLerpBox::Render( Gwen::Skin::Base* skin )
 	else
 	{ skin->GetRender()->SetDrawColor( Gwen::Color( 0, 0, 0, 255 ) ); }
 
-	Gwen::Rect testRect = Gwen::Rect( cursorPos.x -3, cursorPos.y -3, 6, 6 );
+	Gwen::Rect testRect = Gwen::Rect( cursorPos.x - 3, cursorPos.y - 3, 6, 6 );
 	skin->GetRender()->DrawShavedCornerRect( testRect );
 }
 
@@ -266,7 +266,7 @@ void ColorSlider::Render( Gwen::Skin::Base* skin )
 
 	for ( y = 0; y < Height(); y++ )
 	{
-		float yPercent = ( float )y / ( float )Height();
+		float yPercent = ( float ) y / ( float ) Height();
 		skin->GetRender()->SetDrawColor( HSVToColor( yPercent * 360, 1, 1 ) );
 		skin->GetRender()->DrawFilledRect( Gwen::Rect( 5, y, Width() - 10, 1 ) );
 	}
@@ -296,7 +296,7 @@ void ColorSlider::OnMouseClickLeft( int x, int y, bool bDown )
 
 Gwen::Color ColorSlider::GetColorAtHeight( int y )
 {
-	float yPercent = ( float )y / ( float )Height();
+	float yPercent = ( float ) y / ( float ) Height();
 	return HSVToColor( yPercent * 360, 1, 1 );
 }
 void ColorSlider::OnMouseMoved( int x, int y, int /*deltaX*/, int /*deltaY*/ )

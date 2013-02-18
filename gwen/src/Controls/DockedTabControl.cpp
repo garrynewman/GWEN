@@ -80,7 +80,7 @@ void DockedTabControl::MoveTabsTo( DockedTabControl* pTarget )
 
 	for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 	{
-		TabButton* pButton = gwen_cast<TabButton>( *iter );
+		TabButton* pButton = gwen_cast<TabButton> ( *iter );
 
 		if ( !pButton ) { continue; }
 

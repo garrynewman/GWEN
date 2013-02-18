@@ -57,7 +57,7 @@ class ListBox : public GUnit
 
 		void RowSelected( Gwen::Controls::Base* pControl )
 		{
-			Gwen::Controls::ListBox* ctrl = ( Gwen::Controls::ListBox* )pControl;
+			Gwen::Controls::ListBox* ctrl = ( Gwen::Controls::ListBox* ) pControl;
 			UnitPrint( Utility::Format( L"Listbox Item Selected: %ls", ctrl->GetSelectedRow()->GetText( 0 ).GetUnicode().c_str() ) );
 		}
 

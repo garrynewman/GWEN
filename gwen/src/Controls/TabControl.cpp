@@ -103,7 +103,7 @@ void TabControl::AddPage( TabButton* pButton )
 
 void TabControl::OnTabPressed( Controls::Base* control )
 {
-	TabButton* pButton = gwen_cast<TabButton>( control );
+	TabButton* pButton = gwen_cast<TabButton> ( control );
 
 	if ( !pButton ) { return; }
 
@@ -156,7 +156,7 @@ int TabControl::TabCount( void )
 
 TabButton* TabControl::GetTab( int iNum )
 {
-	return gwen_cast<TabButton>( m_TabStrip->GetChild( iNum ) );
+	return gwen_cast<TabButton> ( m_TabStrip->GetChild( iNum ) );
 }
 
 void TabControl::SetTabStripPosition( int iDock )

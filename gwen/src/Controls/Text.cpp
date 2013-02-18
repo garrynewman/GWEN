@@ -149,10 +149,10 @@ int Text::GetClosestCharacter( Gwen::Point p )
 	int iDistance = 4096;
 	int iChar = 0;
 
-	for ( size_t i=0; i<m_String.GetUnicode().length()+1; i++ )
+	for ( size_t i = 0; i < m_String.GetUnicode().length() + 1; i++ )
 	{
 		Gwen::Rect cp = GetCharacterPosition( i );
-		int iDist = abs( cp.x - p.x ) + abs( cp.y - p.y ); // this isn't proper
+		int iDist = abs( cp.x - p.x ) + abs( cp.y - p.y );   // this isn't proper
 
 		if ( iDist > iDistance ) { continue; }
 
@@ -205,7 +205,7 @@ void SplitWords( const Gwen::UnicodeString & s, wchar_t delim, std::vector<Gwen:
 {
 	Gwen::UnicodeString str;
 
-	for ( int i=0; i<s.length(); i++ )
+	for ( int i = 0; i < s.length(); i++ )
 	{
 		if ( s[i] == L'\n' )
 		{
@@ -263,7 +263,7 @@ void Text::RefreshSizeWrap()
 		bool bWrapped = false;
 
 		// If this word is a newline - make a newline (we still add it to the text)
-		if ( ( *it ).c_str()[0] == L'\n' ) { bFinishLine = true; }
+		if ( ( *it ).c_str() [0] == L'\n' ) { bFinishLine = true; }
 
 		// Does adding this word drive us over the width?
 		{

@@ -75,7 +75,7 @@ namespace Gwen
 		{
 			if ( !pFont->data ) { return; }
 
-			Gdiplus::Font* font = ( ( Gdiplus::Font* )pFont->data );
+			Gdiplus::Font* font = ( ( Gdiplus::Font* ) pFont->data );
 			delete font;
 			pFont->data = NULL;
 		}
@@ -94,8 +94,8 @@ namespace Gwen
 			Gdiplus::StringFormat strFormat( Gdiplus::StringFormat::GenericDefault() );
 			Gdiplus::SolidBrush solidBrush( m_Colour );
 			Gdiplus::RectF r( pos.x, pos.y, 1000, 1000 );
-			Gdiplus::Font* pGDIFont = ( Gdiplus::Font* )pFont->data;
-			graphics->DrawString( text.c_str(), text.length()+1, pGDIFont, r, &strFormat, &solidBrush );
+			Gdiplus::Font* pGDIFont = ( Gdiplus::Font* ) pFont->data;
+			graphics->DrawString( text.c_str(), text.length() + 1, pGDIFont, r, &strFormat, &solidBrush );
 		}
 
 		Gwen::Point GDIPlus::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
@@ -112,15 +112,15 @@ namespace Gwen
 			strFormat.SetFormatFlags( Gdiplus::StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() );
 			Gdiplus::SizeF size;
 			Gdiplus::Graphics g( m_HWND );
-			Gdiplus::Font* pGDIFont = ( Gdiplus::Font* )pFont->data;
+			Gdiplus::Font* pGDIFont = ( Gdiplus::Font* ) pFont->data;
 			g.MeasureString( text.c_str(), -1, pGDIFont, Gdiplus::SizeF( 10000, 10000 ), &strFormat, &size );
-			return Gwen::Point( size.Width+1, size.Height+1 );
+			return Gwen::Point( size.Width + 1, size.Height + 1 );
 		}
 
 		void GDIPlus::StartClip()
 		{
 			const Gwen::Rect & rect = ClipRegion();
-			graphics->SetClip( Gdiplus::Rect( rect.x * Scale(), rect.y* Scale(), rect.w* Scale(), rect.h* Scale() ), Gdiplus::CombineMode::CombineModeReplace );
+			graphics->SetClip( Gdiplus::Rect( rect.x * Scale(), rect.y * Scale(), rect.w * Scale(), rect.h * Scale() ), Gdiplus::CombineMode::CombineModeReplace );
 		}
 
 		void GDIPlus::EndClip()

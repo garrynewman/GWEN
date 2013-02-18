@@ -87,7 +87,7 @@ namespace Gwen
 							const Gwen::Event::Packet & packet )
 			{
 				SetActionInternal( ob,
-								   static_cast<void ( Gwen::Event::Handler::* )( Gwen::Event::Info )>( f ),
+								   static_cast<void ( Gwen::Event::Handler::* )( Gwen::Event::Info ) > ( f ),
 								   packet );
 			}
 

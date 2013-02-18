@@ -17,7 +17,7 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						return Utility::Format( L"%f", ( float )gwen_cast<Controls::ProgressBar>( ctrl )->GetCycleSpeed() );
+						return Utility::Format( L"%f", ( float ) gwen_cast<Controls::ProgressBar> ( ctrl )->GetCycleSpeed() );
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
@@ -26,7 +26,7 @@ namespace Gwen
 
 						if ( swscanf( str.c_str(), L"%f", &num ) != 1 ) { return; }
 
-						gwen_cast<Controls::ProgressBar>( ctrl )->SetCycleSpeed( num );
+						gwen_cast<Controls::ProgressBar> ( ctrl )->SetCycleSpeed( num );
 					}
 
 			};

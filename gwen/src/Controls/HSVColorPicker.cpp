@@ -43,12 +43,12 @@ GWEN_CONTROL_CONSTRUCTOR( HSVColorPicker )
 		label->SetPos( x, y );
 		TextBoxNumeric* numeric = new TextBoxNumeric( this );
 		numeric->SetName( "RedBox" );
-		numeric->SetPos( x + 15, y -1  );
+		numeric->SetPos( x + 15, y - 1 );
 		numeric->SetSize( 26, 16 );
 		numeric->SetSelectAllOnFocus( true );
 		numeric->onTextChanged.Add( this, &HSVColorPicker::NumericTyped );
 	}
-	y+= 20;
+	y += 20;
 	{
 		Label* label = new Label( this );
 		label->SetText( L"G:" );
@@ -56,12 +56,12 @@ GWEN_CONTROL_CONSTRUCTOR( HSVColorPicker )
 		label->SetPos( x, y );
 		TextBoxNumeric* numeric = new TextBoxNumeric( this );
 		numeric->SetName( "GreenBox" );
-		numeric->SetPos( x + 15, y -1  );
+		numeric->SetPos( x + 15, y - 1 );
 		numeric->SetSize( 26, 16 );
 		numeric->SetSelectAllOnFocus( true );
 		numeric->onTextChanged.Add( this, &HSVColorPicker::NumericTyped );
 	}
-	y+= 20;
+	y += 20;
 	{
 		Label* label = new Label( this );
 		label->SetText( L"B:" );
@@ -69,7 +69,7 @@ GWEN_CONTROL_CONSTRUCTOR( HSVColorPicker )
 		label->SetPos( x, y );
 		TextBoxNumeric* numeric = new TextBoxNumeric( this );
 		numeric->SetName( "BlueBox" );
-		numeric->SetPos( x + 15, y -1  );
+		numeric->SetPos( x + 15, y - 1 );
 		numeric->SetSize( 26, 16 );
 		numeric->SetSelectAllOnFocus( true );
 		numeric->onTextChanged.Add( this, &HSVColorPicker::NumericTyped );
@@ -78,13 +78,13 @@ GWEN_CONTROL_CONSTRUCTOR( HSVColorPicker )
 
 void HSVColorPicker::NumericTyped( Gwen::Controls::Base* control )
 {
-	TextBoxNumeric* box = gwen_cast<TextBoxNumeric>( control );
+	TextBoxNumeric* box = gwen_cast<TextBoxNumeric> ( control );
 
 	if ( !box ) { return; }
 
 	if ( box->GetText() == L"" )	{ return; }
 
-	int textValue = atoi( box->GetText().c_str()  );
+	int textValue = atoi( box->GetText().c_str() );
 
 	if ( textValue < 0 ) { textValue = 0; }
 
@@ -115,17 +115,17 @@ void HSVColorPicker::NumericTyped( Gwen::Controls::Base* control )
 void HSVColorPicker::UpdateControls( Gwen::Color color )
 {
 	// What in the FUCK
-	TextBoxNumeric* redBox = gwen_cast<TextBoxNumeric>(	FindChildByName( "RedBox",   false ) );
+	TextBoxNumeric* redBox = gwen_cast<TextBoxNumeric> ( FindChildByName( "RedBox",   false ) );
 
-	if ( redBox )    { redBox->SetText( Gwen::Utility::ToString( ( int )color.r ), false ); }
+	if ( redBox )    { redBox->SetText( Gwen::Utility::ToString( ( int ) color.r ), false ); }
 
-	TextBoxNumeric* greenBox = gwen_cast<TextBoxNumeric>(	FindChildByName( "GreenBox",   false ) );
+	TextBoxNumeric* greenBox = gwen_cast<TextBoxNumeric> ( FindChildByName( "GreenBox",   false ) );
 
-	if ( greenBox )  { greenBox->SetText( Gwen::Utility::ToString( ( int )color.g ), false ); }
+	if ( greenBox )  { greenBox->SetText( Gwen::Utility::ToString( ( int ) color.g ), false ); }
 
-	TextBoxNumeric* blueBox = gwen_cast<TextBoxNumeric>(	FindChildByName( "BlueBox",   false ) );
+	TextBoxNumeric* blueBox = gwen_cast<TextBoxNumeric> ( FindChildByName( "BlueBox",   false ) );
 
-	if ( blueBox )   { blueBox->SetText( Gwen::Utility::ToString( ( int )color.b ), false ); }
+	if ( blueBox )   { blueBox->SetText( Gwen::Utility::ToString( ( int ) color.b ), false ); }
 
 	m_After->SetColor( color );
 }
