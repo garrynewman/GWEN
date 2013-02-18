@@ -102,7 +102,7 @@ void Menu::CloseAll()
 	for ( Base::List::iterator it = m_InnerPanel->Children.begin(); it != m_InnerPanel->Children.end(); ++it )
 	{
 		Base* pChild = *it;
-		MenuItem* pItem = gwen_cast<MenuItem>( pChild );
+		MenuItem* pItem = gwen_cast<MenuItem> ( pChild );
 
 		if ( !pItem ) { continue; }
 
@@ -115,7 +115,7 @@ bool Menu::IsMenuOpen()
 	for ( Base::List::iterator it = m_InnerPanel->Children.begin(); it != m_InnerPanel->Children.end(); ++it )
 	{
 		Base* pChild = *it;
-		MenuItem* pItem = gwen_cast<MenuItem>( pChild );
+		MenuItem* pItem = gwen_cast<MenuItem> ( pChild );
 
 		if ( !pItem ) { continue; }
 
@@ -130,7 +130,7 @@ void Menu::OnHoverItem( Gwen::Controls::Base* pControl )
 {
 	if ( !ShouldHoverOpenMenu() ) { return; }
 
-	MenuItem* pItem = gwen_cast<MenuItem>( pControl );
+	MenuItem* pItem = gwen_cast<MenuItem> ( pControl );
 
 	if ( !pItem ) { return; }
 

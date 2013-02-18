@@ -29,7 +29,7 @@ namespace Gwen
 
 				void AddChild( Gwen::Controls::Base* ctrl, Gwen::Controls::Base* child, Gwen::Point & pos )
 				{
-					Gwen::Controls::SplitterVertical* pSplitter = gwen_cast<Gwen::Controls::SplitterVertical>( ctrl );
+					Gwen::Controls::SplitterVertical* pSplitter = gwen_cast<Gwen::Controls::SplitterVertical> ( ctrl );
 					child->SetParent( pSplitter );
 
 					if ( pos.y < pSplitter->SplitterPos() )

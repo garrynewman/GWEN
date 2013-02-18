@@ -119,7 +119,7 @@ void Button::SetImage( const TextObject & strName, bool bCenter )
 		if ( m_Image )
 		{
 			delete m_Image;
-			m_Image= NULL;
+			m_Image = NULL;
 		}
 
 		return;

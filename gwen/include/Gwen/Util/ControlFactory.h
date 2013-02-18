@@ -37,7 +37,7 @@ namespace Gwen
 
 				inline void NumSet( Gwen::Controls::Base* ctrl, const Gwen::String & str, float f )
 				{
-					for ( int i=0; i<NumCount(); i++ )
+					for ( int i = 0; i < NumCount(); i++ )
 					{
 						if ( NumName( i ) == str ) { NumSet( ctrl, i, f ); }
 					}

@@ -110,7 +110,7 @@ void UnitTest::Render( Gwen::Skin::Base* skin )
 
 	if ( m_fLastSecond < Gwen::Platform::GetTimeInSeconds() )
 	{
-		m_StatusBar->SetText( Gwen::Utility::Format( L"GWEN Unit Test - %i fps", m_iFrames*2 ) );
+		m_StatusBar->SetText( Gwen::Utility::Format( L"GWEN Unit Test - %i fps", m_iFrames * 2 ) );
 		m_fLastSecond = Gwen::Platform::GetTimeInSeconds() + 0.5f;
 		m_iFrames = 0;
 	}

@@ -122,7 +122,7 @@ void WindowCanvas::RenderCanvas()
 	// This gives some cpu time back to the os. If you're using a rendering
 	// method that needs continual updates, just call canvas->redraw every frame.
 	//
-	if  ( !NeedsRedraw() )
+	if ( !NeedsRedraw() )
 	{
 		Platform::Sleep( 10 );
 		return;
@@ -216,7 +216,7 @@ void WindowCanvas::Dragger_Moved()
 		float fOldWidth = Width();
 		SetMaximize( false );
 		// Change the hold pos to be the same distance across the titlebar of the resized window
-		m_HoldPos.x = ( ( float )m_HoldPos.x ) * ( ( float )Width() / fOldWidth );
+		m_HoldPos.x = ( ( float ) m_HoldPos.x ) * ( ( float ) Width() / fOldWidth );
 		m_HoldPos.y = 10;
 	}
 

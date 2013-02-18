@@ -62,7 +62,7 @@ namespace Gwen
 
 					for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
 					{
-						Gwen::Controls::CollapsibleCategory* pChild = gwen_cast<Gwen::Controls::CollapsibleCategory>( *iter );
+						Gwen::Controls::CollapsibleCategory* pChild = gwen_cast<Gwen::Controls::CollapsibleCategory> ( *iter );
 
 						if ( !pChild ) { continue; }
 
@@ -76,7 +76,7 @@ namespace Gwen
 
 					for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
 					{
-						Gwen::Controls::CollapsibleCategory* pChild = gwen_cast<Gwen::Controls::CollapsibleCategory>( *iter );
+						Gwen::Controls::CollapsibleCategory* pChild = gwen_cast<Gwen::Controls::CollapsibleCategory> ( *iter );
 
 						if ( !pChild ) { continue; }
 
@@ -97,7 +97,7 @@ namespace Gwen
 
 				void OnSelectionEvent( Controls::Base* pControl )
 				{
-					Gwen::Controls::CollapsibleCategory* pChild = gwen_cast<Gwen::Controls::CollapsibleCategory>( pControl );
+					Gwen::Controls::CollapsibleCategory* pChild = gwen_cast<Gwen::Controls::CollapsibleCategory> ( pControl );
 
 					if ( !pChild ) { return; }
 

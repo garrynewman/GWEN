@@ -22,13 +22,13 @@ GWEN_CONTROL_CONSTRUCTOR( RadioButtonController )
 
 void RadioButtonController::OnRadioClicked( Gwen::Controls::Base* pFromPanel )
 {
-	RadioButton* pCheckedRadioButton = gwen_cast<RadioButton>( pFromPanel );
+	RadioButton* pCheckedRadioButton = gwen_cast<RadioButton> ( pFromPanel );
 
 	//Iterate through all other buttons and set them to false;
 	for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 	{
 		Base* pChild = *iter;
-		LabeledRadioButton* pLRB = gwen_cast<LabeledRadioButton>( pChild );
+		LabeledRadioButton* pLRB = gwen_cast<LabeledRadioButton> ( pChild );
 
 		if ( pLRB )
 		{

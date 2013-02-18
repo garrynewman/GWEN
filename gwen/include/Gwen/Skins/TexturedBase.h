@@ -336,124 +336,124 @@ namespace Gwen
 					Colors.Category.Line.Text_Selected	= GetRender()->PixelColour( &m_Texture, 4 + 8 * 20, 500, Color( 255, 255, 0 ) );
 					Colors.Category.Line.Button			= GetRender()->PixelColour( &m_Texture, 4 + 8 * 21, 500, Color( 255, 255, 0 ) );
 					Colors.Category.Line.Button_Hover	= GetRender()->PixelColour( &m_Texture, 4 + 8 * 22, 508, Color( 255, 255, 0 ) );
-					Colors.Category.Line.Button_Selected= GetRender()->PixelColour( &m_Texture, 4 + 8 * 23, 508, Color( 255, 255, 0 ) );
+					Colors.Category.Line.Button_Selected = GetRender()->PixelColour( &m_Texture, 4 + 8 * 23, 508, Color( 255, 255, 0 ) );
 					Colors.Category.LineAlt.Text			= GetRender()->PixelColour( &m_Texture, 4 + 8 * 22, 500, Color( 255, 255, 0 ) );
 					Colors.Category.LineAlt.Text_Hover		= GetRender()->PixelColour( &m_Texture, 4 + 8 * 23, 500, Color( 255, 255, 0 ) );
 					Colors.Category.LineAlt.Text_Selected	= GetRender()->PixelColour( &m_Texture, 4 + 8 * 24, 508, Color( 255, 255, 0 ) );
 					Colors.Category.LineAlt.Button			= GetRender()->PixelColour( &m_Texture, 4 + 8 * 25, 508, Color( 255, 255, 0 ) );
 					Colors.Category.LineAlt.Button_Hover	= GetRender()->PixelColour( &m_Texture, 4 + 8 * 24, 500, Color( 255, 255, 0 ) );
 					Colors.Category.LineAlt.Button_Selected	= GetRender()->PixelColour( &m_Texture, 4 + 8 * 25, 500, Color( 255, 255, 0 ) );
-					Textures.Shadow.Init			( &m_Texture, 448, 0,	31,		31,		Margin( 8, 8, 8, 8 ) );
-					Textures.Tooltip.Init			( &m_Texture, 128, 320,	127,	31,		Margin( 8, 8, 8, 8 ) );
-					Textures.StatusBar.Init		 ( &m_Texture, 128, 288, 127, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Selection.Init		 ( &m_Texture, 384, 32, 31, 31, Margin( 4, 4, 4, 4 ) );
-					Textures.Panel.Normal.Init			( &m_Texture, 256,		0,	63,	63,		Margin( 16,	16, 16, 16 ) );
-					Textures.Panel.Bright.Init			( &m_Texture, 256+64,	0,	63,	63,		Margin( 16,	16, 16, 16 ) );
-					Textures.Panel.Dark.Init			( &m_Texture, 256,		64,	63,	63,		Margin( 16,	16, 16, 16 ) );
-					Textures.Panel.Highlight.Init		( &m_Texture, 256+64,	64,	63,	63,		Margin( 16,	16, 16, 16 ) );
-					Textures.Window.Normal.Init			( &m_Texture, 0, 0, 127,		127,	Margin( 8, 32, 8, 8 ) );
-					Textures.Window.Inactive.Init		( &m_Texture, 128, 0, 127,		127,	Margin( 8, 32, 8, 8 ) );
-					Textures.Checkbox.Active.Checked.Init		( &m_Texture, 448, 32, 15, 15 );
-					Textures.Checkbox.Active.Normal.Init		( &m_Texture, 464, 32, 15, 15 );
-					Textures.Checkbox.Disabled.Checked.Init		( &m_Texture, 448, 48, 15, 15 );
-					Textures.Checkbox.Disabled.Normal.Init		( &m_Texture, 464, 48, 15, 15 );
-					Textures.RadioButton.Active.Checked.Init	( &m_Texture, 448, 64, 15, 15 );
-					Textures.RadioButton.Active.Normal.Init		( &m_Texture, 464, 64, 15, 15 );
-					Textures.RadioButton.Disabled.Checked.Init	( &m_Texture, 448, 80, 15, 15 );
-					Textures.RadioButton.Disabled.Normal.Init	( &m_Texture, 464, 80, 15, 15 );
-					Textures.TextBox.Normal.Init		( &m_Texture, 0, 150, 127, 21, Margin( 4, 4, 4, 4 ) );
-					Textures.TextBox.Focus.Init			( &m_Texture, 0, 172, 127, 21, Margin( 4, 4, 4, 4 ) );
-					Textures.TextBox.Disabled.Init		( &m_Texture, 0, 193, 127, 21, Margin( 4, 4, 4, 4 ) );
-					Textures.Menu.Strip.Init					( &m_Texture, 0, 128, 127, 21, Margin( 1, 1, 1, 1 ) );
-					Textures.Menu.BackgroundWithMargin.Init		( &m_Texture, 128, 128, 127, 63, Margin( 24, 8, 8, 8 ) );
-					Textures.Menu.Background.Init				( &m_Texture, 128, 192, 127, 63, Margin( 8, 8, 8, 8 ) );
-					Textures.Menu.Hover.Init					( &m_Texture, 128, 256, 127, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Menu.RightArrow.Init				( &m_Texture, 464, 112, 15, 15 );
-					Textures.Menu.Check.Init					( &m_Texture, 448, 112, 15, 15 );
-					Textures.Tab.Control.Init			( &m_Texture, 0, 256, 127, 127, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Bottom.Active.Init			( &m_Texture, 0,		416, 63, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Bottom.Inactive.Init			( &m_Texture, 0+128,	416, 63, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Top.Active.Init			( &m_Texture, 0,		384, 63, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Top.Inactive.Init			( &m_Texture, 0+128,	384, 63, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Left.Active.Init			( &m_Texture, 64,		384, 31, 63, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Left.Inactive.Init			( &m_Texture, 64+128,	384, 31, 63, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Right.Active.Init			( &m_Texture, 96,		384, 31, 63, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.Right.Inactive.Init			( &m_Texture, 96+128,	384, 31, 63, Margin( 8, 8, 8, 8 ) );
-					Textures.Tab.HeaderBar.Init				( &m_Texture, 128, 352, 127, 31, Margin( 4, 4, 4, 4 ) );
-					Textures.Window.Close.Init			( &m_Texture, 32, 448, 31, 31 );
-					Textures.Window.Close_Hover.Init	( &m_Texture, 64, 448, 31, 31 );
-					Textures.Window.Close_Down.Init		( &m_Texture, 96, 448, 31, 31 );
-					Textures.Window.Maxi.Init			( &m_Texture, 32 + 96*2, 448, 31, 31 );
-					Textures.Window.Maxi_Hover.Init		( &m_Texture, 64 + 96*2, 448, 31, 31 );
-					Textures.Window.Maxi_Down.Init		( &m_Texture, 96 + 96*2, 448, 31, 31 );
-					Textures.Window.Restore.Init		( &m_Texture, 32 + 96*2, 448+32, 31, 31 );
-					Textures.Window.Restore_Hover.Init	( &m_Texture, 64 + 96*2, 448+32, 31, 31 );
-					Textures.Window.Restore_Down.Init	( &m_Texture, 96 + 96*2, 448+32, 31, 31 );
-					Textures.Window.Mini.Init			( &m_Texture, 32 + 96, 448, 31, 31 );
-					Textures.Window.Mini_Hover.Init		( &m_Texture, 64 + 96, 448, 31, 31 );
-					Textures.Window.Mini_Down.Init		( &m_Texture, 96 + 96, 448, 31, 31 );
-					Textures.Tree.Background.Init			( &m_Texture, 256, 128, 127,	127,	Margin( 16, 16, 16, 16 ) );
-					Textures.Tree.Plus.Init					( &m_Texture, 448, 96, 15, 15 );
-					Textures.Tree.Minus.Init				( &m_Texture, 464, 96, 15, 15 );
-					Textures.Input.Button.Normal.Init				( &m_Texture, 480, 0,	31,		31,		Margin( 8, 8, 8, 8 ) );
-					Textures.Input.Button.Hovered.Init			( &m_Texture, 480, 32,	31,		31,		Margin( 8, 8, 8, 8 ) );
-					Textures.Input.Button.Disabled.Init			( &m_Texture, 480, 64,	31,		31,		Margin( 8, 8, 8, 8 ) );
-					Textures.Input.Button.Pressed.Init			( &m_Texture, 480, 96,	31,		31,		Margin( 8, 8, 8, 8 ) );
+					Textures.Shadow.Init( &m_Texture, 448, 0,	31,		31,		Margin( 8, 8, 8, 8 ) );
+					Textures.Tooltip.Init( &m_Texture, 128, 320,	127,	31,		Margin( 8, 8, 8, 8 ) );
+					Textures.StatusBar.Init( &m_Texture, 128, 288, 127, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Selection.Init( &m_Texture, 384, 32, 31, 31, Margin( 4, 4, 4, 4 ) );
+					Textures.Panel.Normal.Init( &m_Texture, 256,		0,	63,	63,		Margin( 16,	16, 16, 16 ) );
+					Textures.Panel.Bright.Init( &m_Texture, 256 + 64,	0,	63,	63,		Margin( 16,	16, 16, 16 ) );
+					Textures.Panel.Dark.Init( &m_Texture, 256,		64,	63,	63,		Margin( 16,	16, 16, 16 ) );
+					Textures.Panel.Highlight.Init( &m_Texture, 256 + 64,	64,	63,	63,		Margin( 16,	16, 16, 16 ) );
+					Textures.Window.Normal.Init( &m_Texture, 0, 0, 127,		127,	Margin( 8, 32, 8, 8 ) );
+					Textures.Window.Inactive.Init( &m_Texture, 128, 0, 127,		127,	Margin( 8, 32, 8, 8 ) );
+					Textures.Checkbox.Active.Checked.Init( &m_Texture, 448, 32, 15, 15 );
+					Textures.Checkbox.Active.Normal.Init( &m_Texture, 464, 32, 15, 15 );
+					Textures.Checkbox.Disabled.Checked.Init( &m_Texture, 448, 48, 15, 15 );
+					Textures.Checkbox.Disabled.Normal.Init( &m_Texture, 464, 48, 15, 15 );
+					Textures.RadioButton.Active.Checked.Init( &m_Texture, 448, 64, 15, 15 );
+					Textures.RadioButton.Active.Normal.Init( &m_Texture, 464, 64, 15, 15 );
+					Textures.RadioButton.Disabled.Checked.Init( &m_Texture, 448, 80, 15, 15 );
+					Textures.RadioButton.Disabled.Normal.Init( &m_Texture, 464, 80, 15, 15 );
+					Textures.TextBox.Normal.Init( &m_Texture, 0, 150, 127, 21, Margin( 4, 4, 4, 4 ) );
+					Textures.TextBox.Focus.Init( &m_Texture, 0, 172, 127, 21, Margin( 4, 4, 4, 4 ) );
+					Textures.TextBox.Disabled.Init( &m_Texture, 0, 193, 127, 21, Margin( 4, 4, 4, 4 ) );
+					Textures.Menu.Strip.Init( &m_Texture, 0, 128, 127, 21, Margin( 1, 1, 1, 1 ) );
+					Textures.Menu.BackgroundWithMargin.Init( &m_Texture, 128, 128, 127, 63, Margin( 24, 8, 8, 8 ) );
+					Textures.Menu.Background.Init( &m_Texture, 128, 192, 127, 63, Margin( 8, 8, 8, 8 ) );
+					Textures.Menu.Hover.Init( &m_Texture, 128, 256, 127, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Menu.RightArrow.Init( &m_Texture, 464, 112, 15, 15 );
+					Textures.Menu.Check.Init( &m_Texture, 448, 112, 15, 15 );
+					Textures.Tab.Control.Init( &m_Texture, 0, 256, 127, 127, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Bottom.Active.Init( &m_Texture, 0,		416, 63, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Bottom.Inactive.Init( &m_Texture, 0 + 128,	416, 63, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Top.Active.Init( &m_Texture, 0,		384, 63, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Top.Inactive.Init( &m_Texture, 0 + 128,	384, 63, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Left.Active.Init( &m_Texture, 64,		384, 31, 63, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Left.Inactive.Init( &m_Texture, 64 + 128,	384, 31, 63, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Right.Active.Init( &m_Texture, 96,		384, 31, 63, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.Right.Inactive.Init( &m_Texture, 96 + 128,	384, 31, 63, Margin( 8, 8, 8, 8 ) );
+					Textures.Tab.HeaderBar.Init( &m_Texture, 128, 352, 127, 31, Margin( 4, 4, 4, 4 ) );
+					Textures.Window.Close.Init( &m_Texture, 32, 448, 31, 31 );
+					Textures.Window.Close_Hover.Init( &m_Texture, 64, 448, 31, 31 );
+					Textures.Window.Close_Down.Init( &m_Texture, 96, 448, 31, 31 );
+					Textures.Window.Maxi.Init( &m_Texture, 32 + 96 * 2, 448, 31, 31 );
+					Textures.Window.Maxi_Hover.Init( &m_Texture, 64 + 96 * 2, 448, 31, 31 );
+					Textures.Window.Maxi_Down.Init( &m_Texture, 96 + 96 * 2, 448, 31, 31 );
+					Textures.Window.Restore.Init( &m_Texture, 32 + 96 * 2, 448 + 32, 31, 31 );
+					Textures.Window.Restore_Hover.Init( &m_Texture, 64 + 96 * 2, 448 + 32, 31, 31 );
+					Textures.Window.Restore_Down.Init( &m_Texture, 96 + 96 * 2, 448 + 32, 31, 31 );
+					Textures.Window.Mini.Init( &m_Texture, 32 + 96, 448, 31, 31 );
+					Textures.Window.Mini_Hover.Init( &m_Texture, 64 + 96, 448, 31, 31 );
+					Textures.Window.Mini_Down.Init( &m_Texture, 96 + 96, 448, 31, 31 );
+					Textures.Tree.Background.Init( &m_Texture, 256, 128, 127,	127,	Margin( 16, 16, 16, 16 ) );
+					Textures.Tree.Plus.Init( &m_Texture, 448, 96, 15, 15 );
+					Textures.Tree.Minus.Init( &m_Texture, 464, 96, 15, 15 );
+					Textures.Input.Button.Normal.Init( &m_Texture, 480, 0,	31,		31,		Margin( 8, 8, 8, 8 ) );
+					Textures.Input.Button.Hovered.Init( &m_Texture, 480, 32,	31,		31,		Margin( 8, 8, 8, 8 ) );
+					Textures.Input.Button.Disabled.Init( &m_Texture, 480, 64,	31,		31,		Margin( 8, 8, 8, 8 ) );
+					Textures.Input.Button.Pressed.Init( &m_Texture, 480, 96,	31,		31,		Margin( 8, 8, 8, 8 ) );
 
-					for ( int i=0; i<4; i++ )
+					for ( int i = 0; i < 4; i++ )
 					{
-						Textures.Scroller.Button.Normal[i].Init		( &m_Texture, 464 + 0, 208 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
-						Textures.Scroller.Button.Hover[i].Init		( &m_Texture, 480, 208 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
-						Textures.Scroller.Button.Down[i].Init		( &m_Texture, 464, 272 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
-						Textures.Scroller.Button.Disabled[i].Init	( &m_Texture, 480 + 48, 272 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
+						Textures.Scroller.Button.Normal[i].Init( &m_Texture, 464 + 0, 208 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
+						Textures.Scroller.Button.Hover[i].Init( &m_Texture, 480, 208 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
+						Textures.Scroller.Button.Down[i].Init( &m_Texture, 464, 272 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
+						Textures.Scroller.Button.Disabled[i].Init( &m_Texture, 480 + 48, 272 + i * 16, 15, 15, Margin( 2, 2, 2, 2 ) );
 					}
 
-					Textures.Scroller.TrackV.Init				( &m_Texture, 384,			208, 15, 127, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonV_Normal.Init		( &m_Texture, 384 + 16,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonV_Hover.Init		( &m_Texture, 384 + 32,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonV_Down.Init			( &m_Texture, 384 + 48,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonV_Disabled.Init		( &m_Texture, 384 + 64,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.TrackH.Init				( &m_Texture, 384,	128,		127, 15, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonH_Normal.Init		( &m_Texture, 384,	128 + 16,	127, 15, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonH_Hover.Init		( &m_Texture, 384,	128 + 32,	127, 15, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonH_Down.Init			( &m_Texture, 384,	128 + 48,	127, 15, Margin( 4, 4, 4, 4 ) );
-					Textures.Scroller.ButtonH_Disabled.Init		( &m_Texture, 384,	128 + 64,	127, 15, Margin( 4, 4, 4, 4 ) );
-					Textures.Input.ListBox.Background.Init		( &m_Texture, 256,	256, 63, 127, Margin( 8, 8, 8, 8 ) );
-					Textures.Input.ListBox.Hovered.Init			( &m_Texture, 320,	320, 31, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Input.ListBox.EvenLine.Init		( &m_Texture, 352,  256, 31, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Input.ListBox.OddLine.Init			( &m_Texture, 352,  288, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Scroller.TrackV.Init( &m_Texture, 384,			208, 15, 127, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonV_Normal.Init( &m_Texture, 384 + 16,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonV_Hover.Init( &m_Texture, 384 + 32,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonV_Down.Init( &m_Texture, 384 + 48,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonV_Disabled.Init( &m_Texture, 384 + 64,		208, 15, 127, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.TrackH.Init( &m_Texture, 384,	128,		127, 15, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonH_Normal.Init( &m_Texture, 384,	128 + 16,	127, 15, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonH_Hover.Init( &m_Texture, 384,	128 + 32,	127, 15, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonH_Down.Init( &m_Texture, 384,	128 + 48,	127, 15, Margin( 4, 4, 4, 4 ) );
+					Textures.Scroller.ButtonH_Disabled.Init( &m_Texture, 384,	128 + 64,	127, 15, Margin( 4, 4, 4, 4 ) );
+					Textures.Input.ListBox.Background.Init( &m_Texture, 256,	256, 63, 127, Margin( 8, 8, 8, 8 ) );
+					Textures.Input.ListBox.Hovered.Init( &m_Texture, 320,	320, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Input.ListBox.EvenLine.Init( &m_Texture, 352,  256, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Input.ListBox.OddLine.Init( &m_Texture, 352,  288, 31, 31, Margin( 8, 8, 8, 8 ) );
 					Textures.Input.ListBox.EvenLineSelected.Init( &m_Texture, 320,	256, 31, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Input.ListBox.OddLineSelected.Init	( &m_Texture, 320,	288, 31, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Input.ComboBox.Normal.Init			 ( &m_Texture, 384,	336,	127, 31, Margin( 8, 8, 32, 8 ) );
-					Textures.Input.ComboBox.Hover.Init			 ( &m_Texture, 384,	336+32, 127, 31, Margin( 8, 8, 32, 8 ) );
-					Textures.Input.ComboBox.Down.Init			 ( &m_Texture, 384,	336+64, 127, 31, Margin( 8, 8, 32, 8 ) );
-					Textures.Input.ComboBox.Disabled.Init		 ( &m_Texture, 384,	336+96, 127, 31, Margin( 8, 8, 32, 8 ) );
-					Textures.Input.ComboBox.Button.Normal.Init			 ( &m_Texture, 496,	272,	15, 15 );
-					Textures.Input.ComboBox.Button.Hover.Init			 ( &m_Texture, 496,	272+16, 15, 15 );
-					Textures.Input.ComboBox.Button.Down.Init			 ( &m_Texture, 496,	272+32, 15, 15 );
-					Textures.Input.ComboBox.Button.Disabled.Init		 ( &m_Texture, 496,	272+48, 15, 15 );
-					Textures.Input.UpDown.Up.Normal.Init		( &m_Texture, 384,		112,	7, 7 );
-					Textures.Input.UpDown.Up.Hover.Init			( &m_Texture, 384+8,	112,	7, 7 );
-					Textures.Input.UpDown.Up.Down.Init			( &m_Texture, 384+16,	112,	7, 7 );
-					Textures.Input.UpDown.Up.Disabled.Init		( &m_Texture, 384+24,	112,	7, 7 );
-					Textures.Input.UpDown.Down.Normal.Init		( &m_Texture, 384,		120,	7, 7 );
-					Textures.Input.UpDown.Down.Hover.Init		( &m_Texture, 384+8,	120,	7, 7 );
-					Textures.Input.UpDown.Down.Down.Init		( &m_Texture, 384+16,	120,	7, 7 );
-					Textures.Input.UpDown.Down.Disabled.Init	( &m_Texture, 384+24,	120,	7, 7 );
-					Textures.ProgressBar.Back.Init		 ( &m_Texture, 384,	0, 31, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.ProgressBar.Front.Init		 ( &m_Texture, 384+32,	0, 31, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.Input.Slider.H.Normal.Init			 ( &m_Texture, 416,	32,	15, 15 );
-					Textures.Input.Slider.H.Hover.Init			 ( &m_Texture, 416,	32+16, 15, 15 );
-					Textures.Input.Slider.H.Down.Init			 ( &m_Texture, 416,	32+32, 15, 15 );
-					Textures.Input.Slider.H.Disabled.Init		 ( &m_Texture, 416,	32+48, 15, 15 );
-					Textures.Input.Slider.V.Normal.Init			 ( &m_Texture, 416+16,	32,	15, 15 );
-					Textures.Input.Slider.V.Hover.Init			 ( &m_Texture, 416+16,	32+16, 15, 15 );
-					Textures.Input.Slider.V.Down.Init			 ( &m_Texture, 416+16,	32+32, 15, 15 );
-					Textures.Input.Slider.V.Disabled.Init		 ( &m_Texture, 416+16,	32+48, 15, 15 );
-					Textures.CategoryList.Outer.Init			 ( &m_Texture, 256,			384, 63, 63, Margin( 8, 8, 8, 8 ) );
-					Textures.CategoryList.Inner.Init			 ( &m_Texture, 256 + 64,	384, 63, 63, Margin( 8, 21, 8, 8 ) );
-					Textures.CategoryList.Header.Init			 ( &m_Texture, 320,			352, 63, 31, Margin( 8, 8, 8, 8 ) );
-					Textures.GroupBox.Init						 ( &m_Texture, 0,			448, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Input.ListBox.OddLineSelected.Init( &m_Texture, 320,	288, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Input.ComboBox.Normal.Init( &m_Texture, 384,	336,	127, 31, Margin( 8, 8, 32, 8 ) );
+					Textures.Input.ComboBox.Hover.Init( &m_Texture, 384,	336 + 32, 127, 31, Margin( 8, 8, 32, 8 ) );
+					Textures.Input.ComboBox.Down.Init( &m_Texture, 384,	336 + 64, 127, 31, Margin( 8, 8, 32, 8 ) );
+					Textures.Input.ComboBox.Disabled.Init( &m_Texture, 384,	336 + 96, 127, 31, Margin( 8, 8, 32, 8 ) );
+					Textures.Input.ComboBox.Button.Normal.Init( &m_Texture, 496,	272,	15, 15 );
+					Textures.Input.ComboBox.Button.Hover.Init( &m_Texture, 496,	272 + 16, 15, 15 );
+					Textures.Input.ComboBox.Button.Down.Init( &m_Texture, 496,	272 + 32, 15, 15 );
+					Textures.Input.ComboBox.Button.Disabled.Init( &m_Texture, 496,	272 + 48, 15, 15 );
+					Textures.Input.UpDown.Up.Normal.Init( &m_Texture, 384,		112,	7, 7 );
+					Textures.Input.UpDown.Up.Hover.Init( &m_Texture, 384 + 8,	112,	7, 7 );
+					Textures.Input.UpDown.Up.Down.Init( &m_Texture, 384 + 16,	112,	7, 7 );
+					Textures.Input.UpDown.Up.Disabled.Init( &m_Texture, 384 + 24,	112,	7, 7 );
+					Textures.Input.UpDown.Down.Normal.Init( &m_Texture, 384,		120,	7, 7 );
+					Textures.Input.UpDown.Down.Hover.Init( &m_Texture, 384 + 8,	120,	7, 7 );
+					Textures.Input.UpDown.Down.Down.Init( &m_Texture, 384 + 16,	120,	7, 7 );
+					Textures.Input.UpDown.Down.Disabled.Init( &m_Texture, 384 + 24,	120,	7, 7 );
+					Textures.ProgressBar.Back.Init( &m_Texture, 384,	0, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.ProgressBar.Front.Init( &m_Texture, 384 + 32,	0, 31, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.Input.Slider.H.Normal.Init( &m_Texture, 416,	32,	15, 15 );
+					Textures.Input.Slider.H.Hover.Init( &m_Texture, 416,	32 + 16, 15, 15 );
+					Textures.Input.Slider.H.Down.Init( &m_Texture, 416,	32 + 32, 15, 15 );
+					Textures.Input.Slider.H.Disabled.Init( &m_Texture, 416,	32 + 48, 15, 15 );
+					Textures.Input.Slider.V.Normal.Init( &m_Texture, 416 + 16,	32,	15, 15 );
+					Textures.Input.Slider.V.Hover.Init( &m_Texture, 416 + 16,	32 + 16, 15, 15 );
+					Textures.Input.Slider.V.Down.Init( &m_Texture, 416 + 16,	32 + 32, 15, 15 );
+					Textures.Input.Slider.V.Disabled.Init( &m_Texture, 416 + 16,	32 + 48, 15, 15 );
+					Textures.CategoryList.Outer.Init( &m_Texture, 256,			384, 63, 63, Margin( 8, 8, 8, 8 ) );
+					Textures.CategoryList.Inner.Init( &m_Texture, 256 + 64,	384, 63, 63, Margin( 8, 21, 8, 8 ) );
+					Textures.CategoryList.Header.Init( &m_Texture, 320,			352, 63, 31, Margin( 8, 8, 8, 8 ) );
+					Textures.GroupBox.Init( &m_Texture, 0,			448, 31, 31, Margin( 8, 8, 8, 8 ) );
 				}
 
 
@@ -468,13 +468,13 @@ namespace Gwen
 					Textures.Input.Button.Normal.Draw( GetRender(), control->GetRenderBounds() );
 				}
 
-				virtual void DrawMenuItem( Gwen::Controls::Base* control, bool bSubmenuOpen, bool bChecked  )
+				virtual void DrawMenuItem( Gwen::Controls::Base* control, bool bSubmenuOpen, bool bChecked )
 				{
 					const Gwen::Rect & rect = control->GetRenderBounds();
 
 					if ( bSubmenuOpen || control->IsHovered() )	{ Textures.Menu.Hover.Draw( GetRender(), rect ); }
 
-					if ( bChecked ) { Textures.Menu.Check.Draw( GetRender(), Gwen::Rect( rect.x+4, rect.y+3, 15, 15 ) ); }
+					if ( bChecked ) { Textures.Menu.Check.Draw( GetRender(), Gwen::Rect( rect.x + 4, rect.y + 3, 15, 15 ) ); }
 				}
 
 				virtual void DrawMenuStrip( Gwen::Controls::Base* control )
@@ -627,7 +627,7 @@ namespace Gwen
 					{ Textures.Scroller.TrackV.Draw( GetRender(), control->GetRenderBounds() ); }
 				}
 
-				virtual void DrawScrollBarBar( Controls::Base* control, bool bDepressed, bool isHovered, bool isHorizontal  )
+				virtual void DrawScrollBarBar( Controls::Base* control, bool bDepressed, bool isHovered, bool isHorizontal )
 				{
 					if ( !isHorizontal )
 					{
@@ -672,7 +672,7 @@ namespace Gwen
 					else
 					{
 						Textures.ProgressBar.Back.Draw( GetRender(), rect );
-						int inv_progress = rect.h * ( 1-progress );
+						int inv_progress = rect.h * ( 1 - progress );
 						rect.y += inv_progress;
 						rect.h -= inv_progress;
 						Textures.ProgressBar.Front.Draw( GetRender(), rect );
@@ -707,9 +707,9 @@ namespace Gwen
 				{
 					if ( numNotches == 0 ) { return; }
 
-					float iSpacing = ( float )rect.w / ( float )numNotches;
+					float iSpacing = ( float ) rect.w / ( float ) numNotches;
 
-					for ( int i=0; i<numNotches+1; i++ )
+					for ( int i = 0; i < numNotches + 1; i++ )
 					{
 						GetRender()->DrawFilledRect( Gwen::Rect( rect.x + iSpacing * i, rect.y + dist - 2, 1, 5 ) );
 					}
@@ -719,9 +719,9 @@ namespace Gwen
 				{
 					if ( numNotches == 0 ) { return; }
 
-					float iSpacing = ( float )rect.h / ( float )numNotches;
+					float iSpacing = ( float ) rect.h / ( float ) numNotches;
 
-					for ( int i=0; i<numNotches+1; i++ )
+					for ( int i = 0; i < numNotches + 1; i++ )
 					{
 						GetRender()->DrawFilledRect( Gwen::Rect( rect.x + dist - 1, rect.y + iSpacing * i, 5, 1 ) );
 					}
@@ -732,9 +732,9 @@ namespace Gwen
 					if ( bIsHorizontal )
 					{
 						Gwen::Rect rect = control->GetRenderBounds();
-						rect.x += barSize*0.5;
+						rect.x += barSize * 0.5;
 						rect.w -= barSize;
-						rect.y += rect.h*0.5-1;
+						rect.y += rect.h * 0.5 - 1;
 						rect.h = 1;
 						GetRender()->SetDrawColor( Gwen::Color( 0, 0, 0, 100 ) );
 						DrawSliderNotchesH( rect, numNotches, barSize * 0.5 );
@@ -742,9 +742,9 @@ namespace Gwen
 					}
 
 					Gwen::Rect rect = control->GetRenderBounds();
-					rect.y += barSize*0.5;
+					rect.y += barSize * 0.5;
 					rect.h -= barSize;
-					rect.x += rect.w*0.5-1;
+					rect.x += rect.w * 0.5 - 1;
 					rect.w = 1;
 					GetRender()->SetDrawColor( Gwen::Color( 0, 0, 0, 100 ) );
 					DrawSliderNotchesV( rect, numNotches, barSize * 0.4 );
@@ -770,19 +770,19 @@ namespace Gwen
 					Gwen::Rect rect = r;
 					rect.x += iOffset;
 					rect.y += iOffset;
-					rect.w -= iOffset*2;
-					rect.h -= iOffset*2;
+					rect.w -= iOffset * 2;
+					rect.h -= iOffset * 2;
 					//draw the top and bottom
 					bool skip = true;
 
-					for ( int i=0; i< rect.w*0.5; i++ )
+					for ( int i = 0; i < rect.w * 0.5; i++ )
 					{
 						m_Render->SetDrawColor( Gwen::Color( 0, 0, 0, 255 ) );
 
 						if ( !skip )
 						{
-							GetRender()->DrawPixel( rect.x + ( i*2 ), rect.y );
-							GetRender()->DrawPixel( rect.x + ( i*2 ), rect.y+rect.h-1 );
+							GetRender()->DrawPixel( rect.x + ( i * 2 ), rect.y );
+							GetRender()->DrawPixel( rect.x + ( i * 2 ), rect.y + rect.h - 1 );
 						}
 						else
 						{ skip = !skip; }
@@ -790,14 +790,14 @@ namespace Gwen
 
 					skip = false;
 
-					for ( int i=0; i< rect.h*0.5; i++ )
+					for ( int i = 0; i < rect.h * 0.5; i++ )
 					{
 						GetRender()->SetDrawColor( Gwen::Color( 0, 0, 0, 255 ) );
 
 						if ( !skip )
 						{
-							GetRender()->DrawPixel( rect.x , rect.y +i*2 );
-							GetRender()->DrawPixel( rect.x +rect.w-1, rect.y +i*2 );
+							GetRender()->DrawPixel( rect.x , rect.y + i * 2 );
+							GetRender()->DrawPixel( rect.x + rect.w - 1, rect.y + i * 2 );
 						}
 						else
 						{ skip = !skip; }
@@ -892,7 +892,7 @@ namespace Gwen
 						GetRender()->DrawFilledRect( rect );
 						GetRender()->SetDrawColor( Gwen::Color( 128, 128, 128, 128 ) );
 						GetRender()->DrawFilledRect( Gwen::Rect( 0, 0, rect.w * 0.5, rect.h * 0.5 ) );
-						GetRender()->DrawFilledRect( Gwen::Rect( rect.w * 0.5, rect.h * 0.5, rect.w * 0.5,rect.h * 0.5 ) );
+						GetRender()->DrawFilledRect( Gwen::Rect( rect.w * 0.5, rect.h * 0.5, rect.w * 0.5, rect.h * 0.5 ) );
 					}
 
 					GetRender()->SetDrawColor( color );
@@ -999,7 +999,7 @@ namespace Gwen
 				{
 					if ( bSelected )
 					{
-						Textures.Selection.Draw( GetRender(), Gwen::Rect( 17, 0, iLabelWidth + 2, iLabelHeight-1 ) );
+						Textures.Selection.Draw( GetRender(), Gwen::Rect( 17, 0, iLabelWidth + 2, iLabelHeight - 1 ) );
 					}
 
 					Base::DrawTreeNode( ctrl, bOpen, bSelected, iLabelHeight, iLabelWidth, iHalfWay, iLastBranch, bIsRoot );

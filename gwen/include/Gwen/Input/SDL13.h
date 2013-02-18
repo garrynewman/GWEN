@@ -131,7 +131,7 @@ namespace Gwen
 						case SDL_TEXTINPUT:
 							{
 								SDL_TextInputEvent* E = &Event->text;
-								wchar_t* widechar = ( wchar_t* )SDL_iconv_string( UCS_STRING, "UTF-8", E->text, SDL_strlen( E->text )+1 );
+								wchar_t* widechar = ( wchar_t* ) SDL_iconv_string( UCS_STRING, "UTF-8", E->text, SDL_strlen( E->text ) + 1 );
 								bool ret = m_Canvas->InputCharacter( *widechar );
 								SDL_free( widechar );
 								return ret;

@@ -20,7 +20,7 @@ GWEN_CONTROL_CONSTRUCTOR( ResizableControl )
 	m_bClampMovement = false;
 	m_Resizer[5] = NULL;
 	m_Resizer[0] = NULL;
-	m_Resizer[2] = new Resizer ( this );
+	m_Resizer[2] = new Resizer( this );
 	m_Resizer[2]->Dock( Pos::Bottom );
 	m_Resizer[2]->SetResizeDir( Pos::Bottom );
 	m_Resizer[2]->SetTarget( this );
@@ -47,7 +47,7 @@ GWEN_CONTROL_CONSTRUCTOR( ResizableControl )
 	m_Resizer[7]->onResize.Add( this, &ResizableControl::OnResizedInternal );
 	m_Resizer[9] = new Resizer( m_Resizer[8] );
 	m_Resizer[9]->Dock( Pos::Right );
-	m_Resizer[9]->SetResizeDir( Pos::Top| Pos::Right );
+	m_Resizer[9]->SetResizeDir( Pos::Top | Pos::Right );
 	m_Resizer[9]->SetTarget( this );
 	m_Resizer[9]->onResize.Add( this, &ResizableControl::OnResizedInternal );
 	m_Resizer[4] = new Resizer( this );
@@ -66,7 +66,7 @@ void ResizableControl::DisableResizing()
 {
 	for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
 	{
-		Resizer* resizer = gwen_cast<Resizer>( *it );
+		Resizer* resizer = gwen_cast<Resizer> ( *it );
 
 		if ( !resizer ) { continue; }
 

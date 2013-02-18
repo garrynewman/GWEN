@@ -27,7 +27,7 @@ bool TextBoxNumeric::IsTextAllowed( const Gwen::UnicodeString & str, int iPos )
 	if ( str.length() == 0 )
 	{ return true; }
 
-	for ( size_t i=0; i<str.length(); i++ )
+	for ( size_t i = 0; i < str.length(); i++ )
 	{
 		if ( str[i] == L'-' )
 		{

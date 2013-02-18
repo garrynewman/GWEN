@@ -120,7 +120,7 @@ namespace Gwen
 						case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
 						case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
 							{
-								return m_Canvas->InputMouseButton( event.mouse.button-1,
+								return m_Canvas->InputMouseButton( event.mouse.button - 1,
 																   event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN );
 							}
 

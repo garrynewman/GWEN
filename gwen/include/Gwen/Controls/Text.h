@@ -38,7 +38,7 @@ namespace Gwen
 				Gwen::Rect GetCharacterPosition( int iChar );
 				int GetClosestCharacter( Gwen::Point p );
 
-				int Length() const { return ( int )m_String.GetUnicode().size(); }
+				int Length() const { return ( int ) m_String.GetUnicode().size(); }
 
 				virtual void SetTextColor( const Gwen::Color & col ) { m_Color = col; }
 				virtual void SetTextColorOverride( const Gwen::Color & col ) { m_ColorOverride = col; }

@@ -137,7 +137,7 @@ void ComboBox::SelectItem( MenuItem* pItem, bool bFireChangeEvents )
 void ComboBox::OnItemSelected( Controls::Base* pControl )
 {
 	//Convert selected to a menu item
-	MenuItem* pItem = gwen_cast<MenuItem>( pControl );
+	MenuItem* pItem = gwen_cast<MenuItem> ( pControl );
 
 	if ( !pItem ) { return; }
 
@@ -151,7 +151,7 @@ void ComboBox::SelectItemByName( const Gwen::String & name, bool bFireChangeEven
 
 	while ( it != children.end() )
 	{
-		MenuItem* pChild = gwen_cast<MenuItem>( *it );
+		MenuItem* pChild = gwen_cast<MenuItem> ( *it );
 
 		if ( pChild->GetName() == name )
 		{
@@ -193,7 +193,7 @@ void ComboBox::OpenList()
 	m_Menu->SetHidden( false );
 	m_Menu->BringToFront();
 	Gwen::Point p = LocalPosToCanvas( Gwen::Point( 0, 0 ) );
-	m_Menu->SetBounds( Gwen::Rect ( p.x, p.y + Height(), Width(), m_Menu->Height() ) );
+	m_Menu->SetBounds( Gwen::Rect( p.x, p.y + Height(), Width(), m_Menu->Height() ) );
 }
 
 void ComboBox::CloseList()

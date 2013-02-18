@@ -14,8 +14,8 @@ namespace Gwen
 	{
 		struct TextureData
 		{
-			TextureData( sf::Image* img ): image( img ), texture( NULL ) { }
-			TextureData( sf::Texture* text ): texture( text ), image( NULL ) { }
+			TextureData( sf::Image* img ) : image( img ), texture( NULL ) { }
+			TextureData( sf::Texture* text ) : texture( text ), image( NULL ) { }
 			~TextureData() { if ( texture != NULL ) { delete texture; } if ( image != NULL ) { delete image; } }
 
 			sf::Texture* texture;
@@ -56,8 +56,8 @@ namespace Gwen
 		{
 #if SFML_VERSION_MAJOR == 2
 			Translate( rect );
-			sf::RectangleShape rectShape( sf::Vector2f( rect.w-2, rect.h-2 ) );
-			rectShape.setPosition( rect.x+1, rect.y+1 );
+			sf::RectangleShape rectShape( sf::Vector2f( rect.w - 2, rect.h - 2 ) );
+			rectShape.setPosition( rect.x + 1, rect.y + 1 );
 			rectShape.setFillColor( sf::Color::Transparent );
 			rectShape.setOutlineColor( m_Color );
 			rectShape.setOutlineThickness( 1.f );
@@ -86,7 +86,7 @@ namespace Gwen
 
 			if ( !pFont->loadFromFile( Utility::UnicodeToString( font->facename ) ) )
 #else
-			if ( !pFont->LoadFromFile( Utility::UnicodeToString( font->facename ), font->realsize  ) )
+			if ( !pFont->LoadFromFile( Utility::UnicodeToString( font->facename ), font->realsize ) )
 #endif
 			{
 				// Ideally here we should be setting the font to a system default font here.
@@ -106,7 +106,7 @@ namespace Gwen
 		{
 			if ( !pFont->data ) { return; }
 
-			sf::Font* font = ( ( sf::Font* )pFont->data );
+			sf::Font* font = ( ( sf::Font* ) pFont->data );
 #if SFML_VERSION_MAJOR != 2
 
 			// If this is the default font then don't delete it!
@@ -133,7 +133,7 @@ namespace Gwen
 			const sf::Font* pSFFont = ( sf::Font* )( pFont->data );
 #if SFML_VERSION_MAJOR != 2
 
-			if  ( !pSFFont )
+			if ( !pSFFont )
 			{
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pSFFont = &defaultFont;
@@ -170,7 +170,7 @@ namespace Gwen
 			const sf::Font* pSFFont = ( sf::Font* )( pFont->data );
 #if SFML_VERSION_MAJOR != 2
 
-			if  ( !pSFFont )
+			if ( !pSFFont )
 			{
 				static sf::Font defaultFont = sf::Font::GetDefaultFont();
 				pSFFont = &defaultFont;

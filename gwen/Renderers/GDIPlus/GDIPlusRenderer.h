@@ -173,7 +173,7 @@ class GWENRENDER_Windows : public Gwen::Gwen::Renderer::Base
 
 			if ( !pFont->data ) { return; }
 
-			Font* font = ( ( Font* )pFont->data );
+			Font* font = ( ( Font* ) pFont->data );
 			delete font;
 			pFont->data = NULL;
 		}
@@ -196,8 +196,8 @@ class GWENRENDER_Windows : public Gwen::Gwen::Renderer::Base
 			StringFormat strFormat( StringFormat::GenericDefault() );
 			SolidBrush solidBrush( GetGDIColor() );
 			RectF r( rect.x, rect.y, rect.w, rect.h );
-			Font* pGDIFont = ( Font* )pFont->data;
-			graphics->DrawString( text.c_str(), text.length()+1, pGDIFont, r, &strFormat, &solidBrush );
+			Font* pGDIFont = ( Font* ) pFont->data;
+			graphics->DrawString( text.c_str(), text.length() + 1, pGDIFont, r, &strFormat, &solidBrush );
 		}
 
 		virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
@@ -214,15 +214,15 @@ class GWENRENDER_Windows : public Gwen::Gwen::Renderer::Base
 			strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() );
 			SizeF size;
 			Graphics g( m_HWND );
-			Font* pGDIFont = ( Font* )pFont->data;
+			Font* pGDIFont = ( Font* ) pFont->data;
 			Status s = g.MeasureString( text.c_str(), -1, pGDIFont, &strFormat, &size );
-			return Gwen::Point( size.Width+1, size.Height+1 );
+			return Gwen::Point( size.Width + 1, size.Height + 1 );
 		}
 
 		void StartClip()
 		{
 			const Gwen::Rect & rect = ClipRegion();
-			graphics->SetClip( Rect( rect.x * Scale(), rect.y* Scale(), rect.w* Scale(), rect.h* Scale() ), CombineMode::CombineModeReplace );
+			graphics->SetClip( Rect( rect.x * Scale(), rect.y * Scale(), rect.w * Scale(), rect.h * Scale() ), CombineMode::CombineModeReplace );
 			//Pen      pen( Color( 100, 255, 0, 255 ) );
 			//graphics->DrawRectangle( &pen, Rect( rect.x*Scale(), rect.y*Scale(), rect.w*Scale(), rect.h*Scale() ) );
 		}
@@ -243,7 +243,7 @@ class GWENRENDER_Windows : public Gwen::Gwen::Renderer::Base
 			DrawFilledRect( pTargetRect );
 		}
 
-		void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1=0.0f, float v1=0.0f, float u2=1.0f, float v2=1.0f )
+		void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1 = 0.0f, float v1 = 0.0f, float u2 = 1.0f, float v2 = 1.0f )
 		{
 			Image* pImage = ( Image* ) pTexture->data;
 

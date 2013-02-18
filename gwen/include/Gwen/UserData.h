@@ -69,7 +69,7 @@ namespace Gwen
 
 				while ( it != itEnd )
 				{
-					( ( ValueBase* )it->second )->DeleteThis();
+					( ( ValueBase* ) it->second )->DeleteThis();
 					++it;
 				}
 			}
@@ -82,11 +82,11 @@ namespace Gwen
 
 				if ( it != m_List.end() )
 				{
-					( ( Value<T>* )it->second )->val = var;
+					( ( Value<T>* ) it->second )->val = var;
 				}
 				else
 				{
-					val = new Value<T>( var );
+					val = new Value<T> ( var );
 					m_List[ str ] = ( void* ) val;
 				}
 			};

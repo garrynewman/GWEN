@@ -18,13 +18,13 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle>( ctrl );
+						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle> ( ctrl );
 						return Utility::Format( L"%i %i %i %i", pRect->GetColor().r, pRect->GetColor().g, pRect->GetColor().b, pRect->GetColor().a );
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )
 					{
-						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle>( ctrl );
+						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle> ( ctrl );
 						int r, g, b, a;
 
 						if ( swscanf( str.c_str(), L"%i %i %i %i", &r, &g, &b, &a ) != 4 ) { return; }
@@ -47,7 +47,7 @@ namespace Gwen
 
 					float NumGet( Controls::Base* ctrl, int i )
 					{
-						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle>( ctrl );
+						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle> ( ctrl );
 
 						if ( i == 0 ) { return pRect->GetColor().r; }
 
@@ -60,7 +60,7 @@ namespace Gwen
 
 					void NumSet( Controls::Base* ctrl, int i, float f )
 					{
-						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle>( ctrl );
+						Controls::Rectangle* pRect = gwen_cast<Controls::Rectangle> ( ctrl );
 						Gwen::Color c = pRect->GetColor();
 
 						if ( i == 0 ) { c.r = f; }

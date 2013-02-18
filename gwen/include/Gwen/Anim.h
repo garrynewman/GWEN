@@ -78,7 +78,7 @@ namespace Gwen
 					}
 
 					virtual void OnStart() { m_Control->SetHeight( m_iStartSize ); }
-					virtual void Run( float delta ) { m_Control->SetHeight( m_iStartSize + ( ( ( float )m_iDelta ) * delta ) ); }
+					virtual void Run( float delta ) { m_Control->SetHeight( m_iStartSize + ( ( ( float ) m_iDelta ) * delta ) ); }
 					virtual void OnFinish() { m_Control->SetHeight( m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
@@ -100,7 +100,7 @@ namespace Gwen
 					}
 
 					virtual void OnStart() { m_Control->SetWidth( m_iStartSize ); }
-					virtual void Run( float delta ) { m_Control->SetWidth( m_iStartSize + ( ( ( float )m_iDelta ) * delta ) ); }
+					virtual void Run( float delta ) { m_Control->SetWidth( m_iStartSize + ( ( ( float ) m_iDelta ) * delta ) ); }
 					virtual void OnFinish() { m_Control->SetWidth( m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
@@ -125,7 +125,7 @@ namespace Gwen
 					}
 
 					virtual void OnStart() { m_Control->SetPos( m_iStartSize, m_Control->GetPos().y ); }
-					virtual void Run( float delta ) { m_Control->SetPos( m_iStartSize + ( ( ( float )m_iDelta ) * delta ), m_Control->GetPos().y ); }
+					virtual void Run( float delta ) { m_Control->SetPos( m_iStartSize + ( ( ( float ) m_iDelta ) * delta ), m_Control->GetPos().y ); }
 					virtual void OnFinish() { m_Control->SetPos( m_iStartSize + m_iDelta, m_Control->GetPos().y ); m_Control->SetHidden( m_bHide ); }
 
 				protected:
@@ -147,7 +147,7 @@ namespace Gwen
 					}
 
 					virtual void OnStart() { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize ); }
-					virtual void Run( float delta ) { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + ( ( ( float )m_iDelta ) * delta ) ); }
+					virtual void Run( float delta ) { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + ( ( ( float ) m_iDelta ) * delta ) ); }
 					virtual void OnFinish() { m_Control->SetPos( m_Control->GetPos().x, m_iStartSize + m_iDelta ); m_Control->SetHidden( m_bHide ); }
 
 				protected:

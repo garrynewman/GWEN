@@ -152,14 +152,14 @@ namespace Gwen
 
 		void Base::SetParentPage( Gwen::Controls::Base* ctrl, int i )
 		{
-			ctrl->UserData.Set<int>( "ParentPage", i );
+			ctrl->UserData.Set<int> ( "ParentPage", i );
 		}
 
 		int Base::GetParentPage( Gwen::Controls::Base* ctrl )
 		{
 			if ( !ctrl->UserData.Exists( "ParentPage" ) ) { return 0; }
 
-			return ctrl->UserData.Get<int>( "ParentPage" );
+			return ctrl->UserData.Get<int> ( "ParentPage" );
 		}
 
 	}

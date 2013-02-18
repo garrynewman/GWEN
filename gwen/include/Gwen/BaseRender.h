@@ -57,7 +57,7 @@ namespace Gwen
 
 				virtual void LoadTexture( Gwen::Texture* pTexture ) {};
 				virtual void FreeTexture( Gwen::Texture* pTexture ) {};
-				virtual void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1=0.0f, float v1=0.0f, float u2=1.0f, float v2=1.0f ) {};
+				virtual void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1 = 0.0f, float v1 = 0.0f, float u2 = 1.0f, float v2 = 1.0f ) {};
 				virtual void DrawMissingImage( Gwen::Rect pTargetRect );
 				virtual Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default = Gwen::Color( 255, 255, 255, 255 ) ) { return col_default; }
 

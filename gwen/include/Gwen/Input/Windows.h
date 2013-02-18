@@ -49,8 +49,8 @@ namespace Gwen
 
 						case WM_MOUSEMOVE:
 							{
-								int x = ( signed short )LOWORD( msg.lParam );
-								int y = ( signed short )HIWORD( msg.lParam );
+								int x = ( signed short ) LOWORD( msg.lParam );
+								int y = ( signed short ) HIWORD( msg.lParam );
 								int dx = x - m_MouseX;
 								int dy = y - m_MouseY;
 								m_MouseX = x;
@@ -60,7 +60,7 @@ namespace Gwen
 
 						case WM_CHAR:
 							{
-								Gwen::UnicodeChar chr = ( Gwen::UnicodeChar )msg.wParam;
+								Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) msg.wParam;
 								return m_Canvas->InputCharacter( chr );
 							}
 
@@ -68,7 +68,7 @@ namespace Gwen
 
 						case WM_MOUSEWHEEL:
 							{
-								return m_Canvas->InputMouseWheel( ( short )HIWORD( msg.wParam ) );
+								return m_Canvas->InputMouseWheel( ( short ) HIWORD( msg.wParam ) );
 							}
 
 #endif
@@ -125,9 +125,9 @@ namespace Gwen
 
 								// These aren't sent by WM_CHAR when CTRL is down - but we need
 								// them internally for copy and paste etc..
-								if  ( bDown && GetKeyState( VK_CONTROL ) & 0x80 && msg.wParam >= 'A' && msg.wParam <= 'Z' )
+								if ( bDown && GetKeyState( VK_CONTROL ) & 0x80 && msg.wParam >= 'A' && msg.wParam <= 'Z' )
 								{
-									Gwen::UnicodeChar chr = ( Gwen::UnicodeChar )msg.wParam;
+									Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) msg.wParam;
 									return m_Canvas->InputCharacter( chr );
 								}
 

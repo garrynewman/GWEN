@@ -14,7 +14,7 @@ namespace Gwen
 		{
 			class ColourButton : public Button
 			{
-					GWEN_CONTROL_INLINE ( ColourButton, Button )
+					GWEN_CONTROL_INLINE( ColourButton, Button )
 					{
 						m_Color = Colors::Black;
 						SetText( "" );
@@ -63,11 +63,11 @@ namespace Gwen
 
 					void ColorChanged( Controls::Base* control )
 					{
-						Gwen::Controls::HSVColorPicker* picker = gwen_cast<Gwen::Controls::HSVColorPicker>( control );
+						Gwen::Controls::HSVColorPicker* picker = gwen_cast<Gwen::Controls::HSVColorPicker> ( control );
 						Gwen::String colorStr;
-						colorStr += Gwen::Utility::ToString( ( int )picker->GetColor().r ) + " ";
-						colorStr += Gwen::Utility::ToString( ( int )picker->GetColor().g ) + " ";
-						colorStr += Gwen::Utility::ToString( ( int )picker->GetColor().b );
+						colorStr += Gwen::Utility::ToString( ( int ) picker->GetColor().r ) + " ";
+						colorStr += Gwen::Utility::ToString( ( int ) picker->GetColor().g ) + " ";
+						colorStr += Gwen::Utility::ToString( ( int ) picker->GetColor().b );
 						m_TextBox->SetText( colorStr );
 						DoChanged();
 					}

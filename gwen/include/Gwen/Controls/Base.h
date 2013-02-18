@@ -136,8 +136,8 @@ namespace Gwen
 				virtual void SetMargin( const Margin & margin );
 
 				// MoveTo is identical to SetPos except it uses ShouldRestrictToParent()
-				virtual void MoveTo ( int x, int y );
-				virtual void MoveBy ( int x, int y );
+				virtual void MoveTo( int x, int y );
+				virtual void MoveBy( int x, int y );
 
 				virtual const Gwen::Rect & GetBounds() const { return m_Bounds; }
 
@@ -513,7 +513,7 @@ T* gwen_cast( Gwen::Controls::Base* p )
 template <typename T>
 T* Gwen::Controls::Base::FindChild( const Gwen::String & name, bool bRecursive )
 {
-	return gwen_cast<T>( FindChildByName( name, bRecursive ) );
+	return gwen_cast<T> ( FindChildByName( name, bRecursive ) );
 }
 
 #define GWEN_DYNAMIC( ThisName, BaseName )									\

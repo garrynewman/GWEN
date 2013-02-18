@@ -27,7 +27,7 @@ namespace Gwen
 					{
 						SetEven( false );
 
-						for ( int i=0; i<MaxColumns; i++ )
+						for ( int i = 0; i < MaxColumns; i++ )
 						{ m_Columns[i] = NULL; }
 
 						m_ColumnCount = 0;
@@ -40,7 +40,7 @@ namespace Gwen
 						if ( iCount >= MaxColumns )
 						{ m_ColumnCount = MaxColumns; }
 
-						for ( int i=0; i<MaxColumns; i++ )
+						for ( int i = 0; i < MaxColumns; i++ )
 						{
 							if ( i < iCount )
 							{
@@ -94,7 +94,7 @@ namespace Gwen
 					{
 						int iHeight = 0;
 
-						for ( int i=0; i<m_ColumnCount; i++ )
+						for ( int i = 0; i < m_ColumnCount; i++ )
 						{
 							if ( !m_Columns[i] ) { continue; }
 
@@ -117,7 +117,7 @@ namespace Gwen
 
 					void SetTextColor( const Gwen::Color & color )
 					{
-						for ( int i=0; i<m_ColumnCount; i++ )
+						for ( int i = 0; i < m_ColumnCount; i++ )
 						{
 							if ( !m_Columns[i] ) { continue; }
 
@@ -160,7 +160,7 @@ namespace Gwen
 						m_iColumnCount = 1;
 						m_iDefaultRowHeight = 22;
 
-						for ( int i=0; i<TableRow::MaxColumns; i++ )
+						for ( int i = 0; i < TableRow::MaxColumns; i++ )
 						{
 							m_ColumnWidth[i] = 0;
 						}
@@ -174,7 +174,7 @@ namespace Gwen
 
 						for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
 						{
-							TableRow* pRow = gwen_cast<TableRow>( *it );
+							TableRow* pRow = gwen_cast<TableRow> ( *it );
 
 							if ( !pRow ) { continue; }
 
@@ -210,7 +210,7 @@ namespace Gwen
 
 					TableRow* GetRow( int i )
 					{
-						return gwen_cast<TableRow>( GetChild( i ) );
+						return gwen_cast<TableRow> ( GetChild( i ) );
 					}
 
 					unsigned int RowCount( int i )
@@ -227,7 +227,7 @@ namespace Gwen
 					{
 						for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
 						{
-							TableRow* pRow = gwen_cast<TableRow>( *it );
+							TableRow* pRow = gwen_cast<TableRow> ( *it );
 
 							if ( !pRow ) { continue; }
 
@@ -247,7 +247,7 @@ namespace Gwen
 						int iSizeRemainder = Width();
 						int iAutoSizeColumns = 0;
 
-						for ( int i=0; i<TableRow::MaxColumns && i < m_iColumnCount; i++ )
+						for ( int i = 0; i < TableRow::MaxColumns && i < m_iColumnCount; i++ )
 						{
 							iSizeRemainder -= m_ColumnWidth[i];
 
@@ -260,7 +260,7 @@ namespace Gwen
 
 						for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
 						{
-							TableRow* pRow = gwen_cast<TableRow>( *it );
+							TableRow* pRow = gwen_cast<TableRow> ( *it );
 
 							if ( !pRow ) { continue; }
 
@@ -268,7 +268,7 @@ namespace Gwen
 							pRow->SetEven( bEven );
 							bEven = !bEven;
 
-							for ( int i=0; i<TableRow::MaxColumns && i < m_iColumnCount; i++ )
+							for ( int i = 0; i < TableRow::MaxColumns && i < m_iColumnCount; i++ )
 							{
 								if ( m_ColumnWidth[i] == 0 )
 								{ pRow->SetColumnWidth( i, iSizeRemainder ); }
@@ -297,20 +297,20 @@ namespace Gwen
 
 					void DoSizeToContents()
 					{
-						for ( int i=0; i<TableRow::MaxColumns; i++ )
+						for ( int i = 0; i < TableRow::MaxColumns; i++ )
 						{
 							m_ColumnWidth[i] = 10;
 						}
 
 						for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
 						{
-							TableRow* pRow = gwen_cast<TableRow>( *it );
+							TableRow* pRow = gwen_cast<TableRow> ( *it );
 
 							if ( !pRow ) { continue; }
 
 							pRow->SizeToContents();
 
-							for ( int i=0; i<TableRow::MaxColumns; i++ )
+							for ( int i = 0; i < TableRow::MaxColumns; i++ )
 							{
 								if ( pRow->m_Columns[i] )
 								{

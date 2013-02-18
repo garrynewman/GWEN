@@ -44,9 +44,9 @@ namespace Gwen
 		void Base::DrawLinedRect( Gwen::Rect rect )
 		{
 			DrawFilledRect( Gwen::Rect( rect.x, rect.y, rect.w, 1 ) );
-			DrawFilledRect( Gwen::Rect( rect.x, rect.y + rect.h-1, rect.w, 1 ) );
+			DrawFilledRect( Gwen::Rect( rect.x, rect.y + rect.h - 1, rect.w, 1 ) );
 			DrawFilledRect( Gwen::Rect( rect.x, rect.y, 1, rect.h ) );
-			DrawFilledRect( Gwen::Rect( rect.x + rect.w-1, rect.y, 1, rect.h ) );
+			DrawFilledRect( Gwen::Rect( rect.x + rect.w - 1, rect.y, 1, rect.h ) );
 		};
 
 		void Base::DrawPixel( int x, int y )
@@ -62,21 +62,21 @@ namespace Gwen
 
 			if ( bSlight )
 			{
-				DrawFilledRect( Gwen::Rect( rect.x+1, rect.y, rect.w-1, 1 ) );
-				DrawFilledRect( Gwen::Rect( rect.x+1, rect.y + rect.h, rect.w-1, 1 ) );
-				DrawFilledRect( Gwen::Rect( rect.x, rect.y+1, 1, rect.h-1 ) );
-				DrawFilledRect( Gwen::Rect( rect.x + rect.w, rect.y+1, 1, rect.h-1 ) );
+				DrawFilledRect( Gwen::Rect( rect.x + 1, rect.y, rect.w - 1, 1 ) );
+				DrawFilledRect( Gwen::Rect( rect.x + 1, rect.y + rect.h, rect.w - 1, 1 ) );
+				DrawFilledRect( Gwen::Rect( rect.x, rect.y + 1, 1, rect.h - 1 ) );
+				DrawFilledRect( Gwen::Rect( rect.x + rect.w, rect.y + 1, 1, rect.h - 1 ) );
 				return;
 			}
 
-			DrawPixel( rect.x+1, rect.y+1 );
-			DrawPixel( rect.x+rect.w-1, rect.y+1 );
-			DrawPixel( rect.x+1, rect.y+rect.h-1 );
-			DrawPixel( rect.x+rect.w-1, rect.y+rect.h-1 );
-			DrawFilledRect( Gwen::Rect( rect.x+2, rect.y, rect.w-3, 1 ) );
-			DrawFilledRect( Gwen::Rect( rect.x+2, rect.y + rect.h, rect.w-3, 1 ) );
-			DrawFilledRect( Gwen::Rect( rect.x, rect.y+2, 1, rect.h-3 ) );
-			DrawFilledRect( Gwen::Rect( rect.x + rect.w, rect.y+2, 1, rect.h-3 ) );
+			DrawPixel( rect.x + 1, rect.y + 1 );
+			DrawPixel( rect.x + rect.w - 1, rect.y + 1 );
+			DrawPixel( rect.x + 1, rect.y + rect.h - 1 );
+			DrawPixel( rect.x + rect.w - 1, rect.y + rect.h - 1 );
+			DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y, rect.w - 3, 1 ) );
+			DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + rect.h, rect.w - 3, 1 ) );
+			DrawFilledRect( Gwen::Rect( rect.x, rect.y + 2, 1, rect.h - 3 ) );
+			DrawFilledRect( Gwen::Rect( rect.x + rect.w, rect.y + 2, 1, rect.h - 3 ) );
 		}
 
 		void Base::Translate( int & x, int & y )
@@ -159,13 +159,13 @@ namespace Gwen
 		{
 			float fSize = pFont->size * Scale();
 
-			for ( float i=0; i<text.length(); i++ )
+			for ( float i = 0; i < text.length(); i++ )
 			{
 				wchar_t chr = text[i];
 
 				if ( chr == ' ' ) { continue; }
 
-				Gwen::Rect r( pos.x + i * fSize * 0.4, pos.y, fSize * 0.4 -1, fSize );
+				Gwen::Rect r( pos.x + i * fSize * 0.4, pos.y, fSize * 0.4 - 1, fSize );
 
 				/*
 					This isn't important, it's just me messing around changing the
@@ -204,7 +204,7 @@ namespace Gwen
 		Gwen::Point Base::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
 			Gwen::Point p;
-			p.x = pFont->size * Scale() * ( float )text.length() * 0.4;
+			p.x = pFont->size * Scale() * ( float ) text.length() * 0.4;
 			p.y = pFont->size * Scale();
 			return p;
 		}

@@ -32,7 +32,7 @@ struct t_KeyData
 {
 	t_KeyData()
 	{
-		for ( int i=0; i<Gwen::Key::Count; i++ )
+		for ( int i = 0; i < Gwen::Key::Count; i++ )
 		{
 			KeyState[i] = false;
 			NextRepeat[i] = 0;
@@ -145,7 +145,7 @@ void Gwen::Input::OnCanvasThink( Controls::Base* pControl )
 	//
 	// Simulate Key-Repeats
 	//
-	for ( int i=0; i<Gwen::Key::Count; i++ )
+	for ( int i = 0; i < Gwen::Key::Count; i++ )
 	{
 		if ( KeyData.KeyState[i] && KeyData.Target != KeyboardFocus )
 		{

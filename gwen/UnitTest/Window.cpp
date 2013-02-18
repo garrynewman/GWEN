@@ -28,8 +28,8 @@ class Window : public GUnit
 		{
 			Controls::WindowControl* pWindow = new Controls::WindowControl( GetCanvas() );
 			pWindow->SetTitle( Utility::Format( L"Window %i", m_iWindowCount ) );
-			pWindow->SetSize( 200+rand()%100, 200+rand()%100 );
-			pWindow->SetPos( rand()%700, rand()%400 );
+			pWindow->SetSize( 200 + rand() % 100, 200 + rand() % 100 );
+			pWindow->SetPos( rand() % 700, rand() % 400 );
 			pWindow->SetDeleteOnClose( true );
 			m_iWindowCount++;
 		}
@@ -38,7 +38,7 @@ class Window : public GUnit
 		{
 			Controls::WindowControl* pWindow = new Controls::WindowControl( GetCanvas() );
 			pWindow->SetTitle( Utility::Format( L"Window %i", m_iWindowCount ) );
-			pWindow->SetSize( 200+rand()%100, 200+rand()%100 );
+			pWindow->SetSize( 200 + rand() % 100, 200 + rand() % 100 );
 			pWindow->MakeModal( true );
 			pWindow->Position( Pos::Center );
 			pWindow->SetDeleteOnClose( true );

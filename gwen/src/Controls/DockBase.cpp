@@ -100,9 +100,9 @@ int DockBase::GetDroppedTabDirection( int x, int y )
 {
 	int w = Width();
 	int h = Height();
-	float top = ( float )y / ( float ) h;
-	float left = ( float )x / ( float ) w;
-	float right = ( float )( w - x ) /( float ) w;
+	float top = ( float ) y / ( float ) h;
+	float left = ( float ) x / ( float ) w;
+	float right = ( float )( w - x ) / ( float ) w;
 	float bottom = ( float )( h - y ) / ( float ) h;
 	float minimum = Gwen::Min( Gwen::Min( Gwen::Min( top, left ), right ), bottom );
 	m_bDropFar = ( minimum < 0.2f );
@@ -152,7 +152,7 @@ bool DockBase::DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* pPackage, int
 
 	if ( pPackage->name == "TabButtonMove" )
 	{
-		TabButton* pTabButton = gwen_cast<TabButton>( DragAndDrop::SourceControl );
+		TabButton* pTabButton = gwen_cast<TabButton> ( DragAndDrop::SourceControl );
 
 		if ( !pTabButton ) { return false; }
 
@@ -161,7 +161,7 @@ bool DockBase::DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* pPackage, int
 
 	if ( pPackage->name == "TabWindowMove" )
 	{
-		DockedTabControl* pTabControl = gwen_cast<DockedTabControl>( DragAndDrop::SourceControl );
+		DockedTabControl* pTabControl = gwen_cast<DockedTabControl> ( DragAndDrop::SourceControl );
 
 		if ( !pTabControl ) { return false; }
 
@@ -199,7 +199,7 @@ void DockBase::DoRedundancyCheck()
 {
 	if ( !IsEmpty() ) { return; }
 
-	DockBase* pDockParent = gwen_cast<DockBase>( GetParent() );
+	DockBase* pDockParent = gwen_cast<DockBase> ( GetParent() );
 
 	if ( !pDockParent ) { return; }
 

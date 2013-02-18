@@ -67,7 +67,7 @@ void Caller::CleanLinks()
 	m_Handlers.clear();
 }
 
-void Caller::Call( Controls::Base* pThis  )
+void Caller::Call( Controls::Base* pThis )
 {
 	static Gwen::Event::Information info;
 	info.Control = pThis;

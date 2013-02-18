@@ -25,8 +25,8 @@ namespace Gwen
 					float texh = texture->height;
 					uv[0] = x / texw;
 					uv[1] = y / texh;
-					uv[2] = ( x+w ) / texw;
-					uv[3] = ( y+h ) / texh;
+					uv[2] = ( x + w ) / texw;
+					uv[3] = ( y + h ) / texh;
 					this->iWidth = w;
 					this->iHeight = h;
 				}
@@ -36,7 +36,7 @@ namespace Gwen
 					if ( !texture ) { return; }
 
 					render->SetDrawColor( col );
-					render->DrawTexturedRect( texture, r, uv[0], uv[1],uv[2], uv[3]  );
+					render->DrawTexturedRect( texture, r, uv[0], uv[1], uv[2], uv[3] );
 				}
 
 				void DrawCenter( Gwen::Renderer::Base* render, Gwen::Rect r, const Gwen::Color & col = Gwen::Colors::White )
@@ -69,14 +69,14 @@ namespace Gwen
 					texture = pTexture;
 					margin = in_margin;
 					SetRect( 0, x, y, margin.left, margin.top );
-					SetRect( 1, x+margin.left, y, w - margin.left - margin.right, margin.top );
+					SetRect( 1, x + margin.left, y, w - margin.left - margin.right, margin.top );
 					SetRect( 2, ( x + w ) - margin.right, y, margin.right, margin.top );
-					SetRect( 3, x, y+margin.top, margin.left, h - margin.top - margin.bottom );
-					SetRect( 4, x+margin.left,  y+margin.top, w - margin.left - margin.right, h - margin.top - margin.bottom );
-					SetRect( 5, ( x + w ) - margin.right,  y+margin.top, margin.right, h - margin.top - margin.bottom );
-					SetRect( 6, x, ( y+h )-margin.bottom, margin.left, margin.bottom );
-					SetRect( 7, x+margin.left, ( y+h )-margin.bottom, w - margin.left - margin.right, margin.bottom );
-					SetRect( 8, ( x + w ) - margin.right, ( y+h )-margin.bottom, margin.right, margin.bottom );
+					SetRect( 3, x, y + margin.top, margin.left, h - margin.top - margin.bottom );
+					SetRect( 4, x + margin.left,  y + margin.top, w - margin.left - margin.right, h - margin.top - margin.bottom );
+					SetRect( 5, ( x + w ) - margin.right,  y + margin.top, margin.right, h - margin.top - margin.bottom );
+					SetRect( 6, x, ( y + h ) - margin.bottom, margin.left, margin.bottom );
+					SetRect( 7, x + margin.left, ( y + h ) - margin.bottom, w - margin.left - margin.right, margin.bottom );
+					SetRect( 8, ( x + w ) - margin.right, ( y + h ) - margin.bottom, margin.right, margin.bottom );
 					margin.left *= DrawMarginScale;
 					margin.right *= DrawMarginScale;
 					margin.top *= DrawMarginScale;
@@ -93,8 +93,8 @@ namespace Gwen
 					//y -= 1.0f;
 					rects[iNum].uv[0] = x / texw;
 					rects[iNum].uv[1] = y / texh;
-					rects[iNum].uv[2] = ( x+w ) / texw;
-					rects[iNum].uv[3] = ( y+h ) / texh;
+					rects[iNum].uv[2] = ( x + w ) / texw;
+					rects[iNum].uv[3] = ( y + h ) / texh;
 					//	rects[iNum].uv[0] += 1.0f / texture->width;
 					//	rects[iNum].uv[1] += 1.0f / texture->width;
 				}
@@ -109,7 +109,7 @@ namespace Gwen
 					{
 						render->DrawTexturedRect( texture,
 												  r,
-												  rects[0].uv[0], rects[0].uv[1], rects[8].uv[2], rects[8].uv[3]  );
+												  rects[0].uv[0], rects[0].uv[1], rects[8].uv[2], rects[8].uv[3] );
 						return;
 					}
 
@@ -119,24 +119,24 @@ namespace Gwen
 
 					if ( b3 ) { DrawRect( render, 2, ( r.x + r.w ) - margin.right, r.y, margin.right, margin.top ); }
 
-					if ( b4 ) { DrawRect( render, 3, r.x, r.y+margin.top, margin.left, r.h - margin.top - margin.bottom ); }
+					if ( b4 ) { DrawRect( render, 3, r.x, r.y + margin.top, margin.left, r.h - margin.top - margin.bottom ); }
 
-					if ( b5 ) { DrawRect( render, 4, r.x + margin.left, r.y+margin.top, r.w - margin.left - margin.right, r.h - margin.top - margin.bottom ); }
+					if ( b5 ) { DrawRect( render, 4, r.x + margin.left, r.y + margin.top, r.w - margin.left - margin.right, r.h - margin.top - margin.bottom ); }
 
-					if ( b6 ) { DrawRect( render, 5, ( r.x + r.w ) - margin.right, r.y+margin.top, margin.right, r.h - margin.top - margin.bottom ); }
+					if ( b6 ) { DrawRect( render, 5, ( r.x + r.w ) - margin.right, r.y + margin.top, margin.right, r.h - margin.top - margin.bottom ); }
 
-					if ( b7 ) { DrawRect( render, 6, r.x, ( r.y+r.h ) - margin.bottom, margin.left, margin.bottom ); }
+					if ( b7 ) { DrawRect( render, 6, r.x, ( r.y + r.h ) - margin.bottom, margin.left, margin.bottom ); }
 
-					if ( b8 ) { DrawRect( render, 7, r.x + margin.left, ( r.y+r.h ) - margin.bottom, r.w - margin.left - margin.right, margin.bottom ); }
+					if ( b8 ) { DrawRect( render, 7, r.x + margin.left, ( r.y + r.h ) - margin.bottom, r.w - margin.left - margin.right, margin.bottom ); }
 
-					if ( b9 ) { DrawRect( render, 8, ( r.x + r.w ) - margin.right, ( r.y+r.h ) - margin.bottom, margin.right, margin.bottom ); }
+					if ( b9 ) { DrawRect( render, 8, ( r.x + r.w ) - margin.right, ( r.y + r.h ) - margin.bottom, margin.right, margin.bottom ); }
 				}
 
 				void DrawRect( Gwen::Renderer::Base* render, int i, int x, int y, int w, int h )
 				{
 					render->DrawTexturedRect( texture,
 											  Gwen::Rect( x, y, w, h ),
-											  rects[i].uv[0], rects[i].uv[1], rects[i].uv[2], rects[i].uv[3]  );
+											  rects[i].uv[0], rects[i].uv[1], rects[i].uv[2], rects[i].uv[3] );
 				}
 
 				Texture*	texture;
