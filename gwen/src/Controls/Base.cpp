@@ -1045,56 +1045,56 @@ bool Base::OnKeyPress( int iKey, bool bPress )
 
 	switch ( iKey )
 	{
-	case Key::Tab:
-		bHandled = OnKeyTab( bPress );
-		break;
+		case Key::Tab:
+			bHandled = OnKeyTab( bPress );
+			break;
 
-	case Key::Space:
-		bHandled = OnKeySpace( bPress );
-		break;
+		case Key::Space:
+			bHandled = OnKeySpace( bPress );
+			break;
 
-	case Key::Home:
-		bHandled = OnKeyHome( bPress );
-		break;
+		case Key::Home:
+			bHandled = OnKeyHome( bPress );
+			break;
 
-	case Key::End:
-		bHandled = OnKeyEnd( bPress );
-		break;
+		case Key::End:
+			bHandled = OnKeyEnd( bPress );
+			break;
 
-	case Key::Return:
-		bHandled = OnKeyReturn( bPress );
-		break;
+		case Key::Return:
+			bHandled = OnKeyReturn( bPress );
+			break;
 
-	case Key::Backspace:
-		bHandled = OnKeyBackspace( bPress );
-		break;
+		case Key::Backspace:
+			bHandled = OnKeyBackspace( bPress );
+			break;
 
-	case Key::Delete:
-		bHandled = OnKeyDelete( bPress );
-		break;
+		case Key::Delete:
+			bHandled = OnKeyDelete( bPress );
+			break;
 
-	case Key::Right:
-		bHandled = OnKeyRight( bPress );
-		break;
+		case Key::Right:
+			bHandled = OnKeyRight( bPress );
+			break;
 
-	case Key::Left:
-		bHandled = OnKeyLeft( bPress );
-		break;
+		case Key::Left:
+			bHandled = OnKeyLeft( bPress );
+			break;
 
-	case Key::Up:
-		bHandled = OnKeyUp( bPress );
-		break;
+		case Key::Up:
+			bHandled = OnKeyUp( bPress );
+			break;
 
-	case Key::Down:
-		bHandled = OnKeyDown( bPress );
-		break;
+		case Key::Down:
+			bHandled = OnKeyDown( bPress );
+			break;
 
-	case Key::Escape:
-		bHandled = OnKeyEscape( bPress );
-		break;
+		case Key::Escape:
+			bHandled = OnKeyEscape( bPress );
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	if ( !bHandled && GetParent() )
