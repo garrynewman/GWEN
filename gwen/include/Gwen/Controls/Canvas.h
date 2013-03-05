@@ -94,7 +94,7 @@ namespace Gwen
 				Controls::Base::List	m_DeleteList;
 				std::set< Controls::Base* > m_DeleteSet;
 				friend class Controls::Base;
-				void PreDelete( Controls::Base* );
+				void PreDeleteCanvas( Controls::Base* );
 
 				bool			m_bDrawBackground;
 				Gwen::Color		m_BackgroundColor;

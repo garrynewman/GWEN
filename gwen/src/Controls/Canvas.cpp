@@ -116,7 +116,7 @@ void Canvas::AddDelayedDelete( Gwen::Controls::Base* pControl )
 	}
 }
 
-void Canvas::PreDelete( Controls::Base* pControl )
+void Canvas::PreDeleteCanvas( Controls::Base* pControl )
 {
 	if ( m_bAnyDelete )
 	{
