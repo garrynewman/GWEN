@@ -57,7 +57,7 @@ Base::~Base()
 		Canvas* canvas = GetCanvas();
 
 		if ( canvas )
-		{ canvas->PreDelete( this ); }
+		{ canvas->PreDeleteCanvas( this ); }
 	}
 	Base::List::iterator iter = Children.begin();
 
