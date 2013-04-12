@@ -22,6 +22,7 @@ using namespace Gwen;
 
 #ifdef _MSC_VER
 #define GWEN_FNULL "NUL"
+#define va_copy(d,s) ((d) = (s))
 #else
 #define GWEN_FNULL "/dev/null"
 #endif
