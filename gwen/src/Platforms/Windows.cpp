@@ -25,8 +25,8 @@
 using namespace Gwen;
 using namespace Gwen::Platform;
 
-#define FILESTRING_SIZE			256
-#define FILTERBUFFER_SIZE		512
+static const size_t FileStringSize		= 256;
+static const size_t FilterBufferSize	= 512;
 
 static Gwen::Input::Windows GwenInput;
 
@@ -134,14 +134,15 @@ float Gwen::Platform::GetTimeInSeconds()
 
 bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
 {
-	char Filestring[FILESTRING_SIZE];
+	char Filestring[FileStringSize];
 	String returnstring;
-	char FilterBuffer[FILTERBUFFER_SIZE];
+
+	char FilterBuffer[FilterBufferSize];
 	{
 		memset( FilterBuffer, 0, sizeof( FilterBuffer ) );
 		memcpy( FilterBuffer, Extension.c_str(), Gwen::Min( Extension.length(), sizeof( FilterBuffer ) ) );
 
-		for ( int i = 0; i < FILTERBUFFER_SIZE; i++ )
+		for ( int i = 0; i < FilterBufferSize; i++ )
 		{
 			if ( FilterBuffer[i] == '|' )
 			{ FilterBuffer[i] = 0; }
@@ -155,7 +156,7 @@ bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, co
 	opf.nFilterIndex = 1L;
 	opf.lpstrFile = Filestring;
 	opf.lpstrFile[0] = '\0';
-	opf.nMaxFile = FILESTRING_SIZE;
+	opf.nMaxFile = FileStringSize;
 	opf.lpstrFileTitle = 0;
 	opf.nMaxFileTitle = 50;
 	opf.lpstrInitialDir = StartPath.c_str();
@@ -242,14 +243,15 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 
 bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
-	char Filestring[FILESTRING_SIZE];
+	char Filestring[FileStringSize];
 	String returnstring;
-	char FilterBuffer[FILTERBUFFER_SIZE];
+
+	char FilterBuffer[FilterBufferSize];
 	{
 		memset( FilterBuffer, 0, sizeof( FilterBuffer ) );
 		memcpy( FilterBuffer, Extension.c_str(), Gwen::Min( Extension.size(), sizeof( FilterBuffer ) ) );
 
-		for ( int i = 0; i < FILTERBUFFER_SIZE; i++ )
+		for ( int i = 0; i < FilterBufferSize; i++ )
 		{
 			if ( FilterBuffer[i] == '|' )
 			{ FilterBuffer[i] = 0; }
@@ -263,7 +265,7 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 	opf.nFilterIndex = 1L;
 	opf.lpstrFile = Filestring;
 	opf.lpstrFile[0] = '\0';
-	opf.nMaxFile = FILESTRING_SIZE;
+	opf.nMaxFile = FileStringSize;
 	opf.lpstrFileTitle = 0;
 	opf.nMaxFileTitle = 50;
 	opf.lpstrInitialDir = StartPath.c_str();
