@@ -129,6 +129,22 @@ namespace Gwen
 			protected:
 
 		};
+		
+		class GWEN_EXPORT PasswordTextBox : public TextBox
+		{
+			public:
+
+				GWEN_CONTROL( PasswordTextBox, TextBox );
+				
+				virtual void SetText( const TextObject& str, bool bDoEvents = true );
+				virtual void SetPasswordChar(const char c);
+
+				virtual const TextObject& GetText() const { return m_realText; }
+			protected:
+
+				char m_passwordChar;
+				TextObject	 m_realText;
+		};
 	}
 }
 #endif
