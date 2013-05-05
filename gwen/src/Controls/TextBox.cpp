@@ -572,3 +572,31 @@ bool TextBoxMultiline::OnKeyDown( bool bDown )
 	RefreshCursorBounds();
 	return true;
 }
+
+GWEN_CONTROL_CONSTRUCTOR( PasswordTextBox )
+{	
+	m_realText = "";
+	m_passwordChar = '*';
+}
+
+void PasswordTextBox::SetText( const TextObject& str, bool bDoEvents )
+{ 
+	if ( m_realText == str.GetUnicode() ) return;
+
+	m_realText = str;
+	std::string passwordChars;
+	for (int i = 0; i < m_realText.length(); i ++)
+		passwordChars += m_passwordChar;
+
+	m_Text->SetString(passwordChars);
+	Redraw();
+
+	if ( bDoEvents )
+		OnTextChanged();
+}
+
+void PasswordTextBox::SetPasswordChar(const char c)
+{
+	m_passwordChar = c;
+}
+
