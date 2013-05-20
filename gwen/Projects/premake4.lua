@@ -62,10 +62,12 @@ DefineRenderer( "OpenGL_DebugFont",
                   "../Renderers/OpenGL/DebugFont/OpenGL_DebugFont.cpp" } )
 
 DefineRenderer( "SFML",
-                { "../Renderers/SFML/SFML.cpp" } )
+                { "../Renderers/SFML/SFML.cpp" },
+                SFML_DEFINES )
 
 DefineRenderer( "SFML2",
-                { "../Renderers/SFML2/SFML2.cpp" } )
+                { "../Renderers/SFML2/SFML2.cpp" },
+                SFML2_DEFINES )
 
 DefineRenderer( "Allegro",
                 { "../Renderers/Allegro/Allegro.cpp" } )
@@ -98,15 +100,20 @@ DefineSample( "CrossPlatform",
 
 DefineSample( "SFML",
               { "../Samples/SFML/SFML.cpp" },
-              SFML_LIBS, SFML_LIBS_D )
+              SFML_LIBS,
+              SFML_LIBS_D,
+              SFML_DEFINES )
 
 DefineSample( "SFML2",
               { "../Samples/SFML2/SFML2.cpp" },
-              SFML2_LIBS, SFML2_LIBS_D )
+              SFML2_LIBS,
+              SFML2_LIBS_D,
+              SFML2_DEFINES )
 
 DefineSample( "Allegro",
               { "../Samples/Allegro/AllegroSample.cpp" },
-              ALLEGRO_LIBS, ALLEGRO_LIBS_D )
+              ALLEGRO_LIBS,
+              ALLEGRO_LIBS_D )
 
 if ( os.get() == "windows" ) then
 

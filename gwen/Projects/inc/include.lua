@@ -1,12 +1,13 @@
 
 dofile( os.get() .. ".lua" )
 
-function DefineRenderer( name, filetable )
+function DefineRenderer( name, filetable, definestable )
 
 	project ( "Renderer-"..name )
 	files( filetable )
 	flags( { "Symbols" } )
 	kind( "StaticLib" )
+	if ( definestable ) then defines( definestable ) end
 	
 	configuration( "Release" )
 		targetname( "GWEN-Renderer-"..name )
