@@ -33,15 +33,15 @@ void ColorPicker::CreateColorControl( Gwen::String name, int y )
 	colorGroup->SetName( name + "groupbox" );
 	ColorDisplay* disp = new ColorDisplay( colorGroup );
 	disp->SetName( name );
-	disp->SetBounds( 0 , 10, colorSize, colorSize );
+	disp->SetBounds( 0 , 3, colorSize, colorSize );
 	TextBoxNumeric* numeric = new TextBoxNumeric( colorGroup );
 	numeric->SetName( name + "Box" );
-	numeric->SetPos( 105, 7 );
+	numeric->SetPos( 105, 0 );
 	numeric->SetSize( 26, 16 );
 	numeric->SetSelectAllOnFocus( true );
 	numeric->onTextChanged.Add( this, &ColorPicker::NumericTyped );
 	HorizontalSlider* slider = new HorizontalSlider( colorGroup );
-	slider->SetPos( colorSize + 5 , 8 );
+	slider->SetPos( colorSize + 5 , 1 );
 	slider->SetRange( 0, 255 );
 	slider->SetSize( 80, Gwen::Utility::Max( colorSize, 15 ) );
 	slider->SetName( name + "Slider" );
@@ -100,7 +100,7 @@ void ColorPicker::CreateControls()
 	finalGroup->SetName( "ResultGroupBox" );
 	ColorDisplay* disp = new ColorDisplay( finalGroup );
 	disp->SetName( "Result" );
-	disp->SetBounds( 0 , 10, 32, 32 );
+	disp->SetBounds( 7 , 5, 32, 32 );
 	disp->SetDrawCheckers( true );
 	//UpdateControls();
 }
