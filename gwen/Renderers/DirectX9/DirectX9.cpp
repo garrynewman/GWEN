@@ -36,6 +36,9 @@ namespace Gwen
 
 		void DirectX9::Begin()
 		{
+			m_pDevice->GetTexture( 0, (IDirect3DBaseTexture9**)&m_pCurrentTexture );
+
+			m_pDevice->SetRenderState( D3DRS_ZENABLE, FALSE );
 			m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
 			m_pDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
 			m_pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
@@ -57,6 +60,8 @@ namespace Gwen
 		void DirectX9::End()
 		{
 			Flush();
+			m_pDevice->SetTexture( 0, 0 );
+			m_pCurrentTexture = NULL;
 		}
 
 		void DirectX9::Flush()
