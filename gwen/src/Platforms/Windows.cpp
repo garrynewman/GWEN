@@ -189,6 +189,11 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 	IFileDialog* pfd = NULL;
 	bool bSuccess = false;
 
+#ifndef _MSC_VER
+    // The line below is from the Qt Toolkit "src/plugins/platforms/windows/qwindowsdialoghelpers.cpp"
+    static const CLSID CLSID_FileOpenDialog = {0xdc1c5a9c, 0xe88a, 0x4dde, {0xa5, 0xa1, 0x60, 0xf8, 0x2a, 0x20, 0xae, 0xf7}};
+#endif
+
 	if ( CoCreateInstance( CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS( &pfd ) ) != S_OK )
 	{ return bSuccess; }
 

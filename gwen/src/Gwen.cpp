@@ -46,7 +46,7 @@ namespace Gwen
 			Msg( "Assert: %s\n", strMsg );
 #ifdef _WIN32
 			MessageBoxA( NULL, strMsg, "Assert", MB_ICONEXCLAMATION | MB_OK );
-			_asm { int 3 }
+			__debugbreak();
 #endif
 		}
 	}
