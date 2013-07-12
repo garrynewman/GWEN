@@ -214,7 +214,7 @@ namespace Gwen
 							{
 #if SFML_VERSION_MAJOR == 2
 								bool bPressed = ( event.type == sf::Event::KeyPressed );
-								char keyCode = event.key.code;
+								char keyCode = event.key.code + 97; // adding 97 here turns the sf::Keyboard::Key into a lowercase ASCII character
 								bool control = event.key.control;
 #else
 								bool bPressed = ( event.Type == sf::Event::KeyPressed );
@@ -227,7 +227,11 @@ namespace Gwen
 									return m_Canvas->InputCharacter( keyCode );
 								}
 
+#if SFML_VERSION_MAJOR == 2
+								unsigned char iKey = TranslateKeyCode( event.key.code );
+#else
 								unsigned char iKey = TranslateKeyCode( keyCode );
+#endif
 								return m_Canvas->InputKey( iKey, bPressed );
 							}
                         default:
