@@ -26,24 +26,6 @@ namespace Gwen
 	{
 		/*
 
-			When adding an event hook you can add a Packet too
-			This will be passed in Event::Info when you receive an event
-
-		*/
-		struct Packet
-		{
-			Packet( Gwen::Controls::Base* pControl = NULL ) { Control = pControl; }
-
-			Gwen::Controls::Base*	Control;
-			Gwen::String			String;
-			Gwen::UnicodeString		UnicodeString;
-			int						Integer;
-			float					Float;
-			unsigned long long		UnsignedLongLong;
-		};
-
-		/*
-
 			Passed to an event hook
 
 		*/
@@ -55,7 +37,7 @@ namespace Gwen
 			void Init()
 			{
 				ControlCaller	= NULL;
-				Packet			= NULL;
+				Data			= NULL;
 				Control			= NULL;
 				Integer			= 0;
 			}
@@ -65,8 +47,7 @@ namespace Gwen
 			Gwen::Controls::Base*	ControlCaller;
 
 			// This is set by the event hook
-			// ie onDoSomething.Add( this, &ThisClass::MyFunction, Gwen::Event::Packet( "Something" )
-			Gwen::Event::Packet*	Packet;
+			void*					Data;
 
 			//
 			// These are set by the event and may or may not be set.
@@ -106,6 +87,9 @@ namespace Gwen
 				typedef void ( Handler::*Function )( Gwen::Controls::Base* pFromPanel );
 				typedef void ( Handler::*FunctionBlank )();
 				typedef void ( Handler::*FunctionWithInformation )( Gwen::Event::Info info );
+				typedef void ( *GlobalFunction )( Gwen::Controls::Base* pFromPanel );
+				typedef void ( *GlobalFunctionBlank )();
+				typedef void ( *GlobalFunctionWithInformation )( Gwen::Event::Info info );
 
 		};
 
@@ -126,8 +110,13 @@ namespace Gwen
 
 				template <typename T> void Add( Event::Handler* ob, T f ) {	AddInternal( ob, static_cast<Handler::Function>( f ) ); }
 				template <typename T> void Add( Event::Handler* ob, void ( T::*f )( Gwen::Event::Info ) ) { AddInternal( ob, static_cast<Handler::FunctionWithInformation>( f ) ); }
-				template <typename T> void Add( Event::Handler* ob, void ( T::*f )( Gwen::Event::Info ), const Gwen::Event::Packet & packet ) { AddInternal( ob, static_cast<Handler::FunctionWithInformation>( f ), packet ); }
-				template <typename T> void Add( Event::Handler* ob, void ( T::*f )() ) {	AddInternal( ob, static_cast<Handler::FunctionBlank>( f ) ); }
+				template <typename T> void Add( Event::Handler* ob, void ( T::*f )( Gwen::Event::Info ), void* data ) { AddInternal( ob, static_cast<Handler::FunctionWithInformation>( f ), data ); }
+				template <typename T> void Add( Event::Handler* ob, void ( T::*f )() ) { AddInternal( ob, static_cast<Handler::FunctionBlank>( f ) ); }
+
+				template <typename T> void GlobalAdd( Event::Handler* ob, T f ) { AddInternal( ob, static_cast<Handler::GlobalFunction>( f ) ); }
+				void GlobalAdd( Event::Handler* ob, void ( *f )( Gwen::Event::Info ) ) { AddInternal( ob, static_cast<Handler::GlobalFunctionWithInformation>( f ) ); }
+				void GlobalAdd( Event::Handler* ob, void ( *f )( Gwen::Event::Info ), void* data ) { AddInternal( ob, static_cast<Handler::GlobalFunctionWithInformation>( f ), data ); }
+				void GlobalAdd( Event::Handler* ob, void ( *f )() ) { AddInternal( ob, static_cast<Handler::GlobalFunctionBlank>( f ) ); }
 
 				void RemoveHandler( Event::Handler* pObject );
 
@@ -136,25 +125,35 @@ namespace Gwen
 				void CleanLinks();
 				void AddInternal( Event::Handler* pObject, Handler::Function pFunction );
 				void AddInternal( Event::Handler* pObject, Handler::FunctionWithInformation pFunction );
-				void AddInternal( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, const Gwen::Event::Packet & packet );
+				void AddInternal( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, void* data );
 				void AddInternal( Event::Handler* pObject, Handler::FunctionBlank pFunction );
+				void AddInternal( Event::Handler* pObject, Handler::GlobalFunction pFunction );
+				void AddInternal( Event::Handler* pObject, Handler::GlobalFunctionWithInformation pFunction );
+				void AddInternal( Event::Handler* pObject, Handler::GlobalFunctionWithInformation pFunction, void* data );
+				void AddInternal( Event::Handler* pObject, Handler::GlobalFunctionBlank pFunction );
 
 				struct handler
 				{
 					handler()
 					{
-						fnFunction			= NULL;
-						fnFunctionInfo		= NULL;
-						fnFunctionBlank		= NULL;
-						pObject				= NULL;
+						fnFunction				= NULL;
+						fnFunctionInfo			= NULL;
+						fnFunctionBlank			= NULL;
+						fnGlobalFunction		= NULL;
+						fnGlobalFunctionInfo	= NULL;
+						fnGlobalFunctionBlank	= NULL;
+						pObject					= NULL;
 					}
 
-					Handler::Function					fnFunction;
-					Handler::FunctionWithInformation	fnFunctionInfo;
-					Handler::FunctionBlank				fnFunctionBlank;
+					Handler::Function						fnFunction;
+					Handler::FunctionWithInformation		fnFunctionInfo;
+					Handler::FunctionBlank					fnFunctionBlank;
+					Handler::GlobalFunction					fnGlobalFunction;
+					Handler::GlobalFunctionWithInformation	fnGlobalFunctionInfo;
+					Handler::GlobalFunctionBlank			fnGlobalFunctionBlank;
 
 					Event::Handler*			pObject;
-					Gwen::Event::Packet		Packet;
+					void*					Data;
 				};
 
 				std::list<handler> m_Handlers;

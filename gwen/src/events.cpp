@@ -84,7 +84,7 @@ void Caller::Call( Controls::Base* pThis, Gwen::Event::Info information )
 	for ( iter = m_Handlers.begin(); iter != m_Handlers.end(); ++iter )
 	{
 		handler & h = *iter;
-		info.Packet = &h.Packet;
+		info.Data = h.Data;
 
 		if ( h.fnFunction )
 		{ ( h.pObject->*h.fnFunction )( pThis ); }
@@ -108,15 +108,15 @@ void Caller::AddInternal( Event::Handler* pObject, Event::Handler::Function pFun
 
 void Caller::AddInternal( Event::Handler* pObject, Handler::FunctionWithInformation pFunction )
 {
-	AddInternal( pObject, pFunction, Gwen::Event::Packet() );
+	AddInternal( pObject, pFunction, NULL );
 }
 
-void Caller::AddInternal( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, const Gwen::Event::Packet & packet )
+void Caller::AddInternal( Event::Handler* pObject, Handler::FunctionWithInformation pFunction, void* data )
 {
 	handler h;
 	h.fnFunctionInfo	= pFunction;
 	h.pObject			= pObject;
-	h.Packet			= packet;
+	h.Data				= data;
 	m_Handlers.push_back( h );
 	pObject->RegisterCaller( this );
 }
@@ -125,6 +125,39 @@ void Caller::AddInternal( Event::Handler* pObject, Handler::FunctionBlank pFunct
 {
 	handler h;
 	h.fnFunctionBlank = pFunction;
+	h.pObject = pObject;
+	m_Handlers.push_back( h );
+	pObject->RegisterCaller( this );
+}
+
+void Caller::AddInternal( Event::Handler* pObject, Event::Handler::GlobalFunction pFunction )
+{
+	handler h;
+	h.fnGlobalFunction = pFunction;
+	h.pObject = pObject;
+	m_Handlers.push_back( h );
+	pObject->RegisterCaller( this );
+}
+
+void Caller::AddInternal( Event::Handler* pObject, Handler::GlobalFunctionWithInformation pFunction )
+{
+	AddInternal( pObject, pFunction, NULL );
+}
+
+void Caller::AddInternal( Event::Handler* pObject, Handler::GlobalFunctionWithInformation pFunction, void* data )
+{
+	handler h;
+	h.fnGlobalFunctionInfo	= pFunction;
+	h.pObject				= pObject;
+	h.Data					= data;
+	m_Handlers.push_back( h );
+	pObject->RegisterCaller( this );
+}
+
+void Caller::AddInternal( Event::Handler* pObject, Handler::GlobalFunctionBlank pFunction )
+{
+	handler h;
+	h.fnGlobalFunctionBlank = pFunction;
 	h.pObject = pObject;
 	m_Handlers.push_back( h );
 	pObject->RegisterCaller( this );

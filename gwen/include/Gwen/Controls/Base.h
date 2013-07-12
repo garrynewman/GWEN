@@ -308,9 +308,50 @@ namespace Gwen
 					m_Accelerators[ str ] = caller;
 				}
 
+				template <typename T>
+				void AddAccelerator( const TextObject & accelerator, void ( T::*func )( Gwen::Event::Info ), Gwen::Event::Handler* handler = NULL, void* data = NULL )
+				{
+					if ( handler == NULL )
+					{ handler = this; }
+
+					Gwen::Event::Caller* caller = new Gwen::Event::Caller();
+					caller->Add( handler, func, data );
+					Gwen::UnicodeString str = accelerator.GetUnicode();
+					Gwen::Utility::Strings::ToUpper( str );
+					Gwen::Utility::Strings::Strip( str, L" " );
+					m_Accelerators[ str ] = caller;
+				}
+
 				void AddAccelerator( const TextObject & accelerator )
 				{
 					AddAccelerator( accelerator, &Base::DefaultAccel, this );
+				}
+
+				template <typename T>
+				void GlobalAddAccelerator( const TextObject & accelerator, T func, Gwen::Event::Handler* handler = NULL )
+				{
+					if ( handler == NULL )
+					{ handler = this; }
+
+					Gwen::Event::Caller* caller = new Gwen::Event::Caller();
+					caller->GlobalAdd( handler, func );
+					Gwen::UnicodeString str = accelerator.GetUnicode();
+					Gwen::Utility::Strings::ToUpper( str );
+					Gwen::Utility::Strings::Strip( str, L" " );
+					m_Accelerators[ str ] = caller;
+				}
+
+				void GlobalAddAccelerator( const TextObject & accelerator, void ( *func )( Gwen::Event::Info ), Gwen::Event::Handler* handler = NULL, void* data = NULL )
+				{
+					if ( handler == NULL )
+					{ handler = this; }
+
+					Gwen::Event::Caller* caller = new Gwen::Event::Caller();
+					caller->GlobalAdd( handler, func, data );
+					Gwen::UnicodeString str = accelerator.GetUnicode();
+					Gwen::Utility::Strings::ToUpper( str );
+					Gwen::Utility::Strings::Strip( str, L" " );
+					m_Accelerators[ str ] = caller;
 				}
 
 				AccelMap m_Accelerators;
@@ -534,7 +575,7 @@ T* Gwen::Controls::Base::FindChild( const Gwen::String & name, bool bRecursive )
 #define GWEN_CLASS( ThisName, BaseName )\
 		typedef BaseName BaseClass;\
 		typedef ThisName ThisClass;\
- 
+
 // To be placed in the controls .h definition.
 #define GWEN_CONTROL( ThisName, BaseName )\
 	public:\
