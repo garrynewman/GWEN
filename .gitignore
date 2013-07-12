@@ -176,5 +176,5 @@ xcschemes
 *.xcsettings
 *.xcworkspacedata
 
-
-
+gwen/Projects/windows/*
+gwen/lib/windows/*

@@ -1,4 +1,4 @@
-﻿/*
+/*
 	GWEN
 	Copyright (c) 2010 Facepunch Studios
 	See license in Gwen.h
@@ -21,9 +21,9 @@ using namespace Gwen;
 		GUnit* test = RegisterUnitTest_##name( pCenter );\
 		test->Hide();\
 		test->SetUnitTest( this );\
-		pButton->onPress.Add( this, &ThisClass::OnCategorySelect, Gwen::Event::Packet( test ) );\
+		pButton->onPress.Add( this, &ThisClass::OnCategorySelect, test );\
 	}\
- 
+
 Gwen::Controls::TabButton* pButton = NULL;
 
 GWEN_CONTROL_CONSTRUCTOR( UnitTest )
@@ -94,8 +94,8 @@ void UnitTest::OnCategorySelect( Gwen::Event::Info info )
 		m_pLastControl->Hide();
 	}
 
-	info.Packet->Control->Show();
-	m_pLastControl = info.Packet->Control;
+	static_cast<Gwen::Controls::Base*>(info.Data)->Show();
+	m_pLastControl = static_cast<Gwen::Controls::Base*>(info.Data);
 }
 
 void UnitTest::PrintText( const Gwen::UnicodeString & str )
