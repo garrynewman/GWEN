@@ -27,6 +27,11 @@ namespace Gwen
 					m_Canvas = NULL;
 					m_MouseX = 0;
 					m_MouseY = 0;
+                    m_LeftMouseDown = false;
+                    m_RightMouseDown = false;
+                    m_MiddleMouseDown = false;
+                    m_XButton1MouseDown = false;
+                    m_XButton2MouseDown = false;
 				}
 
 				void Initialize( Gwen::Controls::Canvas* c )
@@ -181,15 +186,45 @@ namespace Gwen
 								return m_Canvas->InputMouseMoved( m_MouseX, m_MouseY, dx, dy );
 							}
 
-						case sf::Event::MouseButtonPressed:
-						case sf::Event::MouseButtonReleased:
-							{
+                        case sf::Event::MouseButtonPressed:
+                            {
 #if SFML_VERSION_MAJOR == 2
-								return m_Canvas->InputMouseButton( event.mouseButton.button, event.type == sf::Event::MouseButtonPressed );
+                                sf::Mouse::Button button = event.mouseButton.button;
 #else
-								return m_Canvas->InputMouseButton( event.MouseButton.Button, event.Type == sf::Event::MouseButtonPressed );
+                                sf::Mouse::Button button = event.MouseButton.Button;
 #endif
-							}
+                                if      (button == sf::Mouse::Left)     m_LeftMouseDown     = true;
+                                else if (button == sf::Mouse::Right)    m_RightMouseDown    = true;
+                                else if (button == sf::Mouse::Middle)   m_MiddleMouseDown   = true;
+                                else if (button == sf::Mouse::XButton1) m_XButton1MouseDown = true;
+                                else if (button == sf::Mouse::XButton2) m_XButton2MouseDown = true;
+                                return m_Canvas->InputMouseButton( button, true );
+                            }
+
+                        case sf::Event::MouseButtonReleased:
+                            {
+#if SFML_VERSION_MAJOR == 2
+                                sf::Mouse::Button button = event.mouseButton.button;
+#else
+                                sf::Mouse::Button button = event.MouseButton.Button;
+#endif
+                                if      (button == sf::Mouse::Left)     m_LeftMouseDown     = false;
+                                else if (button == sf::Mouse::Right)    m_RightMouseDown    = false;
+                                else if (button == sf::Mouse::Middle)   m_MiddleMouseDown   = false;
+                                else if (button == sf::Mouse::XButton1) m_XButton1MouseDown = false;
+                                else if (button == sf::Mouse::XButton2) m_XButton2MouseDown = false;
+                                return m_Canvas->InputMouseButton( button, false );
+                            }
+
+                        case sf::Event::MouseLeft:
+                            {
+                                if (m_LeftMouseDown)     { m_LeftMouseDown     = false; m_Canvas->InputMouseButton( sf::Mouse::Left,     false ); }
+                                if (m_RightMouseDown)    { m_RightMouseDown    = false; m_Canvas->InputMouseButton( sf::Mouse::Right,    false ); }
+                                if (m_MiddleMouseDown)   { m_MiddleMouseDown   = false; m_Canvas->InputMouseButton( sf::Mouse::Middle,   false ); }
+                                if (m_XButton1MouseDown) { m_XButton1MouseDown = false; m_Canvas->InputMouseButton( sf::Mouse::XButton1, false ); }
+                                if (m_XButton2MouseDown) { m_XButton2MouseDown = false; m_Canvas->InputMouseButton( sf::Mouse::XButton2, false ); }
+                                break;
+                            }
 
 						case sf::Event::MouseWheelMoved:
 							{
@@ -246,6 +281,11 @@ namespace Gwen
 				Gwen::Controls::Canvas*	m_Canvas;
 				int m_MouseX;
 				int m_MouseY;
+                bool m_LeftMouseDown;
+                bool m_RightMouseDown;
+                bool m_MiddleMouseDown;
+                bool m_XButton1MouseDown;
+                bool m_XButton2MouseDown;
 
 		};
 	}
