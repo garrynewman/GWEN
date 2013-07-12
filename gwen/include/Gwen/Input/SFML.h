@@ -230,6 +230,8 @@ namespace Gwen
 								unsigned char iKey = TranslateKeyCode( keyCode );
 								return m_Canvas->InputKey( iKey, bPressed );
 							}
+                        default:
+                            break;
 					}
 
 					return false;
