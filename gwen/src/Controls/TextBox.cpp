@@ -40,6 +40,7 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	m_iCursorPos = 0;
 	m_iCursorEnd = 0;
 	m_iCursorLine = 0;
+    m_bEditable = true;
 	m_bSelectAll = false;
 	SetTextColor( Gwen::Color( 50, 50, 50, 255 ) );   // TODO: From Skin
 	SetTabable( true );
@@ -62,6 +63,8 @@ bool TextBox::OnChar( Gwen::UnicodeChar c )
 
 void TextBox::InsertText( const Gwen::UnicodeString & strInsert )
 {
+    if ( !m_bEditable ) return;
+
 	// TODO: Make sure fits (implement maxlength)
 	if ( HasSelection() )
 	{
@@ -312,6 +315,8 @@ void TextBox::SetCursorEnd( int i )
 
 void TextBox::DeleteText( int iStartPos, int iLength )
 {
+    if ( !m_bEditable ) return;
+
 	UnicodeString str = GetText().GetUnicode();
 	str.erase( iStartPos, iLength );
 	SetText( str );
@@ -484,9 +489,9 @@ bool TextBoxMultiline::OnKeyReturn( bool bDown )
 void TextBoxMultiline::Render( Skin::Base* skin )
 {
 	if ( ShouldDrawBackground() ) skin->DrawTextBox( this );
-  
+
 	if ( !HasFocus() ) return;
-  
+
 	if ( m_iCursorPos != m_iCursorEnd )
 	{
 		int iCursorStartLine = m_Text->GetLineFromChar( m_iCursorPos );
@@ -505,7 +510,7 @@ void TextBoxMultiline::Render( Skin::Base* skin )
 		int iLastChar = 0;
 		skin->GetRender()->SetDrawColor( Gwen::Color( 50, 170, 255, 200 ) );
 		m_rectSelectionBounds.h = m_Text->GetFont()->size + 2;
-    
+
 		for(int iLine = iSelectionStartLine; iLine <= iSelectionEndLine; ++iLine)
 		{
 			ControlsInternal::Text* line = m_Text->GetLine(iLine);
@@ -532,28 +537,28 @@ void TextBoxMultiline::Render( Skin::Base* skin )
 			}
 			else
 			{
-				m_rectSelectionBounds.w = box.x + box.w - m_rectSelectionBounds.x;             
+				m_rectSelectionBounds.w = box.x + box.w - m_rectSelectionBounds.x;
 			}
-			if(m_rectSelectionBounds.w < 1) 
+			if(m_rectSelectionBounds.w < 1)
 			{
-				m_rectSelectionBounds.w=1; 
+				m_rectSelectionBounds.w=1;
 			}
 
-			skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );           
+			skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );
 		}
 	}
-  
+
 	// Draw selection.. if selected..
 	if ( m_iCursorPos != m_iCursorEnd )
 	{
 		//skin->GetRender()->SetDrawColor( Gwen::Color( 50, 170, 255, 200 ) );
-		//skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );     
+		//skin->GetRender()->DrawFilledRect( m_rectSelectionBounds );
 	}
 
 	// Draw caret
 	skin->GetRender()->SetDrawColor( m_CaretColor );
-	skin->GetRender()->DrawFilledRect( m_rectCaretBounds );  
-} 
+	skin->GetRender()->DrawFilledRect( m_rectCaretBounds );
+}
 
 void TextBoxMultiline::MakeCaratVisible()
 {
@@ -562,8 +567,8 @@ void TextBoxMultiline::MakeCaratVisible()
 		m_Text->Position( m_iAlign );
 	}
 	else
-	{   
-		//const Rect& bounds = GetInnerBounds();      
+	{
+		//const Rect& bounds = GetInnerBounds();
 
 		//if ( pos & Pos::Top ) y = bounds.y + ypadding;
 		//if ( pos & Pos::Bottom ) y = bounds.y + ( bounds.h - Height() - ypadding );
@@ -592,9 +597,9 @@ void TextBoxMultiline::MakeCaratVisible()
 		// top of carat too low
 		if(iRealCaratPos < GetPadding().top)
 		{
-			y = -iCaratPos + GetPadding().top;          
-		}     
-    
+			y = -iCaratPos + GetPadding().top;
+		}
+
 		// Don't show too much whitespace to the bottom
 		if ( y + m_Text->Height() < Height() - GetPadding().bottom )
 			y = -m_Text->Height() + (Height() - GetPadding().bottom );
@@ -606,10 +611,10 @@ void TextBoxMultiline::MakeCaratVisible()
 		int x = 0;
 		if ( m_iAlign & Pos::Left ) x = GetPadding().left;
 		if ( m_iAlign & Pos::Right ) x = Width() - m_Text->Width() - GetPadding().right ;
-		if ( m_iAlign & Pos::CenterH ) x = ( Width() - m_Text->Width() ) * 0.5;        
+		if ( m_iAlign & Pos::CenterH ) x = ( Width() - m_Text->Width() ) * 0.5;
 
 		m_Text->SetPos( x, y);
-	} 
+	}
 }
 
 int TextBoxMultiline::GetCurrentLine()
@@ -643,13 +648,13 @@ bool TextBoxMultiline::OnKeyEnd( bool bDown )
 	int iChar = m_Text->GetEndCharFromLine( iCurrentLine );
 	m_iCursorLine = 0;
 	m_iCursorPos = iChar;
-  
+
 	int iLastLine = m_Text->NumLines()-1;
-  
+
 	if(iCurrentLine < iLastLine && iChar > 0)
 		m_iCursorPos = iChar-1; // NAUGHTY
 	else
-		m_iCursorPos = m_Text->Length(); 
+		m_iCursorPos = m_Text->Length();
 
 	if ( !Gwen::Input::IsShiftDown() )
 	{
@@ -664,7 +669,7 @@ bool TextBoxMultiline::OnKeyUp( bool bDown )
 {
 	if ( !bDown ) { return true; }
 
-	//if ( m_iCursorLine == 0 ) 
+	//if ( m_iCursorLine == 0 )
 	m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos );
 
 	int iLine = m_Text->GetLineFromChar( m_iCursorPos );
@@ -688,12 +693,12 @@ bool TextBoxMultiline::OnKeyDown( bool bDown )
 {
 	if ( !bDown ) { return true; }
 
-	//if ( m_iCursorLine == 0 ) 
-	m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos ); 
+	//if ( m_iCursorLine == 0 )
+	m_iCursorLine = m_Text->GetCharPosOnLine( m_iCursorPos );
 
 	int iLine = m_Text->GetLineFromChar( m_iCursorPos );
 	int iLastLine = m_Text->NumLines()-1;
-	if ( iLine >= iLastLine || iLastLine<1) return true; 
+	if ( iLine >= iLastLine || iLastLine<1) return true;
 
 	m_iCursorPos = m_Text->GetStartCharFromLine( iLine + 1 );
 	if(iLine+1 >=iLastLine)
@@ -703,7 +708,7 @@ bool TextBoxMultiline::OnKeyDown( bool bDown )
 	else
 	{
 		m_iCursorPos += Clamp( m_iCursorLine, 0, m_Text->GetLine( iLine + 1)->Length()-1 );
-	} 
+	}
 	m_iCursorPos = Clamp( m_iCursorPos, 0, m_Text->Length() );
 
 	if ( !Gwen::Input::IsShiftDown() )
@@ -716,13 +721,13 @@ bool TextBoxMultiline::OnKeyDown( bool bDown )
 }
 
 GWEN_CONTROL_CONSTRUCTOR( PasswordTextBox )
-{	
+{
 	m_realText = "";
 	m_passwordChar = '*';
 }
 
 void PasswordTextBox::SetText( const TextObject& str, bool bDoEvents )
-{ 
+{
 	if ( m_realText == str.GetUnicode() ) return;
 
 	m_realText = str;
