@@ -94,6 +94,15 @@ void Caller::Call( Controls::Base* pThis, Gwen::Event::Info information )
 
 		if ( h.fnFunctionBlank )
 		{ ( h.pObject->*h.fnFunctionBlank )(); }
+
+		if ( h.fnGlobalFunction )
+		{ ( *h.fnGlobalFunction )( pThis ); }
+
+		if ( h.fnGlobalFunctionInfo )
+		{ ( *h.fnGlobalFunctionInfo )( info ); }
+
+		if ( h.fnGlobalFunctionBlank )
+		{ ( *h.fnGlobalFunctionBlank )(); }
 	}
 }
 

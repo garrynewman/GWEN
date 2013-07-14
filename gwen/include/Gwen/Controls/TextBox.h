@@ -64,6 +64,8 @@ namespace Gwen
 				virtual void OnMouseClickLeft( int x, int y, bool bDown );
 				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY );
 
+                virtual void SetEditable( bool b ) { m_bEditable = b; }
+
 				virtual void SetSelectAllOnFocus( bool b ) { m_bSelectAll = b; if ( b ) { OnSelectAll( this ); } }
 
 				virtual void MakeCaratVisible();
@@ -83,6 +85,7 @@ namespace Gwen
 				virtual void OnTextChanged();
 				virtual bool IsTextAllowed( const Gwen::UnicodeString & /*str*/, int /*iPos*/ ) { return true; }
 
+                bool m_bEditable;
 				bool m_bSelectAll;
 
 				int m_iCursorPos;
@@ -117,7 +120,7 @@ namespace Gwen
 				GWEN_CONTROL( TextBoxMultiline, TextBox );
 
 				virtual bool OnKeyReturn( bool bDown );
-				virtual void Render( Skin::Base* skin ); 
+				virtual void Render( Skin::Base* skin );
 				virtual void MakeCaratVisible();
 
 				virtual bool OnKeyHome( bool bDown );
@@ -130,13 +133,13 @@ namespace Gwen
 			protected:
 
 		};
-		
+
 		class GWEN_EXPORT PasswordTextBox : public TextBox
 		{
 			public:
 
 				GWEN_CONTROL( PasswordTextBox, TextBox );
-				
+
 				virtual void SetText( const TextObject& str, bool bDoEvents = true );
 				virtual void SetPasswordChar(const char c);
 
