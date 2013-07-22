@@ -60,7 +60,7 @@ void Gwen::Renderer::SFML2::StartClip()
 	Flush();
 
 	Gwen::Rect rect = ClipRegion();
-	float x = rect.x-1, y = rect.y, w = rect.w+1, h = rect.h+1;
+	float x = rect.x, y = rect.y, w = rect.w, h = rect.h;
 
 	// OpenGL's coords are from the bottom left
 	// so we need to translate them here.

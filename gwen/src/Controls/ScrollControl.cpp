@@ -195,11 +195,16 @@ void ScrollControl::SetVScrollRequired( bool req )
 
 		if ( m_bAutoHideBars )
 		{ m_VerticalScrollBar->SetHidden( true ); }
+        else
+        { m_VerticalScrollBar->SetHidden( false ); }
 	}
 	else
 	{
 		m_VerticalScrollBar->SetHidden( false );
 		m_VerticalScrollBar->SetDisabled( false );
+        
+        if ( !m_bAutoHideBars )
+        { m_VerticalScrollBar->SetHidden( false ); }
 	}
 }
 
@@ -212,11 +217,16 @@ void ScrollControl::SetHScrollRequired( bool req )
 
 		if ( m_bAutoHideBars )
 		{ m_HorizontalScrollBar->SetHidden( true ); }
+        else
+        { m_HorizontalScrollBar->SetHidden( false ); }
 	}
 	else
 	{
 		m_HorizontalScrollBar->SetHidden( false );
 		m_HorizontalScrollBar->SetDisabled( true );
+        
+        if ( !m_bAutoHideBars )
+        { m_HorizontalScrollBar->SetHidden( false ); }
 	}
 }
 

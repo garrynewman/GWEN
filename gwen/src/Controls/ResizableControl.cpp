@@ -71,8 +71,8 @@ void ResizableControl::DisableResizing()
 		if ( !resizer ) { continue; }
 
 		resizer->SetMouseInputEnabled( false );
-		resizer->SetHidden( false );
-		SetPadding( Padding( resizer->Width(), resizer->Width(), resizer->Width(), resizer->Width() ) );
+        //resizer->SetHidden( false );
+		//SetPadding( Padding( resizer->Width(), resizer->Width(), resizer->Width(), resizer->Width() ) );
 	}
 }
 
