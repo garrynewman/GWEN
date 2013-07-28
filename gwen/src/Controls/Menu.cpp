@@ -52,8 +52,8 @@ void Menu::Layout( Skin::Base* skin )
 		childrenHeight += pChild->Height();
 	}
 
-	if ( Y() + childrenHeight > GetCanvas()->Height() )
-	{ childrenHeight = GetCanvas()->Height() - Y(); }
+	if (LocalPosToCanvas().y + childrenHeight > GetCanvas()->Height() )
+	{ childrenHeight = GetCanvas()->Height() - LocalPosToCanvas().y; }
 
 	SetSize( Width(), childrenHeight );
 	BaseClass::Layout( skin );
