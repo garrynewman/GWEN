@@ -227,7 +227,7 @@ Gwen::Point Gwen::Renderer::SFML2::MeasureText( Gwen::Font* pFont, const Gwen::U
 	sfStr.setScale( Scale(), Scale() );
 	sfStr.setCharacterSize( pFont->realsize );
 	sf::FloatRect sz = sfStr.getLocalBounds();
-	return Gwen::Point( sz.left + sz.width, sz.top + sz.height );
+	return Gwen::Point( sz.left + sz.width, pFont->realsize * Scale() );
 }
 
 void Gwen::Renderer::SFML2::LoadTexture( Gwen::Texture* pTexture )
