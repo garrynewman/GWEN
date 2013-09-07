@@ -204,7 +204,7 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 
 	if ( Gwen::HoveredControl == pCanvas ) { return false; }
 
-	if ( iMouseButton > MAX_MOUSE_BUTTONS )
+	if ( iMouseButton >= MAX_MOUSE_BUTTONS )
 	{ return false; }
 
 	if ( iMouseButton == 0 )		{ KeyData.LeftMouseDown = bDown; }
