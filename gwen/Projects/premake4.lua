@@ -86,6 +86,12 @@ if ( os.get() == "windows" ) then
 	DefineRenderer( "GDI",
                     { "../Renderers/GDIPlus/GDIPlus.cpp",
                       "../Renderers/GDIPlus/GDIPlusBuffered.cpp" } )
+
+    DefineRenderer( "DirectX11",
+		{"../Renderers/DirectX11/DirectX11.cpp",
+		 "../Renderers/DirectX11/WICTextureLoader.cpp"})
+	includedirs { "$(DXSDK_DIR)/Include" }
+	libdirs { "$(DXSDK_DIR)/lib/x86" }
 end
 
 --
@@ -122,6 +128,12 @@ if ( os.get() == "windows" ) then
 	DefineSample( "DirectX9",
                   { "../Samples/Direct3D/Direct3DSample.cpp" },
                   { "UnitTest", "Renderer-DirectX9", "GWEN-Static" } )
+	includedirs { "$(DXSDK_DIR)/Include" }
+	libdirs { "$(DXSDK_DIR)/lib/x86" }
+
+	DefineSample( "DirectX11",
+				  { "../Samples/DirectX11/DirectX11Sample.cpp" },
+                  { "UnitTest", "Renderer-DirectX11", "GWEN-Static", "d3d11", "d3dcompiler", "dxgi", "dxguid" } )
 	includedirs { "$(DXSDK_DIR)/Include" }
 	libdirs { "$(DXSDK_DIR)/lib/x86" }
 
