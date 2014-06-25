@@ -71,9 +71,10 @@ namespace Gwen
 			protected:
 
 				virtual void SetValueInternal( float fVal );
-				virtual void UpdateBarFromValue() = 0;
+				virtual void UpdateBarFromValue(){};
 
 				ControlsInternal::SliderBar* m_SliderBar;
+				void OnBoundsChanged( Gwen::Rect oldBounds );
 				bool m_bClampToNotches;
 				int m_iNumNotches;
 				float m_fValue;

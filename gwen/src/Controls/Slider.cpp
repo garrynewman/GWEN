@@ -100,3 +100,9 @@ void Slider::RenderFocus( Gwen::Skin::Base* skin )
 
 	skin->DrawKeyboardHighlight( this, GetRenderBounds(), 0 );
 }
+
+void Slider::OnBoundsChanged(Gwen::Rect oldBounds)
+{
+	BaseClass::OnBoundsChanged( oldBounds );
+	UpdateBarFromValue();
+}
