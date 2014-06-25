@@ -104,6 +104,7 @@ void RichLabel::SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont,
 		strNewString += lst[i];
 	}
 
+	if ( strNewString.size() >= text.size() ) return;
 	Gwen::UnicodeString LeftOver = text.substr( strNewString.size() + 1 );
 	return SplitLabel( LeftOver, pFont, txt, x, y, lineheight );
 }
