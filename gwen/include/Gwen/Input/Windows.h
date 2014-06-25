@@ -75,38 +75,50 @@ namespace Gwen
 
 						case WM_LBUTTONDOWN:
 							{
-								SetCapture( msg.hwnd );
-								return m_Canvas->InputMouseButton( 0, true );
+								bool ret = m_Canvas->InputMouseButton(0, true);
+								if (ret)
+									SetCapture( msg.hwnd );
+								return ret;
 							}
-
+						
 						case WM_LBUTTONUP:
 							{
-								ReleaseCapture();
-								return m_Canvas->InputMouseButton( 0, false );
+								bool ret = m_Canvas->InputMouseButton(0, false);
+								if (ret)
+									ReleaseCapture();
+								return ret;
 							}
-
+						
 						case WM_RBUTTONDOWN:
 							{
-								SetCapture( msg.hwnd );
-								return m_Canvas->InputMouseButton( 1, true );
+								bool ret = m_Canvas->InputMouseButton(1, true);
+								if (ret)
+								   SetCapture(msg.hwnd);
+								return ret;
 							}
 
 						case WM_RBUTTONUP:
 							{
-								ReleaseCapture();
-								return m_Canvas->InputMouseButton( 1, false );
+								bool ret = m_Canvas->InputMouseButton(1, false);
+								if (ret)
+									 ReleaseCapture();
+								return ret;
 							}
 
 						case WM_MBUTTONDOWN:
 							{
-								SetCapture( msg.hwnd );
-								return m_Canvas->InputMouseButton( 2, true );
+								bool ret = m_Canvas->InputMouseButton(2, true);
+								if (ret)
+								   SetCapture(msg.hwnd);
+								return ret;
 							}
 
 						case WM_MBUTTONUP:
 							{
-								ReleaseCapture();
-								return m_Canvas->InputMouseButton( 2, false );
+								bool ret = m_Canvas->InputMouseButton(2, false);
+								if (ret)
+								 ReleaseCapture();
+								return ret;
 							}
 
 						case WM_LBUTTONDBLCLK:
