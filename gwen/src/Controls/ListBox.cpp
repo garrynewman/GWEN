@@ -85,7 +85,10 @@ Layout::TableRow* ListBox::AddItem( const TextObject & strLabel, const String & 
 
 void ListBox::RemoveItem( Layout::TableRow* row )
 {
-	m_SelectedRows.erase( std::find( m_SelectedRows.begin(), m_SelectedRows.end(), row ) );
+	ListBox::Rows::iterator it = std::find( m_SelectedRows.begin(), m_SelectedRows.end(), row );
+	if( it != m_SelectedRows.end() ) {
+		m_SelectedRows.erase( it );
+	}
 	m_Table->Remove( row );
 }
 
