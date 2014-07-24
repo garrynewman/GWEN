@@ -51,7 +51,7 @@ const char vertshader[] = {
 	"{\n"
 	"	PS_INPUT output;\n"
 	"	output.pos = input.pos;\n"
-	"	output.col = input.col;\n"
+	"	output.col = float4(input.col.b, input.col.g, input.col.r, input.col.a);\n"
 	"	output.tex = input.tex;\n"
 	"	return output;\n"
 	"};\n"
@@ -160,7 +160,7 @@ namespace Gwen
 			D3D10_INPUT_ELEMENT_DESC layout[] =
 			{
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-				{ "COLOR", 0, DXGI_FORMAT_B8G8R8A8_UNORM, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+				{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
 				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 16, D3D10_INPUT_PER_VERTEX_DATA, 0 },
 			};
 			UINT numElements = ARRAYSIZE(layout);
