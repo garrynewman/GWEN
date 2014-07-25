@@ -93,6 +93,19 @@ namespace Gwen
 		class FontData
 		{
 		public:
+			FontData()
+			{
+				m_Texture = NULL;
+				m_TexWidth = 0;
+				m_TexHeight = 0;
+				m_Spacing = 0.f;
+			}
+
+			~FontData()
+			{
+				SafeRelease(m_Texture);
+			}
+
 			XMFLOAT4 m_fTexCoords[0x60];
 
 			UINT32   m_TexWidth;
@@ -103,6 +116,7 @@ namespace Gwen
 
 		DirectX10::DirectX10(ID3D10Device* pDevice) : m_pDevice(pDevice), m_Buffer(256)
 		{
+			m_Valid = false;
 			m_pSwapChain = NULL;
 			width = height = 0;
 
@@ -120,6 +134,7 @@ namespace Gwen
 
 		DirectX10::~DirectX10()
 		{
+			Release();
 		}
 
 		void DirectX10::Init()
@@ -208,6 +223,12 @@ namespace Gwen
 			width = vp.Width;
 			height = vp.Height;
 
+			region.left = 0.f;
+			region.right = width;
+			region.top = 0.f;
+			region.bottom = height;
+			m_pDevice->RSSetScissorRects(1, &region);
+
 			m_Valid = true;
 		}
 
@@ -238,7 +259,6 @@ namespace Gwen
 
 			if (!m_Valid)
 				Init();
-
 
 			// Save current state
 			m_pDevice->OMGetBlendState(&m_pUILastBlendState, m_LastBlendFactor, &m_LastBlendMask);
@@ -303,30 +323,6 @@ namespace Gwen
 			m_Buffer.End();
 			Present();
 			m_Buffer.Begin(m_pDevice);
-		}
-
-		void DirectX10::AddVert(int x, int y)
-		{
-			float scalex = 1 / width * 2.f;
-			float scaley = 1 / height * 2.f;
-
-			Translate(x, y);
-
-			VertexFormat vert = { x * scalex - 1.f, 1.f - y * scaley, 0.5f, m_Color, 0.f, 0.f };
-
-			m_Buffer.Add(vert);
-		}
-
-		void DirectX10::AddVert(int x, int y, float u, float v)
-		{
-			float scalex = 1 / width * 2.f;
-			float scaley = 1 / height * 2.f;
-
-			Translate(x, y);
-
-			VertexFormat vert = { x * scalex - 1.f, 1.f - y * scaley, 0.5f, m_Color, u, v };
-
-			m_Buffer.Add(vert);
 		}
 
 		void DirectX10::DrawFilledRect(Gwen::Rect rec)
@@ -555,16 +551,11 @@ namespace Gwen
 		{
 			m_FontList.remove(pFont);
 
-			if (!pFont->data)
-				return;
+			if (!pFont->data) { return; }
 
 			FontData* pFontData = (FontData*)pFont->data;
 
-			if (pFontData)
-			{
-				SafeRelease(pFontData->m_Texture);
-				delete pFontData;
-			}
+			delete pFontData;
 
 			pFont->data = NULL;
 		}
@@ -584,8 +575,10 @@ namespace Gwen
 
 			Translate(pos.x, pos.y);
 
+			float scalex = 1 / (float)width * 2.f;
+			float scaley = 1 / (float)height * 2.f;
 
-			XMFLOAT4A loc(pos.x, pos.y, 0, 0);
+			XMFLOAT4A loc(pos.x * scalex - 1.f, 1.f - scaley * pos.y, 0, 0);
 
 			FontData* data = (FontData*)pFont->data;
 
@@ -604,7 +597,7 @@ namespace Gwen
 					if (c == '\n')
 					{
 						loc.x = fStartX;
-						loc.y += (data->m_fTexCoords[c - 32].w - data->m_fTexCoords[c - 32].y) * data->m_TexHeight;
+						loc.y += (data->m_fTexCoords[c - 32].w - data->m_fTexCoords[c - 32].y) * data->m_TexHeight * scaley;
 					}
 					else
 						continue;
@@ -612,26 +605,17 @@ namespace Gwen
 
 				c -= 32;
 
-				loc.z = loc.x + ((data->m_fTexCoords[c].z - data->m_fTexCoords[c].x) * data->m_TexWidth);
-				loc.w = loc.y + ((data->m_fTexCoords[c].w - data->m_fTexCoords[c].y) * data->m_TexHeight);
+				loc.z = loc.x + ((data->m_fTexCoords[c].z - data->m_fTexCoords[c].x) * data->m_TexWidth * scalex);
+				loc.w = loc.y + ((data->m_fTexCoords[c].w - data->m_fTexCoords[c].y) * data->m_TexHeight * scaley);
 
 				if (c != 0)
 				{
-					float scalex = 1 / (float)width * 2.f;
-					float scaley = 1 / (float)height * 2.f;
-
-					XMFLOAT4A rect(loc);
-
-					rect.z = rect.z * scalex - 1.f;
-					rect.w = 1.f - rect.w * scaley;
-					rect.x = rect.x * scalex - 1.f;
-					rect.y = 1.f - rect.y * scaley;
 
 					VertexFormat v[6];
-					v[0] = { rect.x, rect.w, 0.5f, m_Color, data->m_fTexCoords[c].x, data->m_fTexCoords[c].w };
-					v[1] = { rect.x, rect.y, 0.5f, m_Color, data->m_fTexCoords[c].x, data->m_fTexCoords[c].y };
-					v[2] = { rect.z, rect.w, 0.5f, m_Color, data->m_fTexCoords[c].z, data->m_fTexCoords[c].w };
-					v[3] = { rect.z, rect.y, 0.5f, m_Color, data->m_fTexCoords[c].z, data->m_fTexCoords[c].y };
+					v[0] = { loc.x, loc.w, 0.5f, m_Color, data->m_fTexCoords[c].x, data->m_fTexCoords[c].w };
+					v[1] = { loc.x, loc.y, 0.5f, m_Color, data->m_fTexCoords[c].x, data->m_fTexCoords[c].y };
+					v[2] = { loc.z, loc.w, 0.5f, m_Color, data->m_fTexCoords[c].z, data->m_fTexCoords[c].w };
+					v[3] = { loc.z, loc.y, 0.5f, m_Color, data->m_fTexCoords[c].z, data->m_fTexCoords[c].y };
 					v[4] = v[2];
 					v[5] = v[1];
 
@@ -779,7 +763,12 @@ namespace Gwen
 
 		void DirectX10::FreeTexture(Gwen::Texture* pTexture)
 		{
-			return;
+			ID3D10ShaderResourceView* pImage = (ID3D10ShaderResourceView*)pTexture->data;
+			if (!pImage)
+				return;
+
+			SafeRelease(pImage);
+			pTexture->data = NULL;
 		}
 
 		Gwen::Color DirectX10::PixelColour(Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default)

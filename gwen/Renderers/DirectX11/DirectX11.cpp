@@ -93,6 +93,19 @@ namespace Gwen
 		class FontData
 		{
 		public:
+			FontData()
+			{
+				m_Texture = NULL;
+				m_TexWidth = 0;
+				m_TexHeight = 0;
+				m_Spacing = 0.f;
+			}
+
+			~FontData()
+			{
+				SafeRelease(m_Texture);
+			}
+
 			XMFLOAT4 m_fTexCoords[0x60];
 
 			UINT32   m_TexWidth;
@@ -103,6 +116,8 @@ namespace Gwen
 
 		DirectX11::DirectX11(ID3D11Device* pDevice) : m_pDevice(pDevice), m_Buffer(256)
 		{
+			m_Valid = false;
+
 			m_pSwapChain = NULL;
 			width = height = 0;
 
@@ -121,6 +136,7 @@ namespace Gwen
 
 		DirectX11::~DirectX11()
 		{
+			Release();
 		}
 
 		void DirectX11::Init()
@@ -210,6 +226,12 @@ namespace Gwen
 
 			width = vp.Width;
 			height = vp.Height;
+
+			region.left = 0.f;
+			region.right = width;
+			region.top = 0.f;
+			region.bottom = height;
+			m_pContext->RSSetScissorRects(1, &region);
 
 			m_Valid = true;
 		}
@@ -306,30 +328,6 @@ namespace Gwen
 			m_Buffer.End();
 			Present();
 			m_Buffer.Begin(m_pDevice);
-		}
-
-		void DirectX11::AddVert(int x, int y)
-		{
-			float scalex = 1 / width * 2.f;
-			float scaley = 1 / height * 2.f;
-
-			Translate(x, y);
-
-			VertexFormat vert = { x * scalex - 1.f, 1.f - y * scaley, 0.5f, m_Color, 0.f, 0.f };
-
-			m_Buffer.Add(vert);
-		}
-
-		void DirectX11::AddVert(int x, int y, float u, float v)
-		{
-			float scalex = 1 / width * 2.f;
-			float scaley = 1 / height * 2.f;
-
-			Translate(x, y);
-
-			VertexFormat vert = { x * scalex - 1.f, 1.f - y * scaley, 0.5f, m_Color, u, v };
-
-			m_Buffer.Add(vert);
 		}
 
 		void DirectX11::DrawFilledRect(Gwen::Rect rec)
@@ -543,7 +541,6 @@ namespace Gwen
 
 				SafeRelease(buftex);
 
-
 				return;
 			}
 
@@ -563,11 +560,7 @@ namespace Gwen
 
 			FontData* pFontData = (FontData*)pFont->data;
 
-			if (pFontData)
-			{
-				SafeRelease(pFontData->m_Texture);
-				delete pFontData;
-			}
+			delete pFontData;
 
 			pFont->data = NULL;
 		}
@@ -782,7 +775,12 @@ namespace Gwen
 
 		void DirectX11::FreeTexture(Gwen::Texture* pTexture)
 		{
-			return;
+			ID3D11ShaderResourceView* pImage = (ID3D11ShaderResourceView*)pTexture->data;
+			if (!pImage)
+				return;
+
+			SafeRelease(pImage);
+			pTexture->data = NULL;
 		}
 
 		Gwen::Color DirectX11::PixelColour(Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default)
