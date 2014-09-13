@@ -16,7 +16,9 @@ solution "GWEN"
 	}
 
 	if ( _ACTION == "vs2010" or _ACTION=="vs2008" ) then
+		-- Enable multiprocessor compilation (requires Minimal Rebuild to be disabled)
 		buildoptions { "/MP"  }
+		flags { "NoMinimalRebuild" }
 	end
 
 
