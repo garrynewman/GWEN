@@ -11,7 +11,6 @@
 #include "Gwen/BaseRender.h"
 
 #include <D3D9.h>
-#include <D3DX9Core.h>
 
 #pragma comment( lib, "D3D9.lib" )
 #pragma comment( lib, "D3Dx9.lib" )
