@@ -1,5 +1,5 @@
-#ifndef GWEN_RENDERERS_DIRECTX11_H
-#define GWEN_RENDERERS_DIRECTX11_H
+#ifndef GWEN_RENDERERS_DIRECTX10_H
+#define GWEN_RENDERERS_DIRECTX10_H
 
 #include "Gwen/Gwen.h"
 #include "Gwen/BaseRender.h"
