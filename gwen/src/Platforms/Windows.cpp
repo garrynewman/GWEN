@@ -7,9 +7,9 @@
 #ifdef _WIN32
 
 #ifndef _WIN32_WINNT
-#	define _WIN32_WINNT 0x06000000
+#	define _WIN32_WINNT 0x0600
 #else
-#	if _WIN32_WINNT < 0x06000000
+#	if _WIN32_WINNT < 0x0600
 #		error Unsupported platform
 #	endif
 #endif
