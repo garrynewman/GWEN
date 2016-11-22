@@ -23,7 +23,7 @@ GWEN_CONTROL_CONSTRUCTOR( Properties )
 	m_SplitterBar->DoNotIncludeInSize();
 }
 
-void Properties::SetSplitPosX(int x)
+void Properties::SetSplitWidth(int x)
 {
 	m_SplitterBar->SetPos(x, 0);
 	InvalidateChildren();
