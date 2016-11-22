@@ -37,6 +37,7 @@ namespace Gwen
 				PropertyRow* Find( const TextObject & text );
 
 				virtual int GetSplitWidth();
+				virtual void SetSplitWidth(int x);
 
 				virtual void Clear();
 

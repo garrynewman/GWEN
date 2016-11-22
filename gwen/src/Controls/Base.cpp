@@ -645,6 +645,10 @@ void Base::OnMouseLeave()
 
 	if ( GetToolTip() )
 	{ ToolTip::Disable( this ); }
+	else if (GetParent() && GetParent()->GetToolTip())
+	{
+		ToolTip::Disable(GetParent());
+	}
 
 	Redraw();
 }

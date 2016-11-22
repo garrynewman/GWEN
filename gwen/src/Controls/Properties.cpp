@@ -23,6 +23,12 @@ GWEN_CONTROL_CONSTRUCTOR( Properties )
 	m_SplitterBar->DoNotIncludeInSize();
 }
 
+void Properties::SetSplitWidth(int x)
+{
+	m_SplitterBar->SetPos(x, 0);
+	InvalidateChildren();
+}
+
 void Properties::PostLayout( Gwen::Skin::Base* /*skin*/ )
 {
 	if ( SizeToChildren( false, true ) )
