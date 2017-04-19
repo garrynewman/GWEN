@@ -70,6 +70,8 @@ namespace Gwen
 				virtual void AddDelayedDelete( Controls::Base* pControl );
 				virtual void ProcessDelayedDeletes();
 
+				virtual bool SetSize(int w, int h);
+
 				Controls::Base*	FirstTab;
 				Controls::Base*	NextTab;
 
@@ -86,6 +88,9 @@ namespace Gwen
 				virtual void SetDrawBackground( bool bShouldDraw ) { m_bDrawBackground = bShouldDraw; }
 
 			protected:
+				
+				int real_size_x;
+				int real_size_y;
 
 				bool	m_bNeedsRedraw;
 				bool	m_bAnyDelete;

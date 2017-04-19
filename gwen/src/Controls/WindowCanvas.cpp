@@ -104,6 +104,7 @@ void* WindowCanvas::GetWindow()
 void WindowCanvas::Layout( Skin::Base* skin )
 {
 	m_Sizer->BringToFront();
+	m_Sizer->SetSize(16, 16);
 	m_Sizer->Position( Pos::Right | Pos::Bottom );
 	BaseClass::Layout( skin );
 }

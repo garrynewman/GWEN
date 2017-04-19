@@ -93,6 +93,13 @@ void Canvas::DoThink()
 	Gwen::Input::OnCanvasThink( this );
 }
 
+bool Canvas::SetSize(int w, int h)
+{
+	real_size_x = w;
+	real_size_y = h;
+	return SetBounds(X(), Y(), w/Scale(), h/Scale());
+}
+
 void Canvas::SetScale( float f )
 {
 	if ( m_fScale == f ) { return; }
@@ -102,6 +109,7 @@ void Canvas::SetScale( float f )
 	if ( m_Skin && m_Skin->GetRender() )
 	{ m_Skin->GetRender()->SetScale( m_fScale ); }
 
+	this->SetSize(Width(), Height());
 	OnScaleChanged();
 	Redraw();
 }
@@ -170,8 +178,8 @@ bool Canvas::InputMouseMoved( int x, int y, int deltaX, int deltaY )
 	{ Redraw(); }
 
 	// Todo: Handle scaling here..
-	//float fScale = 1.0f / Scale();
-	Gwen::Input::OnMouseMoved( this, x, y, deltaX, deltaY );
+	float fScale = 1.0f / Scale();
+	Gwen::Input::OnMouseMoved( this, x*fScale, y*fScale, deltaX*fScale, deltaY*fScale );
 
 	if ( !Gwen::HoveredControl ) { return false; }
 
@@ -179,9 +187,9 @@ bool Canvas::InputMouseMoved( int x, int y, int deltaX, int deltaY )
 
 	if ( Gwen::HoveredControl->GetCanvas() != this ) { return false; }
 
-	Gwen::HoveredControl->OnMouseMoved( x, y, deltaX, deltaY );
+	Gwen::HoveredControl->OnMouseMoved(x*fScale, y*fScale, deltaX*fScale, deltaY*fScale);
 	Gwen::HoveredControl->UpdateCursor();
-	DragAndDrop::OnMouseMoved( Gwen::HoveredControl, x, y );
+	DragAndDrop::OnMouseMoved(Gwen::HoveredControl, x*fScale, y*fScale);
 	return true;
 }
 

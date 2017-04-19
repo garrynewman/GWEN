@@ -43,6 +43,7 @@ void HorizontalScrollBar::Layout( Skin::Base* skin )
 	{
 		SetScrolledAmount( GetScrolledAmount(), true );
 	}
+	this->m_bNeedsLayout = false;//fixes a silly infinite layout bug
 }
 
 void HorizontalScrollBar::NudgeLeft( Base* /*control*/ )

@@ -31,6 +31,11 @@ namespace Gwen
 
 				void MoveTabsTo( DockedTabControl* pTarget );
 
+				TabTitleBar* GetTitleBar()
+				{
+					return this->m_pTitleBar;
+				}
+
 			private:
 
 				TabTitleBar*	m_pTitleBar;

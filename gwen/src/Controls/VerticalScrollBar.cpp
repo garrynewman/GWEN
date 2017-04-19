@@ -48,6 +48,7 @@ void VerticalScrollBar::Layout( Skin::Base* skin )
 	{
 		SetScrolledAmount( GetScrolledAmount(), true );
 	}
+	this->m_bNeedsLayout = false;//fixes a silly bug with infinite rendering
 }
 
 void VerticalScrollBar::ScrollToTop()

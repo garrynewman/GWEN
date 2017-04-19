@@ -144,8 +144,16 @@ void TabControl::OnLoseTab( TabButton* pButton )
 	if ( m_pCurrentButton == pButton )
 	{ m_pCurrentButton = NULL; }
 
-	//TODO: Select a tab if any exist.
+	//Select tab properly if any 
+	if (this->TabCount())
+	{
+		m_pCurrentButton = this->GetTab(this->TabCount() - 1);
+		m_pCurrentButton->GetPage()->SetHidden(false);
+		m_TabStrip->Invalidate();
+	}
+
 	onLoseTab.Call( this );
+
 	Invalidate();
 }
 

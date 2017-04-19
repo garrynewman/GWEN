@@ -169,6 +169,9 @@ void Base::InvalidateChildren( bool bRecursive )
 {
 	for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
 	{
+		if ((*it)->Visible() == false)
+			continue;
+
 		( *it )->Invalidate();
 
 		if ( bRecursive )
