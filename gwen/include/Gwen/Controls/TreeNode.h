@@ -54,6 +54,7 @@ namespace Gwen
 				virtual Controls::Base::List & GetChildNodes();
 
 				Event::Caller	onNamePress;
+				Event::Caller   onDoubleClick;
 				Event::Caller	onRightPress;
 				Event::Caller	onSelectChange;
 				Event::Caller	onSelect;
@@ -61,6 +62,7 @@ namespace Gwen
 
 
 				/*protected:*/
+				//virtual void OnMouseDoubleClickLeft(int x, int y) { onDoubleClick.Call(this); };
 
 				void OnToggleButtonPress( Base* control );
 				void OnDoubleClickName( Base* control );
