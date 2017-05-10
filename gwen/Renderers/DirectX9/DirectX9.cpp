@@ -141,7 +141,7 @@ namespace Gwen
 			fd.Italic = 0;
 			fd.Weight = font->bold ? FW_BOLD : FW_NORMAL;
 #ifdef CLEARTYPE_QUALITY
-			fd.Quality = font->realsize < 14 ? DEFAULT_QUALITY : CLEARTYPE_QUALITY;
+			fd.Quality = CLEARTYPE_NATURAL_QUALITY;// CLEARTYPE_QUALITY;// font->realsize < 14 ? DEFAULT_QUALITY : CLEARTYPE_QUALITY;
 #else
 			fd.Quality = PROOF_QUALITY;
 #endif
@@ -194,7 +194,7 @@ namespace Gwen
 			FontData* pFontData = ( FontData* ) pFont->data;
 			Translate( pos.x, pos.y );
 			RECT ClipRect = { pos.x, pos.y, 0, 0 };
-			pFontData->pFont->DrawTextW( NULL, text.c_str(), -1, &ClipRect, DT_LEFT | DT_TOP | DT_NOCLIP | DT_SINGLELINE, m_Color );
+			pFontData->pFont->DrawTextW(NULL, text.c_str(), text.length(), &ClipRect, DT_LEFT | DT_TOP | DT_NOCLIP | DT_SINGLELINE | DT_EXPANDTABS, m_Color);
 		}
 
 		Gwen::Point DirectX9::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
@@ -217,7 +217,7 @@ namespace Gwen
 			}
 
 			RECT rct = {0, 0, 0, 0};
-			pFontData->pFont->DrawTextW( NULL, text.c_str(), -1, &rct, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE, 0 );
+			pFontData->pFont->DrawTextW(NULL, text.c_str(), -1, &rct, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE | DT_EXPANDTABS, 0);
 
 			for ( int i = text.length() - 1; i >= 0 && text[i] == L' '; i-- )
 			{
@@ -391,7 +391,39 @@ namespace Gwen
 
 		bool DirectX9::PresentContext( Gwen::WindowProvider* pWindow )
 		{
-			m_pDevice->Present( NULL, NULL, NULL, NULL );
+			auto res = m_pDevice->TestCooperativeLevel();
+			if (res == D3DERR_DEVICELOST)
+			{
+			}
+			else if (res == D3DERR_DEVICENOTRESET)
+			{
+				//this handles device reset and recreates all the fonts
+				//so alt tabbing or control alt delete no longer breaks it
+				D3DPRESENT_PARAMETERS Params;
+				FillPresentParameters(pWindow, Params);
+
+				Font::List::iterator it = m_FontList.begin();
+
+				while (it != m_FontList.end())
+				{
+					FontData* pFontData = (FontData*)(*it++)->data;
+					pFontData->pFont->OnLostDevice();
+				}
+
+				m_pDevice->Reset(&Params);
+
+				it = m_FontList.begin();
+
+				while (it != m_FontList.end())
+				{
+					FontData* pFontData = (FontData*)(*it++)->data;
+					pFontData->pFont->OnResetDevice();
+				}
+
+				//todo, need to actually reset
+				//	call methods on fonts! so need to store them
+			}
+			m_pDevice->Present( NULL, NULL, (HWND)pWindow->GetWindow(), NULL );
 			return true;
 		}
 

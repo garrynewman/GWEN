@@ -25,9 +25,10 @@ GWEN_CONTROL_CONSTRUCTOR( Properties )
 
 void Properties::PostLayout( Gwen::Skin::Base* /*skin*/ )
 {
-	if ( SizeToChildren( false, true ) )
+	//todo: this causes infinite layout, fix me later
+	//if ( SizeToChildren( false, true ) )
 	{
-		InvalidateParent();
+	//	InvalidateParent();
 	}
 
 	m_SplitterBar->SetSize( 3, Height() );

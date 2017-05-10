@@ -68,7 +68,7 @@ namespace Gwen
 
 						case WM_MOUSEWHEEL:
 							{
-								return m_Canvas->InputMouseWheel( ( short ) HIWORD( msg.wParam ) );
+								return m_Canvas->InputMouseWheel(((short)HIWORD(msg.wParam)) / WHEEL_DELTA);
 							}
 
 #endif
@@ -157,7 +157,8 @@ namespace Gwen
 								else if ( msg.wParam == VK_SPACE ) { iKey = Gwen::Key::Space; }
 								else if ( msg.wParam == VK_UP ) { iKey = Gwen::Key::Up; }
 								else if ( msg.wParam == VK_DOWN ) { iKey = Gwen::Key::Down; }
-
+								else if (msg.wParam >= VK_F1 && msg.wParam <= VK_F24) { iKey = Gwen::Key::F1 + msg.wParam - VK_F1; }
+								
 								if ( iKey != -1 )
 								{
 									return m_Canvas->InputKey( iKey, bDown );

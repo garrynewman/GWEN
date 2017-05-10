@@ -201,6 +201,8 @@ void TreeNode::OnToggleButtonPress( Base* /*control*/ )
 
 void TreeNode::OnDoubleClickName( Base* /*control*/ )
 {
+	onDoubleClick.Call(this);
+
 	if ( !m_ToggleButton->Visible() ) { return; }
 
 	m_ToggleButton->Toggle();

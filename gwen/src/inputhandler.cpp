@@ -292,8 +292,20 @@ bool Gwen::Input::HandleAccelerator( Controls::Base* pCanvas, Gwen::UnicodeChar 
 	if ( Gwen::Input::IsShiftDown() )
 	{ accelString += L"SHIFT+"; }
 
-	chr = towupper( chr );
-	accelString += chr;
+	if (chr >= 0xE000 && chr < 0xF8FF)
+	{
+		chr -= 0xE000;
+		if (chr >= Gwen::Key::F1)
+		{
+			int num = chr - Gwen::Key::F1 + 1;
+			accelString += L"F" + std::to_wstring(num);
+		}
+	}
+	else
+	{
+		chr = towupper(chr);
+		accelString += chr;
+	}
 
 	//Debug::Msg("Accelerator string :%S\n", accelString.c_str());
 

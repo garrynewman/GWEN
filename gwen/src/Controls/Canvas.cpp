@@ -208,6 +208,10 @@ bool Canvas::InputKey( int iKey, bool bDown )
 
 	if ( iKey >= Gwen::Key::Count ) { return false; }
 
+	if (bDown)
+		if (Gwen::Input::HandleAccelerator(this, 0xE000+iKey))
+			return true;
+
 	return Gwen::Input::OnKeyEvent( this, iKey, bDown );
 }
 

@@ -298,6 +298,31 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 	return true;
 }
 
+LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_MOUSEWHEEL:
+	{
+		MSG msg;
+		msg.hwnd = hwnd;
+		msg.message = message;
+		msg.wParam = wParam;
+		msg.lParam = lParam;
+		GwenInput.ProcessMessage(msg);
+		return 0;
+	}
+	/*case WM_MOVE:
+		return 0;
+	case WM_SIZE:
+	{
+		return 0;
+	}*/
+	break;
+	default:
+		return DefWindowProc(hwnd, message, wParam, lParam);
+	}
+}
 
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle )
 {
@@ -305,7 +330,7 @@ void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gw
 	WNDCLASSA	wc;
 	ZeroMemory( &wc, sizeof( wc ) );
 	wc.style			= CS_OWNDC | CS_DROPSHADOW;
-	wc.lpfnWndProc		= DefWindowProc;
+	wc.lpfnWndProc		= WindowProcedure;// DefWindowProc;
 	wc.hInstance		= GetModuleHandle( NULL );
 	wc.lpszClassName	= "GWEN_Window_Class";
 	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );
@@ -337,6 +362,11 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 	{
 		if ( GwenInput.ProcessMessage( msg ) )
 		{ continue; }
+
+		if (msg.message == WM_SIZE)
+		{
+			printf("");
+		}
 
 		if ( msg.message == WM_PAINT )
 		{

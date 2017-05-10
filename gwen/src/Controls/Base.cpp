@@ -972,7 +972,7 @@ bool Base::SizeToChildren( bool w, bool h )
 	Gwen::Point size = ChildrenSize();
 	size.y += GetPadding().bottom;
 	size.x += GetPadding().right;
-	return SetSize( w ? size.x : Width(), h ? size.y : Height() );
+	return SetSize(w ? size.x : Width(), h ? size.y : Height());
 }
 
 Gwen::Point Base::ChildrenSize()

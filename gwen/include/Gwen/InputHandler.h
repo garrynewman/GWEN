@@ -36,8 +36,17 @@ namespace Gwen
 		const unsigned char Down = 13;
 		const unsigned char Escape = 14;
 		const unsigned char Alt = 15;
+		const unsigned char F1 = 16;
+		const unsigned char F2 = 17;
+		const unsigned char F3 = 18;
+		const unsigned char F4 = 19;
+		const unsigned char F5 = 20;
+		const unsigned char F10 = 25;
+		const unsigned char F15 = 30;
+		const unsigned char F20 = 35;
+		const unsigned char F24 = 39;
 
-		const unsigned char Count = 16;
+		const unsigned char Count = 40;
 	}
 
 	namespace Input
