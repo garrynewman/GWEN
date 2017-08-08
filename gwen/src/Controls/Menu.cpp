@@ -163,6 +163,7 @@ void Menu::CloseMenus()
 	BaseClass::CloseMenus();
 	CloseAll();
 	Close();
+	onMenuClosed.Call(this);
 }
 
 void Menu::AddDivider()
