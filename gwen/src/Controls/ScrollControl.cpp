@@ -124,7 +124,7 @@ void ScrollControl::UpdateScrollBars()
 	if ( !m_InnerPanel )
 	{ return; }
 
-	if ( ContentsAreDocked() )
+	if ( false)//ContentsAreDocked() )
 	{
 		m_VerticalScrollBar->SetHidden( true );
 		m_HorizontalScrollBar->SetHidden( true );

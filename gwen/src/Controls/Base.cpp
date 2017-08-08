@@ -574,7 +574,7 @@ void Base::RenderRecursive( Gwen::Skin::Base* skin, const Gwen::Rect & cliprect 
 				Base* pChild = *iter;
 
 				if ( pChild->Hidden() ) { continue; }
-
+				
 				pChild->DoRender( skin );
 			}
 		}
@@ -648,6 +648,8 @@ void Base::OnMouseLeave()
 
 	if ( GetToolTip() )
 	{ ToolTip::Disable( this ); }
+	else if (GetParent() && GetParent()->GetToolTip())
+	{ ToolTip::Disable(GetParent()); }
 
 	Redraw();
 }

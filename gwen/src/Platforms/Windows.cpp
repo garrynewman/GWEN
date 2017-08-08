@@ -298,6 +298,7 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 	return true;
 }
 
+static std::map<HWND, float> window_dpis;
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -312,6 +313,19 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		GwenInput.ProcessMessage(msg);
 		return 0;
 	}
+	case WM_DPICHANGED:
+	{
+		float dpi = HIWORD(wParam);
+		auto rect = *reinterpret_cast<RECT *>(lParam);
+		SetWindowPos(hwnd,
+			0, // No relative window
+			rect.left,
+			rect.top,
+			rect.right - rect.left,
+			rect.bottom - rect.top,
+			SWP_NOACTIVATE | SWP_NOZORDER);
+		window_dpis[hwnd] = dpi;
+	}
 	/*case WM_MOVE:
 		return 0;
 	case WM_SIZE:
@@ -324,8 +338,10 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 	}
 }
 
+#include <ShellScalingApi.h>
 void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle )
 {
+	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 	CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
 	WNDCLASSA	wc;
 	ZeroMemory( &wc, sizeof( wc ) );
@@ -339,11 +355,17 @@ void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gw
 	ShowWindow( hWindow, SW_SHOW );
 	SetForegroundWindow( hWindow );
 	SetFocus( hWindow );
+	SetWindowTextA(hWindow, strWindowTitle.c_str());
 	// Curve the corners
 	{
 		HRGN rgn = CreateRoundRectRgn( 0, 0, w + 1, h + 1, 4, 4 );
 		SetWindowRgn( hWindow, rgn, false );
 	}
+
+	auto monitor = MonitorFromWindow(hWindow, MONITOR_DEFAULTTONEAREST);
+	unsigned int dx, dy;
+	GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, &dx, &dy);
+	window_dpis[hWindow] = dy;
 	return ( void* ) hWindow;
 }
 
@@ -373,6 +395,13 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 			ptarget->Redraw();
 		}
 
+		//todo: put this somewhere sensible
+		//if (msg.message == WM_DPICHANGED)
+		{
+			float dpi = window_dpis[(HWND)pWindow];// HIWORD(msg.wParam);
+			ptarget->SetScale(dpi / 96.0);
+		}
+
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
 	}
@@ -382,7 +411,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 	{
 		static HWND g_LastFocus = NULL;
 
-		if ( GetActiveWindow()  != g_LastFocus )
+		if ( GetActiveWindow() != g_LastFocus )
 		{
 			g_LastFocus = GetActiveWindow();
 			ptarget->Redraw();

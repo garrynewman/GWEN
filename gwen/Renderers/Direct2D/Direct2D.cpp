@@ -88,8 +88,10 @@ namespace Gwen
 			{
 				FontData*	pFontData = new FontData();
 				pFontData->pTextFormat = pTextFormat;
+
 				pFont->data = pFontData;
 				pFont->realsize = pFont->size * Scale();
+				pFontData->pTextFormat->SetIncrementalTabStop(this->MeasureText(pFont, L"W").x*4.0f);
 				return true;
 			}
 
@@ -120,7 +122,7 @@ namespace Gwen
 			InternalFreeFont( pFont );
 		}
 
-		void Direct2D::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text )
+		void Direct2D::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
 		{
 			// If the font doesn't exist, or the font size should be changed
 			if ( !pFont->data || fabs( pFont->realsize - pFont->size * Scale() ) > 2 )
@@ -130,7 +132,12 @@ namespace Gwen
 			}
 
 			FontData* pFontData = ( FontData* ) pFont->data;
-			Translate( pos.x, pos.y );
+			//Translate( pos.x, pos.y );
+
+			pos.x += m_RenderOffset.x;
+			pos.y += m_RenderOffset.y;
+			pos.x = (((float)pos.x) * m_fScale);
+			pos.y = (((float)pos.y) * m_fScale);
 
 			if ( m_pSolidColorBrush )
 			{
@@ -138,7 +145,7 @@ namespace Gwen
 			}
 		}
 
-		Gwen::Point Direct2D::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+		Gwen::PointF Direct2D::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
 			// If the font doesn't exist, or the font size should be changed
 			if ( !pFont->data || fabs( pFont->realsize - pFont->size * Scale() ) > 2 )
@@ -154,7 +161,7 @@ namespace Gwen
 			m_pDWriteFactory->CreateTextLayout( text.c_str(), text.length(), pFontData->pTextFormat, 50000, 50000, &pLayout );
 			pLayout->GetMetrics( &metrics );
 			pLayout->Release();
-			return Gwen::Point( metrics.widthIncludingTrailingWhitespace, metrics.height );
+			return Gwen::PointF( metrics.widthIncludingTrailingWhitespace, metrics.height );
 		}
 
 		void Direct2D::DeviceLost()
@@ -388,7 +395,7 @@ namespace Gwen
 				// Create a Direct2D render target.
 				hr = m_pD2DFactory->CreateHwndRenderTarget(
 						 D2D1::RenderTargetProperties(),
-						 D2D1::HwndRenderTargetProperties( m_pHWND, size ),
+						 D2D1::HwndRenderTargetProperties(m_pHWND, size),//, D2D1_PRESENT_OPTIONS_RETAIN_CONTENTS),
 						 &pRT
 					 );
 
@@ -466,6 +473,17 @@ namespace Gwen
 		{
 			HRESULT hr = ( ( ID2D1HwndRenderTarget* ) m_pRT )->Resize( D2D1::SizeU( w, h ) );
 			return SUCCEEDED( hr );
+		}
+
+		ICacheToTexture* Direct2D::GetCTT()
+		{
+			//return 0;
+			if (ctt)
+				return ctt;
+			this->ctt = new Gwen::Renderer::Direct2DCTT();
+			this->ctt->SetRenderer(this);
+			this->ctt->Initialize();
+			return this->ctt;
 		}
 
 		bool Direct2D::BeginContext( Gwen::WindowProvider* pWindow )

@@ -141,7 +141,7 @@ namespace Gwen
 			fd.Italic = 0;
 			fd.Weight = font->bold ? FW_BOLD : FW_NORMAL;
 #ifdef CLEARTYPE_QUALITY
-			fd.Quality = CLEARTYPE_NATURAL_QUALITY;// CLEARTYPE_QUALITY;// font->realsize < 14 ? DEFAULT_QUALITY : CLEARTYPE_QUALITY;
+			fd.Quality = CLEARTYPE_NATURAL_QUALITY;// PROOF_QUALITY;// ANTIALIASED_QUALITY;// CLEARTYPE_NATURAL_QUALITY;// CLEARTYPE_QUALITY;// font->realsize < 14 ? DEFAULT_QUALITY : CLEARTYPE_QUALITY;
 #else
 			fd.Quality = PROOF_QUALITY;
 #endif
@@ -180,7 +180,7 @@ namespace Gwen
 			pFont->data = NULL;
 		}
 
-		void DirectX9::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text )
+		void DirectX9::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
 		{
 			Flush();
 
@@ -192,12 +192,16 @@ namespace Gwen
 			}
 
 			FontData* pFontData = ( FontData* ) pFont->data;
-			Translate( pos.x, pos.y );
+			//Translate( pos.x, pos.y );
+			pos.x += m_RenderOffset.x;
+			pos.y += m_RenderOffset.y;
+			pos.x = ceilf(((float)pos.x) * m_fScale);
+			pos.y = ceilf(((float)pos.y) * m_fScale);
 			RECT ClipRect = { pos.x, pos.y, 0, 0 };
-			pFontData->pFont->DrawTextW(NULL, text.c_str(), text.length(), &ClipRect, DT_LEFT | DT_TOP | DT_NOCLIP | DT_SINGLELINE | DT_EXPANDTABS, m_Color);
+			pFontData->pFont->DrawTextW(NULL, text.c_str(), text.length(), &ClipRect, DT_LEFT | DT_TOP | DT_NOCLIP | DT_SINGLELINE, m_Color);
 		}
 
-		Gwen::Point DirectX9::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+		Gwen::PointF DirectX9::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
 			// If the font doesn't exist, or the font size should be changed
 			if ( !pFont->data || fabs( pFont->realsize - pFont->size * Scale() ) > 2 )
@@ -213,18 +217,18 @@ namespace Gwen
 			{
 				RECT rct = {0, 0, 0, 0};
 				pFontData->pFont->DrawTextW( NULL, L"W", -1, &rct, DT_CALCRECT, 0 );
-				return Gwen::Point( 0, rct.bottom );
+				return Gwen::PointF( 0, rct.bottom );
 			}
 
 			RECT rct = {0, 0, 0, 0};
-			pFontData->pFont->DrawTextW(NULL, text.c_str(), -1, &rct, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE | DT_EXPANDTABS, 0);
+			pFontData->pFont->DrawTextW(NULL, text.c_str(), -1, &rct, DT_CALCRECT | DT_LEFT | DT_TOP | DT_SINGLELINE, 0);
 
 			for ( int i = text.length() - 1; i >= 0 && text[i] == L' '; i-- )
 			{
 				rct.right += pFontData->iSpaceWidth;
 			}
 
-			return Gwen::Point( rct.right / Scale(), rct.bottom / Scale() );
+			return Gwen::PointF( rct.right / Scale(), rct.bottom / Scale() );
 		}
 
 		void DirectX9::StartClip()

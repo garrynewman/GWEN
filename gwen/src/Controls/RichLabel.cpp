@@ -66,7 +66,7 @@ void RichLabel::SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont,
 	int iSpaceLeft = Width() - x;
 	// Does the whole word fit in?
 	{
-		Gwen::Point StringSize = GetSkin()->GetRender()->MeasureText( pFont, text );
+		Gwen::PointF StringSize = GetSkin()->GetRender()->MeasureText( pFont, text );
 
 		if ( iSpaceLeft > StringSize.x )
 		{
@@ -75,7 +75,7 @@ void RichLabel::SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont,
 	}
 	// If the first word is bigger than the line, just give up.
 	{
-		Gwen::Point WordSize = GetSkin()->GetRender()->MeasureText( pFont, lst[0] );
+		Gwen::PointF WordSize = GetSkin()->GetRender()->MeasureText( pFont, lst[0] );
 
 		if ( WordSize.x >= iSpaceLeft )
 		{
@@ -91,7 +91,7 @@ void RichLabel::SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont,
 
 	for ( size_t i = 0; i < lst.size(); i++ )
 	{
-		Gwen::Point WordSize = GetSkin()->GetRender()->MeasureText( pFont, strNewString + lst[i] );
+		Gwen::PointF WordSize = GetSkin()->GetRender()->MeasureText( pFont, strNewString + lst[i] );
 
 		if ( WordSize.x > iSpaceLeft )
 		{
@@ -121,7 +121,7 @@ void RichLabel::CreateLabel( const Gwen::UnicodeString & text, const DividedText
 	//
 	// This string is too long for us, split it up.
 	//
-	Gwen::Point p = GetSkin()->GetRender()->MeasureText( pFont, text );
+	Gwen::PointF p = GetSkin()->GetRender()->MeasureText( pFont, text );
 
 	if ( lineheight == -1 )
 	{

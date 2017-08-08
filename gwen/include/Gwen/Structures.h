@@ -128,6 +128,39 @@ namespace Gwen
 		int x, y;
 	};
 
+	struct GWEN_EXPORT PointF
+	{
+		PointF(float x_ = 0, float y_ = 0)
+		{
+			this->x = x_;
+			this->y = y_;
+		}
+
+		void operator += (const PointF & p)
+		{
+			x += p.x;
+			y += p.y;
+		}
+
+		PointF operator + (const PointF & p) const
+		{
+			return PointF(x + p.x, p.y + y);
+		}
+
+		void operator -= (const PointF & p)
+		{
+			x -= p.x;
+			y -= p.y;
+		}
+
+		PointF operator - (const PointF & p) const
+		{
+			return PointF(x - p.x, y - p.y);
+		}
+
+		float x, y;
+	};
+
 	struct GWEN_EXPORT HSV
 	{
 		float h;

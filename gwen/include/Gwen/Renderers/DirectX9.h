@@ -38,8 +38,8 @@ namespace Gwen
 
 				virtual void LoadFont( Gwen::Font* pFont );
 				virtual void FreeFont( Gwen::Font* pFont );
-				virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text );
-				virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text );
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text );
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text );
 
 				void StartClip();
 				void EndClip();

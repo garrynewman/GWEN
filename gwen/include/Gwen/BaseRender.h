@@ -65,8 +65,8 @@ namespace Gwen
 
 				virtual void LoadFont( Gwen::Font* pFont ) {};
 				virtual void FreeFont( Gwen::Font* pFont ) {};
-				virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text );
-				virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text );
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text );
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text );
 
 				//
 				// No need to implement these functions in your derived class, but if
@@ -75,8 +75,8 @@ namespace Gwen
 				virtual void DrawLinedRect( Gwen::Rect rect );
 				virtual void DrawPixel( int x, int y );
 				virtual void DrawShavedCornerRect( Gwen::Rect rect, bool bSlight = false );
-				virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::String & text );
-				virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::String & text );
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::String & text );
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text );
 
 			public:
 
@@ -96,7 +96,7 @@ namespace Gwen
 				const Gwen::Point & GetRenderOffset() const { return m_RenderOffset; }
 
 			private:
-
+			public:
 				Gwen::Point m_RenderOffset;
 
 			public:

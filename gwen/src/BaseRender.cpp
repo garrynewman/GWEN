@@ -29,13 +29,13 @@ namespace Gwen
 			{ GetCTT()->ShutDown(); }
 		}
 
-		void Base::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::String & text )
+		void Base::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text )
 		{
 			Gwen::UnicodeString str = Gwen::Utility::StringToUnicode( text );
 			RenderText( pFont, pos, str );
 		}
 
-		Gwen::Point Base::MeasureText( Gwen::Font* pFont, const Gwen::String & text )
+		Gwen::PointF Base::MeasureText( Gwen::Font* pFont, const Gwen::String & text )
 		{
 			Gwen::UnicodeString str = Gwen::Utility::StringToUnicode( text );
 			return MeasureText( pFont, str );
@@ -155,7 +155,7 @@ namespace Gwen
 			we just draw some rects where the letters would be to give them an idea.
 		*/
 
-		void Base::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text )
+		void Base::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
 		{
 			float fSize = pFont->size * Scale();
 
@@ -201,9 +201,9 @@ namespace Gwen
 			}
 		}
 
-		Gwen::Point Base::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+		Gwen::PointF Base::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
-			Gwen::Point p;
+			Gwen::PointF p;
 			p.x = pFont->size * Scale() * ( float ) text.length() * 0.4;
 			p.y = pFont->size * Scale();
 			return p;

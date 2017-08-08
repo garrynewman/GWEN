@@ -82,7 +82,7 @@ void Text::Render( Skin::Base* skin )
 	else
 	{ skin->GetRender()->SetDrawColor( m_ColorOverride ); }
 
-	skin->GetRender()->RenderText( GetFont(), Gwen::Point( GetPadding().left, GetPadding().top ), m_String.GetUnicode() );
+	skin->GetRender()->RenderText( GetFont(), Gwen::PointF( GetPadding().left, GetPadding().top ), m_String.GetUnicode() );
 }
 
 Gwen::Rect Text::GetCharacterPosition( int iChar )
@@ -117,12 +117,12 @@ Gwen::Rect Text::GetCharacterPosition( int iChar )
 
 	if ( Length() == 0 || iChar == 0 )
 	{
-		Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
 		return Gwen::Rect( 0, 0, 0, p.y );
 	}
 
 	UnicodeString sub = m_String.GetUnicode().substr( 0, iChar );
-	Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), sub );
+	Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), sub );
 	return Rect( p.x, 0, 0, p.y );
 }
 
@@ -131,13 +131,13 @@ Gwen::Rect Text::GetLineBox( int i )
 	Text* line = GetLine(i);
 	if(line != NULL)
 	{
-		Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), line->m_String.GetUnicode());
-		return Gwen::Rect(line->X(), line->Y(), Clamp(p.x, 1,p.x), Clamp(p.y, 1,p.y) );
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), line->m_String.GetUnicode());
+		return Gwen::Rect(line->X(), line->Y(), Clamp(p.x, 1.0f,p.x), Clamp(p.y, 1.0f,p.y) );
 	}
 	else
 	{
-		Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), m_String.GetUnicode());
-		return Gwen::Rect(0, 0, Clamp(p.x, 1,p.x), Clamp(p.y, 1,p.y) );
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), m_String.GetUnicode());
+		return Gwen::Rect(0, 0, Clamp(p.x, 1.0f,p.x), Clamp(p.y, 1.0f,p.y) );
 	}
 }
  
@@ -203,7 +203,7 @@ void Text::RefreshSize()
 		return;
 	}
 
-	Gwen::Point p( 1, GetFont()->size );
+	Gwen::PointF p( 1, GetFont()->size );
 
 	if ( Length() > 0 )
 	{
@@ -250,7 +250,7 @@ void Text::SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeStr
 		str += s[i];
 
 		//if adding character makes the word bigger than the textbox size
-		Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), str );
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), str );
 		if ( p.x > w ) 
 		{
 			int addSum = GetPadding().left+GetPadding().right;
@@ -288,7 +288,7 @@ void Text::RefreshSizeWrap()
 		return;
 	}
 
-	Point pFontSize = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
+	PointF pFontSize = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
 	int w = GetParent()->Width() - GetParent()->GetPadding().left-GetParent()->GetPadding().right; 
 	int x = 0, y = 0;
 	Gwen::UnicodeString strLine;
@@ -304,7 +304,7 @@ void Text::RefreshSizeWrap()
 		// Does adding this word drive us over the width?
 		{
 			strLine += ( *it );
-			Gwen::Point p = GetSkin()->GetRender()->MeasureText( GetFont(), strLine );
+			Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), strLine );
 
 			if ( p.x > w ) { bFinishLine = true; bWrapped = true; }
 		}
