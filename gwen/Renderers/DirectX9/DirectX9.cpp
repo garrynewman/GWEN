@@ -5,6 +5,8 @@
 #include "Gwen/Texture.h"
 #include "Gwen/WindowProvider.h"
 
+#include <D3DX9Core.h>
+
 #define D3DFVF_VERTEXFORMAT2D ( D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1 )
 
 struct FontData
