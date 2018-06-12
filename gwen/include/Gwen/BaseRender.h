@@ -110,6 +110,7 @@ namespace Gwen
 
 				Gwen::Rect m_rectClipRegion;
 				ICacheToTexture* m_RTT;
+				Gwen::PointF m_dpi = Gwen::PointF(96, 96);
 
 			public:
 
@@ -117,6 +118,11 @@ namespace Gwen
 				float Scale() const { return m_fScale; }
 
 				float m_fScale;
+
+				// DPI handling
+				virtual Gwen::PointF GetDPI() { return m_dpi; }
+				void _SetDPI(const Gwen::PointF d) { m_dpi = d; }
+				Gwen::PointF GetDPIScaling() { auto dpi = GetDPI(); return Gwen::PointF(dpi.x/96.0f, dpi.y/96.0f); }
 
 
 			public:

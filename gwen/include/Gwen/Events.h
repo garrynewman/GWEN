@@ -80,7 +80,7 @@ namespace Gwen
 			protected:
 
 				void CleanLinks();
-				std::list<Caller*>	m_Callers;
+				//std::list<Caller*>	m_Callers;// what is this even for?
 
 			public:
 
@@ -145,6 +145,7 @@ namespace Gwen
 						pObject					= NULL;
 					}
 
+					//todo make this use an enum and a union to save space (16 bytes each x 5 per control usually)
 					Handler::Function						fnFunction;
 					Handler::FunctionWithInformation		fnFunctionInfo;
 					Handler::FunctionBlank					fnFunctionBlank;

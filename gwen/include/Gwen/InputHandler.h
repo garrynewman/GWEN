@@ -46,7 +46,10 @@ namespace Gwen
 		const unsigned char F20 = 35;
 		const unsigned char F24 = 39;
 
-		const unsigned char Count = 40;
+		const unsigned char PageUp = 40;
+		const unsigned char PageDown = 41;
+
+		const unsigned char Count = 42;
 	}
 
 	namespace Input

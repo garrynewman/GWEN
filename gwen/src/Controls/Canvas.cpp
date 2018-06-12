@@ -97,7 +97,7 @@ bool Canvas::SetSize(int w, int h)
 {
 	real_size_x = w;
 	real_size_y = h;
-	return SetBounds(X(), Y(), w/Scale(), h/Scale());
+	return SetBounds(X(), Y(), w, h);
 }
 
 void Canvas::SetScale( float f )

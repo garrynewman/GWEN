@@ -23,7 +23,7 @@ Handler::~Handler()
 void Handler::CleanLinks()
 {
 	// Tell all the callers that we're dead
-	std::list<Caller*>::iterator iter = m_Callers.begin();
+	/*std::list<Caller*>::iterator iter = m_Callers.begin();
 
 	while ( iter != m_Callers.end() )
 	{
@@ -31,17 +31,17 @@ void Handler::CleanLinks()
 		UnRegisterCaller( pCaller );
 		pCaller->RemoveHandler( this );
 		iter = m_Callers.begin();
-	}
+	}*/
 }
 
 void Handler::RegisterCaller( Caller* pCaller )
 {
-	m_Callers.push_back( pCaller );
+	//m_Callers.push_back( pCaller );
 }
 
 void Handler::UnRegisterCaller( Caller* pCaller )
 {
-	m_Callers.remove( pCaller );
+	//m_Callers.remove( pCaller );
 }
 
 
@@ -61,7 +61,8 @@ void Caller::CleanLinks()
 	for ( iter = m_Handlers.begin(); iter != m_Handlers.end(); ++iter )
 	{
 		handler & h = *iter;
-		h.pObject->UnRegisterCaller( this );
+		if (h.pObject)
+			h.pObject->UnRegisterCaller( this );
 	}
 
 	m_Handlers.clear();
@@ -145,7 +146,8 @@ void Caller::AddInternal( Event::Handler* pObject, Event::Handler::GlobalFunctio
 	h.fnGlobalFunction = pFunction;
 	h.pObject = pObject;
 	m_Handlers.push_back( h );
-	pObject->RegisterCaller( this );
+	if (pObject)
+		pObject->RegisterCaller( this );
 }
 
 void Caller::AddInternal( Event::Handler* pObject, Handler::GlobalFunctionWithInformation pFunction )
@@ -160,7 +162,8 @@ void Caller::AddInternal( Event::Handler* pObject, Handler::GlobalFunctionWithIn
 	h.pObject				= pObject;
 	h.Data					= data;
 	m_Handlers.push_back( h );
-	pObject->RegisterCaller( this );
+	if (pObject)
+		pObject->RegisterCaller( this );
 }
 
 void Caller::AddInternal( Event::Handler* pObject, Handler::GlobalFunctionBlank pFunction )

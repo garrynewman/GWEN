@@ -186,7 +186,7 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 	g_event_queue = NULL;
 }
 
-void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget )
+void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
 	static bool firstCall = true;
 

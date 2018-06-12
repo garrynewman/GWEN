@@ -49,6 +49,7 @@ namespace Gwen
 				virtual bool CanMaximize() { return m_bCanMaximize; }
 				virtual void SetCanMaximize( bool b );
 				virtual void SetMaximize( bool b );
+				virtual void Minimize();
 
 				virtual void SetSizable( bool b ) { m_Sizer->SetHidden( !b ); }
 				virtual bool GetSizable() { return m_Sizer->Visible(); }

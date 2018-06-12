@@ -55,7 +55,8 @@ namespace Gwen
 								int dy = y - m_MouseY;
 								m_MouseX = x;
 								m_MouseY = y;
-								return m_Canvas->InputMouseMoved( x, y, dx, dy );
+								Gwen::PointF scale = m_Canvas->GetSkin()->GetRender()->GetDPIScaling();
+								return m_Canvas->InputMouseMoved( x / scale.x, y / scale.y, dx / scale.x, dy / scale.y);
 							}
 
 						case WM_CHAR:
@@ -158,6 +159,8 @@ namespace Gwen
 								else if ( msg.wParam == VK_UP ) { iKey = Gwen::Key::Up; }
 								else if ( msg.wParam == VK_DOWN ) { iKey = Gwen::Key::Down; }
 								else if (msg.wParam >= VK_F1 && msg.wParam <= VK_F24) { iKey = Gwen::Key::F1 + msg.wParam - VK_F1; }
+								else if (msg.wParam == VK_PRIOR) { iKey = Gwen::Key::PageUp; }
+								else if (msg.wParam == VK_NEXT) { iKey = Gwen::Key::PageDown; }
 								
 								if ( iKey != -1 )
 								{

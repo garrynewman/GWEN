@@ -41,6 +41,10 @@ namespace Gwen
 				virtual TabStrip* GetTabStrip() { return m_TabStrip; }
 
 				virtual void SetTabStripPosition( int iDock );
+				virtual void SelectTab(Controls::Base* control)
+				{
+					this->OnTabPressed(control);
+				}
 
 				virtual bool DoesAllowDrag();
 

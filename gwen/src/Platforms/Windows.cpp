@@ -7,7 +7,7 @@
 #ifdef _WIN32
 
 #ifndef _WIN32_WINNT
-#	define _WIN32_WINNT 0x0600
+//#	define _WIN32_WINNT 0x0600
 #else
 #	if _WIN32_WINNT < 0x0600
 #		error Unsupported platform
@@ -313,8 +313,8 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		GwenInput.ProcessMessage(msg);
 		return 0;
 	}
-	case WM_DPICHANGED:
-	{
+	case 0x02E0://WM_DPICHANGED:
+	{   //todo handle x and y dpi
 		float dpi = HIWORD(wParam);
 		auto rect = *reinterpret_cast<RECT *>(lParam);
 		SetWindowPos(hwnd,
@@ -324,14 +324,13 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			rect.right - rect.left,
 			rect.bottom - rect.top,
 			SWP_NOACTIVATE | SWP_NOZORDER);
+
+		HRGN rgn = CreateRoundRectRgn(0, 0, rect.right - rect.left + 1, rect.bottom - rect.top + 1, 4, 4);
+		SetWindowRgn(hwnd, rgn, false);
+
 		window_dpis[hwnd] = dpi;
+		return 0;
 	}
-	/*case WM_MOVE:
-		return 0;
-	case WM_SIZE:
-	{
-		return 0;
-	}*/
 	break;
 	default:
 		return DefWindowProc(hwnd, message, wParam, lParam);
@@ -339,32 +338,38 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 }
 
 #include <ShellScalingApi.h>
-void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle )
+
+void* Gwen::Platform::CreatePlatformWindow(int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
 {
 	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
-	CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
-	WNDCLASSA	wc;
-	ZeroMemory( &wc, sizeof( wc ) );
-	wc.style			= CS_OWNDC | CS_DROPSHADOW;
-	wc.lpfnWndProc		= WindowProcedure;// DefWindowProc;
-	wc.hInstance		= GetModuleHandle( NULL );
-	wc.lpszClassName	= "GWEN_Window_Class";
-	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );
-	RegisterClassA( &wc );
-	HWND hWindow = CreateWindowExA( WS_EX_APPWINDOW | WS_EX_ACCEPTFILES, wc.lpszClassName, strWindowTitle.c_str(), WS_POPUP | WS_VISIBLE, x, y, w, h, NULL, NULL, GetModuleHandle( NULL ), NULL );
+	CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+	WNDCLASSW	wc;
+	ZeroMemory(&wc, sizeof(wc));
+	wc.style = CS_OWNDC | CS_DROPSHADOW;
+	wc.lpfnWndProc = WindowProcedure;
+	wc.hInstance = GetModuleHandle(NULL);
+	wc.lpszClassName = L"GWEN_Window_Class";
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	RegisterClassW(&wc);
+
+	// Get a guestimate DPI
+	POINT p;
+	p.x = x;
+	p.y = y;
+	auto monitor = MonitorFromPoint(p, MONITOR_DEFAULTTONEAREST);
+	unsigned int dx, dy;
+	GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, &dx, &dy);
+	auto dpi = Gwen::PointF((float)dx/96.0f, (float)dy / 96.0f);
+	
+	HWND hWindow = CreateWindowExW( WS_EX_APPWINDOW | WS_EX_ACCEPTFILES, wc.lpszClassName, L"Testing"/*strWindowTitle.c_str()*/, WS_POPUP | WS_VISIBLE, x, y, w*dpi.x, h*dpi.y, NULL, NULL, GetModuleHandle( NULL ), NULL );
 	ShowWindow( hWindow, SW_SHOW );
 	SetForegroundWindow( hWindow );
 	SetFocus( hWindow );
-	SetWindowTextA(hWindow, strWindowTitle.c_str());
-	// Curve the corners
-	{
-		HRGN rgn = CreateRoundRectRgn( 0, 0, w + 1, h + 1, 4, 4 );
-		SetWindowRgn( hWindow, rgn, false );
-	}
 
-	auto monitor = MonitorFromWindow(hWindow, MONITOR_DEFAULTTONEAREST);
-	unsigned int dx, dy;
-	GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, &dx, &dy);
+	SetWindowTextA(hWindow, strWindowTitle.c_str());
+	HRGN rgn = CreateRoundRectRgn( 0, 0, w*dpi.x + 1, h*dpi.y + 1, 4, 4 );
+	SetWindowRgn( hWindow, rgn, false );
+
 	window_dpis[hWindow] = dy;
 	return ( void* ) hWindow;
 }
@@ -375,7 +380,8 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 	CoUninitialize();
 }
 
-void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget )
+int i = 0;
+void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
 	GwenInput.Initialize( ptarget );
 	MSG msg;
@@ -385,25 +391,21 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget
 		if ( GwenInput.ProcessMessage( msg ) )
 		{ continue; }
 
-		if (msg.message == WM_SIZE)
-		{
-			printf("");
-		}
-
 		if ( msg.message == WM_PAINT )
 		{
 			ptarget->Redraw();
 		}
 
-		//todo: put this somewhere sensible
-		//if (msg.message == WM_DPICHANGED)
-		{
-			float dpi = window_dpis[(HWND)pWindow];// HIWORD(msg.wParam);
-			ptarget->SetScale(dpi / 96.0);
-		}
-
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
+	}
+
+	if (ptarget->GetSkin()->GetRender()->GetDPI().x != window_dpis[(HWND)pWindow])
+	{
+		ptarget->GetSkin()->GetRender()->_SetDPI(Gwen::PointF(window_dpis[(HWND)pWindow], window_dpis[(HWND)pWindow]));
+		RECT rect;
+		GetWindowRect((HWND)pWindow, &rect);
+		ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, rect.right - rect.left, rect.bottom - rect.top );
 	}
 
 	// If the active window has changed then force a redraw of our canvas

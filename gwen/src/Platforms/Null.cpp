@@ -68,7 +68,7 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
 }
 
-void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget )
+void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
 }
 

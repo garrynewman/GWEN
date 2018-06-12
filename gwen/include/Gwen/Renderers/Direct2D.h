@@ -31,6 +31,7 @@ namespace Gwen
 			Direct2D(ID2D1RenderTarget* pDevice, IDWriteFactory* pDWriteFactory, IWICImagingFactory* pWICFactory);
 			~Direct2D();
 
+			virtual void Init();
 			virtual void Begin();
 			virtual void End();
 			virtual void Release();

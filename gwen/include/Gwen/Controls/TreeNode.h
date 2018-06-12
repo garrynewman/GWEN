@@ -37,6 +37,7 @@ namespace Gwen
 				virtual void ExpandAll();
 
 				virtual Button* GetButton();
+				virtual Button* GetToggleButton();
 
 				virtual void Render( Skin::Base* skin );
 				virtual void Layout( Skin::Base* skin );

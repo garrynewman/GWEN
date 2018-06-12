@@ -11,6 +11,8 @@
 #include "Gwen/Texture.h"
 #include "Gwen/WindowProvider.h"
 
+#include <ShellScalingApi.h>
+
 struct FontData
 {
 	IDWriteTextFormat*	pTextFormat;
@@ -418,18 +420,24 @@ namespace Gwen
 			}
 		}
 
+		void Direct2D::Init()
+		{
+			HRESULT hr = D2D1CreateFactory(
+				D2D1_FACTORY_TYPE_SINGLE_THREADED,
+				&m_pD2DFactory
+			);
+
+			if (FAILED(hr))
+			{
+				
+			}
+		}
+
 		bool Direct2D::InitializeContext( Gwen::WindowProvider* pWindow )
 		{
 			m_pHWND = ( HWND ) pWindow->GetWindow();
-			HRESULT hr = D2D1CreateFactory(
-							 D2D1_FACTORY_TYPE_SINGLE_THREADED,
-							 &m_pD2DFactory
-						 );
 
-			if ( FAILED( hr ) )
-			{ return false; }
-
-			hr = DWriteCreateFactory(
+			HRESULT hr = DWriteCreateFactory(
 					 DWRITE_FACTORY_TYPE_SHARED,
 					 __uuidof( IDWriteFactory ),
 					 reinterpret_cast<IUnknown**>( &m_pDWriteFactory )
@@ -471,7 +479,12 @@ namespace Gwen
 
 		bool Direct2D::ResizedContext( Gwen::WindowProvider* pWindow, int w, int h )
 		{
+			//update the dpi to match the system's current
+			float x, y;
+			auto d = this->GetDPI();
+			m_pRT->SetDpi(d.x, d.y);
 			HRESULT hr = ( ( ID2D1HwndRenderTarget* ) m_pRT )->Resize( D2D1::SizeU( w, h ) );
+			auto p = m_pRT->GetSize();
 			return SUCCEEDED( hr );
 		}
 

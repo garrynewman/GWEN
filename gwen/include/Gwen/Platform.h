@@ -10,6 +10,8 @@
 
 #include "Gwen/Structures.h"
 #include "Gwen/Events.h"
+#include "Gwen/BaseRender.h"
+#include "Gwen/Controls/WindowCanvas.h"
 
 namespace Gwen
 {
@@ -54,10 +56,10 @@ namespace Gwen
 		//
 		// Window Creation
 		//
-		GWEN_EXPORT void* CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle );
+		GWEN_EXPORT void* CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer);
 		GWEN_EXPORT void DestroyPlatformWindow( void* pPtr );
 		GWEN_EXPORT void SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h );
-		GWEN_EXPORT void MessagePump( void* pWindow, Gwen::Controls::Canvas* ptarget );
+		GWEN_EXPORT void MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget );
 		GWEN_EXPORT bool HasFocusPlatformWindow( void* pPtr );
 		GWEN_EXPORT void SetWindowMaximized( void* pPtr, bool bMaximized, Gwen::Point & pNewPos, Gwen::Point & pNewSize );
 		GWEN_EXPORT void SetWindowMinimized( void* pPtr, bool bMinimized );

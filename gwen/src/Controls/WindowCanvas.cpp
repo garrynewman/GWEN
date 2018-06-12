@@ -34,10 +34,11 @@ WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin,
 
 		if ( y < 0 ) { y = ( dh - h ) * 0.5; }
 	}
-	m_pOSWindow = Gwen::Platform::CreatePlatformWindow( x, y, w, h, strWindowTitle );
 	m_WindowPos  = Gwen::Point( x, y );
-	pSkin->GetRender()->InitializeContext( this );
+
 	pSkin->GetRender()->Init();
+	m_pOSWindow = Gwen::Platform::CreatePlatformWindow( x, y, w, h, strWindowTitle, pSkin->GetRender() );
+	pSkin->GetRender()->InitializeContext(this);
 	m_pSkinChange = pSkin;
 	SetSize( w, h );
 	m_TitleBar = new Gwen::ControlsInternal::Dragger( this );
@@ -231,7 +232,8 @@ void WindowCanvas::SetPos( int x, int y )
 	y = Gwen::Clamp( y, 0, h );
 	m_WindowPos.x = x;
 	m_WindowPos.y = y;
-	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, Width(), Height() );
+	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
+	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, Width()*scaling.x, Height()*scaling.y);
 }
 
 void WindowCanvas::CloseButtonPressed()
@@ -253,8 +255,9 @@ void WindowCanvas::Sizer_Moved()
 	int h = ( p.y ) - m_WindowPos.y;
 	w = Clamp( w, 100, 9999 );
 	h = Clamp( h, 100, 9999 );
-	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, w, h );
-	GetSkin()->GetRender()->ResizedContext( this, w, h );
+	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
+	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, w*scaling.x, h*scaling.y);
+	GetSkin()->GetRender()->ResizedContext( this, w*scaling.x, h*scaling.y);
 	this->SetSize( w, h );
 	BaseClass::DoThink();
 	RenderCanvas();
@@ -272,8 +275,9 @@ void WindowCanvas::SetMaximize( bool b )
 	m_bIsMaximized = b;
 	m_pMaximize->SetMaximized( m_bIsMaximized );
 	Gwen::Point pSize, pPos;
+	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
 	Gwen::Platform::SetWindowMaximized( m_pOSWindow, m_bIsMaximized, pPos, pSize );
-	SetSize( pSize.x, pSize.y );
+	SetSize( pSize.x/scaling.x, pSize.y/scaling.y );
 	m_WindowPos = pPos;
 	GetSkin()->GetRender()->ResizedContext( this, pSize.x, pSize.y );
 	BaseClass::DoThink();
@@ -290,6 +294,11 @@ void WindowCanvas::MaximizeButtonPressed()
 void WindowCanvas::MinimizeButtonPressed()
 {
 	Gwen::Platform::SetWindowMinimized( m_pOSWindow, true );
+}
+
+void WindowCanvas::Minimize()
+{
+	Gwen::Platform::SetWindowMinimized(m_pOSWindow, true);
 }
 
 void WindowCanvas::SetCanMaximize( bool b )
