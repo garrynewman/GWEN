@@ -51,14 +51,19 @@ namespace Gwen
 			pFont->data = NULL;
 		}
 
-		void Allegro::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text )
+		void Allegro::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
 		{
-			Translate( pos.x, pos.y );
+			//Translate( pos.x, pos.y );
+            pos.x += m_RenderOffset.x;
+			pos.y += m_RenderOffset.y;
+			pos.x = (((float)pos.x) * m_fScale);
+			pos.y = (((float)pos.y) * m_fScale);
+
 			ALLEGRO_FONT* afont = ( ALLEGRO_FONT* ) pFont->data;
 			al_draw_text( afont, m_Color, pos.x, pos.y, ALLEGRO_ALIGN_LEFT, Utility::UnicodeToString( text ).c_str() );
 		}
 
-		Gwen::Point Allegro::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+		Gwen::PointF Allegro::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
 			ALLEGRO_FONT* afont = ( ALLEGRO_FONT* ) pFont->data;
 
@@ -74,7 +79,7 @@ namespace Gwen
 
 			int bx, by, tw, th;
 			al_get_text_dimensions( afont, Utility::UnicodeToString( text ).c_str(), &bx, &by, &tw, &th );
-			return Gwen::Point( tw, th );
+			return Gwen::PointF( tw, th );
 		}
 
 		void Allegro::StartClip()
