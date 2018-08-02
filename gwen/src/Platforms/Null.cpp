@@ -59,7 +59,7 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 	return false;
 }
 
-void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle )
+GWEN_EXPORT void* CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
 {
 	return NULL;
 }
