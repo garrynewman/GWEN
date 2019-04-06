@@ -22,6 +22,8 @@
 #include <ShlObj.h>
 #include <Shobjidl.h>
 
+#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "Shcore.lib")
 using namespace Gwen;
 using namespace Gwen::Platform;
 
