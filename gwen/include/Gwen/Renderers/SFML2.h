@@ -77,7 +77,7 @@ namespace Gwen
 			virtual void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 );
 
 			virtual void RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString& text );
-			virtual Gwen::Point MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text );
+			virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text );
 			virtual void LoadFont( Gwen::Font* font );
 			virtual void FreeFont( Gwen::Font* pFont );
 

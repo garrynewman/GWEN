@@ -3,6 +3,7 @@ dofile( "inc/include.lua" )
 solution "GWEN"
 
 	language "C++"
+	buildoptions { '-std=c++11' }
 	location ( os.get() .. "/" .. _ACTION )
 	flags { "Unicode", "Symbols", "NoEditAndContinue", "NoPCH",
             "No64BitChecks", "StaticRuntime", "EnableSSE" } -- "NoRTTI"

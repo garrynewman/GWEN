@@ -210,7 +210,7 @@ void Gwen::Renderer::SFML2::RenderText( Gwen::Font* pFont, Gwen::Point pos, cons
 	m_Target.draw( sfStr );
 }
 
-Gwen::Point Gwen::Renderer::SFML2::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text )
+Gwen::PointF Gwen::Renderer::SFML2::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString& text )
 {
 	// If the font doesn't exist, or the font size should be changed
 	if ( !pFont->data || fabs( pFont->realsize - pFont->size * Scale() ) > 2 )
@@ -226,10 +226,10 @@ Gwen::Point Gwen::Renderer::SFML2::MeasureText( Gwen::Font* pFont, const Gwen::U
         sfStr.setString( text );
         sfStr.setFont( *pSFFont );
         sfStr.setCharacterSize( pFont->realsize );
-        return Gwen::Point( sfStr.getLocalBounds().width, pSFFont->getLineSpacing( pFont->realsize ) );
+        return Gwen::PointF( sfStr.getLocalBounds().width, pSFFont->getLineSpacing( pFont->realsize ) );
     }
 
-    return Gwen::Point();
+    return Gwen::PointF();
 }
 
 void Gwen::Renderer::SFML2::LoadTexture( Gwen::Texture* pTexture )
