@@ -10,6 +10,60 @@
 #include "GL/glew.h"
 #include "FreeImage/FreeImage.h"
 
+#ifndef _WIN32
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <GL/gl.h>
+#include <GL/glx.h>
+#endif
+
+extern Display* x11_display;
+extern GLXFBConfig global_bestFbc;
+
+static bool ctxErrorOccurred = false;
+static int ctxErrorHandler( Display *dpy, XErrorEvent *ev )
+{
+    ctxErrorOccurred = true;
+    return 0;
+}
+
+// Helper to check for extension string presence.  Adapted from:
+//   http://www.opengl.org/resources/features/OGLextensions/
+static bool isExtensionSupported(const char *extList, const char *extension)
+{
+  const char *start;
+  const char *where, *terminator;
+  
+  /* Extension names should not have spaces. */
+  where = strchr(extension, ' ');
+  if (where || *extension == '\0')
+    return false;
+
+  /* It takes a bit of care to be fool-proof about parsing the
+     OpenGL extensions string. Don't be fooled by sub-strings,
+     etc. */
+  for (start=extList;;) {
+    where = strstr(start, extension);
+
+    if (!where)
+      break;
+
+    terminator = where + strlen(extension);
+
+    if ( where == start || *(where - 1) == ' ' )
+      if ( *terminator == ' ' || *terminator == '\0' )
+        return true;
+
+    start = terminator;
+  }
+
+  return false;
+}
+
+
+#define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
+#define GLX_CONTEXT_MINOR_VERSION_ARB       0x2092
+typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
 
 namespace Gwen
 {
@@ -92,6 +146,8 @@ namespace Gwen
 				glDisable( GL_TEXTURE_2D );
 			}
 
+            //SetDrawColor(Gwen::Color(255, 0, 0, 255));
+
 			Translate( rect );
 			AddVert( rect.x, rect.y );
 			AddVert( rect.x + rect.w, rect.y );
@@ -99,6 +155,7 @@ namespace Gwen
 			AddVert( rect.x + rect.w, rect.y );
 			AddVert( rect.x + rect.w, rect.y + rect.h );
 			AddVert( rect.x, rect.y + rect.h );
+            Flush();
 		}
 
 		void OpenGL::SetDrawColor( Gwen::Color color )
@@ -120,13 +177,13 @@ namespace Gwen
 			}
 			glScissor( rect.x * Scale(), rect.y * Scale(), rect.w * Scale(), rect.h * Scale() );
 			glEnable( GL_SCISSOR_TEST );
-		};
+		}
 
 		void OpenGL::EndClip()
 		{
 			Flush();
 			glDisable( GL_SCISSOR_TEST );
-		};
+		}
 
 		void OpenGL::DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 )
 		{
@@ -161,12 +218,21 @@ namespace Gwen
 
 		void OpenGL::LoadTexture( Gwen::Texture* pTexture )
 		{
+#ifdef _WIN32
 			const wchar_t* wFileName = pTexture->name.GetUnicode().c_str();
 			FREE_IMAGE_FORMAT imageFormat = FreeImage_GetFileTypeU( wFileName );
 
 			if ( imageFormat == FIF_UNKNOWN )
 			{ imageFormat = FreeImage_GetFIFFromFilenameU( wFileName ); }
+#else
+			const char* fileName = pTexture->name.m_String.c_str();
+			FREE_IMAGE_FORMAT imageFormat = FreeImage_GetFileType( fileName );
 
+			if ( imageFormat == FIF_UNKNOWN )
+			{ imageFormat = FreeImage_GetFIFFromFilename( fileName ); }
+#endif
+
+            //FILE* f = fopen(pTexture->name.m_String.c_str(), "rb");
 			// Image failed to load..
 			if ( imageFormat == FIF_UNKNOWN )
 			{
@@ -175,7 +241,11 @@ namespace Gwen
 			}
 
 			// Try to load the image..
+#ifdef _WIN32
 			FIBITMAP* bits = FreeImage_LoadU( imageFormat, wFileName );
+#else
+			FIBITMAP* bits = FreeImage_Load( imageFormat, fileName );
+#endif
 
 			if ( !bits )
 			{
@@ -290,6 +360,106 @@ namespace Gwen
 
 			m_pContext = ( void* ) hRC;
 			return true;
+#else
+            Window win = (Window)pWindow->GetWindow();
+  // Get the default screen's GLX extension list
+  const char *glxExts = glXQueryExtensionsString( x11_display,
+                                                  DefaultScreen( x11_display ) );
+
+  // NOTE: It is not necessary to create or make current to a context before
+  // calling glXGetProcAddressARB
+  glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
+  glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
+           glXGetProcAddressARB( (const GLubyte *) "glXCreateContextAttribsARB" );
+
+  GLXContext ctx = 0;
+
+  // Install an X error handler so the application won't exit if GL 3.0
+  // context allocation fails.
+  //
+  // Note this error handler is global.  All display connections in all threads
+  // of a process use the same error handler, so be sure to guard against other
+  // threads issuing X commands while this code is running.
+  ctxErrorOccurred = false;
+  int (*oldHandler)(Display*, XErrorEvent*) =
+      XSetErrorHandler(&ctxErrorHandler);
+
+  // Check for the GLX_ARB_create_context extension string and the function.
+  // If either is not present, use GLX 1.3 context creation method.
+  if ( !isExtensionSupported( glxExts, "GLX_ARB_create_context" ) ||
+       !glXCreateContextAttribsARB )
+  {
+    printf( "glXCreateContextAttribsARB() not found"
+            " ... using old-style GLX context\n" );
+    ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, 0, True );
+  }
+
+  // If it does, try to get a GL 3.0 context!
+  else
+  {
+    int context_attribs[] =
+      {
+        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+        GLX_CONTEXT_MINOR_VERSION_ARB, 0,
+        //GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+        None
+      };
+
+    printf( "Creating context\n" );
+    ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0,
+                                      True, context_attribs );
+
+    // Sync to ensure any errors generated are processed.
+    XSync( x11_display, False );
+    if ( !ctxErrorOccurred && ctx )
+      printf( "Created GL 3.0 context\n" );
+    else
+    {
+      // Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
+      // When a context version below 3.0 is requested, implementations will
+      // return the newest context version compatible with OpenGL versions less
+      // than version 3.0.
+      // GLX_CONTEXT_MAJOR_VERSION_ARB = 1
+      context_attribs[1] = 1;
+      // GLX_CONTEXT_MINOR_VERSION_ARB = 0
+      context_attribs[3] = 0;
+
+      ctxErrorOccurred = false;
+
+      printf( "Failed to create GL 3.0 context"
+              " ... using old-style GLX context\n" );
+      ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0, 
+                                        True, context_attribs );
+    }
+  }
+
+  // Sync to ensure any errors generated are processed.
+  XSync( x11_display, False );
+
+  // Restore the original error handler
+  XSetErrorHandler( oldHandler );
+
+  if ( ctxErrorOccurred || !ctx )
+  {
+    printf( "Failed to create an OpenGL context\n" );
+    exit(1);
+  }
+
+  // Verifying that context is a direct context
+  if ( ! glXIsDirect ( x11_display, ctx ) )
+  {
+    printf( "Indirect GLX rendering context obtained\n" );
+  }
+  else
+  {
+    printf( "Direct GLX rendering context obtained\n" );
+  }
+
+  printf( "Making context current\n" );
+  glXMakeCurrent( x11_display, win, ctx );
+
+m_pContext = (GLXContext)ctx;
+            return true;
 #endif
 			return false;
 		}
@@ -299,6 +469,10 @@ namespace Gwen
 #ifdef _WIN32
 			wglDeleteContext( ( HGLRC ) m_pContext );
 			return true;
+#else
+			glXMakeCurrent( x11_display, 0, 0 );
+			glXDestroyContext( x11_display, (GLXContext)m_pContext );
+            return true;
 #endif
 			return false;
 		}
@@ -313,6 +487,22 @@ namespace Gwen
 			HDC hDC = GetDC( pHwnd );
 			SwapBuffers( hDC );
 			return true;
+#else
+			Window window = ( Window ) pWindow->GetWindow();
+
+			if ( !window ) { return false; }
+
+            Gwen::Color c(255, 255, 0, 255);
+            SetDrawColor(c);
+            Gwen::Rect r;
+            r.x = r.y = 10;
+            r.w = 10;
+            r.h = 10;
+            //DrawFilledRect(r);
+
+            glXSwapBuffers ( x11_display, window );
+            //glXMakeCurrent( x11_display, 0, 0 );
+            return true;
 #endif
 			return false;
 		}
@@ -332,6 +522,23 @@ namespace Gwen
 			}
 
 			return true;
+#else
+            struct R {  int left, right, bottom, top; };
+            R r;
+            Window root;
+            unsigned int width, height, border_width, depth;
+            XGetGeometry(x11_display, (Window)pWindow->GetWindow(), &root, &r.left, &r.top, &width, &height, &border_width, &depth);
+            r.right = r.left + width;
+            r.bottom = r.top + height;
+
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+			//glOrtho( r.left, r.right, r.bottom, r.top, -1.0, 1.0 );
+            glOrtho(0, width, 0, height, 1, -1);
+            //glOrtho(0, width, height, 0, 1, -1);
+			glMatrixMode( GL_MODELVIEW );
+			glViewport( 0, 0, width, height);
+            return true;
 #endif
 			return false;
 		}
