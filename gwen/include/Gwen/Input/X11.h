@@ -34,6 +34,7 @@ namespace Gwen
 				{
 					if ( !m_Canvas ) { return false; }
 
+                    bool press = true;
                     KeySym key;
                     char text[255];
 					switch ( event.type )
@@ -60,14 +61,44 @@ namespace Gwen
 								//Gwen::PointF scale = m_Canvas->GetSkin()->GetRender()->GetDPIScaling();*/
 								return m_Canvas->InputMouseMoved( x, y, dx, dy);
 							}
-
+                        case KeyRelease:
+                            press = false;
 						case KeyPress:
 							{
-                                if (XLookupString(&event.xkey, text, 255, &key, 0) == 1)
+                                int len = XLookupString(&event.xkey, text, 255, &key, 0);
+                                if (true)
                                 {
-                                    printf("Key pressed: %s", text);
-								    Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) text[0];
-								    return m_Canvas->InputCharacter( chr );
+                                    if (((text[0] >= 'A' && text[0] <= 'z') || text[0] == ' ' ||
+                                        (text[0] >= '0' && text[0] <= '9')) && len == 1)
+                                    {
+                                        if (!press) { return false; }
+								        Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) text[0];
+								        return m_Canvas->InputCharacter( chr );
+                                    }
+
+                                    int iKey = -1;
+                                    if (key == XK_BackSpace) { iKey = Gwen::Key::Backspace; }
+                                    else if (key == XK_Tab) { iKey = Gwen::Key::Tab; }
+                                    else if (key == XK_Delete) { iKey = Gwen::Key::Delete; }
+                                    else if (key == XK_Return) { iKey = Gwen::Key::Return; }
+                                    else if (key == XK_Left) { iKey = Gwen::Key::Left; }
+                                    else if (key == XK_Up) { iKey = Gwen::Key::Up; }
+                                    else if (key == XK_Down) { iKey = Gwen::Key::Down; }
+                                    else if (key == XK_Right) { iKey = Gwen::Key::Right; }
+                                    else if (key == XK_End) { iKey = Gwen::Key::End; }
+                                    else if (key == XK_Home) { iKey = Gwen::Key::Home; }
+                                    else if (key == XK_Prior) { iKey = Gwen::Key::PageUp; }
+                                    else if (key == XK_Next) { iKey = Gwen::Key::PageDown; }
+                                    else if (key == XK_Shift_L || key == XK_Shift_R) { iKey = Gwen::Key::Shift; }
+								/*else if ( msg.wParam == VK_SPACE ) { iKey = Gwen::Key::Space; }
+								else if ( msg.wParam == VK_CONTROL ) { iKey = Gwen::Key::Control; }
+								else if ( msg.wParam == VK_SPACE ) { iKey = Gwen::Key::Space; }
+								else if (msg.wParam >= VK_F1 && msg.wParam <= VK_F24) { iKey = Gwen::Key::F1 + msg.wParam - VK_F1; }*/
+								
+								    if ( iKey != -1 )
+								    {
+									    return m_Canvas->InputKey( iKey, press );
+								    }
                                 }
 							}
 

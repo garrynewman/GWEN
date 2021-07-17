@@ -36,9 +36,9 @@ WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin,
 	}
 	m_WindowPos  = Gwen::Point( x, y );
 
-	pSkin->GetRender()->Init();
 	m_pOSWindow = Gwen::Platform::CreatePlatformWindow( x, y, w, h, strWindowTitle, pSkin->GetRender() );
 	pSkin->GetRender()->InitializeContext(this);
+	pSkin->GetRender()->Init();
 	m_pSkinChange = pSkin;
 	SetSize( w, h );
 	m_TitleBar = new Gwen::ControlsInternal::Dragger( this );

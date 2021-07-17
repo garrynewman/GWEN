@@ -7,7 +7,7 @@
 #include "Gwen/Macros.h"
 #include "Gwen/Platform.h"
 
-#if !defined(GWEN_ALLEGRO_PLATFORM) 
+#ifndef GWEN_ALLEGRO_PLATFORM
 //!defined(_WIN32) && !defined(GWEN_ALLEGRO_PLATFORM)
 
 #include <X11/Xlib.h>
@@ -180,7 +180,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   // Done with the visual info data
   XFree( vi );
 
-  XStoreName( display, win, "GL 3.0 Window" );
+  XStoreName( display, win, strWindowTitle.c_str() );
 
   printf( "Mapping window\n" );
   XMapWindow( display, win );

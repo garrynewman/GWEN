@@ -124,8 +124,8 @@ namespace Gwen
 				Flush();
 			}
 
-			m_Vertices[ m_iVertNum ].x = ( float ) x;
-			m_Vertices[ m_iVertNum ].y = ( float ) y;
+			m_Vertices[ m_iVertNum ].x = ( float ) x + 10;
+			m_Vertices[ m_iVertNum ].y = ( float ) y + 34;
 			m_Vertices[ m_iVertNum ].u = u;
 			m_Vertices[ m_iVertNum ].v = v;
 			m_Vertices[ m_iVertNum ].r = m_Color.r;
@@ -155,7 +155,6 @@ namespace Gwen
 			AddVert( rect.x + rect.w, rect.y );
 			AddVert( rect.x + rect.w, rect.y + rect.h );
 			AddVert( rect.x, rect.y + rect.h );
-            Flush();
 		}
 
 		void OpenGL::SetDrawColor( Gwen::Color color )
@@ -232,7 +231,6 @@ namespace Gwen
 			{ imageFormat = FreeImage_GetFIFFromFilename( fileName ); }
 #endif
 
-            //FILE* f = fopen(pTexture->name.m_String.c_str(), "rb");
 			// Image failed to load..
 			if ( imageFormat == FIF_UNKNOWN )
 			{
@@ -492,16 +490,7 @@ m_pContext = (GLXContext)ctx;
 
 			if ( !window ) { return false; }
 
-            Gwen::Color c(255, 255, 0, 255);
-            SetDrawColor(c);
-            Gwen::Rect r;
-            r.x = r.y = 10;
-            r.w = 10;
-            r.h = 10;
-            //DrawFilledRect(r);
-
             glXSwapBuffers ( x11_display, window );
-            //glXMakeCurrent( x11_display, 0, 0 );
             return true;
 #endif
 			return false;
@@ -533,8 +522,8 @@ m_pContext = (GLXContext)ctx;
 
 			glMatrixMode( GL_PROJECTION );
 			glLoadIdentity();
-			//glOrtho( r.left, r.right, r.bottom, r.top, -1.0, 1.0 );
-            glOrtho(0, width, 0, height, 1, -1);
+			glOrtho( r.left, r.right, r.bottom, r.top, -1.0, 1.0 );
+            //glOrtho(0, width, 0, height, 1, -1);
             //glOrtho(0, width, height, 0, 1, -1);
 			glMatrixMode( GL_MODELVIEW );
 			glViewport( 0, 0, width, height);
