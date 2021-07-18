@@ -185,7 +185,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   printf( "Mapping window\n" );
   XMapWindow( display, win );
 
-  XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|ExposureMask|PointerMotionMask|StructureNotifyMask);
+  XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask);
 
   //glClearColor( 0, 0.5, 1, 1 );
   //glClear( GL_COLOR_BUFFER_BIT );

@@ -102,17 +102,20 @@ namespace Gwen
                                 }
 							}
 
-                        case ButtonPress:
-                            {
-                                printf("Mouse pressed");
-                                return m_Canvas->InputMouseButton(0, true);
-                            }
-
                         case ButtonRelease:
                             {
-                                printf("Mouse released");
-                                return m_Canvas->InputMouseButton(0, false);                                
+                                press = false;                                
                             }
+                        case ButtonPress:
+                            {
+                                if (event.xbutton.button == 1)
+                                    return m_Canvas->InputMouseButton(0, press);
+                                if (event.xbutton.button == 2)
+                                    return m_Canvas->InputMouseButton(2, press);
+                                if (event.xbutton.button == 3)
+                                    return m_Canvas->InputMouseButton(1, press);
+                            }
+
 
 /*#ifdef WM_MOUSEWHEEL
 

@@ -125,7 +125,7 @@ namespace Gwen
 			}
 
 			m_Vertices[ m_iVertNum ].x = ( float ) x + 10;
-			m_Vertices[ m_iVertNum ].y = ( float ) y + 34;
+			m_Vertices[ m_iVertNum ].y = ( float ) y + 33;
 			m_Vertices[ m_iVertNum ].u = u;
 			m_Vertices[ m_iVertNum ].v = v;
 			m_Vertices[ m_iVertNum ].r = m_Color.r;
