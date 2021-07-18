@@ -66,40 +66,34 @@ namespace Gwen
 						case KeyPress:
 							{
                                 int len = XLookupString(&event.xkey, text, 255, &key, 0);
-                                if (true)
+                                if ((key >= 33 && key <= 126) && len == 1)
                                 {
-                                    if (((text[0] >= 'A' && text[0] <= 'z') || text[0] == ' ' ||
-                                        (text[0] >= '0' && text[0] <= '9')) && len == 1)
-                                    {
-                                        if (!press) { return false; }
-								        Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) text[0];
-								        return m_Canvas->InputCharacter( chr );
-                                    }
-
-                                    int iKey = -1;
-                                    if (key == XK_BackSpace) { iKey = Gwen::Key::Backspace; }
-                                    else if (key == XK_Tab) { iKey = Gwen::Key::Tab; }
-                                    else if (key == XK_Delete) { iKey = Gwen::Key::Delete; }
-                                    else if (key == XK_Return) { iKey = Gwen::Key::Return; }
-                                    else if (key == XK_Left) { iKey = Gwen::Key::Left; }
-                                    else if (key == XK_Up) { iKey = Gwen::Key::Up; }
-                                    else if (key == XK_Down) { iKey = Gwen::Key::Down; }
-                                    else if (key == XK_Right) { iKey = Gwen::Key::Right; }
-                                    else if (key == XK_End) { iKey = Gwen::Key::End; }
-                                    else if (key == XK_Home) { iKey = Gwen::Key::Home; }
-                                    else if (key == XK_Prior) { iKey = Gwen::Key::PageUp; }
-                                    else if (key == XK_Next) { iKey = Gwen::Key::PageDown; }
-                                    else if (key == XK_Shift_L || key == XK_Shift_R) { iKey = Gwen::Key::Shift; }
-								/*else if ( msg.wParam == VK_SPACE ) { iKey = Gwen::Key::Space; }
-								else if ( msg.wParam == VK_CONTROL ) { iKey = Gwen::Key::Control; }
-								else if ( msg.wParam == VK_SPACE ) { iKey = Gwen::Key::Space; }
-								else if (msg.wParam >= VK_F1 && msg.wParam <= VK_F24) { iKey = Gwen::Key::F1 + msg.wParam - VK_F1; }*/
-								
-								    if ( iKey != -1 )
-								    {
-									    return m_Canvas->InputKey( iKey, press );
-								    }
+                                    if (!press) { return false; }
+								    Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) key;
+								    return m_Canvas->InputCharacter( chr );
                                 }
+
+                                int iKey = -1;
+                                if (key == XK_BackSpace) { iKey = Gwen::Key::Backspace; }
+                                else if (key == XK_Tab) { iKey = Gwen::Key::Tab; }
+                                else if (key == XK_Delete) { iKey = Gwen::Key::Delete; }
+                                else if (key == XK_Return) { iKey = Gwen::Key::Return; }
+                                else if (key == XK_Left) { iKey = Gwen::Key::Left; }
+                                else if (key == XK_Up) { iKey = Gwen::Key::Up; }
+                                else if (key == XK_Down) { iKey = Gwen::Key::Down; }
+                                else if (key == XK_Right) { iKey = Gwen::Key::Right; }
+                                else if (key == XK_End) { iKey = Gwen::Key::End; }
+                                else if (key == XK_Home) { iKey = Gwen::Key::Home; }
+                                else if (key == XK_Prior) { iKey = Gwen::Key::PageUp; }
+                                else if (key == XK_Next) { iKey = Gwen::Key::PageDown; }
+                                else if (key == XK_Shift_L || key == XK_Shift_R) { iKey = Gwen::Key::Shift; }
+                                else if (key == XK_Control_L || key == XK_Control_R) { iKey = Gwen::Key::Control; }
+								/*else if (msg.wParam >= VK_F1 && msg.wParam <= VK_F24) { iKey = Gwen::Key::F1 + msg.wParam - VK_F1; }*/
+								
+								if ( iKey != -1 )
+								{
+								    return m_Canvas->InputKey( iKey, press );
+								}
 							}
 
                         case ButtonRelease:
@@ -114,17 +108,15 @@ namespace Gwen
                                     return m_Canvas->InputMouseButton(2, press);
                                 if (event.xbutton.button == 3)
                                     return m_Canvas->InputMouseButton(1, press);
+                                // Scrolling is mapped to buttons....
+                                if (event.xbutton.button == 4)
+                                    return m_Canvas->InputMouseWheel(20);
+                                if (event.xbutton.button == 5)
+                                    return m_Canvas->InputMouseWheel(-20);
                             }
 
 
-/*#ifdef WM_MOUSEWHEEL
-
-						case WM_MOUSEWHEEL:
-							{
-								return m_Canvas->InputMouseWheel(((short)HIWORD(msg.wParam)) / WHEEL_DELTA);
-							}
-
-#endif
+/*
 
 						case WM_LBUTTONDOWN:
 							{
@@ -172,14 +164,6 @@ namespace Gwen
 								if (ret)
 								 ReleaseCapture();
 								return ret;
-							}
-
-						case WM_LBUTTONDBLCLK:
-						case WM_RBUTTONDBLCLK:
-						case WM_MBUTTONDBLCLK:
-							{
-								// Filter out those events from the application
-								return true;
 							}
 
 						case WM_KEYDOWN:
