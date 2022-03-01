@@ -37,6 +37,7 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	SetKeyboardInputEnabled( true );
 	SetAlignment( Pos::Left | Pos::CenterV );
 	SetPadding( Padding( 4, 2, 4, 2 ) );
+	SetCursor( Gwen::CursorType::Beam );
 	m_iCursorPos = 0;
 	m_iCursorEnd = 0;
 	m_iCursorLine = 0;

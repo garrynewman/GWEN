@@ -34,15 +34,6 @@ namespace Gwen
 			if ( !text.length() )
 			{ return; }
 
-			if (!fs)
-            {
-                fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
-                if (fs == NULL)
-                {
-		            printf("Could not create stash.\n");
-	            }
-            }
-
             if (pFont->data == 0)
             {
                 Gwen::String name = Gwen::Utility::UnicodeToString( pFont->facename );
@@ -75,11 +66,6 @@ namespace Gwen
 
 		Gwen::PointF OpenGL::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
-			if (!fs)
-            {
-                fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
-            }
-
             if (pFont->data == 0)
             {
                 Gwen::String name = Gwen::Utility::UnicodeToString( pFont->facename );

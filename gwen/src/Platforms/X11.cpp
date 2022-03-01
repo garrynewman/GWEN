@@ -12,6 +12,8 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xcursor/Xcursor.h>
+#include <X11/cursorfont.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
 
@@ -25,6 +27,7 @@
 
 static Gwen::UnicodeString gs_ClipboardEmulator;
 Display* x11_display;
+Window x11_window;
 GLXFBConfig global_bestFbc;
 
 static Gwen::Input::X11 GwenInput;
@@ -37,7 +40,47 @@ void Gwen::Platform::Sleep( unsigned int iMS )
 
 void Gwen::Platform::SetCursor( unsigned char iCursor )
 {
+    int cursor_id = 0;
+    if (iCursor == Gwen::CursorType::SizeNS)
+    {
+        cursor_id = XC_sb_v_double_arrow;
+    }
+    else if (iCursor == Gwen::CursorType::SizeWE)
+    {
+        cursor_id = XC_sb_h_double_arrow;
+    }
+    else if (iCursor == Gwen::CursorType::SizeNWSE)
+    {
+        cursor_id = XC_bottom_right_corner;
+    }
+    else if (iCursor == Gwen::CursorType::SizeNESW)
+    {
+        cursor_id = XC_bottom_left_corner;
+    }
+    else if (iCursor == Gwen::CursorType::SizeAll)
+    {
+        cursor_id = XC_fleur;
+    }
+    else if (iCursor == Gwen::CursorType::Finger)
+    {
+        cursor_id = XC_hand1; 
+    }
+    else if (iCursor == Gwen::CursorType::No)
+    {
+        cursor_id = XC_X_cursor; 
+    }
+    else if (iCursor == Gwen::CursorType::Beam)
+    {
+        cursor_id = XC_xterm;
+    }
+    else// normal
+    {
+        XUndefineCursor(x11_display, x11_window);
+        return;
+    }
 	// No platform independent way to do this
+    Cursor c = XCreateFontCursor(x11_display, cursor_id);
+    XDefineCursor(x11_display, x11_window, c);
 }
 
 Gwen::UnicodeString Gwen::Platform::GetClipboardText()
