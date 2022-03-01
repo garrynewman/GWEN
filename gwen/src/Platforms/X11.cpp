@@ -21,6 +21,8 @@
 
 #include <unistd.h>
 
+#include "portable-file-dialogs.h"
+
 static Gwen::UnicodeString gs_ClipboardEmulator;
 Display* x11_display;
 GLXFBConfig global_bestFbc;
@@ -57,21 +59,47 @@ float Gwen::Platform::GetTimeInSeconds()
 
 bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
 {
-	// No platform independent way to do this.
-	// Ideally you would open a system dialog here
-	return false;
+	auto files = pfd::open_file(Name, StartPath, { Extension }, pfd::opt::none).result();
+
+	if ( pHandler && fnCallback && files.size() > 0)
+	{
+		Gwen::Event::Information info;
+		info.Control		= NULL;
+		info.ControlCaller	= NULL;
+		info.String			= files[0];
+		( pHandler->*fnCallback )( info );
+	}
+	return true;
 }
 
 bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
-	// No platform independent way to do this.
-	// Ideally you would open a system dialog here
-	return false;
+	auto file = pfd::save_file(Name, StartPath, { Extension }, pfd::opt::none).result();
+
+	if ( pHandler && fnCallback && file.length())
+	{
+		Gwen::Event::Information info;
+		info.Control		= NULL;
+		info.ControlCaller	= NULL;
+		info.String			= file;
+		( pHandler->*fnCallback )( info );
+	}
+    return true;
 }
 
 bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
 {
-	return false;
+	auto folder = pfd::select_folder(Name, StartPath).result();
+
+	if ( pHandler && fnCallback && folder.length())
+	{
+		Gwen::Event::Information info;
+		info.Control		= NULL;
+		info.ControlCaller	= NULL;
+		info.String			= folder;
+		( pHandler->*fnCallback )( info );
+	}
+	return true;
 }
 
 GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
@@ -210,8 +238,8 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 
         if (event.type == ConfigureNotify)
         {
-            printf("Width %i Height %i \n", event.xconfigure.width, event.xconfigure.height);
             ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, event.xconfigure.width, event.xconfigure.height );
+            ptarget->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
         }
         if (event.type == Expose && event.xexpose.count == 0)
         {

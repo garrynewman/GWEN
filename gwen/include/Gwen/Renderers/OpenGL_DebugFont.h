@@ -8,14 +8,14 @@
 #define GWEN_RENDERERS_OPENGL_DEBUGFONT_H
 
 #include "Gwen/Gwen.h"
-#include "Gwen/Renderers/OpenGL.h"
+#include "Gwen/Renderers/OpenGL_Base.h"
 
 namespace Gwen
 {
 	namespace Renderer
 	{
 
-		class OpenGL_DebugFont : public Gwen::Renderer::OpenGL
+		class OpenGL_DebugFont : public Gwen::Renderer::OpenGL_Base
 		{
 			public:
 

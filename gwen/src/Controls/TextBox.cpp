@@ -42,7 +42,7 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	m_iCursorLine = 0;
     m_bEditable = true;
 	m_bSelectAll = false;
-	SetTextColor( Gwen::Color( 50, 50, 50, 255 ) );   // TODO: From Skin
+	SetTextColor( GetSkin()->Colors.Label.Default );
 	SetTabable( true );
 	AddAccelerator( L"Ctrl + C", &TextBox::OnCopy );
 	AddAccelerator( L"Ctrl + X", &TextBox::OnCut );

@@ -1,20 +1,107 @@
 project(GWEN)
 cmake_minimum_required(VERSION 3.10)
 
-file(GLOB GWEN_sources src/**.cpp)
-file(GLOB GWEN_control_sources src/Controls/**.cpp)
-file(GLOB GWEN_unit_test_sources UnitTest/**.cpp)
-add_library(GWEN_static ${GWEN_sources} ${GWEN_control_sources} ${GWEN_unit_test_sources} src/Platforms/X11.cpp)
-target_include_directories(GWEN_static PUBLIC include)
+set(USE_ALLEGRO false)
 
-add_library(GWEN_opengl Renderers/OpenGL/OpenGL.cpp Renderers/OpenGL/DebugFont/OpenGL_DebugFont.cpp)
+if(USE_ALLEGRO)
+set(GWEN_platform_sources src/Platforms/AllegroPlatform.cpp)
+else()
+if(WIN32)
+set(GWEN_platform_sources src/Platforms/Windows.cpp)
+else()
+set(GWEN_platform_sources src/Platforms/X11.cpp)
+endif()
+endif()
+file(GLOB GWEN_sources src/**.cpp)
+file(GLOB GWEN_dialog_sources src/Controls/Dialog/**.cpp)
+file(GLOB GWEN_control_sources src/Controls/**.cpp)
+add_library(GWEN_static 
+  ${GWEN_sources}
+  ${GWEN_control_sources}
+  ${GWEN_dialog_sources}
+  ${GWEN_unit_test_sources}
+  ${GWEN_platform_sources})
+target_include_directories(GWEN_static PUBLIC include)
+if(USE_ALLEGRO)
+target_link_libraries(GWEN_static allegro)
+else()
+if(WIN32)
+target_link_libraries(GWEN_static system32)
+else()
+target_link_libraries(GWEN_static X11)
+endif()
+endif()
+
+file(GLOB GWEN_unit_test_sources UnitTest/**.cpp)
+add_library(GWEN_unit_test
+  ${GWEN_unit_test_sources})
+target_include_directories(GWEN_unit_test PUBLIC include)
+target_link_libraries(GWEN_unit_test GWEN_static)
+
+add_library(GWEN_opengl 
+  Renderers/OpenGL/OpenGL.cpp
+  Renderers/OpenGL/OpenGL_Base.cpp
+  Renderers/OpenGL/DebugFont/OpenGL_DebugFont.cpp
+)
 target_include_directories(GWEN_opengl PUBLIC include)
-target_link_libraries(GWEN_opengl freeimage)
+target_link_libraries(GWEN_opengl freeimage GL)
+
+if(USE_ALLEGRO)
+add_library(GWEN_allegro
+  Renderers/Allegro/Allegro.cpp)
+target_include_directories(GWEN_allegro PUBLIC include)
+target_link_libraries(GWEN_allegro freeimage GL)
+endif()
+
+if(WIN32)
+add_library(GWEN_d2d 
+  Renderers/Direct2D/Direct2D.cpp)
+target_include_directories(GWEN_d2d PUBLIC include)
+target_link_libraries(GWEN_d2d d2d)
+
+add_library(GWEN_dx9
+  Renderers/DirectX9/DirectX9.cpp)
+target_include_directories(GWEN_dx9 PUBLIC include)
+target_link_libraries(GWEN_dx9 d3d)
+
+add_library(GWEN_dx10
+  Renderers/DirectX10/DirectX10.cpp)
+target_include_directories(GWEN_dx10 PUBLIC include)
+target_link_libraries(GWEN_dx10 d3d)
+
+add_library(GWEN_dx9
+  Renderers/DirectX11/DirectX11.cpp)
+target_include_directories(GWEN_dx11 PUBLIC include)
+target_link_libraries(GWEN_dx11 d3d)
+endif()
 
 # Samples
 add_executable(GWEN_cross_platform_sample Samples/CrossPlatform/CrossPlatform.cpp)
 target_include_directories(GWEN_cross_platform_sample PUBLIC include)
-target_link_libraries(GWEN_cross_platform_sample GWEN_opengl GWEN_static X11 GL)
+target_link_libraries(GWEN_cross_platform_sample GWEN_opengl GWEN_static GWEN_unit_test)
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
-    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+
+#set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
+#    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+
+function(my_export_target _target _include_dir)
+    file(
+        WRITE "${CMAKE_CURRENT_BINARY_DIR}/${_target}Config.cmake"
+        "
+            include(\"\$\{CMAKE_CURRENT_LIST_DIR\}/${_target}Targets.cmake\")
+            set_property(
+                TARGET ${_target}
+                APPEND PROPERTY
+                    INTERFACE_INCLUDE_DIRECTORIES \"${_include_dir}\"
+            )
+        "
+    )
+
+    export(TARGETS ${_target} GWEN_static FILE "${CMAKE_CURRENT_BINARY_DIR}/${_target}Targets.cmake")
+
+    # NOTE: The following call can pollute your PC's CMake package registry
+    #       See comments/alternatives below
+    export(PACKAGE ${_target})
+endfunction(my_export_target)
+
+my_export_target(${PROJECT_NAME}_opengl "${CMAKE_CURRENT_SOURCE_DIR}")
