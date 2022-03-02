@@ -60,7 +60,7 @@ namespace Gwen
             fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
             fonsSetFont(fs, (long)pFont->data);
             fonsSetColor(fs, glfonsRGBA(m_Color.r,m_Color.g,m_Color.b,m_Color.a));
-            fonsSetSize(fs, fSize*1.1);
+            fonsSetSize(fs, fSize*1.333f);
             fonsDrawText(fs, pos.x, pos.y, converted_string.c_str(), NULL);
 		}
 
@@ -78,14 +78,14 @@ namespace Gwen
             fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
             
             fonsSetFont(fs, (long)pFont->data);
-            fonsSetSize(fs, fSize*1.1);
+            fonsSetSize(fs, fSize*1.333f);
 
 			Gwen::PointF p;
 			
             float bounds[4];//0 is minx, 1 is miny, 2 is maxx 3 is maxy
             float advance = fonsTextBounds(fs, 0, 0, converted_string.c_str(), NULL, bounds);
             p.x = advance;//std::abs(bounds[2] - bounds[0]);
-			p.y = fSize;//std::abs(bounds[3] - bounds[1]);
+			p.y = fSize*1.33;//std::abs(bounds[3] - bounds[1]);
 			return p;
 		}
 	}

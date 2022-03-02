@@ -15,7 +15,9 @@
 #include <X11/Xcursor/Xcursor.h>
 #include <X11/cursorfont.h>
 #include <GL/gl.h>
+
 #include <GL/glx.h>
+#include <sys/time.h>
 
 #include "Gwen/Input/X11.h"
 
@@ -34,7 +36,6 @@ static Gwen::Input::X11 GwenInput;
 
 void Gwen::Platform::Sleep( unsigned int iMS )
 {
-	// TODO.
     usleep(iMS*1000);
 }
 
@@ -78,9 +79,9 @@ void Gwen::Platform::SetCursor( unsigned char iCursor )
         XUndefineCursor(x11_display, x11_window);
         return;
     }
-	// No platform independent way to do this
+	
     Cursor c = XCreateFontCursor(x11_display, cursor_id);
-    XDefineCursor(x11_display, x11_window, c);
+    XDefineCursor(x11_display, x11_window, c);// todo need to get the correct window
 }
 
 Gwen::UnicodeString Gwen::Platform::GetClipboardText()
@@ -94,9 +95,20 @@ bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString & str )
 	return true;
 }
 
+static uint64_t start = 0;
 float Gwen::Platform::GetTimeInSeconds()
 {
-	float fSeconds = ( float ) clock() / ( float ) CLOCKS_PER_SEC;
+	struct timeval tv;
+	gettimeofday(&tv, 0);
+	
+	uint64_t time_us = tv.tv_sec*1000000 + tv.tv_usec;
+	if (start == 0)
+	{
+		start = time_us;
+	}
+	
+	uint64_t dt = time_us - start;
+	float fSeconds = (float)dt/1000000.0f;
 	return fSeconds;
 }
 
@@ -257,6 +269,8 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   XMapWindow( display, win );
 
   XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask);
+
+  x11_window = win;
 
   //glClearColor( 0, 0.5, 1, 1 );
   //glClear( GL_COLOR_BUFFER_BIT );

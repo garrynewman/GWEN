@@ -363,104 +363,105 @@ namespace Gwen
 			m_pContext = ( void* ) hRC;
 			return true;
 #else
-            Window win = (Window)pWindow->GetWindow();
-  // Get the default screen's GLX extension list
-  const char *glxExts = glXQueryExtensionsString( x11_display,
+			Window win = (Window)pWindow->GetWindow();
+			// Get the default screen's GLX extension list
+			const char *glxExts = glXQueryExtensionsString( x11_display,
                                                   DefaultScreen( x11_display ) );
 
-  // NOTE: It is not necessary to create or make current to a context before
-  // calling glXGetProcAddressARB
-  glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
-  glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
-           glXGetProcAddressARB( (const GLubyte *) "glXCreateContextAttribsARB" );
+			// NOTE: It is not necessary to create or make current to a context before
+			// calling glXGetProcAddressARB
+			glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
+			glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
+			glXGetProcAddressARB( (const GLubyte *) "glXCreateContextAttribsARB" );
 
-  GLXContext ctx = 0;
+			GLXContext ctx = 0;
 
-  // Install an X error handler so the application won't exit if GL 3.0
-  // context allocation fails.
-  //
-  // Note this error handler is global.  All display connections in all threads
-  // of a process use the same error handler, so be sure to guard against other
-  // threads issuing X commands while this code is running.
-  ctxErrorOccurred = false;
-  int (*oldHandler)(Display*, XErrorEvent*) =
-      XSetErrorHandler(&ctxErrorHandler);
+			// Install an X error handler so the application won't exit if GL 3.0
+			// context allocation fails.
+			//
+			// Note this error handler is global.  All display connections in all threads
+			// of a process use the same error handler, so be sure to guard against other
+			// threads issuing X commands while this code is running.
+			ctxErrorOccurred = false;
+			int (*oldHandler)(Display*, XErrorEvent*) =
+			XSetErrorHandler(&ctxErrorHandler);
 
-  // Check for the GLX_ARB_create_context extension string and the function.
-  // If either is not present, use GLX 1.3 context creation method.
-  if ( !isExtensionSupported( glxExts, "GLX_ARB_create_context" ) ||
-       !glXCreateContextAttribsARB )
-  {
-    printf( "glXCreateContextAttribsARB() not found"
-            " ... using old-style GLX context\n" );
-    ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, 0, True );
-  }
+			// Check for the GLX_ARB_create_context extension string and the function.
+			// If either is not present, use GLX 1.3 context creation method.
+			if ( !isExtensionSupported( glxExts, "GLX_ARB_create_context" ) ||
+				!glXCreateContextAttribsARB )
+			{
+				printf( "glXCreateContextAttribsARB() not found"
+					" ... using old-style GLX context\n" );
+				ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, 0, True );
+			}
+			// If it does, try to get a GL 3.0 context!
+			else
+			{
+				int context_attribs[] =
+				{
+					GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+					GLX_CONTEXT_MINOR_VERSION_ARB, 0,// change back to 0
+					//GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+					None
+				};
 
-  // If it does, try to get a GL 3.0 context!
-  else
-  {
-    int context_attribs[] =
-      {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-        GLX_CONTEXT_MINOR_VERSION_ARB, 0,// change back to 0
-        //GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
-        None
-      };
-
-    printf( "Creating context\n" );
-    ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0,
+				//printf( "Creating context\n" );
+				ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0,
                                       True, context_attribs );
 
-    // Sync to ensure any errors generated are processed.
-    XSync( x11_display, False );
-    if ( !ctxErrorOccurred && ctx )
-      printf( "Created GL 3.0 context\n" );
-    else
-    {
-      // Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
-      // When a context version below 3.0 is requested, implementations will
-      // return the newest context version compatible with OpenGL versions less
-      // than version 3.0.
-      // GLX_CONTEXT_MAJOR_VERSION_ARB = 1
-      context_attribs[1] = 1;
-      // GLX_CONTEXT_MINOR_VERSION_ARB = 0
-      context_attribs[3] = 0;
+				// Sync to ensure any errors generated are processed.
+				XSync( x11_display, False );
+				if ( !ctxErrorOccurred && ctx )
+				{
+					//  printf( "Created GL 3.0 context\n" );
+				}
+				else
+				{
+					// Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
+					// When a context version below 3.0 is requested, implementations will
+					// return the newest context version compatible with OpenGL versions less
+					// than version 3.0.
+					// GLX_CONTEXT_MAJOR_VERSION_ARB = 1
+					context_attribs[1] = 1;
+					// GLX_CONTEXT_MINOR_VERSION_ARB = 0
+					context_attribs[3] = 0;
 
-      ctxErrorOccurred = false;
+					ctxErrorOccurred = false;
 
-      printf( "Failed to create GL 3.0 context"
-              " ... using old-style GLX context\n" );
-      ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0, 
+					printf( "Failed to create GL 3.0 context"
+						" ... using old-style GLX context\n" );
+					ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0, 
                                         True, context_attribs );
-    }
-  }
+				}
+			}
 
-  // Sync to ensure any errors generated are processed.
-  XSync( x11_display, False );
+			// Sync to ensure any errors generated are processed.
+			XSync( x11_display, False );
 
-  // Restore the original error handler
-  XSetErrorHandler( oldHandler );
+			// Restore the original error handler
+			XSetErrorHandler( oldHandler );
 
-  if ( ctxErrorOccurred || !ctx )
-  {
-    printf( "Failed to create an OpenGL context\n" );
-    exit(1);
-  }
+			if ( ctxErrorOccurred || !ctx )
+			{
+				printf( "Failed to create an OpenGL context\n" );
+				exit(1);
+			}
 
-  // Verifying that context is a direct context
-  if ( ! glXIsDirect ( x11_display, ctx ) )
-  {
-    printf( "Indirect GLX rendering context obtained\n" );
-  }
-  else
-  {
-    printf( "Direct GLX rendering context obtained\n" );
-  }
+			// Verifying that context is a direct context
+			if ( ! glXIsDirect ( x11_display, ctx ) )
+			{
+				printf( "Indirect GLX rendering context obtained\n" );
+			}
+			else
+			{
+				//printf( "Direct GLX rendering context obtained\n" );
+			}
 
-  printf( "Making context current\n" );
-  glXMakeCurrent( x11_display, win, ctx );
+			//printf( "Making context current\n" );
+			glXMakeCurrent( x11_display, win, ctx );
 
-m_pContext = (GLXContext)ctx;
+			m_pContext = (GLXContext)ctx;
             return true;
 #endif
 			return false;

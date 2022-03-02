@@ -98,7 +98,7 @@ namespace Gwen
 
                         case ButtonRelease:
                             {
-                                press = false;                                
+                                press = false;
                             }
                         case ButtonPress:
                             {
