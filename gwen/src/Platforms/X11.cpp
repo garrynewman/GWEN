@@ -112,9 +112,25 @@ float Gwen::Platform::GetTimeInSeconds()
 	return fSeconds;
 }
 
+static std::vector<std::string> split (std::string s, char delimiter) {
+    size_t pos_start = 0, pos_end, delim_len = 1;
+    std::string token;
+    std::vector<std::string> res;
+
+    while ((pos_end = s.find (delimiter, pos_start)) != std::string::npos) {
+        token = s.substr (pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back (token);
+    }
+
+    res.push_back (s.substr (pos_start));
+    return res;
+}
+
 bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
 {
-	auto files = pfd::open_file(Name, StartPath, { Extension }, pfd::opt::none).result();
+	std::vector<std::string> extensions = split(Extension, '|');
+	auto files = pfd::open_file(Name, StartPath, extensions, pfd::opt::none).result();
 
 	if ( pHandler && fnCallback && files.size() > 0)
 	{
@@ -129,7 +145,9 @@ bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, co
 
 bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
-	auto file = pfd::save_file(Name, StartPath, { Extension }, pfd::opt::none).result();
+	// split out extensions
+	std::vector<std::string> extensions = split(Extension, '|');
+	auto file = pfd::save_file(Name, StartPath, extensions, pfd::opt::none).result();
 
 	if ( pHandler && fnCallback && file.length())
 	{
@@ -284,16 +302,20 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
     XDestroyWindow(x11_display, (Window)pPtr);
 }
 
+static std::map<Window, Gwen::Controls::WindowCanvas*> canvases;
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
+	x11_window = (Window)ptarget->GetWindow();
+	
     GwenInput.Initialize( ptarget );
+    canvases[(Window)ptarget->GetWindow()] = ptarget;
 
     XEvent event;
     while (XPending(x11_display))
     {
         XNextEvent(x11_display, &event);
 
-        if (event.type == ConfigureNotify)
+        if (event.type == ConfigureNotify && event.xconfigure.window == (Window)ptarget->GetWindow())
         {
             ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, event.xconfigure.width, event.xconfigure.height );
             ptarget->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
@@ -302,8 +324,29 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
         {
             ptarget->Redraw();
         }
+        if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
+        {
+        	canvases[event.xclient.window]->InputQuit();
+        	canvases.erase(event.xclient.window);
+        }
+        
+       	if (event.type == MotionNotify)
+       	{	
+       	
+       		GwenInput.Initialize(canvases[event.xmotion.window]);
+			x11_window = event.xmotion.window;
+        	GwenInput.ProcessMessage(event);
+       		continue;
+       	}
 
-        GwenInput.ProcessMessage(event);
+		// process it for _every_ window
+		// not that this is correct really...
+		for (auto canv: canvases)
+		{
+			GwenInput.Initialize(canv.second);
+			x11_window = canv.first;
+        	GwenInput.ProcessMessage(event);
+        }
     }
 }
 

@@ -57,7 +57,9 @@ namespace Gwen
 				int					m_iVertNum;
 				Vertex				m_Vertices[ MaxVerts ];
 
-
+				void*               m_pWindow;
+				
+				int width_, height_, ortho_x_, ortho_y_;
 			public:
 
 				//

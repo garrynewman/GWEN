@@ -364,6 +364,8 @@ namespace Gwen
 			return true;
 #else
 			Window win = (Window)pWindow->GetWindow();
+			m_pWindow = (void*)win;
+			
 			// Get the default screen's GLX extension list
 			const char *glxExts = glXQueryExtensionsString( x11_display,
                                                   DefaultScreen( x11_display ) );
@@ -401,7 +403,7 @@ namespace Gwen
 				int context_attribs[] =
 				{
 					GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-					GLX_CONTEXT_MINOR_VERSION_ARB, 0,// change back to 0
+					GLX_CONTEXT_MINOR_VERSION_ARB, 0,
 					//GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 					None
 				};
@@ -462,6 +464,8 @@ namespace Gwen
 			glXMakeCurrent( x11_display, win, ctx );
 
 			m_pContext = (GLXContext)ctx;
+			
+			m_pWindow = (void*)win;
             return true;
 #endif
 			return false;
@@ -530,6 +534,11 @@ namespace Gwen
 			glOrtho( 0, r.right-r.left, r.bottom-r.top, 0, -1.0, 1.0 );
 			glMatrixMode( GL_MODELVIEW );
 			glViewport(0, 0, width, height);
+			
+			width_ = width;
+			height_ = height;
+			ortho_x_ = r.right-r.left;
+			ortho_y_ = r.bottom-r.top;
             return true;
 #endif
 			return false;
@@ -537,6 +546,15 @@ namespace Gwen
 
 		bool OpenGL_Base::BeginContext( Gwen::WindowProvider* pWindow )
 		{
+#ifndef _win32
+			glXMakeCurrent( x11_display, (Window)m_pWindow, (GLXContext)m_pContext );
+#endif
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+			glOrtho( 0, ortho_x_, ortho_y_, 0, -1.0, 1.0 );
+			glMatrixMode( GL_MODELVIEW );
+			glViewport(0, 0, width_, height_);
+			
 			glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 			return true;
