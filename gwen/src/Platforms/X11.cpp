@@ -268,7 +268,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   printf( "Mapping window\n" );
   XMapWindow( display, win );
 
-  XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask);
+  XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
 
   x11_window = win;
 
@@ -298,7 +298,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
             ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, event.xconfigure.width, event.xconfigure.height );
             ptarget->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
         }
-        if (event.type == Expose && event.xexpose.count == 0)
+        if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
         {
             ptarget->Redraw();
         }
@@ -322,7 +322,11 @@ void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
 
 bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 {
-	return true;
+	Window focused;
+	int revert_to;
+	XGetInputFocus(x11_display, &focused, &revert_to);
+	
+	return focused == (Window)pPtr;
 }
 
 void Gwen::Platform::GetDesktopSize( int & w, int & h )
