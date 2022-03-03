@@ -124,8 +124,8 @@ namespace Gwen
 				Flush();
 			}
 
-			m_Vertices[ m_iVertNum ].x = ( float ) x + 10;
-			m_Vertices[ m_iVertNum ].y = ( float ) y + 33;
+			m_Vertices[ m_iVertNum ].x = ( float ) x;
+			m_Vertices[ m_iVertNum ].y = ( float ) y;
 			m_Vertices[ m_iVertNum ].u = u;
 			m_Vertices[ m_iVertNum ].v = v;
 			m_Vertices[ m_iVertNum ].r = m_Color.r;
@@ -527,9 +527,9 @@ namespace Gwen
 
 			glMatrixMode( GL_PROJECTION );
 			glLoadIdentity();
-			glOrtho( r.left, r.right, r.bottom, r.top, -1.0, 1.0 );
+			glOrtho( 0, r.right-r.left, r.bottom-r.top, 0, -1.0, 1.0 );
 			glMatrixMode( GL_MODELVIEW );
-			glViewport( 0, 0, width, height);
+			glViewport(0, 0, width, height);
             return true;
 #endif
 			return false;

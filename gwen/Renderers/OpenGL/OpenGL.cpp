@@ -53,10 +53,6 @@ namespace Gwen
 			pos.x = (((float)pos.x) * m_fScale);
 			pos.y = (((float)pos.y) * m_fScale);
 
-            pos.x += 10;
-            pos.y += 33;
-
-
             fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
             fonsSetFont(fs, (long)pFont->data);
             fonsSetColor(fs, glfonsRGBA(m_Color.r,m_Color.g,m_Color.b,m_Color.a));
