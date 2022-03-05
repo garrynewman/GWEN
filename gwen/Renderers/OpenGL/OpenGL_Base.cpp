@@ -95,6 +95,12 @@ namespace Gwen
 			glEnable( GL_BLEND );
 			glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 			//glAlphaFunc( GL_GREATER, 1.0f );
+			
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+			glOrtho( 0, ortho_x_, ortho_y_, 0, -1.0, 1.0 );
+			glMatrixMode( GL_MODELVIEW );
+			glViewport(0, 0, width_, height_);
 		}
 
 		void OpenGL_Base::End()

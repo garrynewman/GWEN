@@ -39,6 +39,11 @@ void Properties::OnSplitterMoved( Controls::Base* /*control*/ )
 	InvalidateChildren();
 }
 
+void Properties::SetSplitWidth(int w)
+{
+	m_SplitterBar->SetPos(w);
+}
+
 int Properties::GetSplitWidth()
 {
 	return m_SplitterBar->X();

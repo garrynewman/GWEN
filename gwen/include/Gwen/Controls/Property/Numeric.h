@@ -54,6 +54,44 @@ namespace Gwen
 
 					NumericUpDown* m_Numeric;
 			};
+			
+			class GWEN_EXPORT Float : public Property::Base
+			{
+				public:
+
+					GWEN_CONTROL_INLINE( Float, Property::Base )
+					{
+						m_Numeric = new Controls::FloatUpDown( this );
+						m_Numeric->SetValue( 50 );
+						m_Numeric->SetMax( 1000 );
+						m_Numeric->SetMin( -1000 );
+						m_Numeric->Dock( Pos::Fill );
+						//m_Numeric->SetShouldDrawBackground( false );
+						m_Numeric->onChanged.Add( this, &BaseClass::OnPropertyValueChanged );
+					}
+
+					virtual TextObject GetPropertyValue()
+					{
+						return m_Numeric->GetText();
+					}
+
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
+					{
+						m_Numeric->SetText( v, bFireChangeEvents );
+					}
+
+					virtual bool IsEditing()
+					{
+						return m_Numeric->HasFocus();
+					}
+
+					virtual bool IsHovered()
+					{
+						return BaseClass::IsHovered() || m_Numeric->IsHovered();
+					}
+
+					FloatUpDown* m_Numeric;
+			};
 		}
 	}
 }

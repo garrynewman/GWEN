@@ -76,6 +76,41 @@ namespace Gwen
 				int m_iMin;
 
 		};
+		
+		class GWEN_EXPORT FloatUpDown : public TextBoxNumeric
+		{
+			public:
+
+				GWEN_CONTROL( FloatUpDown, TextBoxNumeric );
+
+				virtual void SetMin( double i );
+				virtual void SetMax( double i );
+				virtual void SetValue( double i );
+
+				Event::Caller	onChanged;
+
+			private:
+
+				virtual void OnEnter();
+				virtual void OnChange();
+				virtual void OnTextChanged();
+
+				virtual void OnButtonUp( Base* control );
+				virtual void OnButtonDown( Base* control );
+
+				virtual bool OnKeyUp( bool bDown )	{	if ( bDown ) { OnButtonUp( NULL ); } return true;   }
+				virtual bool OnKeyDown( bool bDown ) {	if ( bDown ) { OnButtonDown( NULL ); } return true; }
+
+				virtual void SyncTextFromNumber();
+				virtual void SyncNumberFromText();
+
+
+
+				double m_iNumber;
+				double m_iMax;
+				double m_iMin;
+
+		};
 	}
 }
 #endif
