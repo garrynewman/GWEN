@@ -294,6 +294,11 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   //glClear( GL_COLOR_BUFFER_BIT );
   //glXSwapBuffers ( display, win );
 
+
+	Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
+	delete_msg = wmDeleteMessage;
+	XSetWMProtocols(display, win, &wmDeleteMessage, 1);
+
 	return (void*)win;
 }
 
@@ -332,7 +337,6 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
         
        	if (event.type == MotionNotify)
        	{	
-       	
        		GwenInput.Initialize(canvases[event.xmotion.window]);
 			x11_window = event.xmotion.window;
         	GwenInput.ProcessMessage(event);

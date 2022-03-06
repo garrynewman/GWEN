@@ -18,6 +18,7 @@ using namespace Gwen::Controls;
 
 GWEN_CONTROL_CONSTRUCTOR( TabButton )
 {
+	m_bClosable = false;
 	m_Page = NULL;
 	m_Control = NULL;
 	DragAndDrop_SetPackage( true, "TabButtonMove" );

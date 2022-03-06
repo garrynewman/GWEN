@@ -10,6 +10,7 @@
 
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/TabControl.h"
+#include "Gwen/Controls/TabTitleBar.h"
 
 namespace Gwen
 {

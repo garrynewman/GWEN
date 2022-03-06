@@ -30,7 +30,9 @@ namespace Gwen
 
 				void SetTabControl( TabControl* ctrl );
 				TabControl* GetTabControl() { return m_Control; }
+				void SetClosable(bool y) { m_bClosable = true; }
 
+				bool IsClosable() { return m_bClosable; }
 				bool IsActive() { return m_Page && m_Page->Visible(); }
 
 				virtual bool DragAndDrop_ShouldStartDrag();
@@ -50,6 +52,7 @@ namespace Gwen
 
 				Base*		m_Page;
 				TabControl*	m_Control;
+				bool        m_bClosable;
 
 		};
 
