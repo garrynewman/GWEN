@@ -66,10 +66,11 @@ namespace Gwen
 						case KeyPress:
 							{
                                 int len = XLookupString(&event.xkey, text, 255, &key, 0);
-                                if ((key >= 33 && key <= 126) && len == 1)
+                                if (len == 1 && (text[0] >= 32 && text[0] <= 126))
                                 {
                                     if (!press) { return false; }
-								    Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) key;
+                                    
+								    Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) text[0];
 								    return m_Canvas->InputCharacter( chr );
                                 }
 
