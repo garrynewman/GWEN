@@ -488,4 +488,9 @@ void Gwen::Platform::Sleep( unsigned int iMS )
 	::Sleep( iMS );
 }
 
+bool Gwen::Platform::WindowHasTitleBar()
+{
+	return false;
+}
+
 #endif // WIN32

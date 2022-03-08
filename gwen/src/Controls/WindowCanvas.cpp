@@ -11,6 +11,7 @@
 #include "Gwen/Controls/Menu.h"
 #include "Gwen/DragAndDrop.h"
 #include "Gwen/ToolTip.h"
+#include "Gwen/Platform.h"
 
 #ifndef GWEN_NO_ANIMATION
 #include "Gwen/Anim.h"
@@ -21,6 +22,7 @@ using namespace Gwen::Controls;
 
 WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin, const Gwen::String & strWindowTitle ) : BaseClass( NULL )
 {
+	m_bHasTitleBar = !Platform::WindowHasTitleBar();
 	m_bQuit = false;
 	m_bCanMaximize = true;
 	m_bIsMaximized = false;
@@ -41,48 +43,48 @@ WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin,
 	pSkin->GetRender()->Init();
 	m_pSkinChange = pSkin;
 	SetSize( w, h );
-	m_TitleBar = new Gwen::ControlsInternal::Dragger( this );
-	m_TitleBar->SetHeight( 24 );
-	m_TitleBar->SetPadding( Padding( 0, 0, 0, 0 ) );
-	m_TitleBar->SetMargin( Margin( 0, 0, 0, 0 ) );
-	m_TitleBar->Dock( Pos::Top );
-	m_TitleBar->SetDoMove( false );
-	m_TitleBar->onDragged.Add( this, &ThisClass::Dragger_Moved );
-	m_TitleBar->onDragStart.Add( this, &ThisClass::Dragger_Start );
-	m_TitleBar->onDoubleClickLeft.Add( this, &ThisClass::OnTitleDoubleClicked );
-	m_Title = new Gwen::Controls::Label( m_TitleBar );
-	m_Title->SetAlignment( Pos::Left | Pos::CenterV );
-	m_Title->SetText( strWindowTitle );
-	m_Title->Dock( Pos::Fill );
-	m_Title->SetPadding( Padding( 8, 0, 0, 0 ) );
-	m_Title->SetTextColor( GetSkin()->Colors.Window.TitleInactive );
-	// CLOSE
+	
+	if (m_bHasTitleBar)
 	{
+		m_TitleBar = new Gwen::ControlsInternal::Dragger( this );
+		m_TitleBar->SetHeight( 24 );
+		m_TitleBar->SetPadding( Padding( 0, 0, 0, 0 ) );
+		m_TitleBar->SetMargin( Margin( 0, 0, 0, 0 ) );
+		m_TitleBar->Dock( Pos::Top );
+		m_TitleBar->SetDoMove( false );
+		m_TitleBar->onDragged.Add( this, &ThisClass::Dragger_Moved );
+		m_TitleBar->onDragStart.Add( this, &ThisClass::Dragger_Start );
+		m_TitleBar->onDoubleClickLeft.Add( this, &ThisClass::OnTitleDoubleClicked );
+		m_Title = new Gwen::Controls::Label( m_TitleBar );
+		m_Title->SetAlignment( Pos::Left | Pos::CenterV );
+		m_Title->SetText( strWindowTitle );
+		m_Title->Dock( Pos::Fill );
+		m_Title->SetPadding( Padding( 8, 0, 0, 0 ) );
+		m_Title->SetTextColor( GetSkin()->Colors.Window.TitleInactive );
+		
+		// CLOSE
 		m_pClose = new Gwen::Controls::WindowCloseButton( m_TitleBar, "Close" );
 		m_pClose->Dock( Pos::Right );
 		m_pClose->SetMargin( Margin( 0, 0, 4, 0 ) );
 		m_pClose->onPress.Add( this, &WindowCanvas::CloseButtonPressed );
 		m_pClose->SetTabable( false );
 		m_pClose->SetWindow( this );
-	}
-	// MAXIMIZE
-	{
+		
+		// MAXIMIZE
 		m_pMaximize = new Gwen::Controls::WindowMaximizeButton( m_TitleBar, "Maximize" );
 		m_pMaximize->Dock( Pos::Right );
 		m_pMaximize->onPress.Add( this, &WindowCanvas::MaximizeButtonPressed );
 		m_pMaximize->SetTabable( false );
 		m_pMaximize->SetWindow( this );
-	}
-	// MINIMiZE
-	{
+
+		// MINIMiZE
 		m_pMinimize = new Gwen::Controls::WindowMinimizeButton( m_TitleBar, "Minimize" );
 		m_pMinimize->Dock( Pos::Right );
 		m_pMinimize->onPress.Add( this, &WindowCanvas::MinimizeButtonPressed );
 		m_pMinimize->SetTabable( false );
 		m_pMinimize->SetWindow( this );
-	}
-	// Bottom Right Corner Sizer
-	{
+
+		// Bottom Right Corner Sizer
 		m_Sizer = new Gwen::ControlsInternal::Dragger( this );
 		m_Sizer->SetSize( 16, 16 );
 		m_Sizer->SetDoMove( false );
@@ -104,9 +106,12 @@ void* WindowCanvas::GetWindow()
 
 void WindowCanvas::Layout( Skin::Base* skin )
 {
-	m_Sizer->BringToFront();
-	m_Sizer->SetSize(16, 16);
-	m_Sizer->Position( Pos::Right | Pos::Bottom );
+	if (m_bHasTitleBar)
+	{
+		m_Sizer->BringToFront();
+		m_Sizer->SetSize(16, 16);
+		m_Sizer->Position( Pos::Right | Pos::Bottom );
+	}
 	BaseClass::Layout( skin );
 }
 
@@ -161,12 +166,19 @@ void WindowCanvas::Render( Skin::Base* skin )
 {
 	bool bHasFocus = IsOnTop();
 
-	if ( bHasFocus )
-	{ m_Title->SetTextColor( GetSkin()->Colors.Window.TitleActive ); }
-	else
-	{ m_Title->SetTextColor( GetSkin()->Colors.Window.TitleInactive ); }
+	if (m_bHasTitleBar)
+	{
+		if ( bHasFocus )
+		{ m_Title->SetTextColor( GetSkin()->Colors.Window.TitleActive ); }
+		else
+		{ m_Title->SetTextColor( GetSkin()->Colors.Window.TitleInactive ); }
 
-	skin->DrawWindow( this, m_TitleBar->Bottom(), bHasFocus );
+		skin->DrawWindow( this, m_TitleBar->Bottom(), bHasFocus );
+	}
+	else
+	{
+		skin->DrawWindow( this, 0, bHasFocus );
+	}
 }
 
 
@@ -273,7 +285,7 @@ void WindowCanvas::OnTitleDoubleClicked()
 void WindowCanvas::SetMaximize( bool b )
 {
 	m_bIsMaximized = b;
-	m_pMaximize->SetMaximized( m_bIsMaximized );
+	if (m_bHasTitleBar) { m_pMaximize->SetMaximized( m_bIsMaximized ); }
 	Gwen::Point pSize, pPos;
 	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
 	Gwen::Platform::SetWindowMaximized( m_pOSWindow, m_bIsMaximized, pPos, pSize );
@@ -306,5 +318,5 @@ void WindowCanvas::SetCanMaximize( bool b )
 	if ( m_bCanMaximize == b ) { return; }
 
 	m_bCanMaximize = b;
-	m_pMaximize->SetDisabled( !b );
+	if (m_bHasTitleBar) { m_pMaximize->SetDisabled( !b ); }
 }

@@ -51,8 +51,8 @@ namespace Gwen
 				virtual void SetMaximize( bool b );
 				virtual void Minimize();
 
-				virtual void SetSizable( bool b ) { m_Sizer->SetHidden( !b ); }
-				virtual bool GetSizable() { return m_Sizer->Visible(); }
+				virtual void SetSizable( bool b ) { if (m_bHasTitleBar) { m_Sizer->SetHidden( !b ); } }
+				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_Sizer->Visible(); }
 
 			protected:
 
@@ -70,6 +70,7 @@ namespace Gwen
 
 				void*		m_pOSWindow;
 				bool		m_bQuit;
+				bool		m_bHasTitleBar;
 
 				Gwen::Skin::Base*			m_pSkinChange;
 

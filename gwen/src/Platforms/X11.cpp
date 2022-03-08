@@ -216,7 +216,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
     exit(1);
   }
 
-  printf( "Getting matching framebuffer configs\n" );
+  //printf( "Getting matching framebuffer configs\n" );
   int fbcount;
   GLXFBConfig* fbc = glXChooseFBConfig(display, DefaultScreen(display), visual_attribs, &fbcount);
   if (!fbc)
@@ -224,10 +224,10 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
     printf( "Failed to retrieve a framebuffer config\n" );
     exit(1);
   }
-  printf( "Found %d matching FB configs.\n", fbcount );
+  //printf( "Found %d matching FB configs.\n", fbcount );
 
   // Pick the FB config/visual with the most samples per pixel
-  printf( "Getting XVisualInfos\n" );
+  //printf( "Getting XVisualInfos\n" );
   int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
 
   int i;
@@ -240,9 +240,9 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
       glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLE_BUFFERS, &samp_buf );
       glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLES       , &samples  );
       
-      printf( "  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d,"
-              " SAMPLES = %d DEPTH = %d\n", 
-              i, vi -> visualid, samp_buf, samples, vi->depth );
+      //printf( "  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d,"
+      //        " SAMPLES = %d DEPTH = %d\n", 
+      //        i, vi -> visualid, samp_buf, samples, vi->depth );
 
       if ( best_fbc < 0 || samp_buf && samples > best_num_samp )
         best_fbc = i, best_num_samp = samples;
@@ -260,9 +260,9 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 
   // Get a visual
   XVisualInfo *vi = glXGetVisualFromFBConfig( display, bestFbc );
-  printf( "Chosen visual ID = 0x%x\n", vi->visualid );
+  //printf( "Chosen visual ID = 0x%x\n", vi->visualid );
 
-  printf( "Creating colormap\n" );
+  //printf( "Creating colormap\n" );
   XSetWindowAttributes swa;
   Colormap cmap;
   swa.colormap = cmap = XCreateColormap( display,
@@ -272,7 +272,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   swa.border_pixel      = 0;
   swa.event_mask        = StructureNotifyMask;
 
-  printf( "Creating window\n" );
+  //printf( "Creating window\n" );
   Window win = XCreateWindow( display, RootWindow( display, vi->screen ), 
                               x, y, w, h, 0, vi->depth, InputOutput, 
                               vi->visual, 
@@ -283,7 +283,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 
   XStoreName( display, win, strWindowTitle.c_str() );
 
-  printf( "Mapping window\n" );
+  //printf( "Mapping window\n" );
   XMapWindow( display, win );
 
   XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
@@ -384,6 +384,11 @@ void Gwen::Platform::GetDesktopSize( int & w, int & h )
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
 {
+}
+
+bool Gwen::Platform::WindowHasTitleBar()
+{
+	return true;
 }
 
 #endif // ndef WIN32

@@ -63,6 +63,7 @@ namespace Gwen
 		GWEN_EXPORT bool HasFocusPlatformWindow( void* pPtr );
 		GWEN_EXPORT void SetWindowMaximized( void* pPtr, bool bMaximized, Gwen::Point & pNewPos, Gwen::Point & pNewSize );
 		GWEN_EXPORT void SetWindowMinimized( void* pPtr, bool bMinimized );
+		GWEN_EXPORT bool WindowHasTitleBar();
 	}
 
 }

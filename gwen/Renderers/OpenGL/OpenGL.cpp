@@ -33,6 +33,8 @@ namespace Gwen
 
 			if ( !text.length() )
 			{ return; }
+			
+			Flush();
 
             if (pFont->data == 0)
             {
