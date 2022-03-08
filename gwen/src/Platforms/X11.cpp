@@ -175,6 +175,7 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 	return true;
 }
 
+static Atom delete_msg;
 GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
 {
   Display *display = XOpenDisplay(NULL);

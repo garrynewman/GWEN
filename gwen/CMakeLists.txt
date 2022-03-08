@@ -69,7 +69,7 @@ add_library(GWEN_dx10
 target_include_directories(GWEN_dx10 PUBLIC include)
 target_link_libraries(GWEN_dx10 d3d)
 
-add_library(GWEN_dx9
+add_library(GWEN_dx11
   Renderers/DirectX11/DirectX11.cpp)
 target_include_directories(GWEN_dx11 PUBLIC include)
 target_link_libraries(GWEN_dx11 d3d)
