@@ -16,9 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: move directories
-      run: cd gwen
     - name: cmake configure
-      run: cmake .
+      run: |
+        cd gwen
+        cmake .
     - name: cmake build
-      run: cmake --build .
+      run: |
+        cd gwen
+        cmake --build .
