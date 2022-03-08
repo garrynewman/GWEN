@@ -3,7 +3,7 @@ name: C/C++ CI
 on: [push]
 
 jobs:
-  build:
+  windows-build:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: install deps
-      run: sudo apt-get install libxcursor-dev mesa-common-dev libglu1-mesa-dev
+      run: sudo apt-get install libxcursor-dev mesa-common-dev libglu1-mesa-dev libfreeimage-dev
     - name: cmake configure
       run: |
         cd gwen

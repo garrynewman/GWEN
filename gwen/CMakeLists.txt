@@ -53,7 +53,7 @@ target_include_directories(GWEN_allegro PUBLIC include)
 target_link_libraries(GWEN_allegro freeimage GL)
 endif()
 
-if(WIN32)
+if(0)
 add_library(GWEN_d2d 
   Renderers/Direct2D/Direct2D.cpp)
 target_include_directories(GWEN_d2d PUBLIC include)
