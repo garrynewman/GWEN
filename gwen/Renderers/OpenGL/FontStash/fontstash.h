@@ -16,6 +16,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+// NOTE: This version has a few minor modifications from the original distribution.
+
 #ifndef FONS_H
 #define FONS_H
 

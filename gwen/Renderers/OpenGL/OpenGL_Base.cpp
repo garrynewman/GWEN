@@ -15,7 +15,6 @@
 #include <X11/Xutil.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
-#endif
 
 extern Display* x11_display;
 extern GLXFBConfig global_bestFbc;
@@ -26,6 +25,7 @@ static int ctxErrorHandler( Display *dpy, XErrorEvent *ev )
     ctxErrorOccurred = true;
     return 0;
 }
+#endif
 
 // Helper to check for extension string presence.  Adapted from:
 //   http://www.opengl.org/resources/features/OGLextensions/
