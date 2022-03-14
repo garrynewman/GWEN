@@ -1,6 +1,6 @@
 /*
 	GWEN
-	Copyright (c) 2011 Facepunch Studios
+	Copyright (c) 2011 Facepunch Studios and Matthew Bries
 	See license in Gwen.h
 */
 #ifndef GWEN_INPUT_X11_H
@@ -20,20 +20,12 @@ namespace Gwen
 
 				X11()
 				{
-					m_Canvas = NULL;
 					m_MouseX = 0;
 					m_MouseY = 0;
 				}
 
-				void Initialize( Gwen::Controls::Canvas* c )
+				bool ProcessMessage( Gwen::Controls::Canvas* m_Canvas, XEvent& event )
 				{
-					m_Canvas = c;
-				}
-
-				bool ProcessMessage( XEvent& event )
-				{
-					if ( !m_Canvas ) { return false; }
-
                     bool press = true;
                     KeySym key;
                     char text[255];
@@ -169,7 +161,6 @@ namespace Gwen
 
 			protected:
 
-				Gwen::Controls::Canvas*	m_Canvas;
 				int m_MouseX;
 				int m_MouseY;
 

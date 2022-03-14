@@ -654,7 +654,7 @@ namespace Gwen
 				}
 
 				virtual void DrawCategoryHolder( Controls::Base* ctrl ) {}
-				virtual void DrawCategoryInner( Controls::Base* ctrl, bool bCollapsed ) {}
+				virtual void DrawCategoryInner( Controls::Base* ctrl, int header_height, bool bCollapsed ) {}
 		};
 	}
 }

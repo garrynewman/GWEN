@@ -25,6 +25,8 @@ static int ctxErrorHandler( Display *dpy, XErrorEvent *ev )
     ctxErrorOccurred = true;
     return 0;
 }
+
+typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
 #endif
 
 // Helper to check for extension string presence.  Adapted from:
@@ -63,7 +65,6 @@ static bool isExtensionSupported(const char *extList, const char *extension)
 
 #define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
 #define GLX_CONTEXT_MINOR_VERSION_ARB       0x2092
-typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
 
 namespace Gwen
 {

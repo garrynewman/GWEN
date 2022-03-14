@@ -1022,12 +1022,15 @@ namespace Gwen
 					Textures.CategoryList.Outer.Draw( GetRender(), ctrl->GetRenderBounds() );
 				}
 
-				void DrawCategoryInner( Controls::Base* ctrl, bool bCollapsed )
+				void DrawCategoryInner( Controls::Base* ctrl, int header_height, bool bCollapsed )
 				{
 					if ( bCollapsed )
 					{ return Textures.CategoryList.Header.Draw( GetRender(), ctrl->GetRenderBounds() ); }
 
-					Textures.CategoryList.Inner.Draw( GetRender(), ctrl->GetRenderBounds() );
+					Rect bounds = ctrl->GetRenderBounds();
+					Textures.CategoryList.Inner.Draw( GetRender(), bounds );
+					bounds.h = header_height;
+					Textures.CategoryList.Header.Draw( GetRender(), bounds ); 
 				}
 		};
 	}

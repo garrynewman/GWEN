@@ -159,9 +159,10 @@ void PropertyRow::Layout( Gwen::Skin::Base* /*skin*/ )
 
 	m_Label->SetWidth( pParent->GetSplitWidth() );
 
+	int min_height = m_Label->GetFont()->size + 7;
 	if ( m_Property )
 	{
-		SetHeight( m_Property->Height() );
+		SetHeight( std::max(min_height, m_Property->Height()) );
 	}
 }
 

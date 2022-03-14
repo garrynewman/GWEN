@@ -18,8 +18,11 @@ namespace Gwen
 	{
 		class OpenGL : public Gwen::Renderer::OpenGL_Base
 		{
-            FONScontext* fs = 0;
+            	FONScontext* fs = 0;
+            
 			public:
+			
+				virtual ~OpenGL();
 
 				struct Vertex
 				{

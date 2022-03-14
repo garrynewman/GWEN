@@ -26,6 +26,12 @@ namespace Gwen
         {
             fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
         }
+        
+        OpenGL::~OpenGL()
+        {
+        	glfonsDelete(fs);
+        }
+
 
 		void OpenGL::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
 		{

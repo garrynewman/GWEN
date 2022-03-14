@@ -303,17 +303,18 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 	return (void*)win;
 }
 
+static std::map<Window, Gwen::Controls::WindowCanvas*> canvases;
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
+	printf("window destroyed\n");
+	canvases.erase((Window)pPtr);
     XDestroyWindow(x11_display, (Window)pPtr);
 }
 
-static std::map<Window, Gwen::Controls::WindowCanvas*> canvases;
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
 	x11_window = (Window)ptarget->GetWindow();
 	
-    GwenInput.Initialize( ptarget );
     canvases[(Window)ptarget->GetWindow()] = ptarget;
 
     XEvent event;
@@ -321,15 +322,6 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
     {
         XNextEvent(x11_display, &event);
 
-        if (event.type == ConfigureNotify && event.xconfigure.window == (Window)ptarget->GetWindow())
-        {
-            ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, event.xconfigure.width, event.xconfigure.height );
-            ptarget->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
-        }
-        if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
-        {
-            ptarget->Redraw();
-        }
         if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
         {
         	canvases[event.xclient.window]->InputQuit();
@@ -337,10 +329,9 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
         }
         
        	if (event.type == MotionNotify)
-       	{	
-       		GwenInput.Initialize(canvases[event.xmotion.window]);
+       	{
 			x11_window = event.xmotion.window;
-        	GwenInput.ProcessMessage(event);
+        	GwenInput.ProcessMessage(canvases[event.xmotion.window], event);
        		continue;
        	}
 
@@ -348,9 +339,18 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		// not that this is correct really...
 		for (auto canv: canvases)
 		{
-			GwenInput.Initialize(canv.second);
+		    if (event.type == ConfigureNotify && event.xconfigure.window == (Window)canv.second->GetWindow())
+        	{
+            	canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
+            	canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
+        	}
+        	if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
+        	{
+            	canv.second->Redraw();
+        	}
+    
 			x11_window = canv.first;
-        	GwenInput.ProcessMessage(event);
+        	GwenInput.ProcessMessage(canv.second, event);
         }
     }
 }

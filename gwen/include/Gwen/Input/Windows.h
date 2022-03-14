@@ -22,20 +22,12 @@ namespace Gwen
 
 				Windows()
 				{
-					m_Canvas = NULL;
 					m_MouseX = 0;
 					m_MouseY = 0;
 				}
 
-				void Initialize( Gwen::Controls::Canvas* c )
+				bool ProcessMessage( Gwen::Controls::Canvas* m_Canvas, MSG msg )
 				{
-					m_Canvas = c;
-				}
-
-				bool ProcessMessage( MSG msg )
-				{
-					if ( !m_Canvas ) { return false; }
-
 					switch ( msg.message )
 					{
 							//case WM_NCLBUTTONDOWN:
@@ -181,7 +173,6 @@ namespace Gwen
 
 			protected:
 
-				Gwen::Controls::Canvas*	m_Canvas;
 				int m_MouseX;
 				int m_MouseY;
 

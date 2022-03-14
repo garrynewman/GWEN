@@ -27,7 +27,7 @@ namespace Gwen
 				};
 
 				OpenGL_Base();
-				~OpenGL_Base();
+				virtual ~OpenGL_Base();
 
 				virtual void Init();
 

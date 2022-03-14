@@ -71,6 +71,8 @@ namespace Gwen
 				virtual void MakeCaratVisible();
 
 				virtual void OnEnter();
+				
+				virtual void OnLostKeyboardFocus() { onFocusLost.Call( this ); } 
 
 				virtual bool NeedsInputChars() { return true; }
 
@@ -79,6 +81,7 @@ namespace Gwen
 
 				Event::Caller	onTextChanged;
 				Event::Caller	onReturnPressed;
+				Event::Caller	onFocusLost;
 
 			protected:
 

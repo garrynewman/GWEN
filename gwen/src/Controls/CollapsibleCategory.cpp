@@ -82,7 +82,7 @@ GWEN_CONTROL_CONSTRUCTOR( CollapsibleCategory )
 	m_pButton = new CategoryHeaderButton( this );
 	m_pButton->SetText( "Category Title" );
 	m_pButton->Dock( Pos::Top );
-	m_pButton->SetHeight( 20 );
+	m_pButton->SetHeight( m_pButton->GetFont()->size + 10 );
 	SetPadding( Padding( 1, 0, 1, 5 ) );
 	SetSize( 512, 512 );
 }
@@ -120,7 +120,7 @@ void CollapsibleCategory::OnSelection( Controls::Base* control )
 
 void CollapsibleCategory::Render( Skin::Base* skin )
 {
-	skin->DrawCategoryInner( this, m_pButton->GetToggleState() );
+	skin->DrawCategoryInner( this, m_pButton->Height(), m_pButton->GetToggleState() );
 }
 
 void CollapsibleCategory::SetText( const TextObject & text )
