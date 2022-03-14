@@ -555,6 +555,20 @@ namespace Gwen
 		{
 #ifndef _win32
 			glXMakeCurrent( x11_display, (Window)m_pWindow, (GLXContext)m_pContext );
+			if (width_ == -1 && height_ == -1)
+			{
+				struct R {  int left, right, bottom, top; };
+				R r;
+				Window root;
+				unsigned int width, height, border_width, depth;
+				XGetGeometry(x11_display, (Window)pWindow->GetWindow(), &root, &r.left, &r.top, &width, &height, &border_width, &depth);
+				r.right = r.left + width;
+				r.bottom = r.top + height;
+				width_ = width;
+				height_ = height;
+				ortho_x_ = r.right-r.left;
+				ortho_y_ = r.bottom-r.top;			
+			}
 #endif
 			glMatrixMode( GL_PROJECTION );
 			glLoadIdentity();

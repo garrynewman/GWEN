@@ -59,7 +59,7 @@ namespace Gwen
 
 				void*               m_pWindow;
 				
-				int width_, height_, ortho_x_, ortho_y_;
+				int width_ = -1, height_ = -1, ortho_x_, ortho_y_;
 			public:
 
 				//

@@ -80,6 +80,11 @@ add_executable(GWEN_cross_platform_sample Samples/CrossPlatform/CrossPlatform.cp
 target_include_directories(GWEN_cross_platform_sample PUBLIC include)
 target_link_libraries(GWEN_cross_platform_sample GWEN_opengl GWEN_static GWEN_unit_test)
 
+# Samples
+add_executable(GWEN_application_sample Samples/Application/Application.cpp)
+target_include_directories(GWEN_application_sample PUBLIC include)
+target_link_libraries(GWEN_application_sample GWEN_opengl GWEN_static GWEN_unit_test)
+
 
 #set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
 #    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
