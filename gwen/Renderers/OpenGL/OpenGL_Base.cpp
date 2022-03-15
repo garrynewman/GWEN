@@ -97,7 +97,7 @@ namespace Gwen
 			glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 			//glAlphaFunc( GL_GREATER, 1.0f );
 			
-			glMatrixMode( GL_PROJECTION );
+			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 			glOrtho( 0, ortho_x_, ortho_y_, 0, -1.0, 1.0 );
 			glMatrixMode( GL_MODELVIEW );
@@ -175,6 +175,10 @@ namespace Gwen
             //return;
 			Flush();
 			Gwen::Rect rect = ClipRegion();
+			rect.x *= Scale();
+			rect.y *= Scale();
+			rect.w *= Scale();
+			rect.h *= Scale();
 			// OpenGL's coords are from the bottom left
 			// so we need to translate them here.
 			{
@@ -182,7 +186,7 @@ namespace Gwen
 				glGetIntegerv( GL_VIEWPORT, &view[0] );
 				rect.y = view[3] - ( rect.y + rect.h );
 			}
-			glScissor( rect.x * Scale(), rect.y * Scale(), rect.w * Scale(), rect.h * Scale() );
+			glScissor( rect.x, rect.y, rect.w, rect.h );
 			glEnable( GL_SCISSOR_TEST );
 		}
 
@@ -553,7 +557,7 @@ namespace Gwen
 
 		bool OpenGL_Base::BeginContext( Gwen::WindowProvider* pWindow )
 		{
-#ifndef _win32
+#ifndef _WIN32
 			glXMakeCurrent( x11_display, (Window)m_pWindow, (GLXContext)m_pContext );
 			if (width_ == -1 && height_ == -1)
 			{
@@ -569,12 +573,28 @@ namespace Gwen
 				ortho_x_ = r.right-r.left;
 				ortho_y_ = r.bottom-r.top;			
 			}
-#endif
-			glMatrixMode( GL_PROJECTION );
+
+			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 			glOrtho( 0, ortho_x_, ortho_y_, 0, -1.0, 1.0 );
 			glMatrixMode( GL_MODELVIEW );
 			glViewport(0, 0, width_, height_);
+#else
+			RECT r;
+
+			if (GetClientRect((HWND)pWindow->GetWindow(), &r))
+			{
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glOrtho(r.left, r.right, r.bottom, r.top, -1.0, 1.0);
+				glMatrixMode(GL_MODELVIEW);
+				glViewport(0, 0, r.right - r.left, r.bottom - r.top);
+				ortho_x_ = r.right;
+				ortho_y_ = r.bottom;
+				width_ = r.right - r.left;
+				height_ = r.bottom - r.top;
+			}
+#endif
 			
 			glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

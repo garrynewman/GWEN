@@ -46,10 +46,19 @@ static LPCTSTR iCursorConversion[] =
 	IDC_HAND
 };
 
-void Gwen::Platform::SetCursor( unsigned char iCursor )
+static bool loaded_cursors = false;
+static HCURSOR cursors[10];
+void Gwen::Platform::SetCursor(unsigned char iCursor)
 {
-	// Todo.. Properly.
-	::SetCursor( LoadCursor( NULL, iCursorConversion[iCursor] ) );
+	if (!loaded_cursors)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			cursors[i] = LoadCursor(NULL, iCursorConversion[iCursor]);
+		}
+		loaded_cursors = true;
+	}
+	::SetCursor( cursors[iCursor]);
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
@@ -305,16 +314,6 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 {
 	switch (message)
 	{
-	case WM_MOUSEWHEEL:
-	{
-		MSG msg;
-		msg.hwnd = hwnd;
-		msg.message = message;
-		msg.wParam = wParam;
-		msg.lParam = lParam;
-		GwenInput.ProcessMessage(msg);
-		return 0;
-	}
 	case 0x02E0://WM_DPICHANGED:
 	{   //todo handle x and y dpi
 		float dpi = HIWORD(wParam);
@@ -385,12 +384,11 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 int i = 0;
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
-	GwenInput.Initialize( ptarget );
 	MSG msg;
 
 	while ( PeekMessage( &msg, ( HWND ) pWindow, 0, 0, PM_REMOVE ) )
 	{
-		if ( GwenInput.ProcessMessage( msg ) )
+		if ( GwenInput.ProcessMessage( ptarget, msg ) )
 		{ continue; }
 
 		if ( msg.message == WM_PAINT )
@@ -402,9 +400,10 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		DispatchMessage( &msg );
 	}
 
-	if (ptarget->GetSkin()->GetRender()->GetDPI().x != window_dpis[(HWND)pWindow])
+	if (ptarget->GetDPI() != window_dpis[(HWND)pWindow])
 	{
-		ptarget->GetSkin()->GetRender()->_SetDPI(Gwen::PointF(window_dpis[(HWND)pWindow], window_dpis[(HWND)pWindow]));
+		ptarget->SetDPI(window_dpis[(HWND)pWindow]);
+		ptarget->SetScale(window_dpis[(HWND)pWindow] / 96.0);
 		RECT rect;
 		GetWindowRect((HWND)pWindow, &rect);
 		ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, rect.right - rect.left, rect.bottom - rect.top );

@@ -244,7 +244,7 @@ void WindowCanvas::SetPos( int x, int y )
 	y = Gwen::Clamp( y, 0, h );
 	m_WindowPos.x = x;
 	m_WindowPos.y = y;
-	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
+	Gwen::PointF scaling = GetDPIScaling();
 	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, Width()*scaling.x, Height()*scaling.y);
 }
 
@@ -267,7 +267,7 @@ void WindowCanvas::Sizer_Moved()
 	int h = ( p.y ) - m_WindowPos.y;
 	w = Clamp( w, 100, 9999 );
 	h = Clamp( h, 100, 9999 );
-	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
+	Gwen::PointF scaling = GetDPIScaling();
 	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, w*scaling.x, h*scaling.y);
 	GetSkin()->GetRender()->ResizedContext( this, w*scaling.x, h*scaling.y);
 	this->SetSize( w, h );
@@ -287,7 +287,7 @@ void WindowCanvas::SetMaximize( bool b )
 	m_bIsMaximized = b;
 	if (m_bHasTitleBar) { m_pMaximize->SetMaximized( m_bIsMaximized ); }
 	Gwen::Point pSize, pPos;
-	Gwen::PointF scaling = GetSkin()->GetRender()->GetDPIScaling();
+	Gwen::PointF scaling = GetDPIScaling();
 	Gwen::Platform::SetWindowMaximized( m_pOSWindow, m_bIsMaximized, pPos, pSize );
 	SetSize( pSize.x/scaling.x, pSize.y/scaling.y );
 	m_WindowPos = pPos;

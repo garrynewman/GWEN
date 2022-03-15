@@ -110,6 +110,7 @@ public:
 				Gwen::Platform::Sleep(300);
 			}
 		}
+		return true;
 	}
 	
 	// Runs the application loop once then returns. Returns false if the program should exit

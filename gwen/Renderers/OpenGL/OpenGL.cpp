@@ -88,8 +88,8 @@ namespace Gwen
 			
             float bounds[4];//0 is minx, 1 is miny, 2 is maxx 3 is maxy
             float advance = fonsTextBounds(fs, 0, 0, converted_string.c_str(), NULL, bounds);
-            p.x = advance;//std::abs(bounds[2] - bounds[0]);
-			p.y = fSize*1.33;//std::abs(bounds[3] - bounds[1]);
+            p.x = advance/Scale();//std::abs(bounds[2] - bounds[0]);
+			p.y = fSize*1.33/Scale();//std::abs(bounds[3] - bounds[1]);
 			return p;
 		}
 	}

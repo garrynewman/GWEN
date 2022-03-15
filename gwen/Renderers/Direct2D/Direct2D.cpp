@@ -143,7 +143,7 @@ namespace Gwen
 
 			if ( m_pSolidColorBrush )
 			{
-				m_pRT->DrawTextW( text.c_str(), text.length(), pFontData->pTextFormat, D2D1::RectF( pos.x, pos.y, pos.x + 50000, pos.y + 50000 ), m_pSolidColorBrush );
+				m_pRT->DrawTextA( text.c_str(), text.length(), pFontData->pTextFormat, D2D1::RectF( pos.x, pos.y, pos.x + 50000, pos.y + 50000 ), m_pSolidColorBrush );
 			}
 		}
 
@@ -481,8 +481,8 @@ namespace Gwen
 		{
 			//update the dpi to match the system's current
 			float x, y;
-			auto d = this->GetDPI();
-			m_pRT->SetDpi(d.x, d.y);
+			//auto d = this->GetDPI();
+			//m_pRT->SetDpi(d.x, d.y);
 			HRESULT hr = ( ( ID2D1HwndRenderTarget* ) m_pRT )->Resize( D2D1::SizeU( w, h ) );
 			auto p = m_pRT->GetSize();
 			return SUCCEEDED( hr );

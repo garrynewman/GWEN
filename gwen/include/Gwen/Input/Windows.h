@@ -47,8 +47,7 @@ namespace Gwen
 								int dy = y - m_MouseY;
 								m_MouseX = x;
 								m_MouseY = y;
-								Gwen::PointF scale = m_Canvas->GetSkin()->GetRender()->GetDPIScaling();
-								return m_Canvas->InputMouseMoved( x / scale.x, y / scale.y, dx / scale.x, dy / scale.y);
+								return m_Canvas->InputMouseMoved( x, y, dx, dy );
 							}
 
 						case WM_CHAR:
@@ -61,7 +60,7 @@ namespace Gwen
 
 						case WM_MOUSEWHEEL:
 							{
-								return m_Canvas->InputMouseWheel(((short)HIWORD(msg.wParam)) / WHEEL_DELTA);
+								return m_Canvas->InputMouseWheel(20 * ((short)HIWORD(msg.wParam)) / WHEEL_DELTA);
 							}
 
 #endif

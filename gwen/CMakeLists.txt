@@ -44,7 +44,11 @@ add_library(GWEN_opengl
   Renderers/OpenGL/DebugFont/OpenGL_DebugFont.cpp
 )
 target_include_directories(GWEN_opengl PUBLIC include)
+if (WIN32)
+target_link_libraries(GWEN_opengl opengl32 ${PROJECT_SOURCE_DIR}/lib/FreeImage64.lib) #freeimage GL)
+else()
 target_link_libraries(GWEN_opengl freeimage GL)
+endif()
 
 if(USE_ALLEGRO)
 add_library(GWEN_allegro
@@ -53,12 +57,18 @@ target_include_directories(GWEN_allegro PUBLIC include)
 target_link_libraries(GWEN_allegro freeimage GL)
 endif()
 
-if(0)
+if(WIN32)
 add_library(GWEN_d2d 
   Renderers/Direct2D/Direct2D.cpp)
 target_include_directories(GWEN_d2d PUBLIC include)
 target_link_libraries(GWEN_d2d d2d)
 
+# Samples
+add_executable(GWEN_d2d_sample Samples/Direct2D/Direct2DSample.cpp)
+target_include_directories(GWEN_d2d_sample PUBLIC include)
+target_link_libraries(GWEN_d2d_sample GWEN_d2d GWEN_static GWEN_unit_test)
+
+if(0)
 add_library(GWEN_dx9
   Renderers/DirectX9/DirectX9.cpp)
 target_include_directories(GWEN_dx9 PUBLIC include)
@@ -73,6 +83,7 @@ add_library(GWEN_dx11
   Renderers/DirectX11/DirectX11.cpp)
 target_include_directories(GWEN_dx11 PUBLIC include)
 target_link_libraries(GWEN_dx11 d3d)
+endif()
 endif()
 
 # Samples

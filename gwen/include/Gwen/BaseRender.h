@@ -119,11 +119,6 @@ namespace Gwen
 
 				float m_fScale;
 
-				// DPI handling
-				virtual Gwen::PointF GetDPI() { return m_dpi; }
-				void _SetDPI(const Gwen::PointF d) { m_dpi = d; }
-				Gwen::PointF GetDPIScaling() { auto dpi = GetDPI(); return Gwen::PointF(dpi.x/96.0f, dpi.y/96.0f); }
-
 
 			public:
 

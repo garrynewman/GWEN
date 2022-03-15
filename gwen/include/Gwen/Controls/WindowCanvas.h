@@ -54,7 +54,16 @@ namespace Gwen
 				virtual void SetSizable( bool b ) { if (m_bHasTitleBar) { m_Sizer->SetHidden( !b ); } }
 				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_Sizer->Visible(); }
 
+
+
+				// DPI handling
+				double GetDPI() { return m_dpi; }
+				void SetDPI(const double d) { m_dpi = d; }
+				Gwen::PointF GetDPIScaling() { auto dpi = GetDPI(); return Gwen::PointF(dpi / 96.0f, dpi / 96.0f); }
+
 			protected:
+
+				double m_dpi = 96.0;
 
 				virtual void RenderCanvas();
 				virtual void DestroyWindow();
