@@ -25,7 +25,7 @@ namespace ToolTip
 
 	GWEN_EXPORT void ControlDeleted( Controls::Base* pControl );
 
-	GWEN_EXPORT void RenderToolTip( Skin::Base* skin );
+	GWEN_EXPORT void RenderToolTip( Controls::Canvas* canvas, Skin::Base* skin );
 }
 
 #endif

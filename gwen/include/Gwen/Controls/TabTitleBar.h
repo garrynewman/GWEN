@@ -14,6 +14,7 @@
 #include "Gwen/Controls/TabControl.h"
 #include "Gwen/Controls/DockBase.h"
 #include "Gwen/Controls/WindowControl.h"
+#include "Gwen/Application.h"
 #include "Gwen/DragAndDrop.h"
 #include "Gwen/Skin.h"
 
@@ -80,7 +81,7 @@ namespace Gwen
 				Base* inner;// what is held in this panel
 				bool closable;
 				std::string title;
-				WindowControl* window;// our parent window
+				Base* window;// our parent window
 			};
 			
 			void OnPopout(Controls::Base* control)
@@ -125,25 +126,33 @@ namespace Gwen
 				
 				auto inner = page->GetChildren().front();
 				
-				Controls::WindowControl* pWindow = new Controls::WindowControl( GetCanvas() );
-				pWindow->SetTitle( m_CurrentButton->GetText().Get() );
-				pWindow->SetSize( inner->Width(), inner->Height() );
-				pWindow->SetPos( inner->LocalPosToCanvas(inner->GetPos()) );
-				pWindow->SetDeleteOnClose( true );
-				inner->SetParent(pWindow);
+				Gwen::Controls::Base* win;
+				if (gApplication)
+				{
+					win = gApplication->AddWindow(m_CurrentButton->GetText().Get(), inner->Width(), inner->Height());
+				}
+				else
+				{
+					Controls::WindowControl* pWindow = new Controls::WindowControl( GetCanvas() );
+					pWindow->SetTitle( m_CurrentButton->GetText().Get() );
+					pWindow->SetSize( inner->Width(), inner->Height() );
+					pWindow->SetPos( inner->LocalPosToCanvas(inner->GetPos()) );
+					pWindow->SetDeleteOnClose( true );
+					win = pWindow;
+				}
+				inner->SetParent(win);
 				
 				//now add a button that lets us go back to the dock
-				auto button = new Controls::Button(pWindow);
+				auto button = new Controls::Button(win);
 				button->SetSize(20, 20);
-				button->SetPos(0, 2);
 				button->Dock(Pos::Right);
-				button->SetSize(20, 20);
-				button->SetText("^");
+				button->SetText("v");
+				button->SetToolTip("Return To Parent");
 				ReturnButtonData* data = new ReturnButtonData;
 				data->title = m_CurrentButton->GetText().Get();
 				data->closable = closable;
 				data->inner = inner;
-				data->window = pWindow;
+				data->window = win;
 				data->dock = dock;
 				button->onPress.Add(this, &ThisClass::OnReturn, data);
 				button->SetHidden(false);
@@ -160,7 +169,15 @@ namespace Gwen
 				data->inner->SetParent(page);
 				info.Control->Dock(Pos::Fill);
 				
-				data->window->CloseButtonPressed();
+				WindowCanvas* canv = dynamic_cast<WindowCanvas*>(data->window);
+				if (canv)
+				{
+					canv->InputQuit();
+				}
+				else
+				{
+					static_cast<WindowControl*>(data->window)->CloseButtonPressed();
+				}
 				
 				delete data;
 			}

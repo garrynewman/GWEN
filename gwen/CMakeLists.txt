@@ -29,6 +29,7 @@ if(WIN32)
 #target_link_libraries(GWEN_static system32)
 else()
 target_link_libraries(GWEN_static X11)
+target_compile_definitions(GWEN_static PUBLIC GWEN_X11_PLATFORM)
 endif()
 endif()
 

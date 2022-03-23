@@ -310,6 +310,7 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 }
 
 static std::map<HWND, float> window_dpis;
+static std::map<HWND, std::pair<int, int>> window_min_bounds;
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -379,6 +380,8 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
 	DestroyWindow( ( HWND ) pPtr );
 	CoUninitialize();
+	window_min_bounds.erase((HWND)pPtr);
+	window_dpis.erase((HWND)pPtr);
 }
 
 int i = 0;
@@ -490,6 +493,11 @@ void Gwen::Platform::Sleep( unsigned int iMS )
 bool Gwen::Platform::WindowHasTitleBar()
 {
 	return false;
+}
+
+void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
+{
+	window_min_bounds[(HWND)pPtr] = {min_width, min_height};
 }
 
 #endif // WIN32

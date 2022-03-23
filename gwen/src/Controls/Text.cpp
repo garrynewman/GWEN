@@ -18,6 +18,7 @@ GWEN_CONTROL_CONSTRUCTOR( Text )
 	m_Font = NULL;
 	m_ColorOverride = Color( 255, 255, 255, 0 );
 	m_Color = GetSkin()->Colors.Label.Default;
+	m_bWrap = false;
 	SetMouseInputEnabled( false );
 	SetWrap( false );
 }

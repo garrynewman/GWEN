@@ -7,7 +7,7 @@
 #include "Gwen/Macros.h"
 #include "Gwen/Platform.h"
 
-#if !defined(_WIN32) && !defined(GWEN_ALLEGRO_PLATFORM)
+#if !defined(_WIN32) && !defined(GWEN_ALLEGRO_PLATFORM) && !defined(GWEN_X11_PLATFORM)
 
 #include <time.h>
 
@@ -96,6 +96,10 @@ void Gwen::Platform::GetDesktopSize( int & w, int & h )
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
+{
+}
+
+void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
 {
 }
 
