@@ -43,6 +43,7 @@ WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin,
 	pSkin->GetRender()->Init();
 	m_pSkinChange = pSkin;
 	SetSize( w, h );
+	SetMinimumSize(Gwen::Point(std::min(w, 100), std::min(h, 40)));
 	
 	if (m_bHasTitleBar)
 	{
@@ -154,7 +155,7 @@ void WindowCanvas::RenderCanvas()
 
 		DoRender( m_Skin );
 		DragAndDrop::RenderOverlay( this, m_Skin );
-		ToolTip::RenderToolTip( m_Skin );
+		ToolTip::RenderToolTip( static_cast<Canvas*>(this), m_Skin );
 		render->End();
 	}
 
@@ -319,4 +320,11 @@ void WindowCanvas::SetCanMaximize( bool b )
 
 	m_bCanMaximize = b;
 	if (m_bHasTitleBar) { m_pMaximize->SetDisabled( !b ); }
+}
+
+void WindowCanvas::SetMinimumSize( const Gwen::Point & minSize )
+{
+	m_MinimumSize = minSize;
+	
+	Gwen::Platform::SetWindowMinimumSize(m_pOSWindow, minSize.x, minSize.y);
 }

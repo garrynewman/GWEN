@@ -53,6 +53,8 @@ namespace Gwen
 
 				virtual void SetSizable( bool b ) { if (m_bHasTitleBar) { m_Sizer->SetHidden( !b ); } }
 				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_Sizer->Visible(); }
+				virtual void SetMinimumSize( const Gwen::Point & minSize );
+				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
 
 			protected:
 
@@ -81,6 +83,8 @@ namespace Gwen
 
 				Gwen::Point		m_WindowPos;
 				Gwen::Point		m_HoldPos;
+				
+				Gwen::Point		m_MinimumSize;
 
 				bool			m_bCanMaximize;
 				bool			m_bIsMaximized;

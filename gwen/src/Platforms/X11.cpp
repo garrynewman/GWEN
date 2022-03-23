@@ -28,8 +28,8 @@
 #include "portable-file-dialogs.h"
 
 static Gwen::UnicodeString gs_ClipboardEmulator;
-Display* x11_display;
-Window x11_window;
+Display* x11_display = 0;
+Window x11_window;// the current active window, kinda a terrible hack which breaks thread safety
 GLXFBConfig global_bestFbc;
 
 static Gwen::Input::X11 GwenInput;
@@ -175,22 +175,38 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 	return true;
 }
 
+typedef struct
+
+                {
+
+                unsigned long   flags;
+
+                unsigned long   functions;
+
+                unsigned long   decorations;
+
+                long            inputMode;
+
+                unsigned long   status;
+
+                } Hints;
+
 static Atom delete_msg;
 GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
 {
-  Display *display = XOpenDisplay(NULL);
+	Display *display = x11_display ? x11_display : XOpenDisplay(NULL);
+	//printf("Creating window\n");
+	if (!display)
+	{
+		printf("Failed to open X display\n");
+		exit(1);
+	}
 
-  if (!display)
-  {
-    printf("Failed to open X display\n");
-    exit(1);
-  }
+	x11_display = display;
 
-  x11_display = display;
-
-  // Get a matching FB config
-  static int visual_attribs[] =
-    {
+	// Get a matching FB config
+	static int visual_attribs[] =
+	{
       GLX_X_RENDERABLE    , True,
       GLX_DRAWABLE_TYPE   , GLX_WINDOW_BIT,
       GLX_RENDER_TYPE     , GLX_RGBA_BIT,
@@ -205,96 +221,99 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
       //GLX_SAMPLE_BUFFERS  , 1,
       //GLX_SAMPLES         , 4,
       None
-    };
+	};
 
-  int glx_major, glx_minor;
+	int glx_major, glx_minor;
  
   // FBConfigs were added in GLX version 1.3.
-  if ( !glXQueryVersion( display, &glx_major, &glx_minor ) || 
+	if ( !glXQueryVersion( display, &glx_major, &glx_minor ) || 
        ( ( glx_major == 1 ) && ( glx_minor < 3 ) ) || ( glx_major < 1 ) )
-  {
-    printf("Invalid GLX version");
-    exit(1);
-  }
+	{
+		printf("Invalid GLX version");
+		exit(1);
+	}
 
-  //printf( "Getting matching framebuffer configs\n" );
-  int fbcount;
-  GLXFBConfig* fbc = glXChooseFBConfig(display, DefaultScreen(display), visual_attribs, &fbcount);
-  if (!fbc)
-  {
-    printf( "Failed to retrieve a framebuffer config\n" );
-    exit(1);
-  }
-  //printf( "Found %d matching FB configs.\n", fbcount );
+	//printf( "Getting matching framebuffer configs\n" );
+	int fbcount;
+	GLXFBConfig* fbc = glXChooseFBConfig(display, DefaultScreen(display), visual_attribs, &fbcount);
+	if (!fbc)
+	{
+		printf( "Failed to retrieve a framebuffer config\n" );
+		exit(1);
+	}
+	//printf( "Found %d matching FB configs.\n", fbcount );
 
-  // Pick the FB config/visual with the most samples per pixel
-  //printf( "Getting XVisualInfos\n" );
-  int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
+	// Pick the FB config/visual with the most samples per pixel
+	//printf( "Getting XVisualInfos\n" );
+	int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
 
-  int i;
-  for (i=0; i<fbcount; ++i)
-  {
-    XVisualInfo *vi = glXGetVisualFromFBConfig( display, fbc[i] );
-    if ( vi )
-    {
-      int samp_buf, samples;
-      glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLE_BUFFERS, &samp_buf );
-      glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLES       , &samples  );
+	int i;
+	for (i=0; i<fbcount; ++i)
+	{
+		XVisualInfo *vi = glXGetVisualFromFBConfig( display, fbc[i] );
+		if ( vi )
+		{
+			int samp_buf, samples;
+			glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLE_BUFFERS, &samp_buf );
+			glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLES       , &samples  );
       
-      //printf( "  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d,"
-      //        " SAMPLES = %d DEPTH = %d\n", 
-      //        i, vi -> visualid, samp_buf, samples, vi->depth );
+			//printf( "  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d,"
+			//        " SAMPLES = %d DEPTH = %d\n", 
+			//        i, vi -> visualid, samp_buf, samples, vi->depth );
 
-      if ( best_fbc < 0 || samp_buf && samples > best_num_samp )
-        best_fbc = i, best_num_samp = samples;
-      if ( worst_fbc < 0 || !samp_buf || samples < worst_num_samp )
-        worst_fbc = i, worst_num_samp = samples;
-    }
-    XFree( vi );
-  }
+			if ( best_fbc < 0 || samp_buf && samples > best_num_samp )
+				best_fbc = i, best_num_samp = samples;
+			if ( worst_fbc < 0 || !samp_buf || samples < worst_num_samp )
+				worst_fbc = i, worst_num_samp = samples;
+		}
+		XFree( vi );
+	}
 
-  GLXFBConfig bestFbc = fbc[ 0 ];//best_fbc ];
-  global_bestFbc = bestFbc;
+	GLXFBConfig bestFbc = fbc[ 0 ];//best_fbc ];
+	global_bestFbc = bestFbc;
 
-  // Be sure to free the FBConfig list allocated by glXChooseFBConfig()
-  XFree( fbc );
+	// Be sure to free the FBConfig list allocated by glXChooseFBConfig()
+	XFree( fbc );
 
-  // Get a visual
-  XVisualInfo *vi = glXGetVisualFromFBConfig( display, bestFbc );
-  //printf( "Chosen visual ID = 0x%x\n", vi->visualid );
+	// Get a visual
+	XVisualInfo *vi = glXGetVisualFromFBConfig( display, bestFbc );
+	//printf( "Chosen visual ID = 0x%x\n", vi->visualid );
 
-  //printf( "Creating colormap\n" );
-  XSetWindowAttributes swa;
-  Colormap cmap;
-  swa.colormap = cmap = XCreateColormap( display,
+	//printf( "Creating colormap\n" );
+	XSetWindowAttributes swa;
+	Colormap cmap;
+	swa.colormap = cmap = XCreateColormap( display,
                                          RootWindow( display, vi->screen ), 
                                          vi->visual, AllocNone );
-  swa.background_pixmap = None ;
-  swa.border_pixel      = 0;
-  swa.event_mask        = StructureNotifyMask;
+	swa.background_pixmap = None ;
+	swa.border_pixel      = 0;
+	swa.event_mask        = StructureNotifyMask;
 
-  //printf( "Creating window\n" );
-  Window win = XCreateWindow( display, RootWindow( display, vi->screen ), 
+	//printf( "Creating window\n" );
+	Window win = XCreateWindow( display, RootWindow( display, vi->screen ), 
                               x, y, w, h, 0, vi->depth, InputOutput, 
                               vi->visual, 
                               CWBorderPixel|CWColormap|CWEventMask, &swa );
 
-  // Done with the visual info data
-  XFree( vi );
+	// Done with the visual info data
+	XFree( vi );
 
-  XStoreName( display, win, strWindowTitle.c_str() );
+	XStoreName( display, win, strWindowTitle.c_str() );
+  
+  	
+  	// Hide borders
+	/*Hints hints;
+	hints.flags = 2;
+	hints.decorations = 0;
+	Atom property = XInternAtom(display,"_MOTIF_WM_HINTS",True);
+	XChangeProperty(display,win,property,property,32,PropModeReplace,(unsigned char *)&hints,5);*/
 
-  //printf( "Mapping window\n" );
-  XMapWindow( display, win );
+	//printf( "Mapping window\n" );
+	XMapWindow( display, win );
 
-  XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
+	XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
 
-  x11_window = win;
-
-  //glClearColor( 0, 0.5, 1, 1 );
-  //glClear( GL_COLOR_BUFFER_BIT );
-  //glXSwapBuffers ( display, win );
-
+	x11_window = win;
 
 	Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
 	delete_msg = wmDeleteMessage;
@@ -306,7 +325,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 static std::map<Window, Gwen::Controls::WindowCanvas*> canvases;
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
-	printf("window destroyed\n");
+	//printf("window destroyed\n");
 	canvases.erase((Window)pPtr);
     XDestroyWindow(x11_display, (Window)pPtr);
 }
@@ -326,6 +345,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
         {
         	canvases[event.xclient.window]->InputQuit();
         	canvases.erase(event.xclient.window);
+        	continue;
         }
         
        	if (event.type == MotionNotify)
@@ -362,10 +382,50 @@ void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, i
 
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pNewPos, Gwen::Point & pNewSize )
 {
+	// This kinda works for maximize, but glitches a lot
+	XEvent xev;
+	Atom wm_state  =  XInternAtom(x11_display, "_NET_WM_STATE", False);
+	Atom max_horz  =  XInternAtom(x11_display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+	Atom max_vert  =  XInternAtom(x11_display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+
+	memset(&xev, 0, sizeof(xev));
+	xev.type = ClientMessage;
+	xev.xclient.window = (Window)pPtr;
+	xev.xclient.message_type = wm_state;
+	xev.xclient.format = 32;
+	xev.xclient.data.l[0] = bMax ? 1 : 0;//_NET_WM_STATE_ADD, remove
+	xev.xclient.data.l[1] = max_horz;
+	xev.xclient.data.l[2] = max_vert;
+
+	XSendEvent(x11_display, (Window)pPtr, False, SubstructureNotifyMask, &xev);
+	XFlush(x11_display);
+
+	struct R {  int left, right, bottom, top; };
+	R r;
+	Window root;
+	unsigned int width, height, border_width, depth;
+	XGetGeometry(x11_display, (Window)pPtr, &root, &r.left, &r.top, &width, &height, &border_width, &depth);
+	pNewPos.x = r.left;
+	pNewPos.y = r.bottom;
+	pNewSize.x = std::abs(r.left - r.right);
+	pNewSize.y = std::abs(r.top - r.bottom);
 }
 
 void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
 {
+	Atom prop = XInternAtom(x11_display, "WM_CHANGE_STATE", False);
+	if (prop == None)
+		return;
+
+	XClientMessageEvent ev;
+	ev.type = ClientMessage;
+	ev.window = (Window)pPtr;
+	ev.message_type = prop;
+	ev.format = 32;
+	ev.data.l[0] = bMinimized ? IconicState : NormalState;
+	XSendEvent(x11_display, DefaultRootWindow(x11_display), False,
+            SubstructureRedirectMask|SubstructureNotifyMask,
+            (XEvent *)&ev);
 }
 
 bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
@@ -385,11 +445,28 @@ void Gwen::Platform::GetDesktopSize( int & w, int & h )
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
 {
+	int x, y, lx, ly;
+	unsigned int mask;
+	Window root, child;
+	XQueryPointer(x11_display, x11_window, &root, &child, &x, &y, &lx, &ly, &mask);
+	po.x = x;
+	po.y = y;
 }
 
 bool Gwen::Platform::WindowHasTitleBar()
 {
 	return true;
+}
+
+void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
+{
+	XSizeHints hints;
+	memset(&hints, 0, sizeof(XSizeHints));
+	hints.min_width = min_width;
+	hints.min_height = min_height;
+	hints.flags = PMinSize;
+	XSetWMNormalHints(x11_display, (Window)pPtr, &hints);
+	XSetWMSizeHints(x11_display, (Window)pPtr, &hints, PMinSize);
 }
 
 #endif // ndef WIN32

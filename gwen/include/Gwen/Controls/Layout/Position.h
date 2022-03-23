@@ -24,6 +24,7 @@ namespace Gwen
 
 					GWEN_CONTROL_INLINE( Position, Base )
 					{
+						m_iPosition = 0;
 						SetPosition( Pos::Left | Pos::Top );
 					}
 

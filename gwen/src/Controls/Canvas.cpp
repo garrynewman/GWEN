@@ -52,7 +52,7 @@ void Canvas::RenderCanvas()
 
 	DoRender( m_Skin );
 	DragAndDrop::RenderOverlay( this, m_Skin );
-	ToolTip::RenderToolTip( m_Skin );
+	ToolTip::RenderToolTip( this, m_Skin );
 	render->End();
 }
 

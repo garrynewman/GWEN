@@ -121,7 +121,6 @@ public:
 			
 			if (canv->WantsQuit())
 			{
-				printf("window wants quit\n");
 				//remove it
 				canvases_.erase(canvases_.begin() + i);
 				auto render = canv->GetSkin()->GetRender();
