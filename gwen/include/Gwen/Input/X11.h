@@ -66,6 +66,11 @@ namespace Gwen
 								}
 								
 								int len = XLookupString(&event.xkey, text, 255, &key, 0);
+								if (Gwen::Input::IsControlDown())
+								{
+									// handle control messing with the lookup string
+									text[0] = XLookupKeysym(&event.xkey, 0);
+								}
 								if (len == 1 && (text[0] >= 32 && text[0] <= 126))
 								{
                                     if (!press) { return false; }

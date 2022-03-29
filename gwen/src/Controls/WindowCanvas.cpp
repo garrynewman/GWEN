@@ -118,6 +118,12 @@ void WindowCanvas::Layout( Skin::Base* skin )
 
 void WindowCanvas::DoThink()
 {
+	bool real_maximized = Platform::IsWindowMaximized( m_pOSWindow );
+	if (m_bIsMaximized != real_maximized)
+	{
+		m_bIsMaximized = real_maximized;
+		m_pMaximize->SetMaximized( real_maximized );
+	}
 	Platform::MessagePump( m_pOSWindow, this );
 	BaseClass::DoThink();
 	RenderCanvas();

@@ -27,7 +27,6 @@
 
 #include "portable-file-dialogs.h"
 
-static Gwen::UnicodeString gs_ClipboardEmulator;
 Display* x11_display = 0;
 Window x11_window;// the current active window, kinda a terrible hack which breaks thread safety
 GLXFBConfig global_bestFbc;
@@ -84,14 +83,61 @@ void Gwen::Platform::SetCursor( unsigned char iCursor )
     XDefineCursor(x11_display, x11_window, c);// todo need to get the correct window
 }
 
+static std::string copy_buffer;
 Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 {
-	return gs_ClipboardEmulator;
+	if (copy_buffer.length())
+	{
+		return Gwen::Utility::StringToUnicode(copy_buffer);
+	}
+	
+	char *result;
+	unsigned long ressize, restail;
+	int resbits;
+	const char* fmtname = "STRING";
+	Atom bufid = XInternAtom(x11_display, "CLIPBOARD", False);
+	Atom fmtid = XInternAtom(x11_display, fmtname, False);
+	Atom propid = XInternAtom(x11_display, "XSEL_DATA", False);
+	Atom incrid = XInternAtom(x11_display, "INCR", False);
+
+	XConvertSelection(x11_display, bufid, fmtid, propid, x11_window, CurrentTime);
+
+	XEvent event;
+	do
+	{
+		XNextEvent(x11_display, &event);
+	}
+	while (event.type != SelectionNotify || event.xselection.selection != bufid);
+
+	if (event.xselection.property)
+	{
+		XGetWindowProperty(x11_display, x11_window, propid, 0, 500000, False, AnyPropertyType,
+		  &fmtid, &resbits, &ressize, &restail, (unsigned char**)&result);
+
+		if (fmtid == incrid)
+		{
+			printf("Buffer too large to paste.\n");
+		}
+
+		Gwen::UnicodeString str = Gwen::Utility::StringToUnicode(result);
+		XFree(result);
+		return str;
+	}
+	else // request failed, e.g. owner can't convert to the target format
+	{
+		return L"";
+	}
 }
 
 bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString & str )
 {
-	gs_ClipboardEmulator = str;
+	Atom clip = XInternAtom(x11_display, "CLIPBOARD", False);
+	Atom primary = XInternAtom(x11_display, "PRIMARY", False);
+		
+	copy_buffer = Gwen::Utility::UnicodeToString(str);
+	XSetSelectionOwner(x11_display, clip, DefaultRootWindow(x11_display), CurrentTime);
+	XSetSelectionOwner(x11_display, primary, DefaultRootWindow(x11_display), CurrentTime);
+
 	return true;
 }
 
@@ -302,16 +348,20 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   
   	
   	// Hide borders
-	/*Hints hints;
-	hints.flags = 2;
-	hints.decorations = 0;
-	Atom property = XInternAtom(display,"_MOTIF_WM_HINTS",True);
-	XChangeProperty(display,win,property,property,32,PropModeReplace,(unsigned char *)&hints,5);*/
+  	if (!WindowHasTitleBar())
+  	{
+		Hints hints;
+		hints.flags = 2;
+		hints.decorations = 0;
+		Atom property = XInternAtom(display,"_MOTIF_WM_HINTS",True);
+		XChangeProperty(display,win,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+	}
 
 	//printf( "Mapping window\n" );
 	XMapWindow( display, win );
 
-	XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
+	XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|
+		ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
 
 	x11_window = win;
 
@@ -339,50 +389,101 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
     XEvent event;
     while (XPending(x11_display))
     {
-        XNextEvent(x11_display, &event);
+		XNextEvent(x11_display, &event);
 
-        if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
-        {
-        	canvases[event.xclient.window]->InputQuit();
-        	canvases.erase(event.xclient.window);
-        	continue;
-        }
+		if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
+		{
+			canvases[event.xclient.window]->InputQuit();
+			canvases.erase(event.xclient.window);
+			continue;
+		}
         
-       	if (event.type == MotionNotify)
-       	{
+		if (event.type == MotionNotify)
+		{
 			x11_window = event.xmotion.window;
-        	GwenInput.ProcessMessage(canvases[event.xmotion.window], event);
-       		continue;
-       	}
+			GwenInput.ProcessMessage(canvases[event.xmotion.window], event);
+			continue;
+		}
+       	
+		if (event.type == SelectionRequest)
+		{
+			XEvent reply = {0};
+			reply.xselection.type = SelectionNotify;
+			reply.xselection.requestor = event.xselectionrequest.requestor;
+			reply.xselection.selection = event.xselectionrequest.selection;
+			reply.xselection.target = event.xselectionrequest.target;
+			reply.xselection.time = event.xselectionrequest.time;
+			reply.xselection.property = None;
+       		
+			if (copy_buffer.length())
+			{
+				Atom xa_targets = XInternAtom(x11_display, "TARGETS", False);
+				Atom xa_text = XInternAtom(x11_display, "TEXT", False);
+				Atom xa_string = XInternAtom(x11_display, "STRING", False);
+				Atom xa_utf8_string = XInternAtom(x11_display, "UTF8_STRING", False);
+				// Provide supported types
+				if (reply.xselection.target == xa_targets)
+				{
+					Atom tar_list[4];
+					tar_list[0] = xa_targets;
+					tar_list[1] = xa_utf8_string;
+					tar_list[2] = xa_string;
+       				
+					reply.xselection.property = event.xselectionrequest.property;
+					XChangeProperty(event.xselection.display, event.xselectionrequest.requestor,
+       					reply.xselection.property, XInternAtom(x11_display, "ATOM", False), 32, PropModeReplace,
+       					(unsigned char*)&tar_list, 3);
+				}
+				// todo check if they are requesting a supported type
+				else// if (reply.xselection.property == xa_text ||
+       				//	 reply.xselection.property == xa_string ||
+       				//	 reply.xselection.property == xa_utf8_string)// paste
+				{
+					reply.xselection.property = event.xselectionrequest.property;
+					XChangeProperty(x11_display, event.xselectionrequest.requestor,
+						reply.xselection.property, reply.xselection.target, 8,
+						PropModeReplace, (unsigned char*)copy_buffer.c_str(), copy_buffer.length() + 1);
+				}
+			}
+			XSendEvent(x11_display, event.xselectionrequest.requestor, True, 0, &reply);
+			XFlush(x11_display);
+			continue;
+		}
+       	
+		if (event.type == SelectionClear)
+		{
+			copy_buffer.clear();
+			continue;
+		}
+       	
 
 		// process it for _every_ window
 		// not that this is correct really...
 		for (auto canv: canvases)
 		{
-		    if (event.type == ConfigureNotify && event.xconfigure.window == (Window)canv.second->GetWindow())
-        	{
+			if (event.type == ConfigureNotify && event.xconfigure.window == (Window)canv.second->GetWindow())
+			{
             	canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
             	canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
-        	}
+			}
         	if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
-        	{
-            	canv.second->Redraw();
-        	}
+			{
+				canv.second->Redraw();
+			}
     
 			x11_window = canv.first;
-        	GwenInput.ProcessMessage(canv.second, event);
-        }
-    }
+			GwenInput.ProcessMessage(canv.second, event);
+		}
+	}
 }
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
-    XMoveResizeWindow(x11_display, (Window)pPtr, x, y, w, h);
+	XMoveResizeWindow(x11_display, (Window)pPtr, x, y, w, h);
 }
 
 void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pNewPos, Gwen::Point & pNewSize )
 {
-	// This kinda works for maximize, but glitches a lot
 	XEvent xev;
 	Atom wm_state  =  XInternAtom(x11_display, "_NET_WM_STATE", False);
 	Atom max_horz  =  XInternAtom(x11_display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
@@ -393,22 +494,48 @@ void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pN
 	xev.xclient.window = (Window)pPtr;
 	xev.xclient.message_type = wm_state;
 	xev.xclient.format = 32;
-	xev.xclient.data.l[0] = bMax ? 1 : 0;//_NET_WM_STATE_ADD, remove
+	xev.xclient.data.l[0] = bMax ? 1 : 0;//_NET_WM_STATE_ADD, _NET_WM_STATE_REMOVE
 	xev.xclient.data.l[1] = max_horz;
 	xev.xclient.data.l[2] = max_vert;
 
-	XSendEvent(x11_display, (Window)pPtr, False, SubstructureNotifyMask, &xev);
-	XFlush(x11_display);
+	XSendEvent(x11_display, DefaultRootWindow(x11_display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+	
+	if (!bMax)
+	{
+		// Because tiling WMs are weird, we must maximize then unmaximize to actually undock
+		memset(&xev, 0, sizeof(xev));
+		xev.type = ClientMessage;
+		xev.xclient.window = (Window)pPtr;
+		xev.xclient.message_type = wm_state;
+		xev.xclient.format = 32;
+		xev.xclient.data.l[0] = 1;//_NET_WM_STATE_ADD
+		xev.xclient.data.l[1] = max_vert;
 
-	struct R {  int left, right, bottom, top; };
-	R r;
+		XSendEvent(x11_display, DefaultRootWindow(x11_display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+		XFlush(x11_display);
+	
+		memset(&xev, 0, sizeof(xev));
+		xev.type = ClientMessage;
+		xev.xclient.window = (Window)pPtr;
+		xev.xclient.message_type = wm_state;
+		xev.xclient.format = 32;
+		xev.xclient.data.l[0] = 0;//_NET_WM_STATE_REMOVE
+		xev.xclient.data.l[1] = max_vert;
+
+		XSendEvent(x11_display, DefaultRootWindow(x11_display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+		XFlush(x11_display);
+	}
+	
+	Sleep(50);
+
 	Window root;
 	unsigned int width, height, border_width, depth;
-	XGetGeometry(x11_display, (Window)pPtr, &root, &r.left, &r.top, &width, &height, &border_width, &depth);
-	pNewPos.x = r.left;
-	pNewPos.y = r.bottom;
-	pNewSize.x = std::abs(r.left - r.right);
-	pNewSize.y = std::abs(r.top - r.bottom);
+	int left, top;
+	XGetGeometry(x11_display, (Window)pPtr, &root, &left, &top, &width, &height, &border_width, &depth);
+	pNewPos.x = left;
+	pNewPos.y = top;
+	pNewSize.x = width;
+	pNewSize.y = height;
 }
 
 void Gwen::Platform::SetWindowMinimized( void* pPtr, bool bMinimized )
@@ -439,8 +566,10 @@ bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 
 void Gwen::Platform::GetDesktopSize( int & w, int & h )
 {
-	w = 1024;
-	h = 768;
+	Screen* screen = XDefaultScreenOfDisplay(x11_display ? x11_display : XOpenDisplay(NULL));
+	
+	w = XWidthOfScreen(screen);
+	h = XHeightOfScreen(screen);
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
@@ -455,7 +584,7 @@ void Gwen::Platform::GetCursorPos( Gwen::Point & po )
 
 bool Gwen::Platform::WindowHasTitleBar()
 {
-	return true;
+	return false;
 }
 
 void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
@@ -467,6 +596,62 @@ void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_he
 	hints.flags = PMinSize;
 	XSetWMNormalHints(x11_display, (Window)pPtr, &hints);
 	XSetWMSizeHints(x11_display, (Window)pPtr, &hints, PMinSize);
+}
+#define XA_ATOM ((Atom) 4)
+
+bool Gwen::Platform::IsWindowMaximized( void* pPtr)
+{
+	Atom property = XInternAtom(x11_display, "_NET_WM_STATE", False);
+	Atom type;
+	int format;
+	unsigned long len;
+	unsigned long remaining;
+	unsigned char *data = nullptr;
+	bool retval = false;
+
+	if (property == None) {
+		return false;
+	}
+
+	int result = XGetWindowProperty(
+			x11_display,
+			(Window)pPtr,
+			property,
+			0,
+			1024,
+			False,
+			XA_ATOM,
+			&type,
+			&format,
+			&len,
+			&remaining,
+			&data);
+
+	if (result == Success && data) {
+		Atom *atoms = (Atom *)data;
+		Atom wm_act_max_horz = XInternAtom(x11_display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+		Atom wm_act_max_vert = XInternAtom(x11_display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+		bool found_wm_act_max_horz = false;
+		bool found_wm_act_max_vert = false;
+
+		for (uint64_t i = 0; i < len; i++) {
+			if (atoms[i] == wm_act_max_horz) {
+				found_wm_act_max_horz = true;
+			}
+			if (atoms[i] == wm_act_max_vert) {
+				found_wm_act_max_vert = true;
+			}
+
+			if (found_wm_act_max_horz || found_wm_act_max_vert) {
+				retval = true;
+				break;
+			}
+		}
+
+		XFree(data);
+	}
+
+	return retval;
 }
 
 #endif // ndef WIN32

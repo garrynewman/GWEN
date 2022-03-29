@@ -103,4 +103,9 @@ void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_he
 {
 }
 
+bool Gwen::Platform::IsWindowMaximized( void* pPtr)
+{
+	return false;
+}
+
 #endif // ndef WIN32

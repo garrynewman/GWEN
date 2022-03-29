@@ -65,6 +65,7 @@ namespace Gwen
 		GWEN_EXPORT void SetWindowMinimized( void* pPtr, bool bMinimized );
 		GWEN_EXPORT void SetWindowMinimumSize( void* pPtr, int min_width, int min_height);
 		GWEN_EXPORT bool WindowHasTitleBar();
+		GWEN_EXPORT bool IsWindowMaximized( void* pPtr);
 	}
 
 }
