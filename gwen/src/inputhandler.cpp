@@ -342,6 +342,10 @@ bool Gwen::Input::OnMouseButton( int iMouseButton, bool bDown )
 
 #endif
 
+	Gwen::Point wpos = Gwen::HoveredControl->GetCanvas()->WindowPosition();
+	int cx = MousePosition.x - wpos.x;
+	int cy = MousePosition.y - wpos.y;
+
 	switch ( iMouseButton )
 	{
 		case 0:
@@ -349,16 +353,16 @@ bool Gwen::Input::OnMouseButton( int iMouseButton, bool bDown )
 				if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
 				{ return true; }
 
-				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( MousePosition.x, MousePosition.y ); }
-				else					{ Gwen::HoveredControl->OnMouseClickLeft( MousePosition.x, MousePosition.y, bDown ); }
+				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( cx, cy ); }
+				else					{ Gwen::HoveredControl->OnMouseClickLeft( cx, cy, bDown ); }
 
 				return true;
 			}
 
 		case 1:
 			{
-				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( MousePosition.x, MousePosition.y ); }
-				else					{ Gwen::HoveredControl->OnMouseClickRight( MousePosition.x, MousePosition.y, bDown ); }
+				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( cx, cy ); }
+				else					{ Gwen::HoveredControl->OnMouseClickRight( cx, cy, bDown ); }
 
 				return true;
 			}

@@ -18,6 +18,7 @@ using namespace Gwen::Controls;
 GWEN_CONTROL_CONSTRUCTOR( DockedTabControl )
 {
 	m_WindowControl = NULL;
+	m_bAlwaysShowStrip = false;
 	Dock( Pos::Fill );
 	m_pTitleBar = new TabTitleBar( this );
 	m_pTitleBar->Dock( Pos::Top );
@@ -27,7 +28,7 @@ GWEN_CONTROL_CONSTRUCTOR( DockedTabControl )
 
 void DockedTabControl::Layout( Skin::Base* skin )
 {
-	GetTabStrip()->SetHidden( TabCount() <= 1 );
+	GetTabStrip()->SetHidden(m_bAlwaysShowStrip ? false : TabCount() <= 1 );
 	UpdateTitleBar();
 	BaseClass::Layout( skin );
 }

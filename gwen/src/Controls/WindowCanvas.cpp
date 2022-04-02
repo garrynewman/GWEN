@@ -119,8 +119,39 @@ void WindowCanvas::Layout( Skin::Base* skin )
 	BaseClass::Layout( skin );
 }
 
+int last_x = 0;
+int last_y = 0;
 void WindowCanvas::DoThink()
 {
+	// hack to handle offscreen dragging
+	if (Gwen::DragAndDrop::CurrentPackage)
+	{
+		Gwen::Point pt;
+		Gwen::Platform::GetCursorPos(pt);
+		//pt -= m_WindowPos;
+		//Gwen::DragAndDrop::OnMouseMoved(
+		double x = pt.x;
+		double y = pt.y;
+		if (last_x == 0 && last_y == 0)
+		{
+			last_x = x;
+			last_y = y;
+		}
+		double deltaX = x - last_x;
+		double deltaY = y - last_y;
+		//loat fScale = 1.0f / Scale();
+		if (last_x != x || last_y != y)
+		{
+			DragAndDrop::OnMouseMoved(Gwen::HoveredControl, x, y);
+		}
+		last_x = x;
+		last_y = y;
+	}
+	else
+	{
+		last_x = last_y = 0;
+	}
+	
 	bool real_maximized = Platform::IsWindowMaximized( m_pOSWindow );
 	if (m_bIsMaximized != real_maximized)
 	{
