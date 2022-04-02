@@ -394,11 +394,12 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 {	
 	x11_window = (Window)ptarget->GetWindow();
 	
-    canvases[(Window)ptarget->GetWindow()] = ptarget;
+	canvases[(Window)ptarget->GetWindow()] = ptarget;
+    
 
-    XEvent event;
-    while (XPending(x11_display))
-    {
+	XEvent event;
+	while (XPending(x11_display))
+	{
 		XNextEvent(x11_display, &event);
 
 		if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
@@ -415,6 +416,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 			continue;
 		}
        	
+		// Handle pastes requested by other windows
 		if (event.type == SelectionRequest)
 		{
 			XEvent reply = {0};
@@ -466,7 +468,6 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 			continue;
 		}
        	
-
 		// process it for _every_ window
 		// not that this is correct really...
 		for (auto canv: canvases)
@@ -536,6 +537,7 @@ void Gwen::Platform::SetWindowMaximized( void* pPtr, bool bMax, Gwen::Point & pN
 		XFlush(x11_display);
 	}
 	
+	// Give a bit of time for the resize so we get an accurate result below
 	Sleep(50);
 
 	Window root;

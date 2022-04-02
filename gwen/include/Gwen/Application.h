@@ -20,7 +20,6 @@ namespace Gwen
 class Application;
 extern Application* gApplication;
 
-// todo give this a global which we can use for spawning new windows
 // note right now this only supports opengl backends
 // could maybe template this on the renderer?
 class Application
