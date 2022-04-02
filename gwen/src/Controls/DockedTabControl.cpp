@@ -77,6 +77,7 @@ void DockedTabControl::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 		// Pop out our tabs into a new window
 		DockedTabControl* control = 0;
 		Base::List Children = GetTabStrip()->Children;
+		TabReturnButtonData return_data;
 		for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 		{
 			TabButton* pButton = gwen_cast<TabButton> ( *iter );
@@ -85,12 +86,15 @@ void DockedTabControl::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 			
 			if (!control)
 			{
-				control = pButton->PopOut();
+				control = pButton->PopOut(&return_data);
 			}
 			else
 			{
-				todo these dont have return data...
 				control->AddPage( pButton );
+				
+				TabReturnButtonData* data = new TabReturnButtonData;
+				*data = return_data;
+				pButton->UserData.Set<TabReturnButtonData*>("return_data", data);
 			}
 		}
 		Invalidate();

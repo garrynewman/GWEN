@@ -74,12 +74,6 @@ namespace Gwen
 				m_PopOutIsReturn = popped_out;
 				m_PopOutButton->SetHidden(!pButton->IsPopoutable());
 			}
-		
-			struct ReturnButtonData
-			{
-				DockBase* dock;// original root dock this was a part of
-				Base* window;// our parent window that we popped into
-			};
 
 		private:
 			

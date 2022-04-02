@@ -78,7 +78,7 @@ void TabButton::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 	}
 }
 
-DockedTabControl* TabButton::PopOut()
+DockedTabControl* TabButton::PopOut(TabReturnButtonData* out_data)
 {
 	// first, lets iterate up to find the topmost dockbase
 	//okay, we need to find the dockbase we came from so we can unpin later
@@ -128,10 +128,15 @@ DockedTabControl* TabButton::PopOut()
 	dcontrol->m_WindowControl = win;
 	dcontrol->AddPage(this);
 	
-	TabTitleBar::ReturnButtonData* data = new TabTitleBar::ReturnButtonData;
+	TabReturnButtonData* data = new TabReturnButtonData;
 	data->window = dcontrol->m_WindowControl;
 	data->dock = dock;
-	UserData.Set<TabTitleBar::ReturnButtonData*>("return_data", data);
+	UserData.Set<TabReturnButtonData*>("return_data", data);
+	
+	if (out_data)
+	{
+		*out_data = *data;
+	}
 	
 	Invalidate();
 	
