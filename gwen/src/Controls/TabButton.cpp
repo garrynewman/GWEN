@@ -23,6 +23,7 @@ using namespace Gwen::Controls;
 GWEN_CONTROL_CONSTRUCTOR( TabButton )
 {
 	m_bClosable = false;
+	m_CloseButton = NULL;
 	m_Page = NULL;
 	m_Control = NULL;
 	DragAndDrop_SetPackage( true, "TabButtonMove" );
@@ -59,6 +60,28 @@ void TabButton::SetTabControl( TabControl* ctrl )
 	}
 
 	m_Control = ctrl;
+}
+
+void TabButton::SetClosable(bool y)
+{
+	if (y == m_bClosable) { return; }
+	
+	m_bClosable = y;
+	
+	if (y)
+	{
+		m_CloseButton = new Controls::Button(this);
+		m_CloseButton->SetSize(20, 20);
+		m_CloseButton->SetPos(0, 2);
+		m_CloseButton->SetText("x");
+		m_CloseButton->Dock(Pos::Right);
+		m_CloseButton->onPress.Add(this, &ThisClass::OnCloseButton);
+	}
+	else
+	{
+		m_CloseButton->DelayedDelete();
+		m_CloseButton = NULL;
+	}
 }
 
 bool TabButton::DragAndDrop_ShouldStartDrag()
@@ -215,4 +238,12 @@ void TabButton::UpdateColours()
 	if ( IsHovered() )		{ return SetTextColor( GetSkin()->Colors.Tab.Active.Hover ); }
 
 	SetTextColor( GetSkin()->Colors.Tab.Active.Normal );
+}
+
+void TabButton::OnCloseButton(Controls::Base* control)
+{
+	auto page = GetPage();
+	GetTabControl()->RemovePage(this);
+	DelayedDelete();
+	page->DelayedDelete();
 }

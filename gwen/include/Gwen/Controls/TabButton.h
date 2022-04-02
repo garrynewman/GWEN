@@ -31,6 +31,7 @@ namespace Gwen
 			public:
 
 				GWEN_CONTROL( TabButton, Button );
+				virtual ~TabButton() { onClose.Call(this); };
 				virtual void Render( Skin::Base* skin );
 				virtual void Layout( Skin::Base* skin );
 
@@ -39,7 +40,7 @@ namespace Gwen
 
 				void SetTabControl( TabControl* ctrl );
 				TabControl* GetTabControl() { return m_Control; }
-				void SetClosable(bool y) { m_bClosable = true; }
+				void SetClosable(bool y);
 				void SetPopoutable(bool y) { DragAndDrop_GetPackage(0, 0)->canpopout = y; }
 
 				bool IsClosable() { return m_bClosable; }
@@ -60,9 +61,14 @@ namespace Gwen
 				virtual void UpdateColours();
 
 				virtual bool ShouldClip() { return false; }
+				
+				Gwen::Event::Caller	onClose;
 
 			private:
+			
+				void OnCloseButton(Controls::Base* control);
 
+				Button*     m_CloseButton;
 				Base*		m_Page;
 				TabControl*	m_Control;
 				bool        m_bClosable;
