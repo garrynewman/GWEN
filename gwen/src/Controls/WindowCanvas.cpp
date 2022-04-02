@@ -93,10 +93,13 @@ WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin,
 		m_Sizer->onDragStart.Add( this, &WindowCanvas::Dragger_Start );
 		m_Sizer->SetCursor( Gwen::CursorType::SizeNWSE );
 	}
+	
+	Gwen::Input::RegisterCanvas(this);
 }
 
 WindowCanvas::~WindowCanvas()
 {
+	Gwen::Input::RemoveCanvas(this);
 	DestroyWindow();
 }
 

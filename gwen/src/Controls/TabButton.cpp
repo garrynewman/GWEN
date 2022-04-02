@@ -74,11 +74,13 @@ void TabButton::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 	if (!bSuccess && Gwen::DragAndDrop::CurrentPackage->canpopout )
 	{
 		// pop out into window
-		PopOut();
+		Gwen::Point p = GetCanvas()->WindowPosition();
+		PopOut(p.x + x - Gwen::DragAndDrop::CurrentPackage->holdoffset.x,
+		       p.y + y - Gwen::DragAndDrop::CurrentPackage->holdoffset.y);
 	}
 }
 
-DockedTabControl* TabButton::PopOut(TabReturnButtonData* out_data)
+DockedTabControl* TabButton::PopOut(int x, int y, TabReturnButtonData* out_data)
 {
 	// first, lets iterate up to find the topmost dockbase
 	//okay, we need to find the dockbase we came from so we can unpin later
@@ -111,16 +113,17 @@ DockedTabControl* TabButton::PopOut(TabReturnButtonData* out_data)
 	Gwen::Controls::Base* win;
 	if (gApplication)
 	{
-		win = gApplication->AddWindow("", page->Width(), page->Height() + 40, -1, -1);
+		Gwen::Point mpos = Gwen::Input::GetMousePosition();
+		win = gApplication->AddWindow("", page->Width(), page->Height() + 40, x, y);
 	}
 	else
 	{
 		auto wc = new WindowControl( GetCanvas() );
-		wc->SetBounds( 0, 0, page->Width(), page->Height() + 40 );
+		wc->SetBounds( x, y, page->Width(), page->Height() + 40 );
 		wc->SetDeleteOnClose(true);
 		win = wc;
 	}
-		
+	
 	// Create a new tab control in that window so we can properly move ourself into it
 	auto dcontrol = new DockedTabControl(win);
 	dcontrol->Dock(Pos::Fill);

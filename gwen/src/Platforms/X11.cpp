@@ -380,6 +380,9 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 	delete_msg = wmDeleteMessage;
 	XSetWMProtocols(display, win, &wmDeleteMessage, 1);
 
+	// Make sure we get placed in the correct spot
+	XMoveResizeWindow(x11_display, win, x, y, w, h);
+	
 	return (void*)win;
 }
 
@@ -396,23 +399,31 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 	
 	canvases[(Window)ptarget->GetWindow()] = ptarget;
     
+	// handle drag and drop off window in a weird special case
+	if (Gwen::Input::IsLeftMouseDown())
+	{
+		// manually look for mouse up if we are outside the window
+		int x, y, lx, ly;
+		unsigned int mask;
+		Window root, child;
+		XQueryPointer(x11_display, x11_window, &root, &child, &x, &y, &lx, &ly, &mask);
+
+		if ((mask & Button1Mask) == 0)
+		{
+			Gwen::Input::OnMouseButton(0, false);
+		}
+	}
 
 	XEvent event;
 	while (XPending(x11_display))
 	{
 		XNextEvent(x11_display, &event);
 
+		// Catch window close requests
 		if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
 		{
 			canvases[event.xclient.window]->InputQuit();
 			canvases.erase(event.xclient.window);
-			continue;
-		}
-        
-		if (event.type == MotionNotify)
-		{
-			x11_window = event.xmotion.window;
-			GwenInput.ProcessMessage(canvases[event.xmotion.window], event);
 			continue;
 		}
        	
@@ -472,19 +483,20 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		// not that this is correct really...
 		for (auto canv: canvases)
 		{
+			// handle window resizes and whatnot
 			if (event.type == ConfigureNotify && event.xconfigure.window == (Window)canv.second->GetWindow())
 			{
-            	canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
-            	canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
+				canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
+				canv.second->OnMove(event.xconfigure.x, event.xconfigure.y);
+				canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
 			}
-        	if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
+			if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
 			{
 				canv.second->Redraw();
 			}
-    
-			x11_window = canv.first;
-			GwenInput.ProcessMessage(canv.second, event);
 		}
+		
+		GwenInput.ProcessMessage(event);
 	}
 }
 

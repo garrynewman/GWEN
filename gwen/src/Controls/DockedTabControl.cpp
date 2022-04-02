@@ -84,9 +84,13 @@ void DockedTabControl::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 
 			if ( !pButton ) { continue; }
 			
+			if (!pButton->IsPopoutable()) { continue; }
+			
 			if (!control)
 			{
-				control = pButton->PopOut(&return_data);
+				Gwen::Point p = GetCanvas()->WindowPosition();
+				control = pButton->PopOut(p.x + x - Gwen::DragAndDrop::CurrentPackage->holdoffset.x,
+				                          p.y + y - Gwen::DragAndDrop::CurrentPackage->holdoffset.y, &return_data);
 			}
 			else
 			{

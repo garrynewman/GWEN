@@ -26,6 +26,7 @@ class Application
 {
 	std::string default_font_ = "Segoe UI";
 	double default_font_size_ = 1.0;
+	std::string skin_ = "DefaultSkin.png";
 	
 	std::vector<Gwen::Controls::WindowCanvas*> canvases_;
 	
@@ -45,6 +46,11 @@ public:
 		default_font_size_ = size;
 	}
 	
+	void SetSkin(const std::string& texture)
+	{
+		skin_ = texture;
+	}
+	
 	Gwen::Controls::Base* AddWindow(const std::string& title, int w = 1000, int h = 700, int x = -1, int y = -1)
 	{
 		Gwen::Renderer::OpenGL* renderer = new Gwen::Renderer::OpenGL();
@@ -54,9 +60,9 @@ public:
 		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
 		window_canvas->SetSizable(true);
 
-		skin->Init("DefaultSkin.png");// todo parameterize this
+		skin->Init(skin_);
 		skin->SetDefaultFont(L"Segoe UI", default_font_size_);
-
+		
 		canvases_.push_back(window_canvas);
 		
 		return window_canvas;
@@ -115,6 +121,8 @@ public:
 	// Runs the application loop once then returns. Returns false if the program should exit
 	bool SpinOnce()
 	{
+		Gwen::Input::OnThink();
+		
 		for (int i = 0; i < canvases_.size(); i++)
 		{
 			auto canv = canvases_[i];

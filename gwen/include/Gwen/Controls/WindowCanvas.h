@@ -42,6 +42,8 @@ namespace Gwen
 				virtual void Render( Skin::Base* skin );
 
 				virtual Gwen::Point WindowPosition() { return m_WindowPos; }
+				
+				virtual void OnMove(int x, int y) { m_WindowPos = Gwen::Point(x,y); }
 				virtual void SetPos( int x, int y );
 				virtual bool IsOnTop();
 

@@ -24,7 +24,7 @@ namespace Gwen
 					m_MouseY = 0;
 				}
 
-				bool ProcessMessage( Gwen::Controls::WindowCanvas* m_Canvas, XEvent& event )
+				bool ProcessMessage( XEvent& event )
 				{
                     bool press = true;
                     KeySym key;
@@ -41,30 +41,21 @@ namespace Gwen
 							}*/
 
 						case MotionNotify:
-							{
-								if (event.xmotion.window != (Window)m_Canvas->GetWindow())
-								{
-									return false;
-								}
-								int x = event.xmotion.x;
-								int y = event.xmotion.y;
+							{	
+								int x = event.xmotion.x_root;
+								int y = event.xmotion.y_root;
 								
 								int dx = x - m_MouseX;
 								int dy = y - m_MouseY;
 								m_MouseX = x;
 								m_MouseY = y;
 								
-								return m_Canvas->InputMouseMoved( x, y, dx, dy);
+								return Gwen::Input::OnMouseMoved( x, y, dx, dy, (void*)event.xmotion.window);
 							}
                         case KeyRelease:
                             press = false;
 						case KeyPress:
-							{
-								if (event.xkey.window != (Window)m_Canvas->GetWindow())
-								{
-									return false;
-								}
-								
+							{	
 								int len = XLookupString(&event.xkey, text, 255, &key, 0);
 								if (Gwen::Input::IsControlDown())
 								{
@@ -75,8 +66,8 @@ namespace Gwen
 								{
                                     if (!press) { return false; }
                                     
-								    Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) text[0];
-								    return m_Canvas->InputCharacter( chr );
+									Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) text[0];
+									return Gwen::Input::OnCharacter( chr );
 								}
 
 								int iKey = -1;
@@ -98,7 +89,7 @@ namespace Gwen
 								
 								if ( iKey != -1 )
 								{
-								    return m_Canvas->InputKey( iKey, press );
+									return Gwen::Input::OnKeyEvent( iKey, press);
 								}
 							}
 
@@ -109,16 +100,16 @@ namespace Gwen
                         case ButtonPress:
                             {
 								if (event.xbutton.button == 1)
-									return m_Canvas->InputMouseButton(0, press);
+									return Gwen::Input::OnMouseButton(0, press);
 								if (event.xbutton.button == 2)
-									return m_Canvas->InputMouseButton(2, press);
+									return Gwen::Input::OnMouseButton(2, press);
 								if (event.xbutton.button == 3)
-									return m_Canvas->InputMouseButton(1, press);
+									return Gwen::Input::OnMouseButton(1, press);
                                 // Scrolling is mapped to buttons....
 								if (event.xbutton.button == 4)
-									return m_Canvas->InputMouseWheel(20);
+									return Gwen::Input::OnMouseWheel(20);
 								if (event.xbutton.button == 5)
-									return m_Canvas->InputMouseWheel(-20);
+									return Gwen::Input::OnMouseWheel(-20);
                             }
 						default:
 							{
