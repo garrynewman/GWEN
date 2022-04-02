@@ -221,12 +221,14 @@ void DragAndDrop::OnMouseMoved( Gwen::Controls::Base* pHoveredControl, int x, in
 	pHoveredControl->Redraw();
 }
 
-void DragAndDrop::RenderOverlay( Gwen::Controls::Canvas* /*pCanvas*/, Skin::Base* skin )
+void DragAndDrop::RenderOverlay( Gwen::Controls::Canvas* canvas, Skin::Base* skin )
 {
 	if ( !CurrentPackage ) { return; }
 
 	if ( !CurrentPackage->drawcontrol ) { return; }
-
+	
+	if ( canvas != CurrentPackage->drawcontrol->GetCanvas() ) { return; }
+	
 	Gwen::Point pntOld = skin->GetRender()->GetRenderOffset();
 	skin->GetRender()->AddRenderOffset( Gwen::Rect( m_iMouseX - SourceControl->X() - CurrentPackage->holdoffset.x, m_iMouseY - SourceControl->Y() - CurrentPackage->holdoffset.y, 0, 0 ) );
 	CurrentPackage->drawcontrol->DoRender( skin );

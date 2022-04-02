@@ -518,4 +518,14 @@ bool Gwen::Platform::IsWindowMaximized( void* pPtr)
 	return pl.showCmd == SW_SHOWMAXIMIZED;
 }
 
+void Gwen::Platform::WaitForEvent()
+{
+	// todo, I'm not sure that this works correctly
+	MSG msg;
+	if (!PeekMessage( &msg, 0, 0, 0, PM_NOREMOVE ) )
+	{
+		WaitMessage();
+	}
+}
+
 #endif // WIN32

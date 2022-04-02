@@ -46,13 +46,13 @@ public:
 		default_font_size_ = size;
 	}
 	
-	Gwen::Controls::Base* AddWindow(const std::string& title, int w = 1000, int h = 700)
+	Gwen::Controls::Base* AddWindow(const std::string& title, int w = 1000, int h = 700, int x = -1, int y = -1)
 	{
 		Gwen::Renderer::OpenGL* renderer = new Gwen::Renderer::OpenGL();
 
 		auto skin = new Gwen::Skin::TexturedBase(renderer);
 
-		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(-1, -1, w, h, skin, title);
+		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
 		window_canvas->SetSizable(true);
 
 		skin->Init("DefaultSkin.png");// todo parameterize this
@@ -69,6 +69,7 @@ public:
 		{
 			canv->InputQuit();
 		}
+		Gwen::Platform::InterruptWait();
 	}
 	
 	void CloseAllWindows()
@@ -107,7 +108,7 @@ public:
 			
 			if (!on_top)
 			{
-				Gwen::Platform::Sleep(300);
+				Gwen::Platform::WaitForEvent();
 			}
 		}
 	}

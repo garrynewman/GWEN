@@ -11,6 +11,10 @@
 #include "Gwen/Controls/TabControl.h"
 #include "Gwen/Controls/Highlight.h"
 #include "Gwen/DragAndDrop.h"
+#include "Gwen/Application.h"
+#include "Gwen/Controls/DockedTabControl.h"
+#include "Gwen/Controls/WindowCanvas.h"
+#include "Gwen/Controls/WindowControl.h"
 
 using namespace Gwen;
 using namespace Gwen::Controls;
@@ -62,6 +66,77 @@ bool TabButton::DragAndDrop_ShouldStartDrag()
 	return m_Control->DoesAllowDrag();
 }
 
+void TabButton::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
+{
+	SetHidden( false );
+	SetDepressed( false );
+	
+	if (!bSuccess && Gwen::DragAndDrop::CurrentPackage->canpopout )
+	{
+		// pop out into window
+		PopOut();
+	}
+}
+
+DockedTabControl* TabButton::PopOut()
+{
+	// first, lets iterate up to find the topmost dockbase
+	//okay, we need to find the dockbase we came from so we can unpin later
+	//also preferrably find the side we were pinned to
+				
+	TabControl* tab = GetTabControl();
+	// now go up until we find a DockBase
+	Base* current = tab;
+	DockBase* dock = dynamic_cast<DockBase*>(current);
+	while (current && dock == 0)
+	{
+		current = current->GetParent();
+		dock = dynamic_cast<DockBase*>(current);
+	}
+	if (dock)
+	{
+		// now go to the top dock base, this one is unlikely to be removed
+		while (dynamic_cast<DockBase*>(dock->GetParent()) != 0)
+		{
+			dock = dynamic_cast<DockBase*>(dock->GetParent());
+		}
+	}
+	else
+	{
+		return 0;
+	}
+	
+	// pop out into window
+	auto page = GetPage();
+	Gwen::Controls::Base* win;
+	if (gApplication)
+	{
+		win = gApplication->AddWindow("", page->Width(), page->Height() + 40, -1, -1);
+	}
+	else
+	{
+		auto wc = new WindowControl( GetCanvas() );
+		wc->SetBounds( 0, 0, page->Width(), page->Height() + 40 );
+		wc->SetDeleteOnClose(true);
+		win = wc;
+	}
+		
+	// Create a new tab control in that window so we can properly move ourself into it
+	auto dcontrol = new DockedTabControl(win);
+	dcontrol->Dock(Pos::Fill);
+	dcontrol->SetShowTitlebar(true);
+	dcontrol->m_WindowControl = win;
+	dcontrol->AddPage(this);
+	
+	TabTitleBar::ReturnButtonData* data = new TabTitleBar::ReturnButtonData;
+	data->window = dcontrol->m_WindowControl;
+	data->dock = dock;
+	UserData.Set<TabTitleBar::ReturnButtonData*>("return_data", data);
+	
+	Invalidate();
+	
+	return dcontrol;
+}
 
 bool TabButton::OnKeyUp( bool bDown )
 {
@@ -90,6 +165,7 @@ bool TabButton::OnKeyLeft( bool bDown )
 
 	return true;
 }
+
 bool TabButton::OnKeyRight( bool bDown )
 {
 	if ( bDown )

@@ -141,29 +141,31 @@ bool Gwen::Platform::SetClipboardText( const Gwen::UnicodeString & str )
 	return true;
 }
 
-static uint64_t start = 0;
+static uint64_t start_time = 0;
 float Gwen::Platform::GetTimeInSeconds()
 {
 	struct timeval tv;
 	gettimeofday(&tv, 0);
 	
 	uint64_t time_us = tv.tv_sec*1000000 + tv.tv_usec;
-	if (start == 0)
+	if (start_time == 0)
 	{
-		start = time_us;
+		start_time = time_us;
 	}
 	
-	uint64_t dt = time_us - start;
+	uint64_t dt = time_us - start_time;
 	float fSeconds = (float)dt/1000000.0f;
 	return fSeconds;
 }
 
-static std::vector<std::string> split (std::string s, char delimiter) {
+static std::vector<std::string> split(std::string s, char delimiter)
+{
     size_t pos_start = 0, pos_end, delim_len = 1;
     std::string token;
     std::vector<std::string> res;
 
-    while ((pos_end = s.find (delimiter, pos_start)) != std::string::npos) {
+    while ((pos_end = s.find (delimiter, pos_start)) != std::string::npos)
+    {
         token = s.substr (pos_start, pos_end - pos_start);
         pos_start = pos_end + delim_len;
         res.push_back (token);
@@ -173,7 +175,8 @@ static std::vector<std::string> split (std::string s, char delimiter) {
     return res;
 }
 
-bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
+bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, const String & Extension,
+	Gwen::Event::Handler* pHandler, Event::Handler::FunctionWithInformation fnCallback )
 {
 	std::vector<std::string> extensions = split(Extension, '|');
 	auto files = pfd::open_file(Name, StartPath, extensions, pfd::opt::none).result();
@@ -189,7 +192,8 @@ bool Gwen::Platform::FileOpen( const String & Name, const String & StartPath, co
 	return true;
 }
 
-bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, const String & Extension, Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
+bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, const String & Extension,
+	Gwen::Event::Handler* pHandler, Gwen::Event::Handler::FunctionWithInformation fnCallback )
 {
 	// split out extensions
 	std::vector<std::string> extensions = split(Extension, '|');
@@ -222,25 +226,31 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 }
 
 typedef struct
+{
+	unsigned long   flags;
+	unsigned long   functions;
+	unsigned long   decorations;
+	long            inputMode;
+	unsigned long   status;
+} Hints;
 
-                {
-
-                unsigned long   flags;
-
-                unsigned long   functions;
-
-                unsigned long   decorations;
-
-                long            inputMode;
-
-                unsigned long   status;
-
-                } Hints;
-
+static struct { 
+    int pip[2];     // extra pipe for event loop
+    sig_atomic_t done;
+} global;
+static int xfd;
 static Atom delete_msg;
-GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
+
+GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, 
+	const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
 {
 	Display *display = x11_display ? x11_display : XOpenDisplay(NULL);
+	if (!x11_display)
+	{
+		memset(&global, 0, sizeof(global));
+		pipe(global.pip);
+		xfd = ConnectionNumber(display);
+	}
 	//printf("Creating window\n");
 	if (!display)
 	{
@@ -365,6 +375,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 
 	x11_window = win;
 
+	// Let us capture close events so we can properly handle them
 	Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
 	delete_msg = wmDeleteMessage;
 	XSetWMProtocols(display, win, &wmDeleteMessage, 1);
@@ -375,13 +386,12 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 static std::map<Window, Gwen::Controls::WindowCanvas*> canvases;
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
-	//printf("window destroyed\n");
 	canvases.erase((Window)pPtr);
     XDestroyWindow(x11_display, (Window)pPtr);
 }
 
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
-{
+{	
 	x11_window = (Window)ptarget->GetWindow();
 	
     canvases[(Window)ptarget->GetWindow()] = ptarget;
@@ -587,6 +597,37 @@ bool Gwen::Platform::WindowHasTitleBar()
 	return false;
 }
 
+void Gwen::Platform::InterruptWait()
+{
+	// Wake up select below in WaitForEvent
+	char buf;
+	write(global.pip[1], &buf, 1);
+}
+
+void Gwen::Platform::WaitForEvent()
+{
+	// This is the naieve method which basically gets stuck forever
+	//XEvent ev;
+	//XPeekEvent(x11_display, &ev);
+	
+	// initialize the set to scan
+	static fd_set set_read;
+	FD_ZERO(&set_read);
+	FD_SET(xfd, &set_read);
+	FD_SET(global.pip[0], &set_read);
+	
+	// block on X11 and pipe so we can interrupt this
+	int max_fd = xfd > global.pip[0] ? xfd : global.pip[0];
+	select(max_fd+1, &set_read, NULL, NULL, NULL);
+    
+	// Read to clear the interrupt if it was the cause of our wakeup
+	if (FD_ISSET(global.pip[0], &set_read))
+	{
+		char buf[50];
+		read(global.pip[0], buf, 50);
+	}
+}
+
 void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
 {
 	XSizeHints hints;
@@ -597,9 +638,10 @@ void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_he
 	XSetWMNormalHints(x11_display, (Window)pPtr, &hints);
 	XSetWMSizeHints(x11_display, (Window)pPtr, &hints, PMinSize);
 }
+
 #define XA_ATOM ((Atom) 4)
 
-bool Gwen::Platform::IsWindowMaximized( void* pPtr)
+bool Gwen::Platform::IsWindowMaximized( void* pPtr )
 {
 	Atom property = XInternAtom(x11_display, "_NET_WM_STATE", False);
 	Atom type;

@@ -18,6 +18,8 @@ namespace Gwen
 	{
 		class GWEN_EXPORT DockedTabControl : public TabControl
 		{
+			friend class TabButton;
+			friend class TabTitleBar;
 			public:
 
 				GWEN_CONTROL( DockedTabControl, TabControl );

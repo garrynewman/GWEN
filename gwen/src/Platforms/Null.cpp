@@ -108,4 +108,10 @@ bool Gwen::Platform::IsWindowMaximized( void* pPtr)
 	return false;
 }
 
+void Gwen::Platform::WaitForEvent()
+{
+
+}
+
+
 #endif // ndef WIN32
