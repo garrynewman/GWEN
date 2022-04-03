@@ -69,6 +69,10 @@ add_executable(GWEN_d2d_sample Samples/Direct2D/Direct2DSample.cpp)
 target_include_directories(GWEN_d2d_sample PUBLIC include)
 target_link_libraries(GWEN_d2d_sample GWEN_d2d GWEN_static GWEN_unit_test)
 
+add_executable(GWEN_opengl_sample Samples/OpenGL/OpenGLSample.cpp)
+target_include_directories(GWEN_opengl_sample PUBLIC include)
+target_link_libraries(GWEN_opengl_sample GWEN_opengl GWEN_static GWEN_unit_test)
+
 if(0)
 add_library(GWEN_dx9
   Renderers/DirectX9/DirectX9.cpp)
