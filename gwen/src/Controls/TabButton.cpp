@@ -105,10 +105,8 @@ void TabButton::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 
 DockedTabControl* TabButton::PopOut(int x, int y, TabReturnButtonData* out_data)
 {
-	// first, lets iterate up to find the topmost dockbase
-	//okay, we need to find the dockbase we came from so we can unpin later
-	//also preferrably find the side we were pinned to
-				
+	// Find the topmost dock base we came from so we can go back to it with
+	// the return button
 	TabControl* tab = GetTabControl();
 	// now go up until we find a DockBase
 	Base* current = tab;
@@ -131,7 +129,7 @@ DockedTabControl* TabButton::PopOut(int x, int y, TabReturnButtonData* out_data)
 		return 0;
 	}
 	
-	// pop out into window
+	// Pop out into a new window
 	auto page = GetPage();
 	Gwen::Controls::Base* win;
 	if (gApplication)

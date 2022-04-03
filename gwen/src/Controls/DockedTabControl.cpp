@@ -56,24 +56,10 @@ void DockedTabControl::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 	{
 		GetParent()->SetHidden( false );
 	}
-
-	bool can_popout = Gwen::DragAndDrop::CurrentPackage->canpopout;
-	if (true)//TabCount() == 1)
-	{
-		Base::List Children = GetTabStrip()->Children;
-		
-		for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
-		{
-			TabButton* pButton = gwen_cast<TabButton> ( *iter );
-
-			if ( !pButton ) { continue; }
-			
-			can_popout = can_popout || pButton->DragAndDrop_GetPackage(0, 0)->canpopout;
-		}
-	}
 	
 	// On failure, pop out into a new window if we havent already been popped out
-	if ( !bSuccess && !m_WindowControl && can_popout )
+	// also only pop out popoutable windows
+	if ( !bSuccess && !m_WindowControl )
 	{
 		// Pop out our tabs into a new window
 		DockedTabControl* control = 0;

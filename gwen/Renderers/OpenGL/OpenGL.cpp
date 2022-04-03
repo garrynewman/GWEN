@@ -34,15 +34,25 @@ namespace Gwen
 {
 	namespace Renderer
 	{
-        void OpenGL::Init()
-        {
-            fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
-        }
+		static FONScontext* fs = 0;
+		static int num_renderers = 0;
+		void OpenGL::Init()
+		{
+			num_renderers++;
+			if (!fs)
+			{
+				fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+			}
+		}
         
-        OpenGL::~OpenGL()
-        {
-        	glfonsDelete(fs);
-        }
+		OpenGL::~OpenGL()
+		{
+			num_renderers--;
+			if (num_renderers == 0)
+			{
+				glfonsDelete(fs);
+			}
+		}
 
         std::string GetExecutablePath()
         {

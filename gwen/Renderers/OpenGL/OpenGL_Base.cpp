@@ -331,6 +331,7 @@ namespace Gwen
 			return c;
 		}
 
+		static std::map<GLXContext, bool> _contexts;
 		bool OpenGL_Base::InitializeContext( Gwen::WindowProvider* pWindow )
 		{
 #ifdef _WIN32
@@ -394,6 +395,13 @@ namespace Gwen
 			ctxErrorOccurred = false;
 			int (*oldHandler)(Display*, XErrorEvent*) =
 			XSetErrorHandler(&ctxErrorHandler);
+			
+			// find a context to share with
+			GLXContext share_ctx = 0;
+			if (_contexts.size())
+			{
+				share_ctx = _contexts.begin()->first;
+			}
 
 			// Check for the GLX_ARB_create_context extension string and the function.
 			// If either is not present, use GLX 1.3 context creation method.
@@ -402,7 +410,7 @@ namespace Gwen
 			{
 				printf( "glXCreateContextAttribsARB() not found"
 					" ... using old-style GLX context\n" );
-				ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, 0, True );
+				ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, share_ctx, True );
 			}
 			// If it does, try to get a GL 3.0 context!
 			else
@@ -416,7 +424,7 @@ namespace Gwen
 				};
 
 				//printf( "Creating context\n" );
-				ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0,
+				ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, share_ctx,
                                       True, context_attribs );
 
 				// Sync to ensure any errors generated are processed.
@@ -440,10 +448,12 @@ namespace Gwen
 
 					printf( "Failed to create GL 3.0 context"
 						" ... using old-style GLX context\n" );
-					ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0, 
+					ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, share_ctx, 
                                         True, context_attribs );
 				}
 			}
+			
+			_contexts[ctx] = true;
 
 			// Sync to ensure any errors generated are processed.
 			XSync( x11_display, False );
@@ -480,6 +490,7 @@ namespace Gwen
 
 		bool OpenGL_Base::ShutdownContext( Gwen::WindowProvider* pWindow )
 		{
+			_contexts.erase((GLXContext)m_pContext);
 #ifdef _WIN32
 			wglDeleteContext( ( HGLRC ) m_pContext );
 			return true;

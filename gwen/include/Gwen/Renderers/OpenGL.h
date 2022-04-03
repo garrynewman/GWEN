@@ -17,9 +17,7 @@ namespace Gwen
 	namespace Renderer
 	{
 		class OpenGL : public Gwen::Renderer::OpenGL_Base
-		{
-            	FONScontext* fs = 0;
-            
+		{   
 			public:
 			
 				virtual ~OpenGL();
