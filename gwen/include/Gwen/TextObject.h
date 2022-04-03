@@ -89,7 +89,7 @@ namespace Gwen
 				return m_Unicode;
 			}
 
-			int length() const { return m_Unicode.length(); }
+			int length() const { return (int)m_Unicode.length(); }
 
 			Gwen::UnicodeString		m_Unicode;
 			Gwen::String			m_String;

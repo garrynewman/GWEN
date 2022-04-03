@@ -48,17 +48,23 @@ static LPCTSTR iCursorConversion[] =
 
 static bool loaded_cursors = false;
 static HCURSOR cursors[10];
+static HCURSOR current_cursor;
 void Gwen::Platform::SetCursor(unsigned char iCursor)
 {
 	if (!loaded_cursors)
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			cursors[i] = LoadCursor(NULL, iCursorConversion[iCursor]);
+			cursors[i] = LoadCursor(NULL, iCursorConversion[i]);
 		}
 		loaded_cursors = true;
 	}
-	::SetCursor( cursors[iCursor]);
+
+	if (GetCursor() != cursors[iCursor])
+	{
+		::SetCursor(cursors[iCursor]);
+		current_cursor = cursors[iCursor];
+	}
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
@@ -315,6 +321,26 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 {
 	switch (message)
 	{
+	case WM_GETMINMAXINFO:
+	{
+		auto f = window_min_bounds.find(hwnd);
+		if (f != window_min_bounds.end())
+		{
+			LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
+			lpMMI->ptMinTrackSize.x = f->second.first;
+			lpMMI->ptMinTrackSize.y = f->second.second;
+		}
+		break;
+	}
+	case WM_SETCURSOR:
+	{
+		// Sets the cursor if mouse input wasnt captured
+		if (IsIconic(hwnd) && current_cursor)
+		{
+			SetCursor(current_cursor);
+		}
+		break;
+	}
 	case 0x02E0://WM_DPICHANGED:
 	{   //todo handle x and y dpi
 		float dpi = HIWORD(wParam);

@@ -945,6 +945,16 @@ STBTT_DEF unsigned char * stbtt_GetCodepointSDF(const stbtt_fontinfo *info, floa
 //     stbtt_GetFontNameString() lets you get any of the various strings
 //             from the file yourself and do your own comparisons on them.
 //             You have to have called stbtt_InitFont() first.
+// 
+//     stbtt_GetFontStyleFlags() lets you get any of the various style flags
+//             from the file yourself and do your own comparisons on them.
+//             You have to have called stbtt_InitFont() first.
+//             Flags are: Bold (Bit 0), Italic (bit 1), Underline (bit 2), Outline (bit 3)
+//                        Shadow (Bit 4), Condensed (bit 5),
+//                        Extended (bit 6)
+//
+//     stbtt_IsMonospaced() returns true if a given font is
+//             labels itself as monospace
 
 
 STBTT_DEF int stbtt_FindMatchingFont(const unsigned char *fontdata, const char *name, int flags);
@@ -4294,6 +4304,27 @@ static int stbtt_CompareUTF8toUTF16_bigendian_internal(char *s1, int len1, char 
    return len1 == stbtt__CompareUTF8toUTF16_bigendian_prefix((stbtt_uint8*) s1, len1, (stbtt_uint8*) s2, len2);
 }
 
+bool stbtt_IsMonospaced(const stbtt_fontinfo* font)
+{
+    stbtt_int32 i, count, stringOffset;
+    stbtt_uint8* fc = font->data;
+    stbtt_uint32 offset = font->fontstart;
+    stbtt_uint32 nm = stbtt__find_table(fc, offset, "post");
+
+    if (nm == 0)
+        return false;
+
+    return ttULONG(fc + nm + 4 + 4 + 2*2) != 0;
+}
+
+uint16_t stbtt_GetFontStyleFlags(const stbtt_fontinfo* font)
+{
+    stbtt_uint32 hd = font->head;
+    stbtt_uint8* fc = font->data;
+
+    return ttUSHORT(fc + hd + 4 + 4 + 4 + 4 + 2 + 2 + 16 + 2*4);
+}
+
 // returns results in whatever encoding you request... but note that 2-byte encodings
 // will be BIG-ENDIAN... use stbtt_CompareUTF8toUTF16_bigendian() to compare
 STBTT_DEF const char *stbtt_GetFontNameString(const stbtt_fontinfo *font, int *length, int platformID, int encodingID, int languageID, int nameID)
@@ -4308,10 +4339,16 @@ STBTT_DEF const char *stbtt_GetFontNameString(const stbtt_fontinfo *font, int *l
    stringOffset = nm + ttUSHORT(fc+nm+4);
    for (i=0; i < count; ++i) {
       stbtt_uint32 loc = nm + 6 + 12 * i;
-      if (platformID == ttUSHORT(fc+loc+0) && encodingID == ttUSHORT(fc+loc+2)
-          && languageID == ttUSHORT(fc+loc+4) && nameID == ttUSHORT(fc+loc+6)) {
-         *length = ttUSHORT(fc+loc+8);
-         return (const char *) (fc+stringOffset+ttUSHORT(fc+loc+10));
+      int l = ttUSHORT(fc + loc + 8);
+      int platform = ttUSHORT(fc + loc + 0);
+      int encoding = ttUSHORT(fc + loc + 2);
+      int name = ttUSHORT(fc + loc + 6);
+      int lang = ttUSHORT(fc + loc + 4);
+      const char* str = (const char*)(fc + stringOffset + ttUSHORT(fc + loc + 10));
+      if (platformID == platform && encodingID == encoding
+          && languageID == lang && nameID == name) {
+         *length = l;
+         return str;
       }
    }
    return NULL;

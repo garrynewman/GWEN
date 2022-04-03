@@ -268,10 +268,9 @@ void WindowCanvas::Sizer_Moved()
 	int h = ( p.y ) - m_WindowPos.y;
 	w = Clamp( w, 100, 9999 );
 	h = Clamp( h, 100, 9999 );
-	Gwen::PointF scaling = GetDPIScaling();
-	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, w*scaling.x, h*scaling.y);
-	GetSkin()->GetRender()->ResizedContext( this, w*scaling.x, h*scaling.y);
-	this->SetSize( w, h );
+	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, w, h);
+	GetSkin()->GetRender()->ResizedContext( this, w, h);
+	this->SetSize( w/Scale(), h/Scale());
 	BaseClass::DoThink();
 	RenderCanvas();
 }

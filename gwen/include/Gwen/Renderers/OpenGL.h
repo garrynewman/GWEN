@@ -20,6 +20,9 @@ namespace Gwen
 		{
             	FONScontext* fs = 0;
             
+				// Fallback fonts for other languages/charsets
+				int fallback_1 = -1;
+				int fallback_2 = -1;
 			public:
 			
 				virtual ~OpenGL();

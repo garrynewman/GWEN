@@ -172,13 +172,16 @@ namespace Gwen
 
 		void OpenGL_Base::StartClip()
 		{
-            //return;
 			Flush();
 			Gwen::Rect rect = ClipRegion();
-			rect.x *= Scale();
-			rect.y *= Scale();
-			rect.w *= Scale();
-			rect.h *= Scale();
+			float x = rect.x * Scale();
+			float y = rect.y * Scale();
+			float w = rect.w * Scale();
+			float h = rect.h * Scale();
+			rect.x = floor(x);// Scale();
+			rect.y = floor(y);// Scale();
+			rect.w = ceil(w);
+			rect.h = ceil(h);
 			// OpenGL's coords are from the bottom left
 			// so we need to translate them here.
 			{
@@ -192,7 +195,6 @@ namespace Gwen
 
 		void OpenGL_Base::EndClip()
 		{
-            //return;
 			Flush();
 			glDisable( GL_SCISSOR_TEST );
 		}
@@ -200,7 +202,6 @@ namespace Gwen
 		void OpenGL_Base::DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2 )
 		{
 			GLuint* tex = ( GLuint* ) pTexture->data;
-            //tex = &last_tex;
 
 			// Missing image, not loaded properly?
 			if ( !tex )

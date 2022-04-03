@@ -18,7 +18,7 @@
 #include "FontStash/glfontstash.h"
 
 
-#ifndef _win32
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/types.h>
 #include <dirent.h>
@@ -37,6 +37,12 @@ namespace Gwen
         void OpenGL::Init()
         {
             fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+
+            // find some fallback fonts
+#ifdef _WIN32
+            fallback_1 = fonsAddFont(fs, "malgun", "C:/Windows/Fonts/malgun.ttf");
+            fallback_2 = fonsAddFont(fs, "nirmala", "C:/Windows/Fonts/nirmala.ttf");
+#endif
         }
         
         OpenGL::~OpenGL()
@@ -47,7 +53,7 @@ namespace Gwen
         std::string GetExecutablePath()
         {
         	char buffer[500];
-        #ifdef _win32
+        #ifdef _WIN32
         	GetModuleFileName(NULL, buffer, 500);
         #else
 			int llen = readlink("/proc/self/exe", buffer, 499);
@@ -75,11 +81,11 @@ namespace Gwen
         
 void find_font_files(const std::string& path, std::vector<std::pair<std::string, std::string>>& files)
 {
-#ifdef _win32
+#ifdef _WIN32
 	HANDLE hFind;
 	WIN32_FIND_DATA FindFileData;
-	std::wstring spath = path;
-	if ((hFind = FindFirstFileW((spath + L"/*").c_str(), &FindFileData)) != INVALID_HANDLE_VALUE)
+	std::string spath = path;
+	if ((hFind = FindFirstFileA((path + "/*").c_str(), &FindFileData)) != INVALID_HANDLE_VALUE)
 	{
 		do
 		{
@@ -89,11 +95,11 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 			if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
 				//recurse
-				find_font_files(spath + L"\\" + FindFileData.cFileName, files);
+				find_font_files(spath + "\\" + FindFileData.cFileName, files);
 			}
 			else
 			{
-				files.push_back({ spath + L"\\" + FindFileData.cFileName, FindFileData.cFileName });
+				files.push_back({ spath + "\\" + FindFileData.cFileName, FindFileData.cFileName });
 			}
 		} while (FindNextFile(hFind, &FindFileData));
 		FindClose(hFind);
@@ -235,7 +241,7 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 		    	modifiers.oblique = true;
 		    	return true;
 		    }
-		    else if (word == "M" || word == "Regular" || word == "Sans")
+		    else if (word == "Regular")// || word == "Sans")
 		    {
 		    	return true;
 		    }
@@ -264,8 +270,8 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 					continue;
 				}
 
-				if (is_last_character || is_skip_character ||
-				    (name[i+1] >= 'A' && name[i+1] <= 'Z'))
+				if (is_last_character || is_skip_character)// ||
+				    //(name[i+1] >= 'A' && name[i+1] <= 'Z'))
 				{
 					// just finished a word
 					if (word != 0)
@@ -320,7 +326,11 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
         	// look through search paths for the font name, otherwise fall back to anything we find
         	std::vector<std::string> search_paths;
         	search_paths.push_back(GetExecutablePath());
+#ifdef _WIN32
+            search_paths.push_back("C:/Windows/Fonts");
+#else
         	search_paths.push_back("/usr/share/fonts/truetype");
+#endif
         	//search_paths.push_back("/usr/share/fonts/truetype/ttf-bitstream-vera");
         	
         	// now search through each directory recursively looking for any fonts and build a list
@@ -345,9 +355,47 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
         			{
         				continue;	
         			}
+
+                    // Read in the font data.
+                    FILE* fp = fons__fopen(file.first.c_str(), "rb");
+                    if (fp == NULL) continue;
+                    fseek(fp, 0, SEEK_END);
+                    int dataSize = (int)ftell(fp);
+                    fseek(fp, 0, SEEK_SET);
+                    unsigned char* data = (unsigned char*)malloc(dataSize);
+                    if (data == NULL) continue;
+                    int readed = fread(data, 1, dataSize, fp);
+                    fclose(fp);
+                    fp = 0;
+                    if (readed != dataSize) continue;
+
+                    stbtt_fontinfo fi;
+                    int stbError = stbtt_InitFont(&fi, data, 0);
+                    int len = 0; int name_len = 0;
+                    const char* real_name = stbtt_GetFontNameString(&fi, &name_len, 1, 0, 0, 1);
+                    const char* txt = stbtt_GetFontNameString(&fi, &len, 1, 0, 0, 2);
+                    uint16_t flags = stbtt_GetFontStyleFlags(&fi);
+                    bool mono = stbtt_IsMonospaced(&fi);
         			
+                    if (real_name == 0)
+                    {
+                        free(data);
+                        continue;
+                    }
+
         			FontModifiers modifiers;
-        			std::string family = SplitFont(file.second.substr(0, l - 4), modifiers);
+                    std::string family(real_name, name_len);//  SplitFont(file.second.substr(0, l - 4), modifiers);
+
+                    free(data);
+
+                    if (flags & 0b1)
+                        modifiers.bold = true;
+                    if (flags & 0b10)
+                        modifiers.italic = true;
+                    if (flags & 0b100000)
+                        modifiers.narrow = true;
+                    if (mono)
+                        modifiers.mono = true;
         			
         			if (family.length() == 0)
         			{
@@ -384,7 +432,7 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
         	
         	_font_mutex.unlock();
         	
-        	/*for (const auto& family: _fonts)
+        	/*for (const auto& family : _fonts)
         	{
         		//printf("Font: %s of %s at %s\n", font.name.c_str(), font.family.c_str(), font.path.c_str());
         		//path = font.path;
@@ -478,7 +526,11 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
         	if (path.length() == 0 && fallback)
         	{
         		printf("Falling back to closest default font...\n");
+#ifdef _WIN32
+                std::string fallback = "Calibri";
+#else
         		std::string fallback = "Liberation";
+#endif
         		if (modifiers.mono)
         		{
         			fallback += "Mono";
@@ -515,7 +567,7 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
                 Gwen::String name = Gwen::Utility::UnicodeToString( pFont->facename );
                 if (pFont->bold)
                 {
-                	name += "Bold";
+                	name += " Bold";
                 }
                 int font = fonsAddFont(fs, name.c_str(), FindFont(name).c_str());
                 if (font == FONS_INVALID)
@@ -523,6 +575,14 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 		            printf("Could not add font %s.\n", name.c_str());
 		            return;
 	            }
+                if (fallback_1 >= 0)
+                {
+                    fonsAddFallbackFont(fs, font, fallback_1);
+                }
+                if (fallback_2 >= 0)
+                {
+                    fonsAddFallbackFont(fs, font, fallback_2);
+                }
                 pFont->data = (void*)font;
             }
 
@@ -547,14 +607,22 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 				Gwen::String name = Gwen::Utility::UnicodeToString( pFont->facename );
                 if (pFont->bold)
                 {
-                	name += "Bold";
+                	name += " Bold";
                 }
                 int font = fonsAddFont(fs, name.c_str(), FindFont(name).c_str());
                 if (font == FONS_INVALID)
                 {
-		            printf("Could not add font %s.\n", name.c_str());
-		           // return;
-	            }
+                    printf("Could not add font %s.\n", name.c_str());
+                    return Gwen::PointF(0.0, 0.0);
+                }
+                if (fallback_1 >= 0)
+                {
+                    fonsAddFallbackFont(fs, font, fallback_1);
+                }
+                if (fallback_2 >= 0)
+                {
+                    fonsAddFallbackFont(fs, font, fallback_2);
+                }
                 pFont->data = (void*)font;
             }
 

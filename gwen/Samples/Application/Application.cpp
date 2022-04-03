@@ -5,6 +5,7 @@
 #include <Gwen/Gwen.h>
 #include <Gwen/Application.h>
 #include "Gwen/UnitTest/UnitTest.h"
+#include "Gwen/Renderers/OpenGL.h"
 
 
 //
@@ -16,8 +17,8 @@ int main(int argc, char** args)
 	//skin->SetDefaultFont(L"Open Sans", 14);
 	
 	// everything is automatically released when this goes out of scope
-	Gwen::Application app;
-	app.SetDefaultFont("Open Sans", 10);
+	Gwen::Application<Gwen::Renderer::OpenGL> app;
+	app.SetDefaultFont(L"Open Sans", 10);
 
 	//
 	// Create our unittest control

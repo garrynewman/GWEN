@@ -9,30 +9,55 @@
 #define GWEN_APPLICATION_H
 
 #include "Gwen/Controls/Base.h"
-#include <Gwen/Controls/WindowCanvas.h>
-#include <Gwen/Platform.h>
-#include <Gwen/Renderers/OpenGL.h>
-#include <Gwen/Skins/TexturedBase.h>
+#include "Gwen/Controls/WindowCanvas.h"
+#include "Gwen/Skins/TexturedBase.h"
+#include "Gwen/Platform.h"
 
 namespace Gwen
 {
 
-class Application;
-extern Application* gApplication;
+class BaseApplication;
+extern BaseApplication* gApplication;
 
 // todo give this a global which we can use for spawning new windows
 // note right now this only supports opengl backends
 // could maybe template this on the renderer?
-class Application
+
+class BaseApplication
 {
-	std::string default_font_ = "Segoe UI";
+public:
+	virtual Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h) = 0;
+
+	virtual void RequestQuit() = 0;
+};
+
+#ifndef _WIN32
+void signal_handler(int sig);
+#endif
+
+template<class T>
+class Application: public BaseApplication
+{
+	std::wstring default_font_ = L"Segoe UI";
 	double default_font_size_ = 1.0;
 	
 	std::vector<Gwen::Controls::WindowCanvas*> canvases_;
 	
 public:
 
-	Application();
+	Application()
+	{
+		if (gApplication)
+		{
+			printf("Cannot instantiate multiple Gwen::Applications per process...\n");
+			throw 7;
+		}
+		gApplication = this;
+
+#ifndef _WIN32
+		signal(SIGINT, signal_handler);
+#endif
+	}
 	
 	~Application()
 	{
@@ -40,30 +65,13 @@ public:
 		gApplication = 0;
 	}
 	
-	void SetDefaultFont(const std::string& font, double size)
+	void SetDefaultFont(const std::wstring& font, double size)
 	{
 		default_font_ = font;
 		default_font_size_ = size;
 	}
 	
-	Gwen::Controls::Base* AddWindow(const std::string& title, int w = 1000, int h = 700)
-	{
-		Gwen::Renderer::OpenGL* renderer = new Gwen::Renderer::OpenGL();
-
-		auto skin = new Gwen::Skin::TexturedBase(renderer);
-
-		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(-1, -1, w, h, skin, title);
-		window_canvas->SetSizable(true);
-
-		skin->Init("DefaultSkin.png");// todo parameterize this
-		skin->SetDefaultFont(L"Segoe UI", default_font_size_);
-
-		canvases_.push_back(window_canvas);
-		
-		return window_canvas;
-	}
-	
-	void RequestQuit()
+	virtual void RequestQuit()
 	{
 		for (auto& canv: canvases_)
 		{
@@ -88,29 +96,6 @@ public:
 	bool Okay()
 	{
 		return canvases_.size() > 0;// todo
-	}
-
-	// Runs the application loop, returns when program is killed
-	bool Spin()
-	{
-		while (SpinOnce())
-		{
-			// sleep extra when we are in the background
-			bool on_top = false;
-			for (const auto& canv: canvases_)
-			{
-				if (canv->IsOnTop())
-				{
-					on_top = true;
-				}
-			}
-			
-			if (!on_top)
-			{
-				Gwen::Platform::Sleep(300);
-			}
-		}
-		return true;
 	}
 	
 	// Runs the application loop once then returns. Returns false if the program should exit
@@ -138,6 +123,46 @@ public:
 		}
 		
 		return canvases_.size() != 0;
+	}
+
+	// Runs the application loop, returns when program is killed
+	bool Spin()
+	{
+		while (SpinOnce())
+		{
+			// sleep extra when we are in the background
+			bool on_top = false;
+			for (const auto& canv: canvases_)
+			{
+				if (canv->IsOnTop())
+				{
+					on_top = true;
+				}
+			}
+
+			if (!on_top)
+			{
+				Gwen::Platform::Sleep(300);
+			}
+		}
+		return true;
+	}
+
+	Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h)
+	{
+		T* renderer = new T();
+
+		auto skin = new Gwen::Skin::TexturedBase(renderer);// todo parameterize this
+
+		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(-1, -1, w, h, skin, title);
+		window_canvas->SetSizable(true);
+
+		skin->Init("DefaultSkin.png");// todo parameterize this
+		skin->SetDefaultFont(default_font_, default_font_size_);
+
+		canvases_.push_back(window_canvas);
+
+		return window_canvas;
 	}
 };
 }
