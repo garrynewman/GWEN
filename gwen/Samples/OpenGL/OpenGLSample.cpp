@@ -116,7 +116,6 @@ int main()
 	// (Processes Windows MSG's and fires input at GWEN)
 	//
 	Gwen::Input::Windows GwenInput;
-	GwenInput.Initialize( pCanvas );
 	//
 	// Begin the main game loop
 	//

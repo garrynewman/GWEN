@@ -69,6 +69,8 @@ namespace ToolTip
 		Gwen::Point pOldRenderOffset = render->GetRenderOffset();
 		Gwen::Point MousePos = Input::GetMousePosition();
 		MousePos -= canvas->WindowPosition();
+		MousePos.x /= canvas->Scale();
+		MousePos.y /= canvas->Scale();
 		Gwen::Rect Bounds = g_ToolTip->GetToolTip()->GetBounds();
 		Gwen::Rect rOffset = Gwen::Rect( MousePos.x - Bounds.w * 0.5f, MousePos.y - Bounds.h - 10, Bounds.w, Bounds.h );
 		rOffset = Utility::ClampRectToRect( rOffset, g_ToolTip->GetCanvas()->GetBounds() );

@@ -27,11 +27,15 @@ Canvas::Canvas( Gwen::Skin::Base* pSkin ) : BaseClass( NULL ), m_bAnyDelete( fal
 	SetDrawBackground( false );
 
 	if ( pSkin ) { SetSkin( pSkin ); }
+
+	Gwen::Input::RegisterCanvas(this);
 }
 
 Canvas::~Canvas()
 {
 	ReleaseChildren();
+
+	Gwen::Input::RemoveCanvas(this);
 }
 
 void Canvas::RenderCanvas()

@@ -78,7 +78,8 @@ void UpdateHoveredControl(Gwen::Controls::Canvas* hovered_canv)
 	if (hovered_canv)
 	{
 		auto pos = MousePosition - hovered_canv->WindowPosition();
-		pHovered = hovered_canv->GetControlAt(pos.x, pos.y);
+		float scale = hovered_canv->Scale();
+		pHovered = hovered_canv->GetControlAt(pos.x/scale, pos.y/scale);
 	}
 	if (!pHovered)
 	{
@@ -86,7 +87,8 @@ void UpdateHoveredControl(Gwen::Controls::Canvas* hovered_canv)
 		{
 			// todo go to local coords
 			auto pos = MousePosition - canv.first->WindowPosition();
-			pHovered = canv.first->GetControlAt( pos.x, pos.y );
+			float scale = canv.first->Scale();
+			pHovered = canv.first->GetControlAt( pos.x/scale, pos.y/scale );
 		
 			if (pHovered)
 			{
@@ -218,7 +220,7 @@ bool Gwen::Input::OnMouseMoved( int x, int y, int deltaX, int deltaY, void* plat
 	MousePosition.y = y;
 	
 	// find the hovered window
-	Controls::Canvas* hovered_canvas;
+	Controls::Canvas* hovered_canvas = 0;
 	for (auto canv: canvases)
 	{
 		Gwen::Controls::WindowCanvas* wcanv = dynamic_cast<Gwen::Controls::WindowCanvas*>(canv.first);
@@ -236,7 +238,8 @@ bool Gwen::Input::OnMouseMoved( int x, int y, int deltaX, int deltaY, void* plat
 	for (auto canv: canvases)
 	{
 		auto wpos = canv.first->WindowPosition();
-		canv.first->OnMouseMoved(x - wpos.x, y - wpos.y, deltaX, deltaY);
+		float scale = canv.first->Scale();
+		canv.first->OnMouseMoved((x - wpos.x)/scale, (y - wpos.y)/scale, deltaX, deltaY);
 		
 		// todo only do this on relevant canvas
 		if ( ToolTip::TooltipActive() )
@@ -250,9 +253,9 @@ bool Gwen::Input::OnMouseMoved( int x, int y, int deltaX, int deltaY, void* plat
 		return false;
 	}
 	
-	float fScale = 1.0;// todo go to local
+	float fScale = Gwen::HoveredControl->GetCanvas()->Scale();
 	auto wpos = Gwen::HoveredControl->GetCanvas()->WindowPosition();
-	Gwen::HoveredControl->OnMouseMoved(x*fScale - wpos.x, y*fScale - wpos.y, deltaX*fScale, deltaY*fScale);
+	Gwen::HoveredControl->OnMouseMoved((x - wpos.x)/fScale, (y - wpos.y)/fScale, deltaX/fScale, deltaY/fScale);
 	Gwen::HoveredControl->UpdateCursor();
 	DragAndDrop::OnMouseMoved(Gwen::HoveredControl, x, y);// this one takes in global coords
 	
@@ -343,8 +346,9 @@ bool Gwen::Input::OnMouseButton( int iMouseButton, bool bDown )
 #endif
 
 	Gwen::Point wpos = Gwen::HoveredControl->GetCanvas()->WindowPosition();
-	int cx = MousePosition.x - wpos.x;
-	int cy = MousePosition.y - wpos.y;
+	float scale = Gwen::HoveredControl->GetCanvas()->Scale();
+	int cx = (MousePosition.x - wpos.x)/scale;
+	int cy = (MousePosition.y - wpos.y)/scale;
 
 	switch ( iMouseButton )
 	{

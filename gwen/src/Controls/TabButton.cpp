@@ -136,7 +136,6 @@ DockedTabControl* TabButton::PopOut(int x, int y, TabReturnButtonData* out_data)
 	Gwen::Controls::Base* win;
 	if (gApplication)
 	{
-		Gwen::Point mpos = Gwen::Input::GetMousePosition();
 		win = gApplication->AddWindow("", page->Width(), page->Height() + 40, x, y);
 	}
 	else

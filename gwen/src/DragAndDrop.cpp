@@ -64,16 +64,18 @@ bool OnDrop( int x, int y )
 	if ( DragAndDrop::HoveredControl )
 	{
 		Gwen::Point wpos = DragAndDrop::HoveredControl->GetCanvas()->WindowPosition();
-		int cx = x - wpos.x;
-		int cy = y - wpos.y;
+		float scale = DragAndDrop::HoveredControl->GetCanvas()->Scale();
+		int cx = (x - wpos.x)/scale;
+		int cy = (y - wpos.y)/scale;
 		DragAndDrop::HoveredControl->DragAndDrop_HoverLeave( DragAndDrop::CurrentPackage );
 		bSuccess = DragAndDrop::HoveredControl->DragAndDrop_HandleDrop( DragAndDrop::CurrentPackage, cx, cy );
 	}
 
 	// Report back to the source control, to tell it if we've been successful.
 	Gwen::Point wpos = DragAndDrop::SourceControl->GetCanvas()->WindowPosition();
-	int cx = x - wpos.x;
-	int cy = y - wpos.y;
+	float scale = DragAndDrop::SourceControl->GetCanvas()->Scale();
+	int cx = (x - wpos.x) / scale;
+	int cy = (y - wpos.y) / scale;
 	DragAndDrop::SourceControl->DragAndDrop_EndDragging( bSuccess, cx, cy );
 	DragAndDrop::SourceControl->Redraw();
 	DragAndDrop::CurrentPackage = NULL;
@@ -120,8 +122,9 @@ bool ShouldStartDraggingControl( int x, int y )
 
 	// Create the dragging package
 	Gwen::Point wpos = LastPressedControl->GetCanvas()->WindowPosition();
-	int lpcx = LastPressedPos.x - wpos.x;
-	int lpcy = LastPressedPos.y - wpos.y;
+	float scale = LastPressedControl->GetCanvas()->Scale();
+	int lpcx = (LastPressedPos.x - wpos.x)/scale;
+	int lpcy = (LastPressedPos.y - wpos.y)/scale;
 	DragAndDrop::CurrentPackage = LastPressedControl->DragAndDrop_GetPackage( lpcx, lpcy );
 
 	// We didn't create a package!
@@ -148,8 +151,9 @@ bool ShouldStartDraggingControl( int x, int y )
 	}
 
 	wpos = DragAndDrop::SourceControl->GetCanvas()->WindowPosition();
-	lpcx = LastPressedPos.x - wpos.x;
-	lpcy = LastPressedPos.y - wpos.y;
+	scale = DragAndDrop::SourceControl->GetCanvas()->Scale();
+	lpcx = (LastPressedPos.x - wpos.x)/scale;
+	lpcy = (LastPressedPos.y - wpos.y)/scale;
 	DragAndDrop::SourceControl->DragAndDrop_StartDragging( DragAndDrop::CurrentPackage, lpcx, lpcy );
 	return true;
 }
@@ -200,8 +204,9 @@ void UpdateHoveredControl( Gwen::Controls::Base* pCtrl, int x, int y )
 	if ( DragAndDrop::HoveredControl )
 	{
 		Gwen::Point wpos = DragAndDrop::HoveredControl->GetCanvas()->WindowPosition();
-		int cx = x - wpos.x;
-		int cy = y - wpos.y;
+		float scale = DragAndDrop::HoveredControl->GetCanvas()->Scale();
+		int cx = (x - wpos.x)/scale;
+		int cy = (y - wpos.y)/scale;
 		DragAndDrop::HoveredControl->DragAndDrop_HoverEnter( DragAndDrop::CurrentPackage, cx, cy );
 	}
 
@@ -231,8 +236,9 @@ void DragAndDrop::OnMouseMoved( Gwen::Controls::Base* pHoveredControl, int x, in
 	// Update the hovered control every mouse move, so it can show where
 	// the dropped control will land etc..
 	Gwen::Point wpos = HoveredControl->GetCanvas()->WindowPosition();
-	int cx = x - wpos.x;
-	int cy = y - wpos.y;
+	float scale = HoveredControl->GetCanvas()->Scale();
+	int cx = (x - wpos.x)/scale;
+	int cy = (y - wpos.y)/scale;
 	
 	HoveredControl->DragAndDrop_Hover( CurrentPackage, cx, cy );
 	// Override the cursor - since it might have been set my underlying controls
@@ -251,8 +257,9 @@ void DragAndDrop::RenderOverlay( Gwen::Controls::Canvas* canvas, Skin::Base* ski
 	
 	// get mouse coords in local
 	Gwen::Point wpos = canvas->WindowPosition();
-	int mx = m_iMouseX - wpos.x;
-	int my = m_iMouseY - wpos.y;
+	float scale = canvas->Scale();
+	int mx = (m_iMouseX - wpos.x)/scale;
+	int my = (m_iMouseY - wpos.y)/scale;
 	
 	Gwen::Point pntOld = skin->GetRender()->GetRenderOffset();
 	skin->GetRender()->AddRenderOffset( Gwen::Rect( mx - SourceControl->X() - CurrentPackage->holdoffset.x, my - SourceControl->Y() - CurrentPackage->holdoffset.y, 0, 0 ) );

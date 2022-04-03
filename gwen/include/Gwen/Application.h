@@ -25,7 +25,7 @@ extern BaseApplication* gApplication;
 class BaseApplication
 {
 public:
-	virtual Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h) = 0;
+	virtual Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1) = 0;
 
 	virtual void RequestQuit() = 0;
 };
@@ -74,23 +74,6 @@ public:
 	void SetSkin(const std::string& texture)
 	{
 		skin_ = texture;
-	}
-	
-	Gwen::Controls::Base* AddWindow(const std::string& title, int w = 1000, int h = 700, int x = -1, int y = -1)
-	{
-		Gwen::Renderer::OpenGL* renderer = new Gwen::Renderer::OpenGL();
-
-		auto skin = new Gwen::Skin::TexturedBase(renderer);
-
-		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
-		window_canvas->SetSizable(true);
-
-		skin->Init(skin_);
-		skin->SetDefaultFont(L"Segoe UI", default_font_size_);
-		
-		canvases_.push_back(window_canvas);
-		
-		return window_canvas;
 	}
 	
 	void RequestQuit()

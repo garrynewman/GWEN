@@ -321,6 +321,16 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 {
 	switch (message)
 	{
+	//case WM_NCLBUTTONDOWN:
+	case WM_SYSCOMMAND:
+	{
+		if (message == WM_SYSCOMMAND && wParam != SC_CLOSE)
+		{
+			return false;
+		}
+
+		//return m_Canvas->InputQuit();
+	}
 	case WM_GETMINMAXINFO:
 	{
 		auto f = window_min_bounds.find(hwnd);
@@ -417,7 +427,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 
 	while ( PeekMessage( &msg, ( HWND ) pWindow, 0, 0, PM_REMOVE ) )
 	{
-		if ( GwenInput.ProcessMessage( ptarget, msg ) )
+		if ( GwenInput.ProcessMessage( msg ) )
 		{ continue; }
 
 		if ( msg.message == WM_PAINT )
@@ -541,6 +551,11 @@ void Gwen::Platform::WaitForEvent()
 	{
 		WaitMessage();
 	}
+}
+
+void Gwen::Platform::InterruptWait()
+{
+
 }
 
 #endif // WIN32
