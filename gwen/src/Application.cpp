@@ -23,7 +23,6 @@ namespace Gwen
 #ifndef _win32
 	void signal_handler(int sig)
 	{
-		printf("signaled\n");
 		gApplication->RequestQuit();
 	}
 #endif

@@ -19,7 +19,6 @@ namespace Gwen
 class BaseApplication;
 extern BaseApplication* gApplication;
 
-// todo give this a global which we can use for spawning new windows
 // note right now this only supports opengl backends
 // could maybe template this on the renderer?
 
@@ -40,6 +39,7 @@ class Application: public BaseApplication
 {
 	std::wstring default_font_ = L"Segoe UI";
 	double default_font_size_ = 1.0;
+	std::string skin_ = "DefaultSkin.png";
 	
 	std::vector<Gwen::Controls::WindowCanvas*> canvases_;
 	
@@ -71,12 +71,35 @@ public:
 		default_font_size_ = size;
 	}
 	
-	virtual void RequestQuit()
+	void SetSkin(const std::string& texture)
+	{
+		skin_ = texture;
+	}
+	
+	Gwen::Controls::Base* AddWindow(const std::string& title, int w = 1000, int h = 700, int x = -1, int y = -1)
+	{
+		Gwen::Renderer::OpenGL* renderer = new Gwen::Renderer::OpenGL();
+
+		auto skin = new Gwen::Skin::TexturedBase(renderer);
+
+		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
+		window_canvas->SetSizable(true);
+
+		skin->Init(skin_);
+		skin->SetDefaultFont(L"Segoe UI", default_font_size_);
+		
+		canvases_.push_back(window_canvas);
+		
+		return window_canvas;
+	}
+	
+	void RequestQuit()
 	{
 		for (auto& canv: canvases_)
 		{
 			canv->InputQuit();
 		}
+		Gwen::Platform::InterruptWait();
 	}
 	
 	void CloseAllWindows()
@@ -101,6 +124,8 @@ public:
 	// Runs the application loop once then returns. Returns false if the program should exit
 	bool SpinOnce()
 	{
+		Gwen::Input::OnThink();
+		
 		for (int i = 0; i < canvases_.size(); i++)
 		{
 			auto canv = canvases_[i];
@@ -142,22 +167,22 @@ public:
 
 			if (!on_top)
 			{
-				Gwen::Platform::Sleep(300);
+				Gwen::Platform::WaitForEvent();
 			}
 		}
 		return true;
 	}
 
-	Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h)
+	Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1)
 	{
 		T* renderer = new T();
 
 		auto skin = new Gwen::Skin::TexturedBase(renderer);// todo parameterize this
 
-		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(-1, -1, w, h, skin, title);
+		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
 		window_canvas->SetSizable(true);
 
-		skin->Init("DefaultSkin.png");// todo parameterize this
+		skin->Init(skin_);
 		skin->SetDefaultFont(default_font_, default_font_size_);
 
 		canvases_.push_back(window_canvas);

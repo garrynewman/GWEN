@@ -89,8 +89,6 @@ void Canvas::DoThink()
 	// If we didn't have a next tab, cycle to the start.
 	if ( NextTab == NULL )
 	{ NextTab = FirstTab; }
-
-	Gwen::Input::OnCanvasThink( this );
 }
 
 bool Canvas::SetSize(int w, int h)
@@ -168,84 +166,4 @@ void Canvas::ReleaseChildren()
 		iter = Children.erase( iter );
 		delete pChild;
 	}
-}
-
-bool Canvas::InputMouseMoved( int x, int y, int deltaX, int deltaY )
-{
-	if ( Hidden() ) { return false; }
-
-	if ( ToolTip::TooltipActive() )
-	{ Redraw(); }
-
-	// Todo: Handle scaling here..
-	float fScale = 1.0f / Scale();
-	Gwen::Input::OnMouseMoved( this, x*fScale, y*fScale, deltaX*fScale, deltaY*fScale );
-
-	if ( !Gwen::HoveredControl ) { return false; }
-
-	if ( Gwen::HoveredControl == this ) { return false; }
-
-	if ( Gwen::HoveredControl->GetCanvas() != this ) { return false; }
-
-	Gwen::HoveredControl->OnMouseMoved(x*fScale, y*fScale, deltaX*fScale, deltaY*fScale);
-	Gwen::HoveredControl->UpdateCursor();
-	DragAndDrop::OnMouseMoved(Gwen::HoveredControl, x*fScale, y*fScale);
-	return true;
-}
-
-bool Canvas::InputMouseButton( int iButton, bool bDown )
-{
-	if ( Hidden() ) { return false; }
-
-	return Gwen::Input::OnMouseClicked( this, iButton, bDown );
-}
-
-bool Canvas::InputKey( int iKey, bool bDown )
-{
-	if ( Hidden() ) { return false; }
-
-	if ( iKey <= Gwen::Key::Invalid ) { return false; }
-
-	if ( iKey >= Gwen::Key::Count ) { return false; }
-
-	if (bDown)
-		if (Gwen::Input::HandleAccelerator(this, 0xE000+iKey))
-			return true;
-
-	return Gwen::Input::OnKeyEvent( this, iKey, bDown );
-}
-
-bool Canvas::InputCharacter( Gwen::UnicodeChar chr )
-{
-	if ( Hidden() ) { return false; }
-
-	if ( !iswprint( chr ) ) { return false; }
-
-	//Handle Accelerators
-	if ( Gwen::Input::HandleAccelerator( this, chr ) )
-	{ return true; }
-
-	//Handle characters
-	if ( !Gwen::KeyboardFocus ) { return false; }
-
-	if ( Gwen::KeyboardFocus->GetCanvas() != this ) { return false; }
-
-	if ( !Gwen::KeyboardFocus->Visible() ) { return false; }
-
-	if ( Gwen::Input::IsControlDown() ) { return false; }
-
-	return KeyboardFocus->OnChar( chr );
-}
-
-bool Canvas::InputMouseWheel( int val )
-{
-	if ( Hidden() ) { return false; }
-
-	if ( !Gwen::HoveredControl ) { return false; }
-
-	if ( Gwen::HoveredControl == this ) { return false; }
-
-	if ( Gwen::HoveredControl->GetCanvas() != this ) { return false; }
-
-	return Gwen::HoveredControl->OnMouseWheeled( val );
 }

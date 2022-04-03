@@ -76,16 +76,13 @@ namespace Gwen
 				Controls::Base*	NextTab;
 
 				// Input
-				virtual bool InputMouseMoved( int x, int y, int deltaX, int deltaY );
-				virtual bool InputMouseButton( int iButton, bool bDown );
-				virtual bool InputKey( int iKey, bool bDown );
-				virtual bool InputCharacter( Gwen::UnicodeChar chr );
-				virtual bool InputMouseWheel( int val );
 				virtual bool InputQuit() { return true; };
 
 				// Background
 				virtual void SetBackgroundColor( const Gwen::Color & color ) { m_BackgroundColor = color; }
 				virtual void SetDrawBackground( bool bShouldDraw ) { m_bDrawBackground = bShouldDraw; }
+				
+				virtual Gwen::Point WindowPosition() { return Gwen::Point(0, 0); }
 
 			protected:
 				

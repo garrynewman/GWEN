@@ -526,4 +526,21 @@ void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_he
 	window_min_bounds[(HWND)pPtr] = {min_width, min_height};
 }
 
+bool Gwen::Platform::IsWindowMaximized( void* pPtr)
+{
+	WINDOWPLACEMENT pl;
+	GetWindowPlacement((HWND)pPtr, &pl);
+	return pl.showCmd == SW_SHOWMAXIMIZED;
+}
+
+void Gwen::Platform::WaitForEvent()
+{
+	// todo, I'm not sure that this works correctly
+	MSG msg;
+	if (!PeekMessage( &msg, 0, 0, 0, PM_NOREMOVE ) )
+	{
+		WaitMessage();
+	}
+}
+
 #endif // WIN32

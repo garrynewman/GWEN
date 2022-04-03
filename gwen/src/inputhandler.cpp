@@ -10,6 +10,7 @@
 #include "Gwen/DragAndDrop.h"
 #include "Gwen/Hook.h"
 #include "Gwen/Platform.h"
+#include "Gwen/ToolTip.h"
 
 #define DOUBLE_CLICK_SPEED 0.5f
 #define MAX_MOUSE_BUTTONS 5
@@ -56,6 +57,8 @@ Gwen::Point	MousePosition;
 static float		g_fLastClickTime[MAX_MOUSE_BUTTONS];
 static Gwen::Point	g_pntLastClickPos;
 
+static std::map<Controls::Canvas*, bool> canvases;
+
 enum
 {
 	ACT_MOUSEMOVE,
@@ -67,10 +70,31 @@ enum
 	ACT_MESSAGE
 };
 
-void UpdateHoveredControl( Controls::Base* pInCanvas )
+void UpdateHoveredControl(Gwen::Controls::Canvas* hovered_canv)
 {
-	Controls::Base* pHovered = pInCanvas->GetControlAt( MousePosition.x, MousePosition.y );
-
+	// now send it to each canvas in their own coords
+	Controls::Base* pHovered = 0;
+	
+	if (hovered_canv)
+	{
+		auto pos = MousePosition - hovered_canv->WindowPosition();
+		pHovered = hovered_canv->GetControlAt(pos.x, pos.y);
+	}
+	if (!pHovered)
+	{
+		for (auto canv: canvases)
+		{
+			// todo go to local coords
+			auto pos = MousePosition - canv.first->WindowPosition();
+			pHovered = canv.first->GetControlAt( pos.x, pos.y );
+		
+			if (pHovered)
+			{
+				break;
+			}
+		}
+	}
+	
 	if ( pHovered != Gwen::HoveredControl )
 	{
 		if ( Gwen::HoveredControl )
@@ -88,7 +112,7 @@ void UpdateHoveredControl( Controls::Base* pInCanvas )
 		}
 	}
 
-	if ( Gwen::MouseFocus && Gwen::MouseFocus->GetCanvas() == pInCanvas )
+	if ( Gwen::MouseFocus )// && Gwen::MouseFocus->GetCanvas() == pInCanvas )
 	{
 		if ( Gwen::HoveredControl )
 		{
@@ -123,12 +147,22 @@ bool FindKeyboardFocus( Controls::Base* pControl )
 	return FindKeyboardFocus( pControl->GetParent() );
 }
 
+void Gwen::Input::RegisterCanvas( Controls::Canvas* pCanvas )
+{
+	canvases[pCanvas] = true;
+}
+
+void Gwen::Input::RemoveCanvas( Controls::Canvas* pCanvas )
+{
+	canvases.erase(pCanvas);
+}
+
 Gwen::Point Gwen::Input::GetMousePosition()
 {
 	return MousePosition;
 }
 
-void Gwen::Input::OnCanvasThink( Controls::Base* pControl )
+void Gwen::Input::OnThink()
 {
 	if ( Gwen::MouseFocus && !Gwen::MouseFocus->Visible() )
 	{ Gwen::MouseFocus = NULL; }
@@ -137,8 +171,6 @@ void Gwen::Input::OnCanvasThink( Controls::Base* pControl )
 	{ Gwen::KeyboardFocus = NULL; }
 
 	if ( !KeyboardFocus ) { return; }
-
-	if ( KeyboardFocus->GetCanvas() != pControl ) { return; }
 
 	float fTime = Gwen::Platform::GetTimeInSeconds();
 
@@ -180,29 +212,83 @@ bool Gwen::Input::IsRightMouseDown()
 	return KeyData.RightMouseDown;
 }
 
-void Gwen::Input::OnMouseMoved( Controls::Base* pCanvas, int x, int y, int /*deltaX*/, int /*deltaY*/ )
+bool Gwen::Input::OnMouseMoved( int x, int y, int deltaX, int deltaY, void* platform_window )
 {
 	MousePosition.x = x;
 	MousePosition.y = y;
-	UpdateHoveredControl( pCanvas );
+	
+	// find the hovered window
+	Controls::Canvas* hovered_canvas;
+	for (auto canv: canvases)
+	{
+		Gwen::Controls::WindowCanvas* wcanv = dynamic_cast<Gwen::Controls::WindowCanvas*>(canv.first);
+		if (wcanv && wcanv->GetWindow() == platform_window)
+		{
+			hovered_canvas = wcanv;
+		}
+	}
+	
+	//okay, lets have mouse position be global, then each canvas has an offset relative to global used to get local
+	UpdateHoveredControl(hovered_canvas);
+	//or could have one of these per canvas
+	
+	// now send it to each canvas in their own coords
+	for (auto canv: canvases)
+	{
+		auto wpos = canv.first->WindowPosition();
+		canv.first->OnMouseMoved(x - wpos.x, y - wpos.y, deltaX, deltaY);
+		
+		// todo only do this on relevant canvas
+		if ( ToolTip::TooltipActive() )
+		{
+			canv.first->Redraw();
+		}
+	}
+	
+	if (Gwen::HoveredControl == 0)
+	{
+		return false;
+	}
+	
+	float fScale = 1.0;// todo go to local
+	auto wpos = Gwen::HoveredControl->GetCanvas()->WindowPosition();
+	Gwen::HoveredControl->OnMouseMoved(x*fScale - wpos.x, y*fScale - wpos.y, deltaX*fScale, deltaY*fScale);
+	Gwen::HoveredControl->UpdateCursor();
+	DragAndDrop::OnMouseMoved(Gwen::HoveredControl, x, y);// this one takes in global coords
+	
+	return true;
 }
 
-bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, bool bDown )
+bool Gwen::Input::OnMouseButton( int iMouseButton, bool bDown )
 {
 	// If we click on a control that isn't a menu we want to close
 	// all the open menus. Menus are children of the canvas.
 	if ( bDown && ( !Gwen::HoveredControl || !Gwen::HoveredControl->IsMenuComponent() ) )
 	{
-		pCanvas->CloseMenus();
+		for (auto canv: canvases)
+		{
+			canv.first->CloseMenus();
+		}
 	}
 
-	if ( !Gwen::HoveredControl ) { return false; }
+	if ( !Gwen::HoveredControl )
+	{
+		// special case for drag and drop off screen
+		if (iMouseButton == 0)
+		{
+			if ( iMouseButton == 0 ) { KeyData.LeftMouseDown = bDown; }
+			if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
+			{ return true; }
+		}
+		return false;
+	}
 
-	if ( Gwen::HoveredControl->GetCanvas() != pCanvas ) { return false; }
+	//if ( Gwen::HoveredControl->GetCanvas() != pCanvas ) { return false; }
 
 	if ( !Gwen::HoveredControl->Visible() ) { return false; }
 
-	if ( Gwen::HoveredControl == pCanvas ) { return false; }
+	// todo probably need to keep this functionality
+	//if ( Gwen::HoveredControl == pCanvas ) { return false; }
 
 	if ( iMouseButton >= MAX_MOUSE_BUTTONS )
 	{ return false; }
@@ -256,6 +342,10 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 
 #endif
 
+	Gwen::Point wpos = Gwen::HoveredControl->GetCanvas()->WindowPosition();
+	int cx = MousePosition.x - wpos.x;
+	int cy = MousePosition.y - wpos.y;
+
 	switch ( iMouseButton )
 	{
 		case 0:
@@ -263,16 +353,16 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 				if ( DragAndDrop::OnMouseButton( Gwen::HoveredControl, MousePosition.x, MousePosition.y, bDown ) )
 				{ return true; }
 
-				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( MousePosition.x, MousePosition.y ); }
-				else					{ Gwen::HoveredControl->OnMouseClickLeft( MousePosition.x, MousePosition.y, bDown ); }
+				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickLeft( cx, cy ); }
+				else					{ Gwen::HoveredControl->OnMouseClickLeft( cx, cy, bDown ); }
 
 				return true;
 			}
 
 		case 1:
 			{
-				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( MousePosition.x, MousePosition.y ); }
-				else					{ Gwen::HoveredControl->OnMouseClickRight( MousePosition.x, MousePosition.y, bDown ); }
+				if ( bIsDoubleClick )	{ Gwen::HoveredControl->OnMouseDoubleClickRight( cx, cy ); }
+				else					{ Gwen::HoveredControl->OnMouseClickRight( cx, cy, bDown ); }
 
 				return true;
 			}
@@ -281,7 +371,7 @@ bool Gwen::Input::OnMouseClicked( Controls::Base* pCanvas, int iMouseButton, boo
 	return false;
 }
 
-bool Gwen::Input::HandleAccelerator( Controls::Base* pCanvas, Gwen::UnicodeChar chr )
+bool Gwen::Input::HandleAccelerator( Gwen::UnicodeChar chr )
 {
 	//Build the accelerator search string
 	Gwen::UnicodeString accelString;
@@ -315,8 +405,11 @@ bool Gwen::Input::HandleAccelerator( Controls::Base* pCanvas, Gwen::UnicodeChar 
 	if ( Gwen::MouseFocus && Gwen::MouseFocus->HandleAccelerator( accelString ) )
 	{ return true; }
 
-	if ( pCanvas->HandleAccelerator( accelString ) )
-	{ return true; }
+	for (auto canvas: canvases)
+	{
+		if ( canvas.first->HandleAccelerator( accelString ) )
+		{ return true; }
+	}
 
 	return false;
 }
@@ -358,11 +451,19 @@ bool Gwen::Input::DoSpecialKeys( Controls::Base* pCanvas, Gwen::UnicodeChar chr 
 	return false;
 }
 
-bool Gwen::Input::OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown )
+bool Gwen::Input::OnKeyEvent( int iKey, bool bDown )
 {
+	if ( iKey <= Gwen::Key::Invalid ) { return false; }
+
+	if ( iKey >= Gwen::Key::Count ) { return false; }
+
+	if (bDown)
+		if (Gwen::Input::HandleAccelerator(0xE000+iKey))
+			return true;
+	
 	Gwen::Controls::Base* pTarget = Gwen::KeyboardFocus;
 
-	if ( pTarget && pTarget->GetCanvas() != pCanvas ) { pTarget = NULL; }
+	//if ( pTarget && pTarget->GetCanvas() != pCanvas ) { pTarget = NULL; }
 
 	if ( pTarget && !pTarget->Visible() ) { pTarget = NULL; }
 
@@ -394,4 +495,39 @@ bool Gwen::Input::OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown )
 	}
 
 	return false;
+}
+
+bool Gwen::Input::OnCharacter( Gwen::UnicodeChar chr )
+{
+	//if ( Hidden() ) { return false; }
+
+	if ( !iswprint( chr ) ) { return false; }
+
+	//Handle Accelerators
+	if ( Gwen::Input::HandleAccelerator( chr ) )
+	{ return true; }
+
+	//Handle characters
+	if ( !Gwen::KeyboardFocus ) { return false; }
+
+	//if ( Gwen::KeyboardFocus->GetCanvas() != this ) { return false; }
+
+	if ( !Gwen::KeyboardFocus->Visible() ) { return false; }
+
+	if ( Gwen::Input::IsControlDown() ) { return false; }
+
+	return Gwen::KeyboardFocus->OnChar( chr );
+}
+
+bool Gwen::Input::OnMouseWheel( int val )
+{
+	//if ( Hidden() ) { return false; }
+
+	if ( !Gwen::HoveredControl ) { return false; }
+
+	//if ( Gwen::HoveredControl == this ) { return false; }
+
+	//if ( Gwen::HoveredControl->GetCanvas() != this ) { return false; }
+
+	return Gwen::HoveredControl->OnMouseWheeled( val );
 }

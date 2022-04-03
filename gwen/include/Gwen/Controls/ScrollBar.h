@@ -55,6 +55,9 @@ namespace Gwen
 
 				virtual void SetContentSize( float size );
 				virtual void SetViewableContentSize( float size );
+				
+				virtual float GetContentSize() { return m_fContentSize; }
+				virtual float GetViewableContentSize() { return m_fViewableContentSize; }
 
 				virtual int GetButtonSize() { return 0; }
 				virtual float GetScrolledAmount() { return m_fScrolledAmount; }
