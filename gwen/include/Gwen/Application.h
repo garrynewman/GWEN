@@ -111,10 +111,7 @@ public:
 				}
 			}
 			
-			if (!on_top)
-			{
-				Gwen::Platform::WaitForEvent();
-			}
+			Gwen::Platform::WaitForEvent();
 		}
 	}
 	

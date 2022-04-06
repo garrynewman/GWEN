@@ -484,15 +484,18 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		for (auto canv: canvases)
 		{
 			// handle window resizes and whatnot
-			if (event.type == ConfigureNotify && event.xconfigure.window == (Window)canv.second->GetWindow())
+			if (event.type == ConfigureNotify && event.xconfigure.window == canv.first)
 			{
 				canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
 				canv.second->OnMove(event.xconfigure.x, event.xconfigure.y);
 				canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
 			}
-			if (event.type == Expose && event.xexpose.count == 0 || event.type == FocusOut || event.type == FocusIn)
+			if ((event.type == Expose && event.xexpose.count == 0) || event.type == FocusOut || event.type == FocusIn)
 			{
-				canv.second->Redraw();
+				if (event.xany.window == canv.first)
+				{
+					canv.second->Redraw();
+				}
 			}
 		}
 		
@@ -623,6 +626,11 @@ void Gwen::Platform::WaitForEvent()
 	// This is the naieve method which basically gets stuck forever
 	//XEvent ev;
 	//XPeekEvent(x11_display, &ev);
+	
+	if (XEventsQueued(x11_display, QueuedAlready))
+	{
+		return;
+	}
 	
 	// initialize the set to scan
 	static fd_set set_read;
