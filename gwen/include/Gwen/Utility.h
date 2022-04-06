@@ -42,25 +42,21 @@ namespace Gwen
 #pragma warning( push )
 #pragma warning( disable : 4996 )
 #endif
+		using convert_type = std::codecvt_utf8<wchar_t>;
+		extern std::wstring_convert<convert_type, wchar_t> wstring_converter;
 
 		inline String UnicodeToString( const UnicodeString & strIn )
 		{
 			if ( !strIn.length() ) { return ""; }
-			
-			using convert_type = std::codecvt_utf8<wchar_t>;
-			std::wstring_convert<convert_type, wchar_t> converter;
 
-			return converter.to_bytes( strIn );
+			return wstring_converter.to_bytes( strIn );
 		}
 
 		inline UnicodeString StringToUnicode( const String & strIn )
 		{
 			if ( !strIn.length() ) { return L""; }
-			
-			using convert_type = std::codecvt_utf8<wchar_t>;
-			std::wstring_convert<convert_type, wchar_t> converter;
 
-			return converter.from_bytes( strIn );
+			return wstring_converter.from_bytes( strIn );
 		}
 
 		template<typename T> void Replace( T & str, const T & strFind, const T & strReplace )

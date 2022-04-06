@@ -252,6 +252,11 @@ void Text::SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeStr
 
 		//if adding character makes the word bigger than the textbox size
 		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), str );
+		if (str.length() == 1 && p.x > w)
+		{
+			return;// give up since we are too narrow
+		}
+
 		if ( p.x > w ) 
 		{
 			int addSum = GetPadding().left+GetPadding().right;
