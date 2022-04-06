@@ -83,7 +83,7 @@ void Text::Render( Skin::Base* skin )
 	else
 	{ skin->GetRender()->SetDrawColor( m_ColorOverride ); }
 
-	skin->GetRender()->RenderText( GetFont(), Gwen::PointF( GetPadding().left, GetPadding().top ), m_String.GetUnicode() );
+	skin->GetRender()->RenderText( GetFont(), Gwen::PointF( GetPadding().left, GetPadding().top ), m_String );
 }
 
 Gwen::Rect Text::GetCharacterPosition( int iChar )
@@ -118,7 +118,7 @@ Gwen::Rect Text::GetCharacterPosition( int iChar )
 
 	if ( Length() == 0 || iChar == 0 )
 	{
-		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), Gwen::UnicodeString(L" ") );
 		return Gwen::Rect( 0, 0, 0, p.y );
 	}
 
@@ -130,14 +130,14 @@ Gwen::Rect Text::GetCharacterPosition( int iChar )
 Gwen::Rect Text::GetLineBox( int i )
 {
 	Text* line = GetLine(i);
-	if(line != NULL)
+	if (line != NULL)
 	{
-		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), line->m_String.GetUnicode());
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), line->m_String);
 		return Gwen::Rect(line->X(), line->Y(), Clamp(p.x, 1.0f,p.x), Clamp(p.y, 1.0f,p.y) );
 	}
 	else
 	{
-		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), m_String.GetUnicode());
+		Gwen::PointF p = GetSkin()->GetRender()->MeasureText( GetFont(), m_String);
 		return Gwen::Rect(0, 0, Clamp(p.x, 1.0f,p.x), Clamp(p.y, 1.0f,p.y) );
 	}
 }
@@ -289,7 +289,7 @@ void Text::RefreshSizeWrap()
 		return;
 	}
 
-	PointF pFontSize = GetSkin()->GetRender()->MeasureText( GetFont(), L" " );
+	PointF pFontSize = GetSkin()->GetRender()->MeasureText( GetFont(), Gwen::UnicodeString(L" ") );
 	int w = GetParent()->Width() - GetParent()->GetPadding().left-GetParent()->GetPadding().right; 
 	int x = 0, y = 0;
 	Gwen::UnicodeString strLine;
