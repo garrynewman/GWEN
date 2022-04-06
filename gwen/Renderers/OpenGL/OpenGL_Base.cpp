@@ -121,7 +121,6 @@ namespace Gwen
 			glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 			glDrawArrays( GL_TRIANGLES, 0, ( GLsizei ) m_iVertNum );
 			m_iVertNum = 0;
-			glFlush();
 		}
 
 		void OpenGL_Base::AddVert( int x, int y, float u, float v )
