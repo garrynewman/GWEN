@@ -18,7 +18,7 @@ int main(int argc, char** args)
 	
 	// everything is automatically released when this goes out of scope
 	Gwen::Application<Gwen::Renderer::OpenGL> app;
-	app.SetDefaultFont(L"Open Sans", 10);
+	app.SetDefaultFont(L"Microsoft Sans Serif", 10);
 
 	//
 	// Create our unittest control

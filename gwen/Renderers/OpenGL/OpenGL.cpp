@@ -34,21 +34,31 @@ namespace Gwen
 {
 	namespace Renderer
 	{
-        void OpenGL::Init()
-        {
-            fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+		static FONScontext* fs = 0;
+		static int num_renderers = 0;
+		void OpenGL::Init()
+		{
+			num_renderers++;
+			if (!fs)
+			{
+				fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+			}
 
             // find some fallback fonts
 #ifdef _WIN32
             fallback_1 = fonsAddFont(fs, "malgun", "C:/Windows/Fonts/malgun.ttf");
             fallback_2 = fonsAddFont(fs, "nirmala", "C:/Windows/Fonts/nirmala.ttf");
 #endif
-        }
+		}
         
-        OpenGL::~OpenGL()
-        {
-        	glfonsDelete(fs);
-        }
+		OpenGL::~OpenGL()
+		{
+			num_renderers--;
+			if (num_renderers == 0)
+			{
+				glfonsDelete(fs);
+			}
+		}
 
         std::string GetExecutablePath()
         {
@@ -553,7 +563,7 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
         	return path;
         }
 
-		void OpenGL::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
+		void OpenGL::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text )
 		{
 			float fSize = pFont->size * Scale();
 
@@ -586,21 +596,19 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
                 pFont->data = (void*)font;
             }
 
-			Gwen::String converted_string = Gwen::Utility::UnicodeToString( text );
-
 			pos.x += m_RenderOffset.x;
 			pos.y += m_RenderOffset.y;
 			pos.x = (((float)pos.x) * m_fScale);
 			pos.y = (((float)pos.y) * m_fScale);
 
-            fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
-            fonsSetFont(fs, (long)pFont->data);
-            fonsSetColor(fs, glfonsRGBA(m_Color.r,m_Color.g,m_Color.b,m_Color.a));
-            fonsSetSize(fs, fSize*1.333f);
-            fonsDrawText(fs, pos.x, pos.y, converted_string.c_str(), NULL);
+			fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
+			fonsSetFont(fs, (long)pFont->data);
+			fonsSetColor(fs, glfonsRGBA(m_Color.r,m_Color.g,m_Color.b,m_Color.a));
+			fonsSetSize(fs, fSize*1.333f);
+			fonsDrawText(fs, pos.x, pos.y, text.c_str(), NULL);
 		}
 
-		Gwen::PointF OpenGL::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+		Gwen::PointF OpenGL::MeasureText( Gwen::Font* pFont, const Gwen::String & text )
 		{
             if (pFont->data == 0)
             {
@@ -626,20 +634,19 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
                 pFont->data = (void*)font;
             }
 
-			float fSize = pFont->size * Scale();
-			Gwen::String converted_string = Gwen::Utility::UnicodeToString( text );
+            float fSize = pFont->size;// dont multiply by scale for measure, we want to return unscaled units
 
-            fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
+			fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
             
-            fonsSetFont(fs, (long)pFont->data);
-            fonsSetSize(fs, fSize*1.333f);
-
-			Gwen::PointF p;
+			fonsSetFont(fs, (long)pFont->data);
+			fonsSetSize(fs, fSize*1.333f);
 			
-            float bounds[4];//0 is minx, 1 is miny, 2 is maxx 3 is maxy
-            float advance = fonsTextBounds(fs, 0, 0, converted_string.c_str(), NULL, bounds);
-            p.x = advance/Scale();//std::abs(bounds[2] - bounds[0]);
-			p.y = fSize*1.33/Scale();//std::abs(bounds[3] - bounds[1]);
+			float bounds[4];//0 is minx, 1 is miny, 2 is maxx 3 is maxy
+			float advance = fonsTextBounds(fs, 0, 0, text.c_str(), NULL, bounds);
+			
+			Gwen::PointF p;
+			p.x = advance;//std::abs(bounds[2] - bounds[0]);
+			p.y = fSize*1.33;//std::abs(bounds[3] - bounds[1]);
 			return p;
 		}
 	}

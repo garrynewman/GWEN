@@ -40,7 +40,7 @@ namespace ToolTip
 
 #ifndef GWEN_NO_ANIMATION
 		Gwen::Anim::Cancel(g_ToolTip);
-		Gwen::Anim::Add(pControl, new TooltipDelay(0.8));
+		Gwen::Anim::Add(pControl, new TooltipDelay(0.8));// change me to adjust tooltip delay
 #endif
 		g_ToolTip = pControl;
 	}

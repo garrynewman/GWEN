@@ -78,18 +78,7 @@ namespace Gwen
 		private:
 			
 			void OnPopoutOrReturn(Controls::Base* control);
-
-			void OnCloseTab(Controls::Base* control)
-			{
-				if (m_CurrentButton)
-				{
-					auto page = m_CurrentButton->GetPage();
-					m_CurrentButton->GetTabControl()->RemovePage(m_CurrentButton);
-					page->DelayedDelete();
-					m_CurrentButton->DelayedDelete();
-					m_CurrentButton = 0;
-				}
-			}
+			void OnCloseTab(Controls::Base* control);
 			
 			TabButton* m_CurrentButton;
 			Button* m_CloseButton;

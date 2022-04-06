@@ -112,7 +112,7 @@ void Button::OnPress()
 }
 
 
-void Button::SetImage( const TextObject & strName, bool bCenter )
+void Button::SetImage( const TextObject & strName, bool bCenter, bool bMaintainAspectRatio )
 {
 	if ( strName.GetUnicode() == L"" )
 	{
@@ -132,6 +132,11 @@ void Button::SetImage( const TextObject & strName, bool bCenter )
 
 	m_Image->SetImage( strName );
 	m_Image->SizeToContents();
+	if (bMaintainAspectRatio)
+	{
+		float aspect_ratio = m_Image->TextureWidth()/m_Image->TextureHeight();
+		m_Image->SetSize(Height()*aspect_ratio-2, Height()-2);
+	}
 	m_Image->SetMargin( Margin( 2, 0, 2, 0 ) );
 	m_bCenterImage = bCenter;
 	// Ugh.

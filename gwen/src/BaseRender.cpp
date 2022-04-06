@@ -40,6 +40,16 @@ namespace Gwen
 			Gwen::UnicodeString str = Gwen::Utility::StringToUnicode( text );
 			return MeasureText( pFont, str );
 		}
+		
+		void Base::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::TextObject & text )
+		{
+			RenderText( pFont, pos, text.GetUnicode() );
+		}
+		
+		Gwen::PointF Base::MeasureText( Gwen::Font* pFont, const Gwen::TextObject & text )
+		{
+			return MeasureText( pFont, text.GetUnicode() );
+		}
 
 		void Base::DrawLinedRect( Gwen::Rect rect )
 		{

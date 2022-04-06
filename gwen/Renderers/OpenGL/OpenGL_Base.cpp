@@ -124,7 +124,6 @@ namespace Gwen
 			glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 			glDrawArrays( GL_TRIANGLES, 0, ( GLsizei ) m_iVertNum );
 			m_iVertNum = 0;
-			glFlush();
 		}
 
 		void OpenGL_Base::AddVert( int x, int y, float u, float v )
@@ -339,6 +338,11 @@ namespace Gwen
 			return c;
 		}
 
+#ifdef _WIN32
+		static std::map<HGLRC, bool> _contexts;
+#else
+		static std::map<GLXContext, bool> _contexts;
+#endif
 		bool OpenGL_Base::InitializeContext( Gwen::WindowProvider* pWindow )
 		{
 #ifdef _WIN32
@@ -364,6 +368,11 @@ namespace Gwen
 			HGLRC hRC;
 			hRC = wglCreateContext( hDC );
 			wglMakeCurrent( hDC, hRC );
+			// find a context to share with
+			if (_contexts.size())
+			{
+				//wglShareLists(hRC, _contexts.begin()->first);
+			}
 			RECT r;
 
 			if ( GetClientRect( pHwnd, &r ) )
@@ -376,6 +385,8 @@ namespace Gwen
 			}
 
 			m_pContext = ( void* ) hRC;
+
+			_contexts[hRC] = true;
 			return true;
 #else
 			Window win = (Window)pWindow->GetWindow();
@@ -402,6 +413,13 @@ namespace Gwen
 			ctxErrorOccurred = false;
 			int (*oldHandler)(Display*, XErrorEvent*) =
 			XSetErrorHandler(&ctxErrorHandler);
+			
+			// find a context to share with
+			GLXContext share_ctx = 0;
+			if (_contexts.size())
+			{
+				share_ctx = _contexts.begin()->first;
+			}
 
 			// Check for the GLX_ARB_create_context extension string and the function.
 			// If either is not present, use GLX 1.3 context creation method.
@@ -410,7 +428,7 @@ namespace Gwen
 			{
 				printf( "glXCreateContextAttribsARB() not found"
 					" ... using old-style GLX context\n" );
-				ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, 0, True );
+				ctx = glXCreateNewContext( x11_display, global_bestFbc, GLX_RGBA_TYPE, share_ctx, True );
 			}
 			// If it does, try to get a GL 3.0 context!
 			else
@@ -424,7 +442,7 @@ namespace Gwen
 				};
 
 				//printf( "Creating context\n" );
-				ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0,
+				ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, share_ctx,
                                       True, context_attribs );
 
 				// Sync to ensure any errors generated are processed.
@@ -448,10 +466,12 @@ namespace Gwen
 
 					printf( "Failed to create GL 3.0 context"
 						" ... using old-style GLX context\n" );
-					ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, 0, 
+					ctx = glXCreateContextAttribsARB( x11_display, global_bestFbc, share_ctx, 
                                         True, context_attribs );
 				}
 			}
+			
+			_contexts[ctx] = true;
 
 			// Sync to ensure any errors generated are processed.
 			XSync( x11_display, False );
@@ -489,9 +509,11 @@ namespace Gwen
 		bool OpenGL_Base::ShutdownContext( Gwen::WindowProvider* pWindow )
 		{
 #ifdef _WIN32
+			_contexts.erase((HGLRC)m_pContext);
 			wglDeleteContext( ( HGLRC ) m_pContext );
 			return true;
 #else
+			_contexts.erase((GLXContext)m_pContext);
 			glXMakeCurrent( x11_display, 0, 0 );
 			glXDestroyContext( x11_display, (GLXContext)m_pContext );
             return true;

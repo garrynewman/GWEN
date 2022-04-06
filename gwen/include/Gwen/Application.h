@@ -138,20 +138,16 @@ public:
 	{
 		while (SpinOnce())
 		{
-			// sleep extra when we are in the background
-			bool on_top = false;
-			for (const auto& canv: canvases_)
+			for (auto& canv : canvases_)
 			{
-				if (canv->IsOnTop())
+				if (canv->NeedsRedraw())
 				{
-					on_top = true;
+					continue;
 				}
 			}
 
-			if (!on_top)
-			{
-				Gwen::Platform::WaitForEvent();
-			}
+			// If we dont need a redraw, sleep until we get new input
+			Gwen::Platform::WaitForEvent();
 		}
 		return true;
 	}

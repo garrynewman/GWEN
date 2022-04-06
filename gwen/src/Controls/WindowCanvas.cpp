@@ -125,8 +125,7 @@ void WindowCanvas::DoThink()
 	{
 		Gwen::Point pt;
 		Gwen::Platform::GetCursorPos(pt);
-		//pt -= m_WindowPos;
-		//Gwen::DragAndDrop::OnMouseMoved(
+
 		double x = pt.x;
 		double y = pt.y;
 		if (last_x == 0 && last_y == 0)
@@ -136,7 +135,7 @@ void WindowCanvas::DoThink()
 		}
 		double deltaX = x - last_x;
 		double deltaY = y - last_y;
-		//loat fScale = 1.0f / Scale();
+
 		if (last_x != x || last_y != y)
 		{
 			DragAndDrop::OnMouseMoved(Gwen::HoveredControl, x, y);

@@ -48,7 +48,7 @@ namespace Gwen
 				virtual void Toggle() { SetToggleState( !GetToggleState() ); }
 
 
-				virtual void SetImage( const TextObject & strName, bool bCenter = false );
+				virtual void SetImage( const TextObject & strName, bool bCenter = false, bool bMaintainAspectRatio = true );
 
 				virtual void SizeToContents();
 				virtual void PostLayout( Skin::Base* pSkin );

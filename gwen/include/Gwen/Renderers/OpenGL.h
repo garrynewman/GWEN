@@ -18,11 +18,10 @@ namespace Gwen
 	{
 		class OpenGL : public Gwen::Renderer::OpenGL_Base
 		{
-            	FONScontext* fs = 0;
-            
 				// Fallback fonts for other languages/charsets
 				int fallback_1 = -1;
 				int fallback_2 = -1;
+
 			public:
 			
 				virtual ~OpenGL();
@@ -35,9 +34,29 @@ namespace Gwen
 				};
 
 				virtual void Init();
+				
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::TextObject & text )
+				{
+					RenderText( pFont, pos, text.Get() );
+				}
+		
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::TextObject & text )
+				{
+					return MeasureText( pFont, text.Get() );
+				}
+				
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
+				{
+					RenderText( pFont, pos, Gwen::Utility::UnicodeToString(text) );
+				}
+				
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+				{
+					return MeasureText( pFont, Gwen::Utility::UnicodeToString(text) );
+				}
 
-				void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text );
-				Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text );
+				void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text );
+				Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::String & text );
 		};
 
 	}
