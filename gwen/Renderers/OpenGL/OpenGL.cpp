@@ -543,19 +543,19 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 #endif
         		if (modifiers.mono)
         		{
-        			fallback += "Mono";
+        			fallback += " Mono";
         		}
         		if (modifiers.bold)
         		{
-        			fallback += "Bold";
+        			fallback += " Bold";
         		}
         		if (modifiers.italic)
         		{
-        			fallback += "Italic";
+        			fallback += " Italic";
         		}
         		if (modifiers.serif)
         		{
-        			fallback += "Serif";
+        			fallback += " Serif";
         		}
         		return FindFont(fallback, false);		
         	}
