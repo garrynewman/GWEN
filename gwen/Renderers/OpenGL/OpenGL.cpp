@@ -539,7 +539,7 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 #ifdef _WIN32
                 std::string fallback = "Calibri";
 #else
-        		std::string fallback = "Liberation";
+        		std::string fallback = "Liberation Sans";
 #endif
         		if (modifiers.mono)
         		{

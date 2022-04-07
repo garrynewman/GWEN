@@ -13,6 +13,10 @@
 #include "Gwen/Skins/TexturedBase.h"
 #include "Gwen/Platform.h"
 
+#ifndef _WIN32
+#include <signal.h>
+#endif
+
 namespace Gwen
 {
 
