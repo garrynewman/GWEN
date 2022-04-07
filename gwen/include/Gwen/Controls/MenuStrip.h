@@ -31,7 +31,7 @@ namespace Gwen
 				virtual bool ShouldHoverOpenMenu();
 				virtual void Close() {}
 
-
+				double m_ItemHeight;
 		};
 	}
 

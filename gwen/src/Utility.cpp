@@ -27,6 +27,15 @@ using namespace Gwen;
 #define GWEN_FNULL "/dev/null"
 #endif
 
+using convert_type = std::codecvt_utf8<wchar_t>;
+namespace Gwen
+{
+	namespace Utility
+	{
+		std::wstring_convert<convert_type, wchar_t> wstring_converter;
+	}
+}
+
 UnicodeString Gwen::Utility::Format( const wchar_t* fmt, ... )
 {
 	va_list s;

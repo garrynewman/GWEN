@@ -124,7 +124,7 @@ void ColorPicker::UpdateControls()
 	UpdateColorControls( "Alpha",	Color( 255, 255, 255, GetColor().a ), GetColor().a );
 	ColorDisplay* disp = gwen_cast<ColorDisplay> ( FindChildByName( "Result", true ) );
 	disp->SetColor( Color( GetColor().r, GetColor().g, GetColor().b, GetColor().a ) );
-	onColorChanged.Call( this );
+	onColorChanged.Call( this );// todo only call this on change
 }
 void ColorPicker::SlidersMoved( Gwen::Controls::Base* control )
 {
@@ -146,8 +146,8 @@ void ColorPicker::SlidersMoved( Gwen::Controls::Base* control )
 void ColorPicker::Layout( Skin::Base* skin )
 {
 	BaseClass::Layout( skin );
-	SizeToChildren( false, true );
-	SetSize( Width(), Height() + 5 );
+	SizeToChildren(false, true);
+	//SetSize( Width(), Height() + 5 );// this forces a rerender since the size changes
 	GroupBox* groupBox = gwen_cast<GroupBox> ( FindChildByName( "ResultGroupBox", true ) );
 
 	if ( groupBox )

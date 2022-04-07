@@ -49,11 +49,10 @@ class ListBoxRow : public Layout::TableRow
 		{
 			m_bSelected = b;
 
-			// TODO: Get these values from the skin.
 			if ( b )
-			{ SetTextColor( Gwen::Colors::White ); }
+			{ SetTextColor( GetSkin()->Colors.Label.Bright ); }
 			else
-			{ SetTextColor( Gwen::Colors::Black ); }
+			{ SetTextColor( GetSkin()->Colors.Label.Default ); }
 		}
 
 	private:

@@ -110,7 +110,7 @@ namespace Gwen
 				virtual void DrawMenuDivider( Controls::Base* control ) = 0;
 
 				virtual void DrawCategoryHolder( Controls::Base* ctrl ) = 0;
-				virtual void DrawCategoryInner( Controls::Base* ctrl, bool bCollapsed ) = 0;
+				virtual void DrawCategoryInner( Controls::Base* ctrl, int header_height, bool bCollapsed ) = 0;
 
 
 				virtual void SetRender( Gwen::Renderer::Base* renderer )

@@ -63,6 +63,7 @@ GWEN_CONTROL_CONSTRUCTOR( TreeNode )
 	m_Title->onDoubleClick.Add( this, &TreeNode::OnDoubleClickName );
 	m_Title->onDown.Add( this, &TreeNode::OnClickName );
 	m_Title->onRightPress.Add( this, &TreeNode::OnRightPress );
+	m_Title->SetHeight(m_Title->GetFont()->size+7);
 	m_InnerPanel = new Base( this );
 	m_InnerPanel->Dock( Pos::Top );
 	m_InnerPanel->SetHeight( 100 );

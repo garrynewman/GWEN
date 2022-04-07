@@ -644,7 +644,7 @@ namespace Gwen
 			RenderText(pFont, pos, Utility::UnicodeToString(text));
 		}
 
-		Gwen::Point DirectX11::MeasureText(Gwen::Font* pFont, const Gwen::String & text)
+		Gwen::Point DirectX11::MeasureText(Gwen::Font* pFont, const Gwen::UnicodeString & text)
 		{
 			// If the font doesn't exist, or the font size should be changed
 			if (!pFont->data || fabs(pFont->realsize - pFont->size * Scale()) > 2)

@@ -178,3 +178,9 @@ xcschemes
 
 gwen/Projects/windows/*
 gwen/lib/windows/*
+gwen/CMakeFiles/
+gwen/CMakeCache.txt
+gwen/*.cmake
+gwen/Makefile
+.vs/*
+gwen/.vs/*

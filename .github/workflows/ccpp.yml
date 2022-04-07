@@ -1,0 +1,32 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: cmake configure
+      run:  |
+        cd gwen
+        cmake .
+    - name: cmake build
+      run:  |
+        cd gwen
+        cmake --build .
+      
+  linux-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: install deps
+      run: sudo apt-get install libxcursor-dev mesa-common-dev libglu1-mesa-dev libfreeimage-dev
+    - name: cmake configure
+      run: |
+        cd gwen
+        cmake .
+    - name: cmake build
+      run: |
+        cd gwen
+        cmake --build .

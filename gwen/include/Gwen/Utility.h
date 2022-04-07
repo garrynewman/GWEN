@@ -12,6 +12,10 @@
 #include <vector>
 #include "Gwen/Structures.h"
 
+#include <locale>
+#include <string>
+#include <codecvt>
+
 namespace Gwen
 {
 	class TextObject;
@@ -38,25 +42,21 @@ namespace Gwen
 #pragma warning( push )
 #pragma warning( disable : 4996 )
 #endif
+		using convert_type = std::codecvt_utf8<wchar_t>;
+		extern std::wstring_convert<convert_type, wchar_t> wstring_converter;
 
 		inline String UnicodeToString( const UnicodeString & strIn )
 		{
 			if ( !strIn.length() ) { return ""; }
 
-			String temp( strIn.length(), ( char ) 0 );
-			std::use_facet< std::ctype<wchar_t> > ( std::locale() ). \
-			narrow( &strIn[0], &strIn[0] + strIn.length(), ' ', &temp[0] );
-			return temp;
+			return wstring_converter.to_bytes( strIn );
 		}
 
 		inline UnicodeString StringToUnicode( const String & strIn )
 		{
 			if ( !strIn.length() ) { return L""; }
 
-			UnicodeString temp( strIn.length(), ( wchar_t ) 0 );
-			std::use_facet< std::ctype<wchar_t> > ( std::locale() ). \
-			widen( &strIn[0], &strIn[0] + strIn.length(), &temp[0] );
-			return temp;
+			return wstring_converter.from_bytes( strIn );
 		}
 
 		template<typename T> void Replace( T & str, const T & strFind, const T & strReplace )

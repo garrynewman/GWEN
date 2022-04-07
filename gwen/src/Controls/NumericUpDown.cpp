@@ -107,3 +107,97 @@ void NumericUpDown::OnEnter()
 	SyncTextFromNumber();
 	BaseClass::OnEnter();
 }
+
+GWEN_CONTROL_CONSTRUCTOR( FloatUpDown )
+{
+	SetSize( 100, 20 );
+	Controls::Base* pSplitter = new Controls::Base( this );
+	pSplitter->Dock( Pos::Right );
+	pSplitter->SetWidth( 13 );
+	NumericUpDownButton_Up* pButtonUp = new NumericUpDownButton_Up( pSplitter );
+	pButtonUp->onPress.Add( this, &FloatUpDown::OnButtonUp );
+	pButtonUp->SetTabable( false );
+	pButtonUp->Dock( Pos::Top );
+	pButtonUp->SetHeight( 10 );
+	NumericUpDownButton_Down* pButtonDown = new NumericUpDownButton_Down( pSplitter );
+	pButtonDown->onPress.Add( this, &FloatUpDown::OnButtonDown );
+	pButtonDown->SetTabable( false );
+	pButtonDown->Dock( Pos::Fill );
+	pButtonUp->SetPadding( Padding( 0, 1, 1, 0 ) );
+	m_iMax = 100;
+	m_iMin = 0;
+	m_iNumber = 0;
+	SetText( "0" );
+}
+
+void FloatUpDown::OnButtonUp( Base* /*control*/ )
+{
+	SyncNumberFromText();
+	SetValue( m_iNumber + 1 );
+}
+
+void FloatUpDown::OnButtonDown( Base* /*control*/ )
+{
+	SyncNumberFromText();
+	SetValue( m_iNumber - 1 );
+}
+
+
+void FloatUpDown::SyncTextFromNumber()
+{
+	SetText( Utility::ToString( m_iNumber ) );
+}
+
+void FloatUpDown::SyncNumberFromText()
+{
+	SetValue( ( double ) GetFloatFromText() );
+}
+
+void FloatUpDown::SetMin( double i )
+{
+	m_iMin = i;
+}
+
+void FloatUpDown::SetMax( double i )
+{
+	m_iMax = i;
+}
+
+void FloatUpDown::SetValue( double i )
+{
+	if ( i > m_iMax ) { i = m_iMax; }
+
+	if ( i < m_iMin ) { i = m_iMin; }
+
+	if ( m_iNumber == i )
+	{
+		return;
+	}
+
+	m_iNumber = i;
+	// Don't update the text if we're typing in it..
+	// Undone - any reason why not?
+	//if ( !HasFocus() )
+	{
+		SyncTextFromNumber();
+	}
+	OnChange();
+}
+
+void FloatUpDown::OnChange()
+{
+	onChanged.Call( this );
+}
+
+void FloatUpDown::OnTextChanged()
+{
+	BaseClass::OnTextChanged();
+	SyncNumberFromText();
+}
+
+void FloatUpDown::OnEnter()
+{
+	SyncNumberFromText();
+	SyncTextFromNumber();
+	BaseClass::OnEnter();
+}

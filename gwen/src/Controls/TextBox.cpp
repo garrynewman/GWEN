@@ -37,12 +37,13 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	SetKeyboardInputEnabled( true );
 	SetAlignment( Pos::Left | Pos::CenterV );
 	SetPadding( Padding( 4, 2, 4, 2 ) );
+	SetCursor( Gwen::CursorType::Beam );
 	m_iCursorPos = 0;
 	m_iCursorEnd = 0;
 	m_iCursorLine = 0;
     m_bEditable = true;
 	m_bSelectAll = false;
-	SetTextColor( Gwen::Color( 50, 50, 50, 255 ) );   // TODO: From Skin
+	SetTextColor( GetSkin()->Colors.Label.Default );
 	SetTabable( true );
 	AddAccelerator( L"Ctrl + C", &TextBox::OnCopy );
 	AddAccelerator( L"Ctrl + X", &TextBox::OnCut );

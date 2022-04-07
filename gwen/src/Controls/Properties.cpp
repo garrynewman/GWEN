@@ -23,12 +23,12 @@ GWEN_CONTROL_CONSTRUCTOR( Properties )
 	m_SplitterBar->DoNotIncludeInSize();
 }
 
-void Properties::PostLayout( Gwen::Skin::Base* /*skin*/ )
+void Properties::PostLayout( Gwen::Skin::Base* skin )
 {
 	//todo: this causes infinite layout, fix me later
-	//if ( SizeToChildren( false, true ) )
+	if ( SizeToChildren( false, true ) )
 	{
-	//	InvalidateParent();
+		InvalidateParent();
 	}
 
 	m_SplitterBar->SetSize( 3, Height() );
@@ -37,6 +37,11 @@ void Properties::PostLayout( Gwen::Skin::Base* /*skin*/ )
 void Properties::OnSplitterMoved( Controls::Base* /*control*/ )
 {
 	InvalidateChildren();
+}
+
+void Properties::SetSplitWidth(int w)
+{
+	m_SplitterBar->SetPos(w);
 }
 
 int Properties::GetSplitWidth()
@@ -154,9 +159,10 @@ void PropertyRow::Layout( Gwen::Skin::Base* /*skin*/ )
 
 	m_Label->SetWidth( pParent->GetSplitWidth() );
 
+	int min_height = m_Label->GetFont()->size + 7;
 	if ( m_Property )
 	{
-		SetHeight( m_Property->Height() );
+		SetHeight( std::max(min_height, m_Property->Height()) );
 	}
 }
 

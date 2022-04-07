@@ -9,6 +9,7 @@
 #define GWEN_BASERENDER_H
 
 #include "Gwen/Structures.h"
+#include "Gwen/TextObject.h"
 
 namespace Gwen
 {
@@ -77,6 +78,8 @@ namespace Gwen
 				virtual void DrawShavedCornerRect( Gwen::Rect rect, bool bSlight = false );
 				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::String & text );
 				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text );
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::TextObject & text );
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::TextObject & text );
 
 			public:
 
@@ -118,11 +121,6 @@ namespace Gwen
 				float Scale() const { return m_fScale; }
 
 				float m_fScale;
-
-				// DPI handling
-				virtual Gwen::PointF GetDPI() { return m_dpi; }
-				void _SetDPI(const Gwen::PointF d) { m_dpi = d; }
-				Gwen::PointF GetDPIScaling() { auto dpi = GetDPI(); return Gwen::PointF(dpi.x/96.0f, dpi.y/96.0f); }
 
 
 			public:

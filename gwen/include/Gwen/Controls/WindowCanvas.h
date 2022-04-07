@@ -41,6 +41,9 @@ namespace Gwen
 
 				virtual void Render( Skin::Base* skin );
 
+				virtual Gwen::Point WindowPosition() { return m_WindowPos; }
+				
+				virtual void OnMove(int x, int y) { m_WindowPos = Gwen::Point(x,y); }
 				virtual void SetPos( int x, int y );
 				virtual bool IsOnTop();
 
@@ -51,10 +54,21 @@ namespace Gwen
 				virtual void SetMaximize( bool b );
 				virtual void Minimize();
 
-				virtual void SetSizable( bool b ) { m_Sizer->SetHidden( !b ); }
-				virtual bool GetSizable() { return m_Sizer->Visible(); }
+				virtual void SetSizable( bool b ) { if (m_bHasTitleBar) { m_Sizer->SetHidden( !b ); } }
+				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_Sizer->Visible(); }
+				virtual void SetMinimumSize( const Gwen::Point & minSize );
+				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
+
+
+
+				// DPI handling
+				double GetDPI() { return m_dpi; }
+				void SetDPI(const double d) { m_dpi = d; }
+				Gwen::PointF GetDPIScaling() { auto dpi = GetDPI(); return Gwen::PointF(dpi / 96.0f, dpi / 96.0f); }
 
 			protected:
+
+				double m_dpi = 96.0;
 
 				virtual void RenderCanvas();
 				virtual void DestroyWindow();
@@ -70,6 +84,7 @@ namespace Gwen
 
 				void*		m_pOSWindow;
 				bool		m_bQuit;
+				bool		m_bHasTitleBar;
 
 				Gwen::Skin::Base*			m_pSkinChange;
 
@@ -80,6 +95,8 @@ namespace Gwen
 
 				Gwen::Point		m_WindowPos;
 				Gwen::Point		m_HoldPos;
+				
+				Gwen::Point		m_MinimumSize;
 
 				bool			m_bCanMaximize;
 				bool			m_bIsMaximized;

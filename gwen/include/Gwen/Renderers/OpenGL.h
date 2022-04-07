@@ -8,16 +8,23 @@
 #define GWEN_RENDERERS_OPENGL_H
 
 #include "Gwen/Gwen.h"
-#include "Gwen/BaseRender.h"
+#include "Gwen/Renderers/OpenGL_Base.h"
+
+struct FONScontext;
 
 namespace Gwen
 {
 	namespace Renderer
 	{
-
-		class OpenGL : public Gwen::Renderer::Base
+		class OpenGL : public Gwen::Renderer::OpenGL_Base
 		{
+				// Fallback fonts for other languages/charsets
+				int fallback_1 = -1;
+				int fallback_2 = -1;
+
 			public:
+			
+				virtual ~OpenGL();
 
 				struct Vertex
 				{
@@ -26,52 +33,30 @@ namespace Gwen
 					unsigned char r, g, b, a;
 				};
 
-				OpenGL();
-				~OpenGL();
-
 				virtual void Init();
+				
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::TextObject & text )
+				{
+					RenderText( pFont, pos, text.Get() );
+				}
+		
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::TextObject & text )
+				{
+					return MeasureText( pFont, text.Get() );
+				}
+				
+				virtual void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
+				{
+					RenderText( pFont, pos, Gwen::Utility::UnicodeToString(text) );
+				}
+				
+				virtual Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
+				{
+					return MeasureText( pFont, Gwen::Utility::UnicodeToString(text) );
+				}
 
-				virtual void Begin();
-				virtual void End();
-
-				virtual void SetDrawColor( Gwen::Color color );
-				virtual void DrawFilledRect( Gwen::Rect rect );
-
-				void StartClip();
-				void EndClip();
-
-				void DrawTexturedRect( Gwen::Texture* pTexture, Gwen::Rect pTargetRect, float u1 = 0.0f, float v1 = 0.0f, float u2 = 1.0f, float v2 = 1.0f );
-				void LoadTexture( Gwen::Texture* pTexture );
-				void FreeTexture( Gwen::Texture* pTexture );
-				Gwen::Color PixelColour( Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default );
-
-			protected:
-
-				static const int	MaxVerts = 1024;
-
-
-				void Flush();
-				void AddVert( int x, int y, float u = 0.0f , float v = 0.0f );
-
-				Gwen::Color			m_Color;
-				int					m_iVertNum;
-				Vertex				m_Vertices[ MaxVerts ];
-
-
-			public:
-
-				//
-				// Self Initialization
-				//
-
-				virtual bool InitializeContext( Gwen::WindowProvider* pWindow );
-				virtual bool ShutdownContext( Gwen::WindowProvider* pWindow );
-				virtual bool PresentContext( Gwen::WindowProvider* pWindow );
-				virtual bool ResizedContext( Gwen::WindowProvider* pWindow, int w, int h );
-				virtual bool BeginContext( Gwen::WindowProvider* pWindow );
-				virtual bool EndContext( Gwen::WindowProvider* pWindow );
-
-				void*	m_pContext;
+				void RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text );
+				Gwen::PointF MeasureText( Gwen::Font* pFont, const Gwen::String & text );
 		};
 
 	}

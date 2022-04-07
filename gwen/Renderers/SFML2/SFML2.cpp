@@ -186,11 +186,13 @@ void Gwen::Renderer::SFML2::FreeFont( Gwen::Font* pFont )
 	pFont->data = NULL;
 }
 
-void Gwen::Renderer::SFML2::RenderText( Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString& text )
+void Gwen::Renderer::SFML2::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString& text )
 {
 	Flush();
 
-	Translate( pos.x, pos.y );
+	pos.x += m_RenderOffset.x;
+	pos.y += m_RenderOffset.y;
+	//Translate( pos.x, pos.y );
 
 	// If the font doesn't exist, or the font size should be changed
 	if ( !pFont->data || fabs( pFont->realsize - pFont->size * Scale() ) > 2 )

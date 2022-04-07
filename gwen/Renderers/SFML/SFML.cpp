@@ -42,7 +42,7 @@ namespace Gwen
 		void SFML::DrawFilledRect( Gwen::Rect rect )
 		{
 			Translate( rect );
-			m_Target.Draw( sf::Shape::Rectangle( rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, m_Color ) );
+			m_Target.draw( sf::Shape::Rectangle( rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, m_Color ) );
 		}
 
         void SFML::DrawLinedRect( Gwen::Rect rect )
@@ -60,7 +60,7 @@ namespace Gwen
 			font->realsize = font->size * Scale();
 			sf::Font* pFont = new sf::Font();
 			
-			if ( !pFont->LoadFromFile( Utility::UnicodeToString( font->facename ), font->realsize  ) )
+			if ( !pFont->loadFromFile( Utility::UnicodeToString( font->facename ), font->realsize  ) )
 			{
 				// Ideally here we should be setting the font to a system default font here.
 				delete pFont;
@@ -102,12 +102,11 @@ namespace Gwen
 				pSFFont = &defaultFont;
 			}
 
-			sf::String sfStr( text );
-			sfStr.SetFont( *pSFFont );
-			sfStr.Move( pos.x, pos.y );
-			sfStr.SetSize( pFont->realsize );
-			sfStr.SetColor( m_Color );
-			m_Target.Draw( sfStr );
+			sf::Text sfStr( text, *pSFFont );
+			sfStr.move( pos.x, pos.y );
+			sfStr.setCharacterSize( pFont->realsize );
+			sfStr.setColor( m_Color );
+			m_Target.draw( sfStr );
 			
 		}
 
@@ -128,12 +127,11 @@ namespace Gwen
 				pSFFont = &defaultFont;
 			}
 
-			sf::String sfStr( text );
-			sfStr.SetFont( *pSFFont );
-			sfStr.SetSize( pFont->realsize );
-			sf::FloatRect sz = sfStr.GetRect();
+			sf::Text sfStr( text, *pSFFont );
+			sfStr.setCharacterSize( pFont->realsize );
+			sf::FloatRect sz = sfStr.getLocalBounds();
 			
-			return Gwen::Point( sz.GetWidth(), sz.GetHeight() );			
+			return Gwen::Point( sz.width, sz.height );			
 		}
 
 		void SFML::StartClip()
@@ -164,15 +162,15 @@ namespace Gwen
 			sf::Image* tex = new sf::Image();
             tex->SetSmooth( true );
             
-            if ( !tex->LoadFromFile( pTexture->name.Get() ) )
+            if ( !tex->loadFromFile( pTexture->name.Get() ) )
 			{
 				delete( tex );
 				pTexture->failed = true;
 				return;
 			}
 			
-			pTexture->height = tex->GetHeight();
-			pTexture->width = tex->GetWidth();
+			pTexture->height = tex->getSize().y;
+			pTexture->width = tex->getSize().x;
 			pTexture->data = new TextureData( tex );
 			
 		};
@@ -226,10 +224,7 @@ namespace Gwen
 			const sf::Image* tex = data->image;
 			if ( !tex ) return col_default;
 
-			sf::Color col = tex->GetPixel( x, y );
-			return Gwen::Color( col.r, col.g, col.b, col.a );
-
-			sf::Color col = tex->GetPixel( x, y );
+			sf::Color col = tex->getPixel( x, y );
 			return Gwen::Color( col.r, col.g, col.b, col.a );
 		}
 		

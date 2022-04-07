@@ -94,7 +94,7 @@ namespace Gwen
 				float curSpacing = sGwenDebugFontSpacing[ch] * m_fLetterSpacing * fSize * m_fFontScale[0];
 				Gwen::Rect r( pos.x + yOffset, pos.y - fSize * 0.5, ( fSize * m_fFontScale[0] ), fSize * m_fFontScale[1] );
 
-				if ( m_pFontTexture )
+				if (m_pFontTexture )
 				{
 					float uv_texcoords[8] = {0., 0., 1., 1.};
 

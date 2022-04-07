@@ -26,18 +26,11 @@ namespace Gwen
 
 				SDL13()
 				{
-					m_Canvas = NULL;
+
 				}
-
-				void Initialize( Gwen::Controls::Canvas* c )
+				
+				bool ProcessEvent( Gwen::Controls::Canvas* m_Canvas, SDL_Event* Event )
 				{
-					m_Canvas = c;
-				}
-
-				bool ProcessEvent( SDL_Event* Event )
-				{
-					if ( !m_Canvas ) { return false; }
-
 					switch ( Event->type )
 					{
 						case SDL_KEYUP:
@@ -184,8 +177,6 @@ namespace Gwen
 				}
 
 			protected:
-
-				Gwen::Controls::Canvas* m_Canvas;
 
 		};
 	}

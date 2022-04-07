@@ -24,7 +24,6 @@ namespace Gwen
 
 				SFML()
 				{
-					m_Canvas = NULL;
 					m_MouseX = 0;
 					m_MouseY = 0;
                     m_LeftMouseDown = false;
@@ -32,11 +31,6 @@ namespace Gwen
                     m_MiddleMouseDown = false;
                     m_XButton1MouseDown = false;
                     m_XButton2MouseDown = false;
-				}
-
-				void Initialize( Gwen::Controls::Canvas* c )
-				{
-					m_Canvas = c;
 				}
 
 				unsigned char TranslateKeyCode( int iKeyCode )
@@ -159,10 +153,8 @@ namespace Gwen
 					return Gwen::Key::Invalid;
 				}
 
-				bool ProcessMessage( sf::Event & event )
+				bool ProcessMessage( Gwen::Controls::Canvas* m_Canvas, sf::Event & event )
 				{
-					if ( !m_Canvas ) { return false; }
-
 #if SFML_VERSION_MAJOR == 2
 
 					switch ( event.type )
@@ -278,7 +270,6 @@ namespace Gwen
 
 			protected:
 
-				Gwen::Controls::Canvas*	m_Canvas;
 				int m_MouseX;
 				int m_MouseY;
                 bool m_LeftMouseDown;

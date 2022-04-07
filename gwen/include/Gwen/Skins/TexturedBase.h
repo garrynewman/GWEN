@@ -47,6 +47,8 @@ namespace Gwen
 					{
 						Texturing::Bordered Normal;
 						Texturing::Bordered Inactive;
+						Texturing::Bordered NormalHeaderless;
+						Texturing::Bordered InactiveHeaderless;
 						Texturing::Single Close;
 						Texturing::Single Close_Hover;
 						Texturing::Single Close_Down;
@@ -353,6 +355,8 @@ namespace Gwen
 					Textures.Panel.Highlight.Init( &m_Texture, 256 + 64,	64,	63,	63,		Margin( 16,	16, 16, 16 ) );
 					Textures.Window.Normal.Init( &m_Texture, 0, 0, 127,		127,	Margin( 8, 32, 8, 8 ) );
 					Textures.Window.Inactive.Init( &m_Texture, 128, 0, 127,		127,	Margin( 8, 32, 8, 8 ) );
+					Textures.Window.NormalHeaderless.Init( &m_Texture, 0, 24, 127,		127-24,	Margin( 8, 32, 8, 8 ) );
+					Textures.Window.InactiveHeaderless.Init( &m_Texture, 128, 24, 127,		127-24,	Margin( 8, 32, 8, 8 ) );
 					Textures.Checkbox.Active.Checked.Init( &m_Texture, 448, 32, 15, 15 );
 					Textures.Checkbox.Active.Normal.Init( &m_Texture, 464, 32, 15, 15 );
 					Textures.Checkbox.Disabled.Checked.Init( &m_Texture, 448, 48, 15, 15 );
@@ -608,8 +612,16 @@ namespace Gwen
 
 				virtual void DrawWindow( Gwen::Controls::Base* control, int topHeight, bool inFocus )
 				{
-					if ( inFocus ) { Textures.Window.Normal.Draw( GetRender(), control->GetRenderBounds() ); }
-					else { Textures.Window.Inactive.Draw( GetRender(), control->GetRenderBounds() ); }
+					if (topHeight == 0)
+					{
+						if ( inFocus ) { Textures.Window.NormalHeaderless.Draw( GetRender(), control->GetRenderBounds() ); }
+						else { Textures.Window.InactiveHeaderless.Draw( GetRender(), control->GetRenderBounds() ); }
+					}
+					else
+					{
+						if ( inFocus ) { Textures.Window.Normal.Draw( GetRender(), control->GetRenderBounds() ); }
+						else { Textures.Window.Inactive.Draw( GetRender(), control->GetRenderBounds() ); }
+					}
 				}
 
 				virtual void DrawHighlight( Gwen::Controls::Base* control )
@@ -1010,12 +1022,15 @@ namespace Gwen
 					Textures.CategoryList.Outer.Draw( GetRender(), ctrl->GetRenderBounds() );
 				}
 
-				void DrawCategoryInner( Controls::Base* ctrl, bool bCollapsed )
+				void DrawCategoryInner( Controls::Base* ctrl, int header_height, bool bCollapsed )
 				{
 					if ( bCollapsed )
 					{ return Textures.CategoryList.Header.Draw( GetRender(), ctrl->GetRenderBounds() ); }
 
-					Textures.CategoryList.Inner.Draw( GetRender(), ctrl->GetRenderBounds() );
+					Rect bounds = ctrl->GetRenderBounds();
+					Textures.CategoryList.Inner.Draw( GetRender(), bounds );
+					bounds.h = header_height;
+					Textures.CategoryList.Header.Draw( GetRender(), bounds ); 
 				}
 		};
 	}

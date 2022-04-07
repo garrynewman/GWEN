@@ -7,7 +7,7 @@
 #include "Gwen/Macros.h"
 #include "Gwen/Platform.h"
 
-#if !defined(_WIN32) && !defined(GWEN_ALLEGRO_PLATFORM)
+#if !defined(_WIN32) && !defined(GWEN_ALLEGRO_PLATFORM) && !defined(GWEN_X11_PLATFORM)
 
 #include <time.h>
 
@@ -59,7 +59,7 @@ bool Gwen::Platform::FolderOpen( const String & Name, const String & StartPath, 
 	return false;
 }
 
-GWEN_EXPORT void* CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
+GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
 {
 	return NULL;
 }
@@ -98,5 +98,20 @@ void Gwen::Platform::GetDesktopSize( int & w, int & h )
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
 {
 }
+
+void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
+{
+}
+
+bool Gwen::Platform::IsWindowMaximized( void* pPtr)
+{
+	return false;
+}
+
+void Gwen::Platform::WaitForEvent()
+{
+
+}
+
 
 #endif // ndef WIN32

@@ -431,7 +431,7 @@ namespace Gwen
 
 				// Giver
 
-				virtual void DragAndDrop_SetPackage( bool bDraggable, const String & strName = "", void* pUserData = NULL );
+				virtual void DragAndDrop_SetPackage( bool bDraggable, const String & strName = "", void* pUserData = NULL, bool canPopout = false );
 				virtual bool DragAndDrop_Draggable();
 				virtual bool DragAndDrop_ShouldStartDrag() { return true; }
 				virtual void DragAndDrop_StartDragging( Gwen::DragAndDrop::Package* pPackage, int x, int y );

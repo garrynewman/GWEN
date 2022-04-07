@@ -265,6 +265,7 @@ namespace Gwen
 			{
 				userdata = NULL;
 				draggable = false;
+				canpopout = false;
 				drawcontrol = NULL;
 				holdoffset = Gwen::Point( 0, 0 );
 			}
@@ -272,6 +273,7 @@ namespace Gwen
 			String	name;
 			void*	userdata;
 			bool	draggable;
+			bool    canpopout;
 
 			Gwen::Controls::Base*	drawcontrol;
 			Gwen::Point	holdoffset;

@@ -46,10 +46,25 @@ static LPCTSTR iCursorConversion[] =
 	IDC_HAND
 };
 
-void Gwen::Platform::SetCursor( unsigned char iCursor )
+static bool loaded_cursors = false;
+static HCURSOR cursors[10];
+static HCURSOR current_cursor;
+void Gwen::Platform::SetCursor(unsigned char iCursor)
 {
-	// Todo.. Properly.
-	::SetCursor( LoadCursor( NULL, iCursorConversion[iCursor] ) );
+	if (!loaded_cursors)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			cursors[i] = LoadCursor(NULL, iCursorConversion[i]);
+		}
+		loaded_cursors = true;
+	}
+
+	if (GetCursor() != cursors[iCursor])
+	{
+		::SetCursor(cursors[iCursor]);
+		current_cursor = cursors[iCursor];
+	}
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
@@ -301,19 +316,40 @@ bool Gwen::Platform::FileSave( const String & Name, const String & StartPath, co
 }
 
 static std::map<HWND, float> window_dpis;
+static std::map<HWND, std::pair<int, int>> window_min_bounds;
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_MOUSEWHEEL:
+	//case WM_NCLBUTTONDOWN:
+	case WM_SYSCOMMAND:
 	{
-		MSG msg;
-		msg.hwnd = hwnd;
-		msg.message = message;
-		msg.wParam = wParam;
-		msg.lParam = lParam;
-		GwenInput.ProcessMessage(msg);
-		return 0;
+		if (message == WM_SYSCOMMAND && wParam != SC_CLOSE)
+		{
+			return false;
+		}
+
+		//return m_Canvas->InputQuit();
+	}
+	case WM_GETMINMAXINFO:
+	{
+		auto f = window_min_bounds.find(hwnd);
+		if (f != window_min_bounds.end())
+		{
+			LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
+			lpMMI->ptMinTrackSize.x = f->second.first;
+			lpMMI->ptMinTrackSize.y = f->second.second;
+		}
+		break;
+	}
+	case WM_SETCURSOR:
+	{
+		// Sets the cursor if mouse input wasnt captured
+		if (IsIconic(hwnd) && current_cursor)
+		{
+			SetCursor(current_cursor);
+		}
+		break;
 	}
 	case 0x02E0://WM_DPICHANGED:
 	{   //todo handle x and y dpi
@@ -380,12 +416,13 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
 	DestroyWindow( ( HWND ) pPtr );
 	CoUninitialize();
+	window_min_bounds.erase((HWND)pPtr);
+	window_dpis.erase((HWND)pPtr);
 }
 
 int i = 0;
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
 {
-	GwenInput.Initialize( ptarget );
 	MSG msg;
 
 	while ( PeekMessage( &msg, ( HWND ) pWindow, 0, 0, PM_REMOVE ) )
@@ -402,9 +439,10 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		DispatchMessage( &msg );
 	}
 
-	if (ptarget->GetSkin()->GetRender()->GetDPI().x != window_dpis[(HWND)pWindow])
+	if (ptarget->GetDPI() != window_dpis[(HWND)pWindow])
 	{
-		ptarget->GetSkin()->GetRender()->_SetDPI(Gwen::PointF(window_dpis[(HWND)pWindow], window_dpis[(HWND)pWindow]));
+		ptarget->SetDPI(window_dpis[(HWND)pWindow]);
+		ptarget->SetScale(window_dpis[(HWND)pWindow] / 96.0);
 		RECT rect;
 		GetWindowRect((HWND)pWindow, &rect);
 		ptarget->GetSkin()->GetRender()->ResizedContext( ptarget, rect.right - rect.left, rect.bottom - rect.top );
@@ -486,6 +524,38 @@ bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 void Gwen::Platform::Sleep( unsigned int iMS )
 {
 	::Sleep( iMS );
+}
+
+bool Gwen::Platform::WindowHasTitleBar()
+{
+	return false;
+}
+
+void Gwen::Platform::SetWindowMinimumSize( void* pPtr, int min_width, int min_height)
+{
+	window_min_bounds[(HWND)pPtr] = {min_width, min_height};
+}
+
+bool Gwen::Platform::IsWindowMaximized( void* pPtr)
+{
+	WINDOWPLACEMENT pl;
+	GetWindowPlacement((HWND)pPtr, &pl);
+	return pl.showCmd == SW_SHOWMAXIMIZED;
+}
+
+void Gwen::Platform::WaitForEvent()
+{
+	// todo, I'm not sure that this works correctly
+	MSG msg;
+	if (!PeekMessage( &msg, 0, 0, 0, PM_NOREMOVE ) )
+	{
+		WaitMessage();
+	}
+}
+
+void Gwen::Platform::InterruptWait()
+{
+
 }
 
 #endif // WIN32

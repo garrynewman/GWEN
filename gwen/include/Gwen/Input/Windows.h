@@ -22,20 +22,12 @@ namespace Gwen
 
 				Windows()
 				{
-					m_Canvas = NULL;
 					m_MouseX = 0;
 					m_MouseY = 0;
 				}
 
-				void Initialize( Gwen::Controls::Canvas* c )
-				{
-					m_Canvas = c;
-				}
-
 				bool ProcessMessage( MSG msg )
 				{
-					if ( !m_Canvas ) { return false; }
-
 					switch ( msg.message )
 					{
 							//case WM_NCLBUTTONDOWN:
@@ -44,7 +36,7 @@ namespace Gwen
 								if ( msg.message == WM_SYSCOMMAND && msg.wParam != SC_CLOSE )
 								{ return false; }
 
-								return m_Canvas->InputQuit();
+								//return m_Canvas->InputQuit();
 							}
 
 						case WM_MOUSEMOVE:
@@ -53,30 +45,33 @@ namespace Gwen
 								int y = ( signed short ) HIWORD( msg.lParam );
 								int dx = x - m_MouseX;
 								int dy = y - m_MouseY;
-								m_MouseX = x;
-								m_MouseY = y;
-								Gwen::PointF scale = m_Canvas->GetSkin()->GetRender()->GetDPIScaling();
-								return m_Canvas->InputMouseMoved( x / scale.x, y / scale.y, dx / scale.x, dy / scale.y);
+
+								RECT r;
+								GetWindowRect(msg.hwnd, &r);
+
+								m_MouseX = x + r.left;
+								m_MouseY = y + r.top;// todo need these in global coords
+								return Gwen::Input::OnMouseMoved(m_MouseX, m_MouseY, dx, dy, (void*)msg.hwnd );
 							}
 
 						case WM_CHAR:
 							{
 								Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) msg.wParam;
-								return m_Canvas->InputCharacter( chr );
+								return Gwen::Input::OnCharacter( chr );
 							}
 
 #ifdef WM_MOUSEWHEEL
 
 						case WM_MOUSEWHEEL:
 							{
-								return m_Canvas->InputMouseWheel(((short)HIWORD(msg.wParam)) / WHEEL_DELTA);
+								return Gwen::Input::OnMouseWheel(20 * ((short)HIWORD(msg.wParam)) / WHEEL_DELTA);
 							}
 
 #endif
 
 						case WM_LBUTTONDOWN:
 							{
-								bool ret = m_Canvas->InputMouseButton(0, true);
+								bool ret = Gwen::Input::OnMouseButton(0, true);
 								if (ret)
 									SetCapture( msg.hwnd );
 								return ret;
@@ -84,7 +79,7 @@ namespace Gwen
 						
 						case WM_LBUTTONUP:
 							{
-								bool ret = m_Canvas->InputMouseButton(0, false);
+								bool ret = Gwen::Input::OnMouseButton(0, false);
 								if (ret)
 									ReleaseCapture();
 								return ret;
@@ -92,7 +87,7 @@ namespace Gwen
 						
 						case WM_RBUTTONDOWN:
 							{
-								bool ret = m_Canvas->InputMouseButton(1, true);
+								bool ret = Gwen::Input::OnMouseButton(1, true);
 								if (ret)
 								   SetCapture(msg.hwnd);
 								return ret;
@@ -100,7 +95,7 @@ namespace Gwen
 
 						case WM_RBUTTONUP:
 							{
-								bool ret = m_Canvas->InputMouseButton(1, false);
+								bool ret = Gwen::Input::OnMouseButton(1, false);
 								if (ret)
 									 ReleaseCapture();
 								return ret;
@@ -108,7 +103,7 @@ namespace Gwen
 
 						case WM_MBUTTONDOWN:
 							{
-								bool ret = m_Canvas->InputMouseButton(2, true);
+								bool ret = Gwen::Input::OnMouseButton(2, true);
 								if (ret)
 								   SetCapture(msg.hwnd);
 								return ret;
@@ -116,7 +111,7 @@ namespace Gwen
 
 						case WM_MBUTTONUP:
 							{
-								bool ret = m_Canvas->InputMouseButton(2, false);
+								bool ret = Gwen::Input::OnMouseButton(2, false);
 								if (ret)
 								 ReleaseCapture();
 								return ret;
@@ -141,7 +136,7 @@ namespace Gwen
 								if ( bDown && GetKeyState( VK_CONTROL ) & 0x80 && msg.wParam >= 'A' && msg.wParam <= 'Z' )
 								{
 									Gwen::UnicodeChar chr = ( Gwen::UnicodeChar ) msg.wParam;
-									return m_Canvas->InputCharacter( chr );
+									return Gwen::Input::OnCharacter( chr );
 								}
 
 								if ( msg.wParam == VK_SHIFT ) { iKey = Gwen::Key::Shift; }
@@ -164,7 +159,7 @@ namespace Gwen
 								
 								if ( iKey != -1 )
 								{
-									return m_Canvas->InputKey( iKey, bDown );
+									return Gwen::Input::OnKeyEvent( iKey, bDown );
 								}
 
 								break;
@@ -181,7 +176,6 @@ namespace Gwen
 
 			protected:
 
-				Gwen::Controls::Canvas*	m_Canvas;
 				int m_MouseX;
 				int m_MouseY;
 

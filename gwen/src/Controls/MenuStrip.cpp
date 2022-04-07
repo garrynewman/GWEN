@@ -14,6 +14,7 @@ using namespace Gwen::Controls;
 
 GWEN_CONTROL_CONSTRUCTOR( MenuStrip )
 {
+	m_ItemHeight = 17;
 	SetBounds( 0, 0, 200, 22 );
 	Dock( Pos::Top );
 	m_InnerPanel->SetPadding( Padding( 5, 0, 0, 0 ) );
@@ -24,9 +25,10 @@ void MenuStrip::Render( Skin::Base* skin )
 	skin->DrawMenuStrip( this );
 }
 
-void MenuStrip::Layout( Skin::Base* /*skin*/ )
+void MenuStrip::Layout( Skin::Base* skin )
 {
-	//TODO: We don't want to do vertical sizing the same as Menu, do nothing for now
+	// Size to the font
+	SetSize(Width(), m_ItemHeight + 10);
 }
 
 void MenuStrip::OnAddItem( MenuItem* item )
@@ -37,6 +39,7 @@ void MenuStrip::OnAddItem( MenuItem* item )
 	item->SizeToContents();
 	item->SetOnStrip( true );
 	item->onHoverEnter.Add( this, &Menu::OnHoverItem );
+	m_ItemHeight = item->Height();
 }
 
 bool MenuStrip::ShouldHoverOpenMenu()

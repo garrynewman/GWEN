@@ -67,7 +67,9 @@ namespace Gwen
 			};
 		};
 
-
+		// Register canvases that events should be forwarded to		
+		void GWEN_EXPORT RegisterCanvas( Controls::Canvas* pCanvas );
+		void GWEN_EXPORT RemoveCanvas( Controls::Canvas* pCanvas );
 
 		// For use in panels
 		bool GWEN_EXPORT IsKeyDown( int iKey );
@@ -80,15 +82,15 @@ namespace Gwen
 
 		// Does copy, paste etc
 		bool GWEN_EXPORT DoSpecialKeys( Controls::Base* pCanvas, Gwen::UnicodeChar chr );
-		bool GWEN_EXPORT HandleAccelerator( Controls::Base* pCanvas, Gwen::UnicodeChar chr );
+		bool GWEN_EXPORT HandleAccelerator( Gwen::UnicodeChar chr );
 
 		// Send input to canvas for study
-		void GWEN_EXPORT OnMouseMoved( Controls::Base* pCanvas, int x, int y, int deltaX, int deltaY );
-		bool GWEN_EXPORT OnMouseClicked( Controls::Base* pCanvas, int iButton, bool bDown );
-		bool GWEN_EXPORT OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown );
-		void GWEN_EXPORT OnCanvasThink( Controls::Base* pControl );
-
-
+		bool GWEN_EXPORT OnMouseMoved( int x, int y, int deltaX, int deltaY, void* platform_window );
+		bool GWEN_EXPORT OnMouseButton( int iButton, bool bDown );
+		bool GWEN_EXPORT OnMouseWheel( int val );
+		bool GWEN_EXPORT OnKeyEvent( int iKey, bool bDown );
+		bool GWEN_EXPORT OnCharacter( Gwen::UnicodeChar chr );
+		void GWEN_EXPORT OnThink();
 	};
 }
 #endif

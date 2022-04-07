@@ -12,7 +12,6 @@
 #include "Gwen/Controls/Button.h"
 #include "Gwen/Controls/TabButton.h"
 #include "Gwen/Controls/TabStrip.h"
-#include "Gwen/Controls/TabTitleBar.h"
 
 namespace Gwen
 {

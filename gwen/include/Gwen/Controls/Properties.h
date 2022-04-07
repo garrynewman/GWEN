@@ -36,6 +36,7 @@ namespace Gwen
 				PropertyRow* Add( const TextObject & text, Property::Base* pProp, const TextObject & value = L"" );
 				PropertyRow* Find( const TextObject & text );
 
+				void SetSplitWidth(int width);
 				virtual int GetSplitWidth();
 
 				virtual void Clear();

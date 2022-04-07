@@ -35,10 +35,10 @@ HWND CreateGameWindow( void )
 	wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc		= DefWindowProc;
 	wc.hInstance		= GetModuleHandle( NULL );
-	wc.lpszClassName	= L"GWENWindow";
+	wc.lpszClassName	= "GWENWindow";
 	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );
 	RegisterClass( &wc );
-	HWND hWindow = CreateWindowEx( ( WS_EX_APPWINDOW | WS_EX_WINDOWEDGE ) , wc.lpszClassName, L"GWEN - Direct 2D Sample", ( WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN ) & ~( WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME ), -1, -1, 1004, 650, NULL, NULL, GetModuleHandle( NULL ), NULL );
+	HWND hWindow = CreateWindowEx( ( WS_EX_APPWINDOW | WS_EX_WINDOWEDGE ) , wc.lpszClassName, "GWEN - Direct 2D Sample", ( WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN ) & ~( WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME ), -1, -1, 1004, 650, NULL, NULL, GetModuleHandle( NULL ), NULL );
 	ShowWindow( hWindow, SW_SHOW );
 	SetForegroundWindow( hWindow );
 	SetFocus( hWindow );
@@ -152,7 +152,6 @@ void runSample()
 	// (Processes Windows MSG's and fires input at GWEN)
 	//
 	Gwen::Input::Windows GwenInput;
-	GwenInput.Initialize( pCanvas );
 	//
 	// Begin the main game loop
 	//
