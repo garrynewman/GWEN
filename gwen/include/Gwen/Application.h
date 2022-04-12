@@ -42,7 +42,7 @@ template<class T>
 class Application: public BaseApplication
 {
 	std::wstring default_font_ = L"Segoe UI";
-	double default_font_size_ = 1.0;
+	double default_font_size_ = 10.0;
 	std::string skin_ = "DefaultSkin.png";
 	
 	std::vector<Gwen::Controls::WindowCanvas*> canvases_;

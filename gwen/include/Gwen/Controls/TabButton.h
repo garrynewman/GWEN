@@ -47,7 +47,10 @@ namespace Gwen
 				bool IsPopoutable() { return DragAndDrop_GetPackage(0, 0)->canpopout; }
 				bool IsActive() { return m_Page && m_Page->Visible(); }
 				
+				// Actions to perform to this tab
+				void Close();
 				DockedTabControl* PopOut(int x = -1, int y = -1, TabReturnButtonData* out_data = 0);
+				void Return();
 
 				virtual bool DragAndDrop_ShouldStartDrag();
 				virtual void DragAndDrop_StartDragging( Gwen::DragAndDrop::Package* /*pPackage*/, int /*x*/, int /*y*/ ) { SetHidden( true ); }
@@ -66,6 +69,7 @@ namespace Gwen
 
 			private:
 			
+				void OnParentLoseTab(Controls::Base* control);
 				void OnCloseButton(Controls::Base* control);
 
 				Button*     m_CloseButton;

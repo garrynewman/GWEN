@@ -57,6 +57,33 @@ void TabButton::SetTabControl( TabControl* ctrl )
 	if ( m_Control )
 	{
 		m_Control->OnLoseTab( this );
+
+		// Remove our parent window if it is empty and we were popped out into it
+		if (UserData.Exists("return_data"))
+		{
+			auto data = UserData.Get<TabReturnButtonData*>("return_data");
+			if (data)
+			{
+				int num_tabs = m_Control->TabCount();
+				
+				WindowCanvas* canv = dynamic_cast<WindowCanvas*>(data->window);
+				if (num_tabs == 0)
+				{
+					if (canv)
+					{
+						canv->InputQuit();
+					}
+					else
+					{
+						static_cast<WindowControl*>(data->window)->CloseButtonPressed();
+					}
+				}
+	
+				UserData.Set<TabReturnButtonData*>("return_data", 0);
+
+				delete data;
+			}
+		}
 	}
 
 	m_Control = ctrl;
@@ -76,11 +103,15 @@ void TabButton::SetClosable(bool y)
 		m_CloseButton->SetText("x");
 		m_CloseButton->Dock(Pos::Right);
 		m_CloseButton->onPress.Add(this, &ThisClass::OnCloseButton);
+		
+		SetTextPadding( Padding( 2, 2, 22, 2 ) );
 	}
 	else
 	{
 		m_CloseButton->DelayedDelete();
 		m_CloseButton = NULL;
+		
+		SetTextPadding( Padding( 2, 2, 2, 2 ) );
 	}
 }
 
@@ -101,6 +132,15 @@ void TabButton::DragAndDrop_EndDragging( bool bSuccess, int x, int y )
 		PopOut(p.x + x - Gwen::DragAndDrop::CurrentPackage->holdoffset.x,
 		       p.y + y - Gwen::DragAndDrop::CurrentPackage->holdoffset.y);
 	}
+}
+
+void TabButton::Return()
+{
+	auto data = UserData.Get<TabReturnButtonData*>("return_data");
+	
+	data->dock->GetRight()->GetTabControl()->AddPage(this);
+	
+	// Dont delete the return data here, it was be released when we were removed from the page
 }
 
 DockedTabControl* TabButton::PopOut(int x, int y, TabReturnButtonData* out_data)
@@ -164,6 +204,47 @@ DockedTabControl* TabButton::PopOut(int x, int y, TabReturnButtonData* out_data)
 	Invalidate();
 	
 	return dcontrol;
+}
+
+void TabButton::OnParentLoseTab( Gwen::Controls::Base* control)
+{
+	return;
+	printf("On lost tab\n");
+	if (GetTabControl() == control)
+	{
+		return;
+	}
+	
+	printf("we were the lost tab\n");
+
+	// in this callback we want to tell our parent dock control to remove itself and the window if its empty
+	// this is just used for popped out tabs
+	auto data = UserData.Get<TabReturnButtonData*>("return_data");
+	if (!data)
+	{
+		return;
+	}
+	
+	int num_tabs = ((TabControl*)control)->TabCount();
+	
+	printf("Lost popped out tab %i tabs left\n", num_tabs);
+				
+	WindowCanvas* canv = dynamic_cast<WindowCanvas*>(data->window);
+	if (num_tabs == 0)
+	{
+		if (canv)
+		{
+			canv->InputQuit();
+		}
+		else
+		{
+			static_cast<WindowControl*>(data->window)->CloseButtonPressed();
+		}
+	}
+	
+	UserData.Set<TabReturnButtonData*>("return_data", 0);
+
+	delete data;
 }
 
 bool TabButton::OnKeyUp( bool bDown )
@@ -237,10 +318,16 @@ void TabButton::UpdateColours()
 	SetTextColor( GetSkin()->Colors.Tab.Active.Normal );
 }
 
-void TabButton::OnCloseButton(Controls::Base* control)
+void TabButton::Close()
 {
 	auto page = GetPage();
-	GetTabControl()->RemovePage(this);
+	SetParent(GetCanvas());
+	SetTabControl(0);
 	DelayedDelete();
 	page->DelayedDelete();
+}
+
+void TabButton::OnCloseButton(Controls::Base* control)
+{
+	Close();
 }
