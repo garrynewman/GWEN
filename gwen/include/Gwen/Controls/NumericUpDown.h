@@ -51,6 +51,7 @@ namespace Gwen
 				virtual void SetMin( int i );
 				virtual void SetMax( int i );
 				virtual void SetValue( int i );
+				void SetIncrement( int i ) { m_iIncrement = i; }
 
 				Event::Caller	onChanged;
 
@@ -74,7 +75,7 @@ namespace Gwen
 				int m_iNumber;
 				int m_iMax;
 				int m_iMin;
-
+				int m_iIncrement;
 		};
 		
 		class GWEN_EXPORT FloatUpDown : public TextBoxNumeric
@@ -86,6 +87,7 @@ namespace Gwen
 				virtual void SetMin( double i );
 				virtual void SetMax( double i );
 				virtual void SetValue( double i );
+				void SetIncrement( double i ) { m_iIncrement = i; }
 
 				Event::Caller	onChanged;
 
@@ -109,7 +111,7 @@ namespace Gwen
 				double m_iNumber;
 				double m_iMax;
 				double m_iMin;
-
+				double m_iIncrement;
 		};
 	}
 }

@@ -145,6 +145,7 @@ void Menu::Open( unsigned int iPos )
 	SetHidden( false );
 	BringToFront();
 	Gwen::Point MousePos = Input::GetMousePosition();
+	MousePos -= GetCanvas()->WindowPosition();
 	SetPos( MousePos.x, MousePos.y );
 }
 

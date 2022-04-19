@@ -33,19 +33,20 @@ GWEN_CONTROL_CONSTRUCTOR( NumericUpDown )
 	m_iMax = 100;
 	m_iMin = 0;
 	m_iNumber = 0;
+	m_iIncrement = 1;
 	SetText( "0" );
 }
 
 void NumericUpDown::OnButtonUp( Base* /*control*/ )
 {
 	SyncNumberFromText();
-	SetValue( m_iNumber + 1 );
+	SetValue( m_iNumber + m_iIncrement );
 }
 
 void NumericUpDown::OnButtonDown( Base* /*control*/ )
 {
 	SyncNumberFromText();
-	SetValue( m_iNumber - 1 );
+	SetValue( m_iNumber - m_iIncrement );
 }
 
 
@@ -127,19 +128,20 @@ GWEN_CONTROL_CONSTRUCTOR( FloatUpDown )
 	m_iMax = 100;
 	m_iMin = 0;
 	m_iNumber = 0;
+	m_iIncrement = 1.0;
 	SetText( "0" );
 }
 
 void FloatUpDown::OnButtonUp( Base* /*control*/ )
 {
 	SyncNumberFromText();
-	SetValue( m_iNumber + 1 );
+	SetValue( m_iNumber + m_iIncrement );
 }
 
 void FloatUpDown::OnButtonDown( Base* /*control*/ )
 {
 	SyncNumberFromText();
-	SetValue( m_iNumber - 1 );
+	SetValue( m_iNumber - m_iIncrement );
 }
 
 
