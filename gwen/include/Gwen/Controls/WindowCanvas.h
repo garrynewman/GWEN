@@ -54,8 +54,8 @@ namespace Gwen
 				virtual void SetMaximize( bool b );
 				virtual void Minimize();
 
-				virtual void SetSizable( bool b ) { if (m_bHasTitleBar) { m_Sizer->SetHidden( !b ); } }
-				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_Sizer->Visible(); }
+				virtual void SetSizable( bool b );
+				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_SESizer->Visible(); }
 				virtual void SetMinimumSize( const Gwen::Point & minSize );
 				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
 
@@ -79,7 +79,11 @@ namespace Gwen
 
 				virtual void Dragger_Start();
 				virtual void Dragger_Moved();
-				virtual void Sizer_Moved();
+				virtual void SESizer_Moved();
+				virtual void SWSizer_Moved();
+				virtual void LeftSizer_Moved();
+				virtual void RightSizer_Moved();
+				virtual void VerticalSizer_Moved();
 				virtual void OnTitleDoubleClicked();
 
 				void*		m_pOSWindow;
@@ -89,12 +93,17 @@ namespace Gwen
 				Gwen::Skin::Base*			m_pSkinChange;
 
 				ControlsInternal::Dragger*	m_TitleBar;
-				ControlsInternal::Dragger*	m_Sizer;
+				ControlsInternal::Dragger*	m_SWSizer;
+				ControlsInternal::Dragger*	m_SESizer;
+				ControlsInternal::Dragger*	m_RightSizer;
+				ControlsInternal::Dragger*	m_LeftSizer;
+				ControlsInternal::Dragger*	m_BottomSizer;
 				Gwen::Controls::Label*		m_Title;
 
 
 				Gwen::Point		m_WindowPos;
 				Gwen::Point		m_HoldPos;
+				Gwen::Point     m_WindowRightPos;
 				
 				Gwen::Point		m_MinimumSize;
 
