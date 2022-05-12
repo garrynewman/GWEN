@@ -43,14 +43,18 @@ namespace Gwen
 							{
 								int x = ( signed short ) LOWORD( msg.lParam );
 								int y = ( signed short ) HIWORD( msg.lParam );
-								int dx = x - m_MouseX;
-								int dy = y - m_MouseY;
 
 								RECT r;
 								GetWindowRect(msg.hwnd, &r);
 
-								m_MouseX = x + r.left;
-								m_MouseY = y + r.top;// todo need these in global coords
+								int new_mouse_x = x + r.left;
+								int new_mouse_y = y + r.top;
+
+								int dx = new_mouse_x - m_MouseX;
+								int dy = new_mouse_y - m_MouseY;
+
+								m_MouseX = new_mouse_x;
+								m_MouseY = new_mouse_y;
 								return Gwen::Input::OnMouseMoved(m_MouseX, m_MouseY, dx, dy, (void*)msg.hwnd );
 							}
 
