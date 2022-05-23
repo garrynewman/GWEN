@@ -730,8 +730,7 @@ Base* Base::GetControlAt( int x, int y, bool bOnlyIfMouseEnabled )
 	for ( iter = Children.rbegin(); iter != Children.rend(); ++iter )
 	{
 		Base* pChild = *iter;
-		Base* pFound = NULL;
-		pFound = pChild->GetControlAt( x - pChild->X(), y - pChild->Y(), bOnlyIfMouseEnabled );
+		Base* pFound = pChild->GetControlAt( x - pChild->X(), y - pChild->Y(), bOnlyIfMouseEnabled );
 
 		if ( pFound ) { return pFound; }
 	}

@@ -39,7 +39,8 @@ add_library(GWEN_unit_test
 target_include_directories(GWEN_unit_test PUBLIC include)
 target_link_libraries(GWEN_unit_test GWEN_static)
 
-add_library(GWEN_opengl 
+add_library(GWEN_opengl
+  Renderers/OpenGL/glew.c
   Renderers/OpenGL/OpenGL.cpp
   Renderers/OpenGL/OpenGL_Base.cpp
   Renderers/OpenGL/DebugFont/OpenGL_DebugFont.cpp

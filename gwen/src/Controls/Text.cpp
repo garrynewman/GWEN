@@ -188,6 +188,7 @@ int Text::GetClosestCharacter( Gwen::Point p )
 
 void Text::OnScaleChanged()
 {
+	m_bTextChanged = true;
 	Invalidate();
 }
 
