@@ -42,12 +42,17 @@ void Menu::Layout( Skin::Base* skin )
 {
 	int childrenHeight = 0;
 
+	int w = 0;
 	for ( Base::List::iterator it = m_InnerPanel->Children.begin(); it != m_InnerPanel->Children.end(); ++it )
 	{
 		Base* pChild = ( *it );
 
 		if ( !pChild )
 		{ continue; }
+		
+		w = std::max(w, pChild->GetMinimumSize().x + 10 + 32);
+		
+		pChild->SetHeight(pChild->GetMinimumSize().y);
 
 		childrenHeight += pChild->Height();
 	}
@@ -55,7 +60,7 @@ void Menu::Layout( Skin::Base* skin )
 	if ( Y() + childrenHeight > GetCanvas()->Height() )
 	{ childrenHeight = GetCanvas()->Height() - Y(); }
 
-	SetSize( Width(), childrenHeight );
+	SetSize( w, childrenHeight );
 	BaseClass::Layout( skin );
 }
 
@@ -78,7 +83,7 @@ void Menu::OnAddItem( MenuItem* item )
 	item->SetAlignment( Pos::CenterV | Pos::Left );
 	item->onHoverEnter.Add( this, &Menu::OnHoverItem );
 	// Do this here - after Top Docking these values mean nothing in layout
-	int w = item->Width() + 10 + 32;
+	int w = item->GetMinimumSize().y + 10 + 32;
 
 	if ( w < Width() ) { w = Width(); }
 

@@ -30,8 +30,6 @@ namespace Gwen
 				virtual void OnAddItem( MenuItem* item );
 				virtual bool ShouldHoverOpenMenu();
 				virtual void Close() {}
-
-				double m_ItemHeight;
 		};
 	}
 

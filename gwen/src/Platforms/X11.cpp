@@ -621,7 +621,7 @@ void Gwen::Platform::InterruptWait()
 	write(global.pip[1], &buf, 1);
 }
 
-void Gwen::Platform::WaitForEvent()
+void Gwen::Platform::WaitForEvent(int delay_ms)
 {
 	// This is the naieve method which basically gets stuck forever
 	//XEvent ev;
@@ -638,9 +638,20 @@ void Gwen::Platform::WaitForEvent()
 	FD_SET(xfd, &set_read);
 	FD_SET(global.pip[0], &set_read);
 	
+	struct timeval tv;
+	tv.tv_sec = delay_ms/1000;
+	tv.tv_usec = (delay_ms%1000)*1000;
+	
 	// block on X11 and pipe so we can interrupt this
 	int max_fd = xfd > global.pip[0] ? xfd : global.pip[0];
-	select(max_fd+1, &set_read, NULL, NULL, NULL);
+	if (delay_ms > 0)
+	{
+		select(max_fd+1, &set_read, NULL, NULL, &tv);
+	}
+	else
+	{
+		select(max_fd+1, &set_read, NULL, NULL, NULL);
+	}
     
 	// Read to clear the interrupt if it was the cause of our wakeup
 	if (FD_ISSET(global.pip[0], &set_read))

@@ -12,6 +12,7 @@
 #include "Gwen/Controls/WindowCanvas.h"
 #include "Gwen/Skins/TexturedBase.h"
 #include "Gwen/Platform.h"
+#include "Gwen/Anim.h"
 
 #ifndef _WIN32
 #include <signal.h>
@@ -151,7 +152,15 @@ public:
 			}
 
 			// If we dont need a redraw, sleep until we get new input
-			Gwen::Platform::WaitForEvent();
+			if (!Gwen::Anim::HasActiveAnimation())
+			{
+				Gwen::Platform::WaitForEvent(0);
+			}
+			else
+			{
+				// If we have an active anim, update at 60 Hz
+				Gwen::Platform::WaitForEvent(16);
+			}
 		}
 		return true;
 	}

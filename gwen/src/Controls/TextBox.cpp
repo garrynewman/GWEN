@@ -49,7 +49,6 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	AddAccelerator( L"Ctrl + X", &TextBox::OnCut );
 	AddAccelerator( L"Ctrl + V", &TextBox::OnPaste );
 	AddAccelerator( L"Ctrl + A", &TextBox::OnSelectAll );
-	Gwen::Anim::Add( this, new ChangeCaretColor() );
 }
 
 bool TextBox::OnChar( Gwen::UnicodeChar c )
@@ -61,6 +60,17 @@ bool TextBox::OnChar( Gwen::UnicodeChar c )
 	InsertText( str );
 	return true;
 }
+
+
+void TextBox::OnKeyboardFocus()
+{ 
+	Gwen::Anim::Add( this, new ChangeCaretColor() );
+}
+				
+void TextBox::OnLostKeyboardFocus()
+{
+	Gwen::Anim::Cancel(this); onFocusLost.Call( this );
+} 
 
 void TextBox::InsertText( const Gwen::UnicodeString & strInsert )
 {

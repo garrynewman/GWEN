@@ -72,7 +72,8 @@ namespace Gwen
 
 				virtual void OnEnter();
 				
-				virtual void OnLostKeyboardFocus() { onFocusLost.Call( this ); } 
+				virtual void OnKeyboardFocus();
+				virtual void OnLostKeyboardFocus();
 
 				virtual bool NeedsInputChars() { return true; }
 

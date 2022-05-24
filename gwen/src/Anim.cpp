@@ -16,6 +16,11 @@ using namespace Gwen;
 static Gwen::Anim::Animation::List	g_Animations;
 static Gwen::Anim::Animation::ChildList g_AnimationsListed;
 
+bool Gwen::Anim::HasActiveAnimation()
+{
+	return g_Animations.size() > 0;
+}
+
 void Gwen::Anim::Add( Gwen::Controls::Base* control, Animation* animation )
 {
 	animation->m_Control = control;
