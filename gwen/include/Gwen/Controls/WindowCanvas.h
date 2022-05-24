@@ -59,7 +59,7 @@ namespace Gwen
 				virtual void SetMinimumSize( const Gwen::Point & minSize );
 				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
 
-
+				virtual Gwen::Controls::Base* GetControlAt( int x, int y, bool bOnlyIfMouseEnabled );
 
 				// DPI handling
 				double GetDPI() { return m_dpi; }

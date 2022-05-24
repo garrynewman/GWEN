@@ -156,7 +156,7 @@ public:
 		return true;
 	}
 
-	Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1)
+	Gwen::Controls::WindowCanvas* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1)
 	{
 		T* renderer = new T();
 

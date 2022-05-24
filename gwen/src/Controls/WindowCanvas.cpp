@@ -139,30 +139,59 @@ void* WindowCanvas::GetWindow()
 
 void WindowCanvas::Layout( Skin::Base* skin )
 {
-	if (m_bHasTitleBar)
-	{
-		m_SESizer->BringToFront();
-		m_SESizer->SetSize(16, 16);
-		m_SESizer->Position( Pos::Right | Pos::Bottom );
-		
-		m_SWSizer->BringToFront();
-		m_SWSizer->SetSize(16, 16);
-		m_SWSizer->Position( Pos::Left | Pos::Bottom );
-		
-		m_RightSizer->BringToFront();
-		m_RightSizer->SetSize(10, Height() - (m_bHasTitleBar ? 24 + 16 : 16));
-		m_RightSizer->Position( Pos::Right | Pos::Top );
-		
-		m_LeftSizer->BringToFront();
-		m_LeftSizer->SetSize(10, Height() - (m_bHasTitleBar ? 24 + 16 : 16));
-		m_LeftSizer->Position( Pos::Left | Pos::Top );
-		
-		m_BottomSizer->BringToFront();
-		m_BottomSizer->SetSize(Width() - 32, 10);
-		m_BottomSizer->Position( Pos::Left | Pos::Bottom );
-		m_BottomSizer->SetPos( 16, m_BottomSizer->GetPos().y );
-	}
 	BaseClass::Layout( skin );
+}
+
+Base* WindowCanvas::GetControlAt( int x, int y, bool bOnlyIfMouseEnabled )
+{
+	if ( Hidden() )
+	{ return NULL; }
+
+	if ( x < 0 || y < 0 || x >= Width() || y >= Height() )
+	{ return NULL; }
+	
+	// Check each of our draggers first
+	if (y > Height() - 16)
+	{
+		if (x < 16)
+		{
+			return m_SWSizer;
+		}
+		else if (x > Width() - 16)
+		{
+			return m_SESizer;
+		}
+		else
+		{
+			return m_BottomSizer;
+		}
+	}
+	else
+	{
+		if (x < 16)
+		{
+			return m_LeftSizer;
+		}
+		else if (x > Width() - 16)
+		{
+			return m_RightSizer;
+		}
+	}
+
+	Base::List::reverse_iterator iter;
+
+	for ( iter = Children.rbegin(); iter != Children.rend(); ++iter )
+	{
+		Base* pChild = *iter;
+		Base* pFound = pChild->GetControlAt( x - pChild->X(), y - pChild->Y(), bOnlyIfMouseEnabled );
+
+		if ( pFound ) { return pFound; }
+	}
+
+	if ( bOnlyIfMouseEnabled && !GetMouseInputEnabled() )
+	{ return NULL; }
+
+	return this;
 }
 
 int last_x = 0;
