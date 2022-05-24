@@ -371,7 +371,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 	XMapWindow( display, win );
 
 	XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|
-		ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
+		ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask|PropertyChangeMask);
 
 	x11_window = win;
 
@@ -391,6 +391,59 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
 	canvases.erase((Window)pPtr);
     XDestroyWindow(x11_display, (Window)pPtr);
+}
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xresource.h>
+
+double _dpi = 96.0;
+
+double _glfwPlatformGetMonitorDPI()
+{
+
+    auto display_2 = XOpenDisplay(0);
+    char *resourceString = XResourceManagerString(display_2);
+    XrmDatabase db;
+    XrmValue value;
+    char *type = NULL;
+    double dpi = 0.0;
+
+    XrmInitialize(); /* Need to initialize the DB before calling Xrm* functions */
+
+    db = XrmGetStringDatabase(resourceString);
+
+    if (resourceString) {
+        //printf("Entire DB:\n%s\n", resourceString);
+        if (XrmGetResource(db, "Xft.dpi", "String", &type, &value) == True) {
+            if (value.addr) {
+                dpi = atof(value.addr);
+            }
+        }
+    }
+
+    //printf("DPI: %f\n", dpi);// this is actually the font scale setting!
+    
+    if (_dpi != dpi)
+    {
+    	_dpi = dpi;
+    	for (auto& canv: canvases)
+    	{
+    		canv.second->SetFontScale(_dpi/96.0);
+    	}
+    }
+    
+    // try other method
+    int screen = DefaultScreen(display_2);
+    
+    //printf("Width: %i\n", DisplayWidthMM(display_2, screen));
+    XCloseDisplay(display_2);
+    
+    double real_dpi = DisplayWidth(display_2, screen)/(DisplayWidthMM(display_2, screen)/25.4);
+    //printf("Real DPI: %f\n", real_dpi);
+    
+    int rdpi = real_dpi;
+    return rdpi;
 }
 
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
@@ -418,6 +471,23 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 	while (XPending(x11_display))
 	{
 		XNextEvent(x11_display, &event);
+		
+		if (event.type == Expose || event.type == PropertyNotify)
+		{
+			double dpi = _glfwPlatformGetMonitorDPI();
+	
+			if (ptarget->GetDPI() != dpi)
+			{
+				//printf("%f vs %f\n", ptarget->GetDPI(), dpi);
+				// todo, how do I size the window properly?
+				float ds = dpi/ptarget->GetDPI();
+				ptarget->SetDPI(dpi);
+		
+				auto pos = ptarget->WindowPosition();
+				ptarget->SetPos(pos.x, pos.y);
+				ptarget->SetScale(dpi / 96.0);
+			}
+		}
 
 		// Catch window close requests
 		if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
@@ -486,9 +556,10 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 			// handle window resizes and whatnot
 			if (event.type == ConfigureNotify && event.xconfigure.window == canv.first)
 			{
+				float scale = canv.second->GetDPIScaling().x;
 				canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
 				canv.second->OnMove(event.xconfigure.x, event.xconfigure.y);
-				canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
+				canv.second->SetSize(event.xconfigure.width/scale, event.xconfigure.height/scale);// this is kinda weird, but meh
 			}
 			if ((event.type == Expose && event.xexpose.count == 0) || event.type == FocusOut || event.type == FocusIn)
 			{

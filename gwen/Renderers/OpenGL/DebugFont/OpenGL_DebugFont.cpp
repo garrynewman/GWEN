@@ -80,7 +80,11 @@ namespace Gwen
 
 		void OpenGL_DebugFont::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::UnicodeString & text )
 		{
-			float fSize = pFont->size * Scale();
+			float fSize = pFont->size * Scale() * FontScale();
+			if (pFont->pixel_size > 0)
+			{
+				fSize = pFont->pixel_size;
+			}
 
 			if ( !text.length() )
 			{ return; }
@@ -122,7 +126,11 @@ namespace Gwen
 		Gwen::PointF OpenGL_DebugFont::MeasureText( Gwen::Font* pFont, const Gwen::UnicodeString & text )
 		{
 			Gwen::PointF p;
-			float fSize = pFont->size * Scale();
+			float fSize = pFont->size * FontScale();
+			if (pFont->pixel_size > 0)
+			{
+				fSize = pFont->pixel_size;
+			}
 			Gwen::String converted_string = Gwen::Utility::UnicodeToString( text );
 			float spacing = 0.0f;
 

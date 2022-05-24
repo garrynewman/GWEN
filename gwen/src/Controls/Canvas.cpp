@@ -23,6 +23,7 @@ Canvas::Canvas( Gwen::Skin::Base* pSkin ) : BaseClass( NULL ), m_bAnyDelete( fal
 {
 	SetBounds( 0, 0, 10000, 10000 );
 	SetScale( 1.0f );
+	SetFontScale( 1.0f );
 	SetBackgroundColor( Color( 255, 255, 255, 255 ) );
 	SetDrawBackground( false );
 
@@ -47,6 +48,7 @@ void Canvas::RenderCanvas()
 	render->SetClipRegion( GetBounds() );
 	render->SetRenderOffset( Gwen::Point( 0, 0 ) );
 	render->SetScale( Scale() );
+	render->SetFontScale( FontScale() );
 
 	if ( m_bDrawBackground )
 	{
@@ -109,9 +111,26 @@ void Canvas::SetScale( float f )
 	m_fScale = f;
 
 	if ( m_Skin && m_Skin->GetRender() )
-	{ m_Skin->GetRender()->SetScale( m_fScale ); }
+	{
+		m_Skin->GetRender()->SetScale( m_fScale );
+	}
 
 	this->SetSize(Width(), Height());
+	OnScaleChanged();
+	Redraw();
+}
+
+void Canvas::SetFontScale( float f )
+{
+	if ( m_fFontScale == f ) { return; }
+
+	m_fFontScale = f;
+
+	if ( m_Skin && m_Skin->GetRender() )
+	{
+		m_Skin->GetRender()->SetFontScale( m_fFontScale );
+	}
+
 	OnScaleChanged();
 	Redraw();
 }

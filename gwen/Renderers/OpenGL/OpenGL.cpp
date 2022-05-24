@@ -565,7 +565,11 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
 
 		void OpenGL::RenderText( Gwen::Font* pFont, Gwen::PointF pos, const Gwen::String & text )
 		{
-			float fSize = pFont->size * Scale();
+			float fSize = pFont->size * Scale() * FontScale();
+			if (pFont->pixel_size > 0)
+			{
+				fSize = pFont->pixel_size;
+			}
 
 			if ( !text.length() )
 			{ return; }
@@ -634,7 +638,11 @@ void find_font_files(const std::string& path, std::vector<std::pair<std::string,
                 pFont->data = (void*)font;
             }
 
-            float fSize = pFont->size;// dont multiply by scale for measure, we want to return unscaled units
+            float fSize = pFont->size * FontScale();// dont multiply by scale for measure, we want to return unscaled units
+            if (pFont->pixel_size > 0)
+            {
+                fSize = pFont->pixel_size;
+            }
 
 			fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
             

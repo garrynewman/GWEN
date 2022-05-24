@@ -260,6 +260,7 @@ void WindowCanvas::RenderCanvas()
 		render->SetClipRegion( GetRenderBounds() );
 		render->SetRenderOffset( Gwen::Point( X() * -1, Y() * -1 ) );
 		render->SetScale( Scale() );
+		render->SetFontScale( FontScale() );
 
 		if ( m_bDrawBackground )
 		{

@@ -21,6 +21,7 @@ namespace Gwen
 		{
 			m_RenderOffset = Gwen::Point( 0, 0 );
 			m_fScale = 1.0f;
+			m_fFontScale = 1.0f;
 		}
 
 		Base::~Base()
