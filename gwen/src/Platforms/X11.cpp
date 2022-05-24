@@ -434,7 +434,7 @@ double GetDPIInfo()
     
     int rdpi = real_dpi;
     
-    float font_scale = dpi / rdpi;
+    float font_scale = dpi / 96.0;
     if (_font_scale != font_scale)
     {
     	_font_scale = font_scale;
