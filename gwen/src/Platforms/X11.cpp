@@ -397,11 +397,10 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-double _dpi = 96.0;
+double _font_scale = 1.0;
 
-double _glfwPlatformGetMonitorDPI()
+double GetDPIInfo()
 {
-
     auto display_2 = XOpenDisplay(0);
     char *resourceString = XResourceManagerString(display_2);
     XrmDatabase db;
@@ -422,16 +421,7 @@ double _glfwPlatformGetMonitorDPI()
         }
     }
 
-    //printf("DPI: %f\n", dpi);// this is actually the font scale setting!
-    
-    if (_dpi != dpi)
-    {
-    	_dpi = dpi;
-    	for (auto& canv: canvases)
-    	{
-    		canv.second->SetFontScale(_dpi/96.0);
-    	}
-    }
+    //printf("Font DPI: %f\n", dpi);// this is actually the font scale setting!
     
     // try other method
     int screen = DefaultScreen(display_2);
@@ -443,6 +433,17 @@ double _glfwPlatformGetMonitorDPI()
     //printf("Real DPI: %f\n", real_dpi);
     
     int rdpi = real_dpi;
+    
+    float font_scale = dpi / rdpi;
+    if (_font_scale != font_scale)
+    {
+    	_font_scale = font_scale;
+    	for (auto& canv: canvases)
+    	{
+    		canv.second->SetFontScale(_font_scale);
+    	}
+    }
+    
     return rdpi;
 }
 
@@ -474,7 +475,7 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		
 		if (event.type == Expose || event.type == PropertyNotify)
 		{
-			double dpi = _glfwPlatformGetMonitorDPI();
+			double dpi = GetDPIInfo();
 	
 			if (ptarget->GetDPI() != dpi)
 			{
