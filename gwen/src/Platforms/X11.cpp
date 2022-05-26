@@ -94,7 +94,7 @@ Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 	char *result;
 	unsigned long ressize, restail;
 	int resbits;
-	const char* fmtname = "STRING";
+	const char* fmtname = "UTF8_STRING";//"STRING";
 	Atom bufid = XInternAtom(x11_display, "CLIPBOARD", False);
 	Atom fmtid = XInternAtom(x11_display, fmtname, False);
 	Atom propid = XInternAtom(x11_display, "XSEL_DATA", False);

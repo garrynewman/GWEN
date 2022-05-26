@@ -171,7 +171,7 @@ typedef struct FONSttFontImpl FONSttFontImpl;
 
 static FT_Library ftLibrary;
 
-static int fons__tt_init()
+static int fons__tt_init(FONScontext *context)
 {
 	FT_Error ftError;
 	FONS_NOTUSED(context);
