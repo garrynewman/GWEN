@@ -79,6 +79,9 @@ namespace Gwen
 
 					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
 					{
+						float col[3];
+						Gwen::Utility::Strings::To::Floats( v.Get(), col, 3 );
+						m_Button->SetColor( Gwen::Color( col[0], col[1], col[2] ) );
 						m_TextBox->SetText( v, bFireChangeEvents );
 					}
 
@@ -89,10 +92,10 @@ namespace Gwen
 
 					virtual void DoChanged()
 					{
-						BaseClass::DoChanged();
 						float col[3];
 						Gwen::Utility::Strings::To::Floats( m_TextBox->GetText().Get(), col, 3 );
 						m_Button->SetColor( Gwen::Color( col[0], col[1], col[2] ) );
+						BaseClass::DoChanged();
 					}
 
 					Controls::Internal::ColourButton*		m_Button;
