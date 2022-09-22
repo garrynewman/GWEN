@@ -105,8 +105,6 @@ TreeNode* TreeNode::AddNode( const TextObject & strLabel )
 
 void TreeNode::Layout( Skin::Base* skin )
 {
-	m_Title->SetHeight(m_Title->TextHeight());
-	
 	if ( m_ToggleButton )
 	{
 		if ( m_Title )
@@ -132,6 +130,8 @@ void TreeNode::Layout( Skin::Base* skin )
 
 void TreeNode::PostLayout( Skin::Base* /*skin*/ )
 {
+	m_Title->SetHeight(m_Title->TextHeight());
+
 	if ( SizeToChildren( false, true ) )
 	{
 		InvalidateParent();
