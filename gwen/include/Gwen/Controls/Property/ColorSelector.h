@@ -54,6 +54,8 @@ namespace Gwen
 						Gwen::Controls::HSVColorPicker* picker = new Gwen::Controls::HSVColorPicker( pMenu );
 						picker->Dock( Pos::Fill );
 						picker->SetSize( 256, 128 );
+						// This is required because the menu is laid out using mininum sizes
+						picker->SetMinimumSize(Gwen::Point(256, 128));
 						float defaultColor[3];
 						Gwen::Utility::Strings::To::Floats( m_TextBox->GetText().Get(), defaultColor, 3 );
 						picker->SetColor( Gwen::Color( defaultColor[0], defaultColor[1], defaultColor[2], 255 ), false, true );

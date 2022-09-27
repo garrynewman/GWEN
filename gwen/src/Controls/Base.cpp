@@ -876,6 +876,18 @@ Gwen::Point Base::LocalPosToCanvas( const Gwen::Point & pnt )
 			y += m_Parent->m_InnerPanel->Y();
 		}
 
+		// Also handle the parent's inner having an inner
+		// Looking at you property tree for causing this....
+		// todo there needs to be a better way to do this
+		if (m_Parent->m_InnerPanel )
+		{
+			auto inner_inner = m_Parent->m_InnerPanel->m_InnerPanel;
+			if (inner_inner && inner_inner->IsChild( this ))
+			{
+				x += inner_inner->X();
+				y += inner_inner->Y();
+			}
+		}
 		return m_Parent->LocalPosToCanvas( Gwen::Point( x, y ) );
 	}
 
@@ -896,6 +908,13 @@ Gwen::Point Base::CanvasPosToLocal( const Gwen::Point & pnt )
 		{
 			x -= m_Parent->m_InnerPanel->X();
 			y -= m_Parent->m_InnerPanel->Y();
+
+			// if the inner panel has an inner panel, add that too
+			if (m_Parent->m_InnerPanel->m_InnerPanel)
+			{
+				x -= m_Parent->m_InnerPanel->m_InnerPanel->X();
+				y -= m_Parent->m_InnerPanel->m_InnerPanel->Y();
+			}
 		}
 
 		return m_Parent->CanvasPosToLocal( Gwen::Point( x, y ) );
