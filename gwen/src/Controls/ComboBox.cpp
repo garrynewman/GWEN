@@ -167,7 +167,6 @@ void ComboBox::OnLostKeyboardFocus()
 	SetTextColor( Color( 0, 0, 0, 255 ) );
 }
 
-
 void ComboBox::OnKeyboardFocus()
 {
 	//Until we add the blue highlighting again
@@ -203,7 +202,6 @@ void ComboBox::CloseList()
 	m_Menu->Hide();
 }
 
-
 bool ComboBox::OnKeyUp( bool bDown )
 {
 	if ( bDown )
@@ -220,6 +218,7 @@ bool ComboBox::OnKeyUp( bool bDown )
 
 	return true;
 }
+
 bool ComboBox::OnKeyDown( bool bDown )
 {
 	if ( bDown )

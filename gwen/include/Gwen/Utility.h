@@ -38,6 +38,9 @@ namespace Gwen
 			return y;
 		}
 
+		HSV RGBtoHSV( int r, int g, int b );
+		Color HSVToColor( float h, float s, float v );
+
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4996 )

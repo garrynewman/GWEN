@@ -73,7 +73,6 @@ void Canvas::OnBoundsChanged( Gwen::Rect oldBounds )
 	InvalidateChildren( true );
 }
 
-
 void Canvas::DoThink()
 {
 	ProcessDelayedDeletes();
