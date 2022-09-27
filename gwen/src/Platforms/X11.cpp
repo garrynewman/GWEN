@@ -25,6 +25,8 @@
 
 #include <unistd.h>
 
+#include <cmath>
+
 #include "portable-file-dialogs.h"
 
 Display* x11_display = 0;
@@ -118,7 +120,16 @@ Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 		{
 			printf("Buffer too large to paste.\n");
 		}
-
+		
+		// handle parsing any unicode values, which appear to be \\U00000000
+		/*const char* buf = new char[ressize];
+		int size = 0;
+		for (int i = 0; i < ressize; i++)
+		{
+			// copy, and parse any unicode
+			if (
+		}
+		buf[size] = 0;*/
 		Gwen::UnicodeString str = Gwen::Utility::StringToUnicode(result);
 		XFree(result);
 		return str;
@@ -431,7 +442,10 @@ double GetDPIInfo()
     
     double real_dpi = DisplayWidth(display_2, screen)/(DisplayWidthMM(display_2, screen)/25.4);
     //printf("Real DPI: %f\n", real_dpi);
-    
+
+    // round to the nearest 0.25 dpi
+    real_dpi = std::round(real_dpi/24.0)*24.0;
+
     int rdpi = real_dpi;
     
     float font_scale = dpi / 96.0;
@@ -476,8 +490,8 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 		if (event.type == Expose || event.type == PropertyNotify)
 		{
 			double dpi = GetDPIInfo();
-	
-			if (ptarget->GetDPI() != dpi)
+			// sometimes we get spurrious 0 dpi values, ignore those
+			if (ptarget->GetDPI() != dpi && dpi > 1.0)
 			{
 				//printf("%f vs %f\n", ptarget->GetDPI(), dpi);
 				// todo, how do I size the window properly?
@@ -577,6 +591,9 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
+	// setting size to <= 0 is an error, clamp at one
+	w = std::max(1, w);
+	h = std::max(1, h);
 	XMoveResizeWindow(x11_display, (Window)pPtr, x, y, w, h);
 }
 
