@@ -11,134 +11,6 @@
 using namespace Gwen;
 using namespace Gwen::Controls;
 
-//Find a place to put these...
-Color HSVToColor( float h, float s, float v )
-{
-	if ( h < 0.0f ) { h += 360.0f; }
-
-	if ( h > 360.0f ) { h -= 360.0f; }
-
-	s *= 255.0f;
-	v *= 255.0f;
-	float r, g, b;
-
-	if ( !h && !s )
-	{
-		r = g = b = v;
-	}
-
-	double min, max, delta, hue;
-	max = v;
-	delta = ( max * s ) / 255.0;
-	min = max - delta;
-	hue = h;
-
-	if ( h > 300 || h <= 60 )
-	{
-		r = ( int ) max;
-
-		if ( h > 300 )
-		{
-			g = ( int ) min;
-			hue = ( hue - 360.0 ) / 60.0;
-			b = ( int )( ( hue * delta - min ) * -1 );
-		}
-		else
-		{
-			b = ( int ) min;
-			hue = hue / 60.0;
-			g = ( int )( hue * delta + min );
-		}
-	}
-	else if ( h > 60 && h < 180 )
-	{
-		g = ( int ) max;
-
-		if ( h < 120 )
-		{
-			b = ( int ) min;
-			hue = ( hue / 60.0 - 2.0 ) * delta;
-			r = ( int )( min - hue );
-		}
-		else
-		{
-			r = ( int ) min;
-			hue = ( hue / 60 - 2.0 ) * delta;
-			b = ( int )( min + hue );
-		}
-	}
-	else
-	{
-		b = ( int ) max;
-
-		if ( h < 240 )
-		{
-			r = ( int ) min;
-			hue = ( hue / 60.0 - 4.0 ) * delta;
-			g = ( int )( min - hue );
-		}
-		else
-		{
-			g = ( int ) min;
-			hue = ( hue / 60 - 4.0 ) * delta;
-			r = ( int )( min + hue );
-		}
-	}
-
-	return Color( r, g, b, 255 );
-}
-
-HSV RGBtoHSV( int r, int g, int b )
-{
-	double min, max, delta, temp;
-	min = Gwen::Min( r, Gwen::Min( g, b ) );
-	max = Gwen::Max( r, Gwen::Max( g, b ) );
-	delta = max - min;
-	HSV hsv;
-	hsv.v = ( int ) max;
-
-	if ( !delta )
-	{
-		hsv.h = hsv.s = 0;
-	}
-	else
-	{
-		temp = delta / max;
-		hsv.s = ( int )( temp * 255 );
-
-		if ( r == ( int ) max )
-		{
-			temp = ( double )( g - b ) / delta;
-		}
-		else if ( g == ( int ) max )
-		{
-			temp = 2.0 + ( ( double )( b - r ) / delta );
-		}
-		else
-		{
-			temp = 4.0 + ( ( double )( r - g ) / delta );
-		}
-
-		temp *= 60;
-
-		if ( temp < 0 )
-		{
-			temp += 360;
-		}
-
-		if ( temp == 360 )
-		{
-			temp = 0;
-		}
-
-		hsv.h = ( int ) temp;
-	}
-
-	hsv.s /= 255.0f;
-	hsv.v /= 255.0f;
-	return hsv;
-}
-
 
 GWEN_CONTROL_CONSTRUCTOR( ColorLerpBox )
 {
@@ -166,7 +38,7 @@ Gwen::Color ColorLerpBox::GetSelectedColor()
 
 void ColorLerpBox::SetColor( Gwen::Color color, bool onlyHue )
 {
-	HSV hsv = RGBtoHSV( color.r, color.g, color.b );
+	HSV hsv = Gwen::Utility::RGBtoHSV( color.r, color.g, color.b );
 	m_Hue = hsv.h;
 
 	if ( !onlyHue )
@@ -217,10 +89,11 @@ Gwen::Color ColorLerpBox::GetColorAtPos( int x, int y )
 {
 	float xPercent = ( ( float ) x / ( float ) Width() );
 	float yPercent = 1 - ( ( float ) y / ( float ) Height() );
-	Gwen::Color result = HSVToColor( m_Hue, xPercent, yPercent );
+	Gwen::Color result = Gwen::Utility::HSVToColor( m_Hue, xPercent, yPercent );
 	result.a = 255;
 	return result;
 }
+
 void ColorLerpBox::Render( Gwen::Skin::Base* skin )
 {
 	//Is there any way to move this into skin? Not for now, no idea how we'll "actually" render these
@@ -248,10 +121,6 @@ void ColorLerpBox::Render( Gwen::Skin::Base* skin )
 	skin->GetRender()->DrawShavedCornerRect( testRect );
 }
 
-
-
-
-
 GWEN_CONTROL_CONSTRUCTOR( ColorSlider )
 {
 	SetSize( 32, 128 );
@@ -267,7 +136,7 @@ void ColorSlider::Render( Gwen::Skin::Base* skin )
 	for ( y = 0; y < Height(); y++ )
 	{
 		float yPercent = ( float ) y / ( float ) Height();
-		skin->GetRender()->SetDrawColor( HSVToColor( yPercent * 360, 1, 1 ) );
+		skin->GetRender()->SetDrawColor( Gwen::Utility::HSVToColor( yPercent * 360, 1, 1 ) );
 		skin->GetRender()->DrawFilledRect( Gwen::Rect( 5, y, Width() - 10, 1 ) );
 	}
 
@@ -297,8 +166,9 @@ void ColorSlider::OnMouseClickLeft( int x, int y, bool bDown )
 Gwen::Color ColorSlider::GetColorAtHeight( int y )
 {
 	float yPercent = ( float ) y / ( float ) Height();
-	return HSVToColor( yPercent * 360, 1, 1 );
+	return Gwen::Utility::HSVToColor( yPercent * 360, 1, 1 );
 }
+
 void ColorSlider::OnMouseMoved( int x, int y, int /*deltaX*/, int /*deltaY*/ )
 {
 	if ( m_bDepressed )
@@ -318,7 +188,7 @@ void ColorSlider::OnMouseMoved( int x, int y, int /*deltaX*/, int /*deltaY*/ )
 
 void ColorSlider::SetColor( Gwen::Color color )
 {
-	HSV hsv = RGBtoHSV( color.r, color.g, color.b );
+	HSV hsv = Gwen::Utility::RGBtoHSV( color.r, color.g, color.b );
 	m_iSelectedDist = hsv.h / 360 * Height();
 	onSelectionChanged.Call( this );
 }

@@ -28,6 +28,11 @@ class ProgressBarThink : public Gwen::Anim::Animation
 			gwen_cast<ProgressBar> ( m_Control )->CycleThink( Gwen::Clamp( fDiff, 0.f, 0.3f ) );
 			m_fLastFrame = Platform::GetTimeInSeconds();
 		}
+		
+		virtual bool Finished()
+		{
+		
+		}
 
 
 		float	m_fLastFrame;
@@ -44,7 +49,6 @@ GWEN_CONTROL_CONSTRUCTOR( ProgressBar )
 	m_fProgress = 0.0f;
 	m_bAutoLabel = true;
 	m_fCycleSpeed = 0.0f;
-	Gwen::Anim::Add( this, new ProgressBarThink() );
 }
 
 void ProgressBar::SetValue( float val )
@@ -91,5 +95,16 @@ float ProgressBar::GetCycleSpeed()
 
 void ProgressBar::SetCycleSpeed( float f )
 {
+	if (f != m_fCycleSpeed)
+	{
+		if (f != 0.0f)
+		{
+			Gwen::Anim::Add( this, new ProgressBarThink() );
+		}
+		else
+		{
+			Gwen::Anim::Cancel( this );
+		}
+	}
 	m_fCycleSpeed = f;
 }

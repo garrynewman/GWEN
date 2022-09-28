@@ -61,9 +61,9 @@ void MenuItem::Layout( Skin::Base* skin )
 	}
 
 	BaseClass::Layout( skin );
+	
+	//SetHeight(GetMinimumSize().y);
 }
-
-
 
 Menu* MenuItem::GetMenu()
 {
@@ -125,6 +125,27 @@ bool MenuItem::IsMenuOpen()
 	if ( !m_Menu ) { return false; }
 
 	return !m_Menu->Hidden();
+}
+
+Gwen::Point MenuItem::GetMinimumSize()
+{
+	int w = 0;
+	if (m_Accelerator)
+	{
+		w += 16;
+		w += m_Accelerator->TextWidth();
+	}
+	if (m_SubmenuArrow)
+	{
+		w += m_SubmenuArrow->Width();
+	}
+	w += TextWidth();
+	
+	auto padding = GetPadding();
+	w += padding.left + padding.right;
+	
+		auto tpadding = GetTextPadding();
+	return Gwen::Point(w, TextHeight() + padding.top + padding.bottom + tpadding.top + tpadding.bottom);
 }
 
 void MenuItem::OpenMenu()

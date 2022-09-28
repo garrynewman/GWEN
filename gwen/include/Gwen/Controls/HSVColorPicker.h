@@ -34,9 +34,13 @@ namespace Gwen
 
 				void UpdateControls( Gwen::Color newColor );
 
+				virtual void SetMinimumSize(Gwen::Point size) { m_MinimumSize = size; }
+				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
+
 				Event::Caller	onColorChanged;
 
 			protected:
+				Gwen::Point m_MinimumSize;
 				ColorLerpBox* m_LerpBox;
 				ColorSlider* m_ColorSlider;
 				ControlsInternal::ColorDisplay* m_Before;

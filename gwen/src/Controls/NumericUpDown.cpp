@@ -84,7 +84,7 @@ void NumericUpDown::SetValue( int i )
 	m_iNumber = i;
 	// Don't update the text if we're typing in it..
 	// Undone - any reason why not?
-	//if ( !HasFocus() )
+	if ( !HasFocus() )
 	{
 		SyncTextFromNumber();
 	}
@@ -107,6 +107,13 @@ void NumericUpDown::OnEnter()
 	SyncNumberFromText();
 	SyncTextFromNumber();
 	BaseClass::OnEnter();
+}
+
+void NumericUpDown::OnLostKeyboardFocus()
+{
+    BaseClass::OnLostKeyboardFocus();
+    SyncNumberFromText();
+	SyncTextFromNumber();
 }
 
 GWEN_CONTROL_CONSTRUCTOR( FloatUpDown )

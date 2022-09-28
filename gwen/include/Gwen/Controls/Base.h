@@ -529,7 +529,7 @@ namespace Gwen
 					address of a control if the control can safely be cast to the class from
 					which the identifier was taken.
 
-	Really you shouldn't actually have to concenn yourself with that stuff. The only thing you
+	Really you shouldn't actually have to concern yourself with that stuff. The only thing you
 	should use in theory is gwen_cast - which is used just the same as dynamic cast - except for
 	one difference. We pass in the class name, not a pointer to the class.
 

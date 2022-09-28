@@ -18,6 +18,7 @@ using namespace Gwen::Controls;
 
 GWEN_CONTROL_CONSTRUCTOR( HSVColorPicker )
 {
+	m_MinimumSize = Gwen::Point(1, 1);
 	SetMouseInputEnabled( true );
 	SetSize( 256, 64 );
 	SetCacheToTexture();
@@ -129,6 +130,7 @@ void HSVColorPicker::UpdateControls( Gwen::Color color )
 
 	m_After->SetColor( color );
 }
+
 void HSVColorPicker::SetColor( Gwen::Color color, bool onlyHue, bool reset )
 {
 	UpdateControls( color );

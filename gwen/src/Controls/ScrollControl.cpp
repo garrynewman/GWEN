@@ -237,6 +237,7 @@ void ScrollControl::ScrollToBottom()
 	UpdateScrollBars();
 	m_VerticalScrollBar->ScrollToBottom();
 }
+
 void ScrollControl::ScrollToTop()
 {
 	if ( CanScrollV() )
@@ -245,6 +246,7 @@ void ScrollControl::ScrollToTop()
 		m_VerticalScrollBar->ScrollToTop();
 	}
 }
+
 void ScrollControl::ScrollToLeft()
 {
 	if ( CanScrollH() )
@@ -253,6 +255,7 @@ void ScrollControl::ScrollToLeft()
 		m_HorizontalScrollBar->ScrollToLeft();
 	}
 }
+
 void ScrollControl::ScrollToRight()
 {
 	if ( CanScrollH() )

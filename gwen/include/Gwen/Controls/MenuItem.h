@@ -33,6 +33,8 @@ namespace Gwen
 				virtual void SizeToContents();
 
 				virtual void OnPress();
+				
+				virtual Gwen::Point GetMinimumSize();
 
 				Menu* GetMenu();
 

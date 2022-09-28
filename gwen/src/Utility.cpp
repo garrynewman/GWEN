@@ -207,5 +207,131 @@ void Gwen::Utility::Strings::Strip( Gwen::UnicodeString & str, const Gwen::Unico
 	}
 }
 
+Color Gwen::Utility::HSVToColor( float h, float s, float v )
+{
+	if ( h < 0.0f ) { h += 360.0f; }
+
+	if ( h > 360.0f ) { h -= 360.0f; }
+
+	s *= 255.0f;
+	v *= 255.0f;
+	float r, g, b;
+
+	if ( !h && !s )
+	{
+		r = g = b = v;
+	}
+
+	double min, max, delta, hue;
+	max = v;
+	delta = ( max * s ) / 255.0;
+	min = max - delta;
+	hue = h;
+
+	if ( h > 300 || h <= 60 )
+	{
+		r = ( int ) max;
+
+		if ( h > 300 )
+		{
+			g = ( int ) min;
+			hue = ( hue - 360.0 ) / 60.0;
+			b = ( int )( ( hue * delta - min ) * -1 );
+		}
+		else
+		{
+			b = ( int ) min;
+			hue = hue / 60.0;
+			g = ( int )( hue * delta + min );
+		}
+	}
+	else if ( h > 60 && h < 180 )
+	{
+		g = ( int ) max;
+
+		if ( h < 120 )
+		{
+			b = ( int ) min;
+			hue = ( hue / 60.0 - 2.0 ) * delta;
+			r = ( int )( min - hue );
+		}
+		else
+		{
+			r = ( int ) min;
+			hue = ( hue / 60 - 2.0 ) * delta;
+			b = ( int )( min + hue );
+		}
+	}
+	else
+	{
+		b = ( int ) max;
+
+		if ( h < 240 )
+		{
+			r = ( int ) min;
+			hue = ( hue / 60.0 - 4.0 ) * delta;
+			g = ( int )( min - hue );
+		}
+		else
+		{
+			g = ( int ) min;
+			hue = ( hue / 60 - 4.0 ) * delta;
+			r = ( int )( min + hue );
+		}
+	}
+
+	return Color( r, g, b, 255 );
+}
+
+HSV Gwen::Utility::RGBtoHSV( int r, int g, int b )
+{
+	double min, max, delta, temp;
+	min = Gwen::Min( r, Gwen::Min( g, b ) );
+	max = Gwen::Max( r, Gwen::Max( g, b ) );
+	delta = max - min;
+	HSV hsv;
+	hsv.v = ( int ) max;
+
+	if ( !delta )
+	{
+		hsv.h = hsv.s = 0;
+	}
+	else
+	{
+		temp = delta / max;
+		hsv.s = ( int )( temp * 255 );
+
+		if ( r == ( int ) max )
+		{
+			temp = ( double )( g - b ) / delta;
+		}
+		else if ( g == ( int ) max )
+		{
+			temp = 2.0 + ( ( double )( b - r ) / delta );
+		}
+		else
+		{
+			temp = 4.0 + ( ( double )( r - g ) / delta );
+		}
+
+		temp *= 60;
+
+		if ( temp < 0 )
+		{
+			temp += 360;
+		}
+
+		if ( temp == 360 )
+		{
+			temp = 0;
+		}
+
+		hsv.h = ( int ) temp;
+	}
+
+	hsv.s /= 255.0f;
+	hsv.v /= 255.0f;
+	return hsv;
+}
 
 

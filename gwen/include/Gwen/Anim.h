@@ -35,6 +35,7 @@ namespace Gwen
 		GWEN_EXPORT void Add( Gwen::Controls::Base* control, Animation* animation );
 		GWEN_EXPORT void Cancel( Gwen::Controls::Base* control );
 		GWEN_EXPORT void Think();
+		GWEN_EXPORT bool HasActiveAnimation();
 
 		//
 		// Timed animation. Provides a useful base for animations.

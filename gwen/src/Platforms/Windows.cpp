@@ -543,13 +543,20 @@ bool Gwen::Platform::IsWindowMaximized( void* pPtr)
 	return pl.showCmd == SW_SHOWMAXIMIZED;
 }
 
-void Gwen::Platform::WaitForEvent()
+void Gwen::Platform::WaitForEvent( int delay_ms )
 {
 	// todo, I'm not sure that this works correctly
 	MSG msg;
 	if (!PeekMessage( &msg, 0, 0, 0, PM_NOREMOVE ) )
 	{
-		WaitMessage();
+		if (delay_ms > 0)
+		{
+			MsgWaitForMultipleObjects(0, NULL, FALSE, delay_ms, QS_ALLINPUT);
+		}
+		else
+		{
+			WaitMessage();
+		}
 	}
 }
 

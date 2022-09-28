@@ -70,6 +70,7 @@ namespace Gwen
 				virtual void SyncTextFromNumber();
 				virtual void SyncNumberFromText();
 
+				virtual void OnLostKeyboardFocus();
 
 
 				int m_iNumber;

@@ -63,7 +63,7 @@ GWEN_CONTROL_CONSTRUCTOR( TreeNode )
 	m_Title->onDoubleClick.Add( this, &TreeNode::OnDoubleClickName );
 	m_Title->onDown.Add( this, &TreeNode::OnClickName );
 	m_Title->onRightPress.Add( this, &TreeNode::OnRightPress );
-	m_Title->SetHeight(m_Title->GetFont()->size+7);
+	m_Title->SetHeight(m_Title->TextHeight());
 	m_InnerPanel = new Base( this );
 	m_InnerPanel->Dock( Pos::Top );
 	m_InnerPanel->SetHeight( 100 );
@@ -72,6 +72,7 @@ GWEN_CONTROL_CONSTRUCTOR( TreeNode )
 	m_bRoot = false;
 	m_bSelected = false;
 	m_bSelectable = true;
+	Invalidate();
 }
 
 void TreeNode::Render( Skin::Base* skin )
@@ -102,8 +103,6 @@ TreeNode* TreeNode::AddNode( const TextObject & strLabel )
 	return node;
 }
 
-
-
 void TreeNode::Layout( Skin::Base* skin )
 {
 	if ( m_ToggleButton )
@@ -131,6 +130,8 @@ void TreeNode::Layout( Skin::Base* skin )
 
 void TreeNode::PostLayout( Skin::Base* /*skin*/ )
 {
+	m_Title->SetHeight(m_Title->TextHeight());
+
 	if ( SizeToChildren( false, true ) )
 	{
 		InvalidateParent();

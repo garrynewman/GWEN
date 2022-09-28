@@ -60,6 +60,9 @@ namespace Gwen
 
 				virtual void SetScale( float f );
 				virtual float Scale() const { return m_fScale; }
+				
+				virtual void SetFontScale( float f);
+				virtual float FontScale() const { return m_fFontScale; }
 
 				virtual void OnBoundsChanged( Gwen::Rect oldBounds );
 
@@ -92,6 +95,7 @@ namespace Gwen
 				bool	m_bNeedsRedraw;
 				bool	m_bAnyDelete;
 				float	m_fScale;
+				float   m_fFontScale;
 
 				Controls::Base::List	m_DeleteList;
 				std::set< Controls::Base* > m_DeleteSet;

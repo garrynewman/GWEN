@@ -260,6 +260,7 @@ void WindowCanvas::RenderCanvas()
 		render->SetClipRegion( GetRenderBounds() );
 		render->SetRenderOffset( Gwen::Point( X() * -1, Y() * -1 ) );
 		render->SetScale( Scale() );
+		render->SetFontScale( FontScale() );
 
 		if ( m_bDrawBackground )
 		{
@@ -361,7 +362,10 @@ void WindowCanvas::SetPos( int x, int y )
 	m_WindowPos.x = x;
 	m_WindowPos.y = y;
 	Gwen::PointF scaling = GetDPIScaling();
-	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, Width()*scaling.x, Height()*scaling.y);
+
+	auto width = Width()*scaling.x;
+	auto height = Height()*scaling.y;
+	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, width, height);
 }
 
 void WindowCanvas::CloseButtonPressed()
@@ -410,8 +414,9 @@ void WindowCanvas::RightSizer_Moved()
 {
 	Gwen::Point p;
 	Gwen::Platform::GetCursorPos( p );
+	Gwen::PointF scaling = GetDPIScaling();
 	int w = ( p.x ) - m_WindowPos.x;
-	int h = Height();
+	int h = Height()*scaling.y;
 	w = Clamp( w, m_MinimumSize.x, 9999 );
 	h = Clamp( h, m_MinimumSize.y, 9999 );
 	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, w, h);
@@ -426,8 +431,9 @@ void WindowCanvas::LeftSizer_Moved()
 	// for this we want to pin the right side of the window
 	Gwen::Point p;
 	Gwen::Platform::GetCursorPos( p );
+	Gwen::PointF scaling = GetDPIScaling();
 	int w = m_WindowRightPos.x - p.x;
-	int h = Height();
+	int h = Height()*scaling.y;
 	w = Clamp( w, m_MinimumSize.x, 9999 );
 	h = Clamp( h, m_MinimumSize.y, 9999 );
 	int desired_x = m_WindowRightPos.x - w;
@@ -442,7 +448,8 @@ void WindowCanvas::VerticalSizer_Moved()
 {
 	Gwen::Point p;
 	Gwen::Platform::GetCursorPos( p );
-	int w = Width();
+	Gwen::PointF scaling = GetDPIScaling();
+	int w = Width()*scaling.x;
 	int h = ( p.y ) - m_WindowPos.y;
 	w = Clamp( w, m_MinimumSize.x, 9999 );
 	h = Clamp( h, m_MinimumSize.y, 9999 );

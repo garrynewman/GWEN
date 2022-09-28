@@ -26,11 +26,18 @@ namespace Gwen
 			facename = L"Arial";
 			size = 10;
 			realsize = 0;
+			pixel_size = -1;
 			bold = false;
 		}
 
 		UnicodeString	facename;
+		
+		// Desired font size in non-dpi corrected pixels
 		float size;
+		
+		// True desired size in pixels. If > 0, we use this instead of size
+		float pixel_size;
+		
 		bool  bold;
 
 		// This should be set by the renderer

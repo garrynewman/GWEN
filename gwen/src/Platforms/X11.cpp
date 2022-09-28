@@ -25,6 +25,8 @@
 
 #include <unistd.h>
 
+#include <cmath>
+
 #include "portable-file-dialogs.h"
 
 Display* x11_display = 0;
@@ -94,7 +96,7 @@ Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 	char *result;
 	unsigned long ressize, restail;
 	int resbits;
-	const char* fmtname = "STRING";
+	const char* fmtname = "UTF8_STRING";//"STRING";
 	Atom bufid = XInternAtom(x11_display, "CLIPBOARD", False);
 	Atom fmtid = XInternAtom(x11_display, fmtname, False);
 	Atom propid = XInternAtom(x11_display, "XSEL_DATA", False);
@@ -118,7 +120,16 @@ Gwen::UnicodeString Gwen::Platform::GetClipboardText()
 		{
 			printf("Buffer too large to paste.\n");
 		}
-
+		
+		// handle parsing any unicode values, which appear to be \\U00000000
+		/*const char* buf = new char[ressize];
+		int size = 0;
+		for (int i = 0; i < ressize; i++)
+		{
+			// copy, and parse any unicode
+			if (
+		}
+		buf[size] = 0;*/
 		Gwen::UnicodeString str = Gwen::Utility::StringToUnicode(result);
 		XFree(result);
 		return str;
@@ -371,7 +382,7 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 	XMapWindow( display, win );
 
 	XSelectInput(display, win, ButtonPressMask|ButtonReleaseMask|KeyPressMask|KeyReleaseMask|
-		ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask);
+		ExposureMask|PointerMotionMask|StructureNotifyMask|FocusChangeMask|PropertyChangeMask);
 
 	x11_window = win;
 
@@ -391,6 +402,63 @@ void Gwen::Platform::DestroyPlatformWindow( void* pPtr )
 {
 	canvases.erase((Window)pPtr);
     XDestroyWindow(x11_display, (Window)pPtr);
+}
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xresource.h>
+
+double _font_scale = 1.0;
+
+double GetDPIInfo()
+{
+    auto display_2 = XOpenDisplay(0);
+    char *resourceString = XResourceManagerString(display_2);
+    XrmDatabase db;
+    XrmValue value;
+    char *type = NULL;
+    double dpi = 0.0;
+
+    XrmInitialize(); /* Need to initialize the DB before calling Xrm* functions */
+
+    db = XrmGetStringDatabase(resourceString);
+
+    if (resourceString) {
+        //printf("Entire DB:\n%s\n", resourceString);
+        if (XrmGetResource(db, "Xft.dpi", "String", &type, &value) == True) {
+            if (value.addr) {
+                dpi = atof(value.addr);
+            }
+        }
+    }
+
+    //printf("Font DPI: %f\n", dpi);// this is actually the font scale setting!
+    
+    // try other method
+    int screen = DefaultScreen(display_2);
+    
+    //printf("Width: %i\n", DisplayWidthMM(display_2, screen));
+    XCloseDisplay(display_2);
+    
+    double real_dpi = DisplayWidth(display_2, screen)/(DisplayWidthMM(display_2, screen)/25.4);
+    //printf("Real DPI: %f\n", real_dpi);
+
+    // round to the nearest 0.25 dpi
+    real_dpi = std::round(real_dpi/24.0)*24.0;
+
+    int rdpi = real_dpi;
+    
+    float font_scale = dpi / 96.0;
+    if (_font_scale != font_scale)
+    {
+    	_font_scale = font_scale;
+    	for (auto& canv: canvases)
+    	{
+    		canv.second->SetFontScale(_font_scale);
+    	}
+    }
+    
+    return rdpi;
 }
 
 void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* ptarget )
@@ -418,6 +486,23 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 	while (XPending(x11_display))
 	{
 		XNextEvent(x11_display, &event);
+		
+		if (event.type == Expose || event.type == PropertyNotify)
+		{
+			double dpi = GetDPIInfo();
+			// sometimes we get spurrious 0 dpi values, ignore those
+			if (ptarget->GetDPI() != dpi && dpi > 1.0)
+			{
+				//printf("%f vs %f\n", ptarget->GetDPI(), dpi);
+				// todo, how do I size the window properly?
+				float ds = dpi/ptarget->GetDPI();
+				ptarget->SetDPI(dpi);
+		
+				auto pos = ptarget->WindowPosition();
+				ptarget->SetPos(pos.x, pos.y);
+				ptarget->SetScale(dpi / 96.0);
+			}
+		}
 
 		// Catch window close requests
 		if (event.type == ClientMessage && event.xclient.data.l[0] == delete_msg)
@@ -486,9 +571,10 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 			// handle window resizes and whatnot
 			if (event.type == ConfigureNotify && event.xconfigure.window == canv.first)
 			{
+				float scale = canv.second->GetDPIScaling().x;
 				canv.second->GetSkin()->GetRender()->ResizedContext( canv.second, event.xconfigure.width, event.xconfigure.height );
 				canv.second->OnMove(event.xconfigure.x, event.xconfigure.y);
-				canv.second->SetSize(event.xconfigure.width, event.xconfigure.height);// this is kinda weird, but meh
+				canv.second->SetSize(event.xconfigure.width/scale, event.xconfigure.height/scale);// this is kinda weird, but meh
 			}
 			if ((event.type == Expose && event.xexpose.count == 0) || event.type == FocusOut || event.type == FocusIn)
 			{
@@ -505,6 +591,9 @@ void Gwen::Platform::MessagePump( void* pWindow, Gwen::Controls::WindowCanvas* p
 
 void Gwen::Platform::SetBoundsPlatformWindow( void* pPtr, int x, int y, int w, int h )
 {
+	// setting size to <= 0 is an error, clamp at one
+	w = std::max(1, w);
+	h = std::max(1, h);
 	XMoveResizeWindow(x11_display, (Window)pPtr, x, y, w, h);
 }
 
@@ -621,7 +710,7 @@ void Gwen::Platform::InterruptWait()
 	write(global.pip[1], &buf, 1);
 }
 
-void Gwen::Platform::WaitForEvent()
+void Gwen::Platform::WaitForEvent(int delay_ms)
 {
 	// This is the naieve method which basically gets stuck forever
 	//XEvent ev;
@@ -638,9 +727,20 @@ void Gwen::Platform::WaitForEvent()
 	FD_SET(xfd, &set_read);
 	FD_SET(global.pip[0], &set_read);
 	
+	struct timeval tv;
+	tv.tv_sec = delay_ms/1000;
+	tv.tv_usec = (delay_ms%1000)*1000;
+	
 	// block on X11 and pipe so we can interrupt this
 	int max_fd = xfd > global.pip[0] ? xfd : global.pip[0];
-	select(max_fd+1, &set_read, NULL, NULL, NULL);
+	if (delay_ms > 0)
+	{
+		select(max_fd+1, &set_read, NULL, NULL, &tv);
+	}
+	else
+	{
+		select(max_fd+1, &set_read, NULL, NULL, NULL);
+	}
     
 	// Read to clear the interrupt if it was the cause of our wakeup
 	if (FD_ISSET(global.pip[0], &set_read))
