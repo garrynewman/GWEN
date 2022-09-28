@@ -31,7 +31,7 @@ class ProgressBarThink : public Gwen::Anim::Animation
 		
 		virtual bool Finished()
 		{
-		
+			return false;
 		}
 
 

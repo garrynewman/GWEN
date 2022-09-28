@@ -34,7 +34,7 @@ namespace Gwen
 
 					virtual TextObject GetPropertyValue()
 					{
-						return m_Numeric->GetText();
+						return Utility::ToString(m_Numeric->GetValueNumeric());
 					}
 
 					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
@@ -72,7 +72,7 @@ namespace Gwen
 
 					virtual TextObject GetPropertyValue()
 					{
-						return m_Numeric->GetText();
+						return Utility::ToString(m_Numeric->GetValueNumeric());
 					}
 
 					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )

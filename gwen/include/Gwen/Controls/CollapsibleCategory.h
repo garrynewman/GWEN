@@ -32,7 +32,7 @@ namespace Gwen
 
 				virtual Button* Add( const TextObject & name );
 				
-				virtual void Layout( Skin::Base* skin );
+				//virtual void Layout( Skin::Base* skin );
 
 				virtual void PostLayout( Skin::Base* /*skin*/ );
 

@@ -52,6 +52,7 @@ namespace Gwen
 				virtual void SetMax( int i );
 				virtual void SetValue( int i );
 				void SetIncrement( int i ) { m_iIncrement = i; }
+				int GetValueNumeric() { return m_iNumber; }
 
 				Event::Caller	onChanged;
 
@@ -89,6 +90,7 @@ namespace Gwen
 				virtual void SetMax( double i );
 				virtual void SetValue( double i );
 				void SetIncrement( double i ) { m_iIncrement = i; }
+				double GetValueNumeric() { return m_iNumber; }
 
 				Event::Caller	onChanged;
 
