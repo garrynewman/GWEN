@@ -186,7 +186,7 @@ void FloatUpDown::SetValue( double i )
 	m_iNumber = i;
 	// Don't update the text if we're typing in it..
 	// Undone - any reason why not?
-	//if ( !HasFocus() )
+	if ( !HasFocus() )
 	{
 		SyncTextFromNumber();
 	}
