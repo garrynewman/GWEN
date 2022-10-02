@@ -444,11 +444,6 @@ void Base::OnScaleChanged()
 	{
 		( *iter )->OnScaleChanged();
 	}
-
-	if (m_ToolTip)
-	{
-		m_ToolTip->OnScaleChanged();
-	}
 }
 
 void Base::OnChildBoundsChanged( Gwen::Rect /*oldChildBounds*/, Base* /*pChild*/ )
