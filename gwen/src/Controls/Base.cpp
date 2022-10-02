@@ -7,6 +7,7 @@
 
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/Label.h"
+#include "Gwen/Controls/ToolTip.h"
 #include "Gwen/Gwen.h"
 #include "Gwen/BaseRender.h"
 #include "Gwen/Skin.h"
@@ -442,6 +443,11 @@ void Base::OnScaleChanged()
 	for ( Base::List::iterator iter = Children.begin(); iter != Children.end(); ++iter )
 	{
 		( *iter )->OnScaleChanged();
+	}
+
+	if (m_ToolTip)
+	{
+		m_ToolTip->OnScaleChanged();
 	}
 }
 
@@ -1162,7 +1168,7 @@ void Base::RenderFocus( Gwen::Skin::Base* skin )
 
 void Base::SetToolTip( const TextObject & strText )
 {
-	Label* tooltip = new Label( this );
+	BasicToolTip* tooltip = new BasicToolTip( this );
 	tooltip->SetText( strText );
 	tooltip->SetTextColorOverride( GetSkin()->Colors.TooltipText );
 	tooltip->SetPadding( Padding( 5, 3, 5, 3 ) );
