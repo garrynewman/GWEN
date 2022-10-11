@@ -50,7 +50,7 @@ namespace Gwen
 
 				virtual void SetMin( int i );
 				virtual void SetMax( int i );
-				virtual void SetValue( int i );
+				virtual void SetValue( int i, bool force = true );
 				void SetIncrement( int i ) { m_iIncrement = i; }
 				int GetValueNumeric() { return m_iNumber; }
 
@@ -88,7 +88,7 @@ namespace Gwen
 
 				virtual void SetMin( double i );
 				virtual void SetMax( double i );
-				virtual void SetValue( double i );
+				virtual void SetValue( double i, bool force = true );
 				void SetIncrement( double i ) { m_iIncrement = i; }
 				double GetValueNumeric() { return m_iNumber; }
 
@@ -109,6 +109,7 @@ namespace Gwen
 				virtual void SyncTextFromNumber();
 				virtual void SyncNumberFromText();
 
+				virtual void OnLostKeyboardFocus();
 
 
 				double m_iNumber;

@@ -151,13 +151,14 @@ Base* WindowCanvas::GetControlAt( int x, int y, bool bOnlyIfMouseEnabled )
 	{ return NULL; }
 	
 	// Check each of our draggers first
-	if (y > Height() - 16)
+	const int sizer_border = 8;
+	if (y > Height() - sizer_border)
 	{
-		if (x < 16)
+		if (x < sizer_border)
 		{
 			return m_SWSizer;
 		}
-		else if (x > Width() - 16)
+		else if (x > Width() - sizer_border)
 		{
 			return m_SESizer;
 		}
@@ -168,11 +169,11 @@ Base* WindowCanvas::GetControlAt( int x, int y, bool bOnlyIfMouseEnabled )
 	}
 	else
 	{
-		if (x < 16)
+		if (x < sizer_border)
 		{
 			return m_LeftSizer;
 		}
-		else if (x > Width() - 16)
+		else if (x > Width() - sizer_border)
 		{
 			return m_RightSizer;
 		}
