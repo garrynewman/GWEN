@@ -65,11 +65,13 @@ bool TextBox::OnChar( Gwen::UnicodeChar c )
 void TextBox::OnKeyboardFocus()
 { 
 	Gwen::Anim::Add( this, new ChangeCaretColor() );
+	onFocusGained.Call(this);
 }
 				
 void TextBox::OnLostKeyboardFocus()
 {
-	Gwen::Anim::Cancel(this); onFocusLost.Call( this );
+	Gwen::Anim::Cancel(this);
+	onFocusLost.Call( this );
 } 
 
 void TextBox::InsertText( const Gwen::UnicodeString & strInsert )

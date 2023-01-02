@@ -82,6 +82,7 @@ namespace Gwen
 
 				Event::Caller	onTextChanged;
 				Event::Caller	onReturnPressed;
+				Event::Caller   onFocusGained;
 				Event::Caller	onFocusLost;
 
 			protected:

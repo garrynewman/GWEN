@@ -22,8 +22,15 @@ namespace Gwen
 
 					void Render( Skin::Base* skin )
 					{
+						// Draw an outline to make sure its not invisible when white
+						skin->GetRender()->SetDrawColor( Gwen::Color( 0, 0, 0 ) );
+						Gwen::Rect r = GetRenderBounds();
+						skin->GetRender()->DrawFilledRect( r );
+
+						// Draw the color itself
 						skin->GetRender()->SetDrawColor( m_Color );
-						skin->GetRender()->DrawFilledRect( GetRenderBounds() );
+						r.x += 1; r.y += 1; r.w -= 2; r.h -= 2;
+						skin->GetRender()->DrawFilledRect( r );
 					}
 
 					void SetColor( const Gwen::Color & col ) { m_Color = col; }
