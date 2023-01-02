@@ -64,9 +64,9 @@ GWEN_CONTROL_CONSTRUCTOR( ResizableControl )
 
 void ResizableControl::DisableResizing()
 {
-	for ( Base::List::iterator it = Children.begin(); it != Children.end(); ++it )
+    for (int i = 0; i < 10; i++)
 	{
-		Resizer* resizer = gwen_cast<Resizer> ( *it );
+		Resizer* resizer = m_Resizer[i];
 
 		if ( !resizer ) { continue; }
 
