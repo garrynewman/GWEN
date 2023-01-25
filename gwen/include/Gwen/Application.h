@@ -14,9 +14,12 @@
 #include "Gwen/Platform.h"
 #include "Gwen/Anim.h"
 
+#include "../../resources.h"
+
 #ifndef _WIN32
 #include <signal.h>
 #endif
+
 
 namespace Gwen
 {
@@ -174,6 +177,20 @@ public:
 		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
 		window_canvas->SetSizable(true);
 
+		if (FILE* f = fopen(skin_.c_str(), "rb"))
+		{
+			fclose(f);
+		}
+		else
+		{
+			// create the skin from default
+			f = fopen(skin_.c_str(), "wb");
+			fwrite(DefaultSkin_png, 1, DefaultSkin_png_size, f);
+			fclose(f);
+			printf("Skin doesnt exist. Creating from default.\n");
+		}
+
+	//if the skin doesnt exist, create it from default
 		skin->Init(skin_);
 		skin->SetDefaultFont(default_font_, default_font_size_);
 
