@@ -32,6 +32,8 @@ namespace Gwen
 				virtual void Toggle() { SetChecked( !IsChecked() ); }
 				virtual bool IsChecked() { return m_bChecked; }
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 				Gwen::Event::Caller	onChecked;
 				Gwen::Event::Caller	onUnChecked;
 				Gwen::Event::Caller	onCheckChanged;

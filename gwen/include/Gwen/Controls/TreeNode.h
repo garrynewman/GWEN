@@ -53,6 +53,7 @@ namespace Gwen
 				virtual void DeselectAll();
 
 				virtual Controls::Base::List & GetChildNodes();
+				virtual Controls::Base::List GetSelectedChildNodes();
 
 				Event::Caller	onNamePress;
 				Event::Caller   onDoubleClick;

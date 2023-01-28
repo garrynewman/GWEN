@@ -33,6 +33,8 @@ class GWEN_EXPORT DownArrow : public Controls::Base
 			skin->DrawComboDownArrow( this, m_ComboBox->IsHovered(), m_ComboBox->IsDepressed(), m_ComboBox->IsMenuOpen(), m_ComboBox->IsDisabled() );
 		}
 
+		virtual bool ShouldRedrawOnHover() { return true; }
+
 		void SetComboBox( ComboBox* p ) { m_ComboBox = p; }
 
 	protected:
@@ -75,7 +77,7 @@ void ComboBox::Render( Skin::Base* skin )
 {
 	if ( !ShouldDrawBackground() ) { return; }
 
-	skin->DrawComboBox( this, IsDepressed(), IsMenuOpen() );
+	skin->DrawComboBox( this, IsDepressed(), IsMenuOpen(), IsHovered() );
 }
 
 void ComboBox::Layout( Skin::Base* skin )

@@ -55,6 +55,22 @@ namespace ToolTip
 		}
 	}
 
+	void Reset( )
+	{
+#ifndef GWEN_NO_ANIMATION
+		if (g_ToolTip)
+		{
+			if (g_ShowToolTip)
+			{
+				g_ToolTip->Redraw();
+			}
+			g_ShowToolTip = false;
+			Gwen::Anim::Cancel(g_ToolTip);
+			Gwen::Anim::Add(g_ToolTip, new TooltipDelay(0.8));// change me to adjust tooltip delay
+		}
+#endif
+	}
+
 	void RenderToolTip( Controls::Canvas* canvas, Skin::Base* skin )
 	{
 		if ( !g_ToolTip ) { return; }

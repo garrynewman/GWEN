@@ -22,7 +22,7 @@ class ListBoxRow : public Layout::TableRow
 
 		void Render( Skin::Base* skin )
 		{
-			skin->DrawListBoxLine( this, IsSelected(), GetEven() );
+			skin->DrawListBoxLine( this, IsSelected(), GetEven(), IsHovered() );
 		}
 
 		bool IsSelected() const
@@ -44,6 +44,8 @@ class ListBoxRow : public Layout::TableRow
 				DoSelect();
 			}
 		}
+
+		virtual bool ShouldRedrawOnHover() { return true; }
 
 		void SetSelected( bool b )
 		{

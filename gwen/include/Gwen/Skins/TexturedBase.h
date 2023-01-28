@@ -472,11 +472,11 @@ namespace Gwen
 					Textures.Input.Button.Normal.Draw( GetRender(), control->GetRenderBounds() );
 				}
 
-				virtual void DrawMenuItem( Gwen::Controls::Base* control, bool bSubmenuOpen, bool bChecked )
+				virtual void DrawMenuItem( Gwen::Controls::Base* control, bool bSubmenuOpen, bool bChecked, bool bHovered )
 				{
 					const Gwen::Rect & rect = control->GetRenderBounds();
 
-					if ( bSubmenuOpen || control->IsHovered() )	{ Textures.Menu.Hover.Draw( GetRender(), rect ); }
+					if ( bSubmenuOpen || bHovered )	{ Textures.Menu.Hover.Draw( GetRender(), rect ); }
 
 					if ( bChecked ) { Textures.Menu.Check.Draw( GetRender(), Gwen::Rect( rect.x + 4, rect.y + 3, 15, 15 ) ); }
 				}
@@ -511,7 +511,7 @@ namespace Gwen
 					Textures.Shadow.Draw( GetRender(), r );
 				}
 
-				virtual void DrawRadioButton( Gwen::Controls::Base* control, bool bSelected, bool bDepressed )
+				virtual void DrawRadioButton( Gwen::Controls::Base* control, bool bSelected, bool bDepressed, bool bHovered )
 				{
 					if ( bSelected )
 					{
@@ -530,7 +530,7 @@ namespace Gwen
 				}
 
 
-				virtual void DrawCheckBox( Gwen::Controls::Base* control, bool bSelected, bool bDepressed )
+				virtual void DrawCheckBox( Gwen::Controls::Base* control, bool bSelected, bool bDepressed, bool bHovered )
 				{
 					if ( bSelected )
 					{
@@ -581,7 +581,7 @@ namespace Gwen
 					if ( dir == Pos::Right )	{ return Textures.Tab.Right.Active.Draw( GetRender(), control->GetRenderBounds() + Rect( -8, 0, 8, 0 ) ); }
 				}
 
-				virtual void DrawTabButton( Gwen::Controls::Base* control, bool bActive, int dir )
+				virtual void DrawTabButton( Gwen::Controls::Base* control, bool bActive, int dir, bool bHovered )
 				{
 					if ( bActive )
 					{ return DrawActiveTabButton( control, dir ); }
@@ -696,7 +696,7 @@ namespace Gwen
 					return Textures.Input.ListBox.Background.Draw( GetRender(), control->GetRenderBounds() );
 				}
 
-				virtual void DrawListBoxLine( Gwen::Controls::Base* control, bool bSelected, bool bEven )
+				virtual void DrawListBoxLine( Gwen::Controls::Base* control, bool bSelected, bool bEven, bool bHovered )
 				{
 					if ( bSelected )
 					{
@@ -706,7 +706,7 @@ namespace Gwen
 						{ return Textures.Input.ListBox.OddLineSelected.Draw( GetRender(), control->GetRenderBounds() ); }
 					}
 
-					if ( control->IsHovered() )
+					if ( bHovered )
 					{ return Textures.Input.ListBox.Hovered.Draw( GetRender(), control->GetRenderBounds() ); }
 
 					if ( bEven )
@@ -763,7 +763,7 @@ namespace Gwen
 					return GetRender()->DrawFilledRect( rect );
 				}
 
-				virtual void DrawComboBox( Gwen::Controls::Base* control, bool bDown, bool bMenuOpen )
+				virtual void DrawComboBox( Gwen::Controls::Base* control, bool bDown, bool bMenuOpen, bool bHovered )
 				{
 					if ( control->IsDisabled() )
 					{ return Textures.Input.ComboBox.Disabled.Draw( GetRender(), control->GetRenderBounds() ); }
@@ -771,7 +771,7 @@ namespace Gwen
 					if ( bDown || bMenuOpen )
 					{ return Textures.Input.ComboBox.Down.Draw( GetRender(), control->GetRenderBounds() ); }
 
-					if ( control->IsHovered() )
+					if ( bHovered )
 					{ return Textures.Input.ComboBox.Hover.Draw( GetRender(), control->GetRenderBounds() ); }
 
 					Textures.Input.ComboBox.Normal.Draw( GetRender(), control->GetRenderBounds() );
@@ -857,7 +857,7 @@ namespace Gwen
 					Textures.Input.ComboBox.Button.Normal.Draw( GetRender(), control->GetRenderBounds() );
 				}
 
-				virtual void DrawNumericUpDownButton( Gwen::Controls::Base* control, bool bDepressed, bool bUp )
+				virtual void DrawNumericUpDownButton( Gwen::Controls::Base* control, bool bDepressed, bool bUp, bool bHovered )
 				{
 					if ( bUp )
 					{
@@ -865,7 +865,7 @@ namespace Gwen
 
 						if ( bDepressed )				{ return Textures.Input.UpDown.Up.Down.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
-						if ( control->IsHovered() )		{ return Textures.Input.UpDown.Up.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
+						if ( bHovered )		{ return Textures.Input.UpDown.Up.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
 						return Textures.Input.UpDown.Up.Normal.DrawCenter( GetRender(), control->GetRenderBounds() );
 					}
@@ -874,7 +874,7 @@ namespace Gwen
 
 					if ( bDepressed )				{ return Textures.Input.UpDown.Down.Down.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
-					if ( control->IsHovered() )		{ return Textures.Input.UpDown.Down.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
+					if ( bHovered )		{ return Textures.Input.UpDown.Down.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
 					return Textures.Input.UpDown.Down.Normal.DrawCenter( GetRender(), control->GetRenderBounds() );
 				}
@@ -985,7 +985,7 @@ namespace Gwen
 				}
 
 
-				virtual void DrawSlideButton( Gwen::Controls::Base* control, bool bDepressed, bool bHorizontal )
+				virtual void DrawSlideButton( Gwen::Controls::Base* control, bool bDepressed, bool bHorizontal, bool bHovered )
 				{
 					if ( !bHorizontal )
 					{
@@ -993,7 +993,7 @@ namespace Gwen
 
 						if ( bDepressed )				{ return Textures.Input.Slider.V.Down.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
-						if ( control->IsHovered() )		{ return Textures.Input.Slider.V.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
+						if ( bHovered )		{ return Textures.Input.Slider.V.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
 						return Textures.Input.Slider.V.Normal.DrawCenter( GetRender(), control->GetRenderBounds() );
 					}
@@ -1002,7 +1002,7 @@ namespace Gwen
 
 					if ( bDepressed )				{ return Textures.Input.Slider.H.Down.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
-					if ( control->IsHovered() )		{ return Textures.Input.Slider.H.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
+					if ( bHovered )		{ return Textures.Input.Slider.H.Hover.DrawCenter( GetRender(), control->GetRenderBounds() ); }
 
 					Textures.Input.Slider.H.Normal.DrawCenter( GetRender(), control->GetRenderBounds() );
 				}

@@ -86,9 +86,9 @@ namespace Gwen
 					DrawButton( control, bDepressed, bHovered, bDisabled );
 				}
 
-				virtual void DrawMenuItem( Gwen::Controls::Base* control, bool bSubmenuOpen, bool bChecked )
+				virtual void DrawMenuItem( Gwen::Controls::Base* control, bool bSubmenuOpen, bool bChecked, bool bHovered )
 				{
-					if ( bSubmenuOpen || control->IsHovered() )
+					if ( bSubmenuOpen || bHovered )
 					{
 						m_Render->SetDrawColor( m_colHighlightBG );
 						m_Render->DrawFilledRect( control->GetRenderBounds() );
@@ -176,18 +176,18 @@ namespace Gwen
 					m_Render->DrawShavedCornerRect( Gwen::Rect( 0, 0, w, h ), bSquared );
 				}
 
-				virtual void DrawRadioButton( Gwen::Controls::Base* control, bool bSelected, bool bDepressed )
+				virtual void DrawRadioButton( Gwen::Controls::Base* control, bool bSelected, bool bDepressed, bool bHovered )
 				{
 					Gwen::Rect rect = control->GetRenderBounds();
 
 					// Inside colour
-					if ( control->IsHovered() )	{ m_Render->SetDrawColor( Gwen::Color( 220, 242, 254, 255 ) ); }
+					if ( bHovered )	{ m_Render->SetDrawColor( Gwen::Color( 220, 242, 254, 255 ) ); }
 					else { m_Render->SetDrawColor( m_colControlBright ); }
 
 					m_Render->DrawFilledRect( Gwen::Rect( 1, 1, rect.w - 2, rect.h - 2 ) );
 
 					// Border
-					if ( control->IsHovered() )	{ m_Render->SetDrawColor( Gwen::Color( 85, 130, 164, 255 ) ); }
+					if ( bHovered )	{ m_Render->SetDrawColor( Gwen::Color( 85, 130, 164, 255 ) ); }
 					else { m_Render->SetDrawColor( m_colControlOutlineLight ); }
 
 					m_Render->DrawShavedCornerRect( rect );
@@ -196,7 +196,7 @@ namespace Gwen
 					m_Render->DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + 2, rect.w * 0.3f, rect.h - 4 ) );
 					m_Render->DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + 2, rect.w - 4, rect.h * 0.3f ) );
 
-					if ( control->IsHovered() )	{ m_Render->SetDrawColor( Gwen::Color( 121, 198, 249, 255 ) ); }
+					if ( bHovered )	{ m_Render->SetDrawColor( Gwen::Color( 121, 198, 249, 255 ) ); }
 					else { m_Render->SetDrawColor( Gwen::Color( 0, 50, 60, 50 ) ); }
 
 					m_Render->DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + 3, 1, rect.h - 5 ) );
@@ -210,18 +210,18 @@ namespace Gwen
 				}
 
 
-				virtual void DrawCheckBox( Gwen::Controls::Base* control, bool bSelected, bool bDepressed )
+				virtual void DrawCheckBox( Gwen::Controls::Base* control, bool bSelected, bool bDepressed, bool bHovered )
 				{
 					Gwen::Rect rect = control->GetRenderBounds();
 
 					// Inside colour
-					if ( control->IsHovered() )	{ m_Render->SetDrawColor( Gwen::Color( 220, 242, 254, 255 ) ); }
+					if ( bHovered )	{ m_Render->SetDrawColor( Gwen::Color( 220, 242, 254, 255 ) ); }
 					else { m_Render->SetDrawColor( m_colControlBright ); }
 
 					m_Render->DrawFilledRect( rect );
 
 					// Border
-					if ( control->IsHovered() )	{ m_Render->SetDrawColor( Gwen::Color( 85, 130, 164, 255 ) ); }
+					if ( bHovered )	{ m_Render->SetDrawColor( Gwen::Color( 85, 130, 164, 255 ) ); }
 					else { m_Render->SetDrawColor( m_colControlOutlineLight ); }
 
 					m_Render->DrawLinedRect( rect );
@@ -230,7 +230,7 @@ namespace Gwen
 					m_Render->DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + 2, rect.w * 0.3f, rect.h - 4 ) );
 					m_Render->DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + 2, rect.w - 4, rect.h * 0.3f ) );
 
-					if ( control->IsHovered() )	{ m_Render->SetDrawColor( Gwen::Color( 121, 198, 249, 255 ) ); }
+					if ( bHovered )	{ m_Render->SetDrawColor( Gwen::Color( 121, 198, 249, 255 ) ); }
 					else { m_Render->SetDrawColor( Gwen::Color( 0, 50, 60, 50 ) ); }
 
 					m_Render->DrawFilledRect( Gwen::Rect( rect.x + 2, rect.y + 2, 1, rect.h - 4 ) );
@@ -292,10 +292,9 @@ namespace Gwen
 					}
 				}
 
-				virtual void DrawTabButton( Gwen::Controls::Base* control, bool bActive, int dir )
+				virtual void DrawTabButton( Gwen::Controls::Base* control, bool bActive, int dir, bool bHovered )
 				{
 					Gwen::Rect rect = control->GetRenderBounds();
-					bool bHovered = control->IsHovered();
 
 					if ( bHovered ) { m_Render->SetDrawColor( m_colControlBright ); }
 					else		   { m_Render->SetDrawColor( m_colControl ); }
@@ -373,10 +372,10 @@ namespace Gwen
 					m_Render->DrawFilledRect( rect );
 				}
 
-				virtual void DrawScrollBarBar( Controls::Base* control, bool bDepressed, bool isHovered, bool isHorizontal )
+				virtual void DrawScrollBarBar( Controls::Base* control, bool bDepressed, bool bHovered, bool isHorizontal )
 				{
 					//TODO: something specialized
-					DrawButton( control, bDepressed, isHovered, false );
+					DrawButton( control, bDepressed, bHovered, false );
 				}
 
 				virtual void DrawTabTitleBar( Gwen::Controls::Base* control )
@@ -434,7 +433,7 @@ namespace Gwen
 					m_Render->DrawLinedRect( rect );
 				}
 
-				virtual void DrawListBoxLine( Gwen::Controls::Base* control, bool bSelected, bool bEven )
+				virtual void DrawListBoxLine( Gwen::Controls::Base* control, bool bSelected, bool bEven, bool bHovered )
 				{
 					Gwen::Rect rect = control->GetRenderBounds();
 
@@ -443,7 +442,7 @@ namespace Gwen
 						m_Render->SetDrawColor( m_colHighlightBorder );
 						m_Render->DrawFilledRect( rect );
 					}
-					else if ( control->IsHovered() )
+					else if ( bHovered )
 					{
 						m_Render->SetDrawColor( m_colHighlightBG );
 						m_Render->DrawFilledRect( rect );
@@ -472,7 +471,7 @@ namespace Gwen
 					m_Render->DrawLinedRect( rect );
 				}
 
-				virtual void DrawComboBox( Gwen::Controls::Base* control, bool bIsDown, bool bIsMenuOpen )
+				virtual void DrawComboBox( Gwen::Controls::Base* control, bool bIsDown, bool bIsMenuOpen, bool bHovered )
 				{
 					DrawTextBox( control );
 				}
@@ -549,7 +548,7 @@ namespace Gwen
 					DrawArrowDown( r );
 				}
 
-				virtual void DrawNumericUpDownButton( Gwen::Controls::Base* control, bool bDepressed, bool bUp )
+				virtual void DrawNumericUpDownButton( Gwen::Controls::Base* control, bool bDepressed, bool bUp, bool bHovered )
 				{
 					//DrawButton( control->Width(), control->Height(), bDepressed, false, true );
 					m_Render->SetDrawColor( Gwen::Color( 0, 0, 0, 240 ) );
@@ -648,9 +647,9 @@ namespace Gwen
 					DrawArrowRight( control->GetRenderBounds() );
 				}
 
-				virtual void DrawSlideButton( Gwen::Controls::Base* control, bool bDepressed, bool bHorizontal )
+				virtual void DrawSlideButton( Gwen::Controls::Base* control, bool bDepressed, bool bHorizontal, bool bHovered )
 				{
-					DrawButton( control, bDepressed, control->IsHovered(), control->IsDisabled() );
+					DrawButton( control, bDepressed, bHovered, control->IsDisabled() );
 				}
 
 				virtual void DrawCategoryHolder( Controls::Base* ctrl ) {}

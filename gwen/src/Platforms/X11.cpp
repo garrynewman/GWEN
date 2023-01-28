@@ -245,6 +245,8 @@ typedef struct
 	unsigned long   status;
 } Hints;
 
+#define XA_ATOM ((Atom)4)
+
 static struct { 
     int pip[2];     // extra pipe for event loop
     sig_atomic_t done;
@@ -253,7 +255,7 @@ static int xfd;
 static Atom delete_msg;
 
 GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int h, 
-	const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
+	const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer, bool is_menu)
 {
 	Display *display = x11_display ? x11_display : XOpenDisplay(NULL);
 	if (!x11_display)
@@ -369,13 +371,25 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
   
   	
   	// Hide borders
-  	if (!WindowHasTitleBar())
+  	if (!WindowHasTitleBar() || is_menu)
   	{
 		Hints hints;
 		hints.flags = 2;
 		hints.decorations = 0;
 		Atom property = XInternAtom(display,"_MOTIF_WM_HINTS",True);
 		XChangeProperty(display,win,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+	}
+
+	// Tell the window manager that we arent a normal window so we dont get added to taskbar
+	if (is_menu)
+	{
+		Atom type_atom = XInternAtom(x11_display, "_NET_WM_WINDOW_TYPE_MENU", False);
+		Atom wt_atom = XInternAtom(x11_display, "_NET_WM_WINDOW_TYPE", False);
+
+		if (wt_atom != None && type_atom != None)
+		{
+			XChangeProperty(display, win, wt_atom, XA_ATOM, 32, PropModeReplace, (unsigned char *)&type_atom, 1);
+		}
 	}
 
 	//printf( "Mapping window\n" );
@@ -395,6 +409,11 @@ GWEN_EXPORT void* Gwen::Platform::CreatePlatformWindow( int x, int y, int w, int
 	XMoveResizeWindow(x11_display, win, x, y, w, h);
 	
 	return (void*)win;
+}
+
+void Gwen::Platform::SetWindowTitle(void* pPtr, const Gwen::String & strWindowTitle)
+{
+	XStoreName( x11_display, (Window)pPtr, strWindowTitle.c_str() );
 }
 
 static std::map<Window, Gwen::Controls::WindowCanvas*> canvases;
@@ -431,6 +450,7 @@ double GetDPIInfo()
             }
         }
     }
+	XrmDestroyDatabase(db);
 
     //printf("Font DPI: %f\n", dpi);// this is actually the font scale setting!
     
@@ -438,9 +458,10 @@ double GetDPIInfo()
     int screen = DefaultScreen(display_2);
     
     //printf("Width: %i\n", DisplayWidthMM(display_2, screen));
-    XCloseDisplay(display_2);
+
     
     double real_dpi = DisplayWidth(display_2, screen)/(DisplayWidthMM(display_2, screen)/25.4);
+    XCloseDisplay(display_2);
     //printf("Real DPI: %f\n", real_dpi);
 
     // round to the nearest 0.25 dpi
@@ -682,10 +703,23 @@ bool Gwen::Platform::HasFocusPlatformWindow( void* pPtr )
 
 void Gwen::Platform::GetDesktopSize( int & w, int & h )
 {
-	Screen* screen = XDefaultScreenOfDisplay(x11_display ? x11_display : XOpenDisplay(NULL));
+	Display* display = x11_display;
+	bool opened_display = false;
+	if (!display)
+	{
+		display = XOpenDisplay(NULL);
+		opened_display = true;
+	}
+
+	Screen* screen = XDefaultScreenOfDisplay(display);
 	
 	w = XWidthOfScreen(screen);
 	h = XHeightOfScreen(screen);
+
+	if (opened_display)
+	{
+		XCloseDisplay(display);
+	}
 }
 
 void Gwen::Platform::GetCursorPos( Gwen::Point & po )
@@ -706,7 +740,7 @@ bool Gwen::Platform::WindowHasTitleBar()
 void Gwen::Platform::InterruptWait()
 {
 	// Wake up select below in WaitForEvent
-	char buf;
+	char buf = 0;
 	write(global.pip[1], &buf, 1);
 }
 

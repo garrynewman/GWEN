@@ -182,5 +182,6 @@ gwen/CMakeFiles/
 gwen/CMakeCache.txt
 gwen/*.cmake
 gwen/Makefile
+gwen/resources.h
 .vs/*
 gwen/.vs/*

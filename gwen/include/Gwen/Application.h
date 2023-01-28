@@ -33,7 +33,7 @@ extern BaseApplication* gApplication;
 class BaseApplication
 {
 public:
-	virtual Gwen::Controls::Base* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1) = 0;
+	virtual Gwen::Controls::WindowCanvas* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1, bool is_menu = false) = 0;
 
 	virtual void RequestQuit() = 0;
 };
@@ -168,14 +168,14 @@ public:
 		return true;
 	}
 
-	Gwen::Controls::WindowCanvas* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1)
+	Gwen::Controls::WindowCanvas* AddWindow(const std::string& title, int w, int h, int x = -1, int y = -1, bool is_menu = false)
 	{
 		T* renderer = new T();
 
 		auto skin = new Gwen::Skin::TexturedBase(renderer);// todo parameterize this
 
-		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title);
-		window_canvas->SetSizable(true);
+		Gwen::Controls::WindowCanvas* window_canvas = new Gwen::Controls::WindowCanvas(x, y, w, h, skin, title, is_menu);
+		window_canvas->SetSizable(!is_menu);
 
 		if (FILE* f = fopen(skin_.c_str(), "rb"))
 		{
@@ -190,7 +190,6 @@ public:
 			printf("Skin doesnt exist. Creating from default.\n");
 		}
 
-	//if the skin doesnt exist, create it from default
 		skin->Init(skin_);
 		skin->SetDefaultFont(default_font_, default_font_size_);
 

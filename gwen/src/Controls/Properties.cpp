@@ -124,6 +124,8 @@ class PropertyRowLabel : public Label
 GWEN_CONTROL_CONSTRUCTOR( PropertyRow )
 {
 	m_Property = NULL;
+	m_bLastHover = false;
+	m_bLastEditing = false;
 	PropertyRowLabel* pLabel = new PropertyRowLabel( this );
 	pLabel->SetPropertyRow( this );
 	pLabel->Dock( Pos::Left );
@@ -172,6 +174,13 @@ void PropertyRow::SetProperty( Property::Base* prop )
 	m_Property->SetParent( this );
 	m_Property->Dock( Pos::Fill );
 	m_Property->onChange.Add( this, &ThisClass::OnPropertyValueChanged );
+	m_Property->onHoverEnter.Add( this, &ThisClass::OnPropertyHoverChanged );
+	m_Property->onHoverLeave.Add( this, &ThisClass::OnPropertyHoverChanged );
+}
+
+void PropertyRow::OnPropertyHoverChanged( Gwen::Controls::Base* /*control*/ )
+{
+	Redraw();
 }
 
 void PropertyRow::OnPropertyValueChanged( Gwen::Controls::Base* /*control*/ )

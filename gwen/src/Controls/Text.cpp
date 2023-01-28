@@ -275,7 +275,7 @@ void Text::SplitWords(const Gwen::UnicodeString &s, std::vector<Gwen::UnicodeStr
 
 void Text::RefreshSizeWrap()
 {
-	RemoveAllChildren();
+	DeleteAllChildren();
 
 	for ( TextLines::iterator it = m_Lines.begin(); it != m_Lines.end(); ++it )
 	{

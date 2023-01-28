@@ -164,6 +164,24 @@ Gwen::Point Gwen::Input::GetMousePosition()
 	return MousePosition;
 }
 
+
+static Gwen::Controls::WindowCanvas* hovered_canvas = 0;
+
+void Gwen::Input::UpdateHovered()
+{
+	// make sure hovered canvas is valid, it could have been deleted
+	bool found = false;
+	for (auto canv: canvases)
+	{
+		if (hovered_canvas == canv.first)
+		{
+			found = true;
+			break;
+		}
+	}
+	UpdateHoveredControl(found ? hovered_canvas : 0);
+}
+
 void Gwen::Input::OnThink()
 {
 	if ( Gwen::MouseFocus && !Gwen::MouseFocus->Visible() )
@@ -220,13 +238,14 @@ bool Gwen::Input::OnMouseMoved( int x, int y, int deltaX, int deltaY, void* plat
 	MousePosition.y = y;
 	
 	// find the hovered window
-	Controls::Canvas* hovered_canvas = 0;
+	hovered_canvas = 0;
 	for (auto canv: canvases)
 	{
 		Gwen::Controls::WindowCanvas* wcanv = dynamic_cast<Gwen::Controls::WindowCanvas*>(canv.first);
 		if (wcanv && wcanv->GetWindow() == platform_window)
 		{
 			hovered_canvas = wcanv;
+			break;
 		}
 	}
 	
@@ -240,17 +259,16 @@ bool Gwen::Input::OnMouseMoved( int x, int y, int deltaX, int deltaY, void* plat
 		auto wpos = canv.first->WindowPosition();
 		float scale = canv.first->Scale();
 		canv.first->OnMouseMoved((x - wpos.x)/scale, (y - wpos.y)/scale, deltaX, deltaY);
-		
-		// todo only do this on relevant canvas
-		if ( ToolTip::TooltipActive() )
-		{
-			canv.first->Redraw();
-		}
 	}
 	
 	if (Gwen::HoveredControl == 0)
 	{
 		return false;
+	}
+
+	if ( ToolTip::TooltipActive() )
+	{
+		ToolTip::Reset();
 	}
 	
 	float fScale = Gwen::HoveredControl->GetCanvas()->Scale();

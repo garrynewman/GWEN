@@ -47,6 +47,8 @@ namespace Gwen
 				virtual void SetToggleState( bool b );
 				virtual void Toggle() { SetToggleState( !GetToggleState() ); }
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 
 				virtual void SetImage( const TextObject & strName, bool bCenter = false, bool bMaintainAspectRatio = true );
 

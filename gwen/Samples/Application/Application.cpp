@@ -23,7 +23,7 @@ int main(int argc, char** args)
 	//
 	// Create our unittest control
 	//
-	UnitTest* pUnit = new UnitTest( app.AddWindow("Gwen's Cross Platform Example", 700, 500) );
+	UnitTest* pUnit = new UnitTest( app.AddWindow("Gwen's Cross Platform Application Example", 700, 500) );
 	pUnit->SetPos( 0, 0 );
 	
 	// Wait for exit

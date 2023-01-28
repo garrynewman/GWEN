@@ -35,6 +35,8 @@ namespace Gwen
 				virtual void Render( Skin::Base* skin );
 				virtual void Layout( Skin::Base* skin );
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 				void SetPage( Base* page ) { m_Page = page; }
 				Base* GetPage() { return m_Page; }
 

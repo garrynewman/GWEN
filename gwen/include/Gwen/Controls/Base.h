@@ -97,6 +97,7 @@ namespace Gwen
 			public:
 
 				virtual void RemoveAllChildren();
+				virtual void DeleteAllChildren();
 
 				virtual void SendToBack( void );
 				virtual void BringToFront( void );
@@ -250,6 +251,7 @@ namespace Gwen
 				virtual void OnMouseLeave();
 				virtual bool IsHovered();
 				virtual bool ShouldDrawHover();
+				virtual bool ShouldRedrawOnHover();
 
 				virtual void Touch();
 				virtual void OnChildTouched( Controls::Base* pChild );

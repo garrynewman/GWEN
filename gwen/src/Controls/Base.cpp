@@ -293,6 +293,7 @@ void Base::AddChild( Base* pChild )
 	OnChildAdded( pChild );
 	pChild->m_ActualParent = this;
 }
+
 void Base::RemoveChild( Base* pChild )
 {
 	// If we removed our innerpanel
@@ -316,6 +317,16 @@ void Base::RemoveAllChildren()
 	while ( Children.size() > 0 )
 	{
 		RemoveChild( *Children.begin() );
+	}
+}
+
+void Base::DeleteAllChildren()
+{
+	while ( Children.size() > 0 )
+	{
+		Base* child = *Children.begin();
+		RemoveChild(child);
+		child->DelayedDelete();
 	}
 }
 
@@ -640,7 +651,8 @@ void Base::OnMouseEnter()
 	else if ( GetParent() && GetParent()->GetToolTip() )
 	{ ToolTip::Enable( GetParent() ); }
 
-	Redraw();
+	if (ShouldRedrawOnHover())
+	{ Redraw(); }
 }
 
 void Base::OnMouseLeave()
@@ -652,9 +664,14 @@ void Base::OnMouseLeave()
 	else if (GetParent() && GetParent()->GetToolTip())
 	{ ToolTip::Disable(GetParent()); }
 
-	Redraw();
+	if (ShouldRedrawOnHover())
+	{ Redraw(); }
 }
 
+bool Base::ShouldRedrawOnHover()
+{
+	return false;
+}
 
 bool Base::IsHovered()
 {

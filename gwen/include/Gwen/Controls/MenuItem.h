@@ -36,6 +36,8 @@ namespace Gwen
 				
 				virtual Gwen::Point GetMinimumSize();
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 				Menu* GetMenu();
 
 				bool IsMenuOpen();
@@ -49,6 +51,7 @@ namespace Gwen
 				virtual void SetCheckable( bool bCheck ) { m_bCheckable = bCheck; }
 				virtual void SetChecked( bool bCheck );
 				virtual bool GetChecked() { return m_bChecked; }
+				virtual void OnScaleChanged();
 
 				template <typename T>
 				MenuItem* SetAction( Gwen::Event::Handler* pHandler, T fn )

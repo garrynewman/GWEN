@@ -27,6 +27,8 @@ namespace Gwen
 						m_TextBox->Dock( Pos::Fill );
 						m_TextBox->SetShouldDrawBackground( false );
 						m_TextBox->onTextChanged.Add( this, &BaseClass::OnPropertyValueChanged );
+						m_TextBox->onHoverEnter.Add( this, &ThisClass::OnPropertyHoverChanged );
+						m_TextBox->onHoverLeave.Add( this, &ThisClass::OnPropertyHoverChanged );
 					}
 
 					virtual TextObject GetPropertyValue()
@@ -50,6 +52,13 @@ namespace Gwen
 					}
 
 					TextBox* m_TextBox;
+
+				private:
+
+					void OnPropertyHoverChanged( Gwen::Controls::Base* control )
+					{
+						Redraw();
+					}
 			};
 		}
 	}

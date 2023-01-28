@@ -19,12 +19,12 @@ GWEN_CONTROL_CONSTRUCTOR( Button )
 	m_Image = NULL;
 	m_bDepressed = false;
 	m_bCenterImage = false;
+	m_bToggleStatus = false;
 	SetSize( 100, 20 );
 	SetMouseInputEnabled( true );
 	SetIsToggle( false );
 	SetAlignment( Gwen::Pos::Center );
 	SetTextPadding( Padding( 3, 0, 3, 0 ) );
-	m_bToggleStatus = false;
 	SetKeyboardInputEnabled( false );
 	SetTabable( false );
 }
@@ -72,7 +72,6 @@ void Button::OnMouseClickRight( int /*x*/, int /*y*/, bool bDown )
 	{
 		SetDepressed( true );
 		Gwen::MouseFocus = this;
-		onDown.Call( this );
 	}
 	else
 	{
@@ -83,7 +82,6 @@ void Button::OnMouseClickRight( int /*x*/, int /*y*/, bool bDown )
 
 		SetDepressed( false );
 		Gwen::MouseFocus = NULL;
-		onUp.Call( this );
 	}
 }
 

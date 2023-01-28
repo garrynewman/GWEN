@@ -25,6 +25,8 @@ namespace Gwen
 				GWEN_CONTROL( RadioButton, CheckBox );
 				virtual void Render( Skin::Base* skin );
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 			private:
 
 				// From CheckBox

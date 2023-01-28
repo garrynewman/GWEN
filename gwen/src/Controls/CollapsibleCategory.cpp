@@ -35,6 +35,11 @@ class CategoryButton : public Button
 
 			skin->GetRender()->DrawFilledRect( this->GetRenderBounds() );
 		}
+		
+		virtual void PostLayout( Skin::Base* /*skin*/ )
+		{
+			SizeToChildren( false, true);
+		}
 
 		void UpdateColours()
 		{
@@ -140,6 +145,13 @@ void CollapsibleCategory::UnselectAll()
 
 		pChild->SetToggleState( false );
 	}
+}
+
+void CollapsibleCategory::Layout( Skin::Base* skin )
+{
+	// Size the button to the font or a minimum size
+	Gwen::Point size = m_pButton->ChildrenSize();
+	m_pButton->SetHeight(std::max(size.y, 20));
 }
 
 void CollapsibleCategory::PostLayout( Skin::Base* /*skin*/ )

@@ -77,6 +77,8 @@ namespace Gwen
 		bool GWEN_EXPORT IsRightMouseDown();
 		Gwen::Point GWEN_EXPORT GetMousePosition();
 
+		void UpdateHovered();
+
 		inline bool IsShiftDown() { return IsKeyDown( Gwen::Key::Shift ); }
 		inline bool IsControlDown() { return IsKeyDown( Gwen::Key::Control ); }
 

@@ -47,7 +47,7 @@ void TabButton::Layout( Skin::Base* skin )
 
 void TabButton::Render( Skin::Base* skin )
 {
-	skin->DrawTabButton( this, IsActive(), m_Control->GetTabStrip()->GetDock() );
+	skin->DrawTabButton( this, IsActive(), m_Control->GetTabStrip()->GetDock(), IsHovered() );
 }
 
 void TabButton::SetTabControl( TabControl* ctrl )

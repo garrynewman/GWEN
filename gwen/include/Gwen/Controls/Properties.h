@@ -67,11 +67,14 @@ namespace Gwen
 				virtual void OnEditingChanged();
 				virtual void OnHoverChanged();
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 				Event::Caller	onChange;
 
 			protected:
 
 				void OnPropertyValueChanged( Gwen::Controls::Base* control );
+				void OnPropertyHoverChanged( Gwen::Controls::Base* control );
 
 				Label*			m_Label;
 				Property::Base*	m_Property;

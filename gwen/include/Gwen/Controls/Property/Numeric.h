@@ -30,6 +30,8 @@ namespace Gwen
 						m_Numeric->Dock( Pos::Fill );
 						//m_Numeric->SetShouldDrawBackground( false );
 						m_Numeric->onChanged.Add( this, &BaseClass::OnPropertyValueChanged );
+						m_Numeric->onHoverEnter.Add( this, &ThisClass::OnPropertyHoverChanged );
+						m_Numeric->onHoverLeave.Add( this, &ThisClass::OnPropertyHoverChanged );
 					}
 
 					virtual TextObject GetPropertyValue()
@@ -53,6 +55,13 @@ namespace Gwen
 					}
 
 					NumericUpDown* m_Numeric;
+
+				private:
+
+					void OnPropertyHoverChanged( Gwen::Controls::Base* control )
+					{
+						Redraw();
+					}
 			};
 			
 			class GWEN_EXPORT Float : public Property::Base

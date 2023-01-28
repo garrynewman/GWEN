@@ -26,6 +26,8 @@ namespace Gwen
 				virtual void SetHorizontal( bool b ) { m_bHorizontal = b; }
 				virtual bool IsHorizontal() { return m_bHorizontal; }
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 			protected:
 
 				bool m_bHorizontal;

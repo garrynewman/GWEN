@@ -56,7 +56,7 @@ namespace Gwen
 		//
 		// Window Creation
 		//
-		GWEN_EXPORT void* CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer);
+		GWEN_EXPORT void* CreatePlatformWindow( int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer, bool is_menu);
 		GWEN_EXPORT void DestroyPlatformWindow( void* pPtr );
 		GWEN_EXPORT void WaitForEvent( int timeout_ms );
 		GWEN_EXPORT void InterruptWait();
@@ -68,6 +68,7 @@ namespace Gwen
 		GWEN_EXPORT void SetWindowMinimumSize( void* pPtr, int min_width, int min_height);
 		GWEN_EXPORT bool WindowHasTitleBar();
 		GWEN_EXPORT bool IsWindowMaximized( void* pPtr);
+		GWEN_EXPORT void SetWindowTitle(void* pPtr, const Gwen::String & strWindowTitle);
 	}
 
 }

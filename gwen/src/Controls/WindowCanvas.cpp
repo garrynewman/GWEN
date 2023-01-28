@@ -20,9 +20,9 @@
 using namespace Gwen;
 using namespace Gwen::Controls;
 
-WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin, const Gwen::String & strWindowTitle ) : BaseClass( NULL )
+WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin, const Gwen::String & strWindowTitle, bool is_menu ) : BaseClass( NULL )
 {
-	m_bHasTitleBar = !Platform::WindowHasTitleBar();
+	m_bHasTitleBar = !Platform::WindowHasTitleBar() && !is_menu;
 	m_bQuit = false;
 	m_bCanMaximize = true;
 	m_bIsMaximized = false;
@@ -38,12 +38,19 @@ WindowCanvas::WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pSkin,
 	}
 	m_WindowPos  = Gwen::Point( x, y );
 
-	m_pOSWindow = Gwen::Platform::CreatePlatformWindow( x, y, w, h, strWindowTitle, pSkin->GetRender() );
+	m_pOSWindow = Gwen::Platform::CreatePlatformWindow( x, y, w, h, strWindowTitle, pSkin->GetRender(), is_menu );
 	pSkin->GetRender()->InitializeContext(this);
 	pSkin->GetRender()->Init();
 	m_pSkinChange = pSkin;
 	SetSize( w, h );
-	SetMinimumSize(Gwen::Point(std::min(w, 100), std::min(h, 40)));
+	if (is_menu)
+	{
+		SetMinimumSize(Gwen::Point(0, 0));
+	}
+	else
+	{
+		SetMinimumSize(Gwen::Point(std::min(w, 100), std::min(h, 40)));
+	}
 	
 	if (m_bHasTitleBar)
 	{
@@ -152,30 +159,33 @@ Base* WindowCanvas::GetControlAt( int x, int y, bool bOnlyIfMouseEnabled )
 	
 	// Check each of our draggers first
 	const int sizer_border = 8;
-	if (y > Height() - sizer_border)
+	if (m_bHasTitleBar)
 	{
-		if (x < sizer_border)
+		if (y > Height() - sizer_border)
 		{
-			return m_SWSizer;
-		}
-		else if (x > Width() - sizer_border)
-		{
-			return m_SESizer;
+			if (x < sizer_border)
+			{
+				return m_SWSizer;
+			}
+			else if (x > Width() - sizer_border)
+			{
+				return m_SESizer;
+			}
+			else
+			{
+				return m_BottomSizer;
+			}
 		}
 		else
 		{
-			return m_BottomSizer;
-		}
-	}
-	else
-	{
-		if (x < sizer_border)
-		{
-			return m_LeftSizer;
-		}
-		else if (x > Width() - sizer_border)
-		{
-			return m_RightSizer;
+			if (x < sizer_border)
+			{
+				return m_LeftSizer;
+			}
+			else if (x > Width() - sizer_border)
+			{
+				return m_RightSizer;
+			}
 		}
 	}
 
@@ -226,7 +236,7 @@ void WindowCanvas::DoThink()
 	{
 		last_x = last_y = 0;
 	}
-	
+
 	bool real_maximized = Platform::IsWindowMaximized( m_pOSWindow );
 	if (m_bIsMaximized != real_maximized)
 	{
@@ -238,6 +248,7 @@ void WindowCanvas::DoThink()
 	RenderCanvas();
 }
 
+//int i = 0;
 void WindowCanvas::RenderCanvas()
 {
 	//
@@ -247,9 +258,15 @@ void WindowCanvas::RenderCanvas()
 	//
 	if ( !NeedsRedraw() )
 	{
-		Platform::Sleep( 10 );
+		Platform::Sleep( 10 );// this probably shouldnt be here
 		return;
 	}
+
+	// If the canvas was needs to be rerendered, its possible things moved around
+	// Update our hovered control so this is correct
+	Gwen::Input::UpdateHovered();
+
+	//printf("Redraw %i\n", i++%10000);
 
 	m_bNeedsRedraw = false;
 	Gwen::Renderer::Base* render = m_Skin->GetRender();
@@ -367,6 +384,22 @@ void WindowCanvas::SetPos( int x, int y )
 	auto width = Width()*scaling.x;
 	auto height = Height()*scaling.y;
 	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, width, height);
+}
+
+void WindowCanvas::OnBoundsChanged( Gwen::Rect oldBounds )
+{
+	BaseClass::OnBoundsChanged(oldBounds);
+}
+
+void WindowCanvas::SetWindowSize(int x, int y)
+{
+	Gwen::PointF scaling = GetDPIScaling();
+
+	auto width = x*scaling.x;
+	auto height = y*scaling.y;
+	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, m_WindowPos.x, m_WindowPos.y, width, height);
+
+	SetSize(x, y);
 }
 
 void WindowCanvas::CloseButtonPressed()
@@ -523,5 +556,25 @@ void WindowCanvas::SetSizable( bool b )
 		m_LeftSizer->SetHidden( !b );
 		m_RightSizer->SetHidden( !b );
 		m_BottomSizer->SetHidden( !b );
+	}
+}
+
+void WindowCanvas::OnChildRemoved( Controls::Base* pChild )
+{
+	BaseClass::OnChildRemoved(pChild);
+
+	if (m_bRemoveWhenChildless && NumChildren() == 0)
+	{
+		InputQuit();
+	}
+}
+
+void WindowCanvas::SetTitle( Gwen::String title )
+{
+	Gwen::Platform::SetWindowTitle(m_pOSWindow, title);
+
+	if (m_bHasTitleBar)
+	{
+		m_Title->SetText( title );
 	}
 }

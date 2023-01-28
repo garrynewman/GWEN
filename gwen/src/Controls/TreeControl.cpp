@@ -63,8 +63,75 @@ void TreeControl::OnNodeAdded( TreeNode* pNode )
 	pNode->onNamePress.Add( this, &TreeControl::OnNodeSelection );
 }
 
-void TreeControl::OnNodeSelection( Controls::Base* /*control*/ )
+void TreeControl::OnNodeSelection( Controls::Base* control )
 {
-	if ( !m_bAllowMultipleSelection || !Gwen::Input::IsKeyDown( Key::Control ) )
-	{ DeselectAll(); }
+	if (!m_bAllowMultipleSelection)
+	{
+		DeselectAll();
+		return;
+	}
+
+	if (Gwen::Input::IsKeyDown( Key::Control ))
+	{
+		return;
+	}
+	else if (Gwen::Input::IsKeyDown( Key::Shift ))
+	{
+		auto& children = m_InnerPanel->GetChildren();
+		int min_selected = children.size() + 1;
+		int max_selected = -1;
+		int selected_index = 0;
+
+		int index = 0;
+		for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
+		{
+			TreeNode* pChild = gwen_cast<TreeNode> ( *iter );
+
+			if (*iter == control)
+			{
+				selected_index = index;
+			}
+
+			if ( pChild->IsSelected() )
+			{
+				min_selected = std::min(min_selected, index);
+				max_selected = std::max(max_selected, index);
+			}
+
+			index++;
+		}
+        
+		index = 0;
+		if (max_selected == -1)
+		{
+			// nothing else was selected so just select the current one
+		}
+		else if (selected_index < min_selected)
+		{
+			for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
+			{
+				TreeNode* pChild = gwen_cast<TreeNode> ( *iter );
+				if (index < min_selected && index > selected_index)
+				{
+					pChild->SetSelected(true);
+				}
+				index++;
+			}
+		}
+		else if (selected_index > max_selected)
+		{
+			for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
+			{
+				TreeNode* pChild = gwen_cast<TreeNode> ( *iter );
+				if (index > min_selected && index < selected_index)
+				{
+					pChild->SetSelected(true);
+				}
+				index++;
+			}
+		}
+		return;
+	}
+
+	DeselectAll();
 }

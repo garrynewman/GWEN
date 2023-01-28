@@ -41,6 +41,8 @@ namespace Gwen
 
 				virtual void ClearItems();
 
+				virtual bool ShouldRedrawOnHover() { return true; }
+
 				virtual MenuItem* AddItem( const UnicodeString & strLabel, const String & strName = "" );
 				virtual bool OnKeyUp( bool bDown );
 				virtual bool OnKeyDown( bool bDown );

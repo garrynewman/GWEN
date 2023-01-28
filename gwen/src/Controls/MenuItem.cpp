@@ -35,16 +35,26 @@ GWEN_CONTROL_CONSTRUCTOR( MenuItem )
 	m_Accelerator = NULL;
 	SetTabable( false );
 	SetCheckable( false );
-	SetChecked( false );
+    m_bChecked = false;
+	//SetChecked( false );
 }
 
 MenuItem::~MenuItem()
 {
 }
 
+void MenuItem::OnScaleChanged()
+{
+	BaseClass::SizeToContents();
+	if (m_Accelerator)
+	{
+		m_Accelerator->SizeToContents();
+	}
+}
+
 void MenuItem::Render( Skin::Base* skin )
 {
-	skin->DrawMenuItem( this, IsMenuOpen(), m_bCheckable ? m_bChecked : false );
+	skin->DrawMenuItem( this, IsMenuOpen(), m_bCheckable ? m_bChecked : false, IsHovered() );
 
 	// HACK!
 	if ( m_Accelerator )
@@ -61,8 +71,6 @@ void MenuItem::Layout( Skin::Base* skin )
 	}
 
 	BaseClass::Layout( skin );
-	
-	//SetHeight(GetMinimumSize().y);
 }
 
 Menu* MenuItem::GetMenu()
@@ -144,7 +152,7 @@ Gwen::Point MenuItem::GetMinimumSize()
 	auto padding = GetPadding();
 	w += padding.left + padding.right;
 	
-		auto tpadding = GetTextPadding();
+	auto tpadding = GetTextPadding();
 	return Gwen::Point(w, TextHeight() + padding.top + padding.bottom + tpadding.top + tpadding.bottom);
 }
 

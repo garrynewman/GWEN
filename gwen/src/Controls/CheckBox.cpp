@@ -22,7 +22,7 @@ GWEN_CONTROL_CONSTRUCTOR( CheckBox )
 
 void CheckBox::Render( Skin::Base* skin )
 {
-	skin->DrawCheckBox( this, m_bChecked, IsDepressed() );
+	skin->DrawCheckBox( this, m_bChecked, IsDepressed(), IsHovered() );
 }
 
 void CheckBox::OnPress()

@@ -267,5 +267,5 @@ void ScrollControl::ScrollToRight()
 
 void ScrollControl::Clear()
 {
-	m_InnerPanel->RemoveAllChildren();
+	m_InnerPanel->DeleteAllChildren();
 }

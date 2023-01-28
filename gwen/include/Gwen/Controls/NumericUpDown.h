@@ -25,8 +25,10 @@ namespace Gwen
 
 				virtual void Render( Skin::Base* skin )
 				{
-					skin->DrawNumericUpDownButton( this, IsDepressed(), true );
+					skin->DrawNumericUpDownButton( this, IsDepressed(), true, IsHovered() );
 				}
+
+				virtual bool ShouldRedrawOnHover() { return true; }
 		};
 
 		class GWEN_EXPORT NumericUpDownButton_Down : public Button
@@ -38,8 +40,10 @@ namespace Gwen
 
 				virtual void Render( Skin::Base* skin )
 				{
-					skin->DrawNumericUpDownButton( this, IsDepressed(), false );
+					skin->DrawNumericUpDownButton( this, IsDepressed(), false, IsHovered() );
 				}
+
+				virtual bool ShouldRedrawOnHover() { return true; }
 		};
 
 		class GWEN_EXPORT NumericUpDown : public TextBoxNumeric

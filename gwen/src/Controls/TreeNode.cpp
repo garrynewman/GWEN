@@ -269,6 +269,25 @@ void TreeNode::DeselectAll()
 	}
 }
 
+Controls::Base::List TreeNode::GetSelectedChildNodes()
+{
+	Controls::Base::List list;
+
+	Base::List & children = m_InnerPanel->GetChildren();
+
+	for ( Base::List::iterator iter = children.begin(); iter != children.end(); ++iter )
+	{
+		TreeNode* pChild = gwen_cast<TreeNode> ( *iter );
+
+		if ( !pChild ) { continue; }
+
+		if ( !pChild->IsSelected() ) { continue; }
+
+		list.push_back(pChild);
+	}
+	return list;
+}
+
 Controls::Base::List & TreeNode::GetChildNodes()
 {
 	return m_InnerPanel->GetChildren();

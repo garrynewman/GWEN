@@ -22,8 +22,10 @@ using namespace Gwen::Controls;
 Canvas::Canvas( Gwen::Skin::Base* pSkin ) : BaseClass( NULL ), m_bAnyDelete( false )
 {
 	SetBounds( 0, 0, 10000, 10000 );
-	SetScale( 1.0f );
-	SetFontScale( 1.0f );
+    m_fScale = 1.0f;
+	//SetScale( 1.0f );
+    m_fFontScale = 1.0f;
+	//SetFontScale( 1.0f );
 	SetBackgroundColor( Color( 255, 255, 255, 255 ) );
 	SetDrawBackground( false );
 

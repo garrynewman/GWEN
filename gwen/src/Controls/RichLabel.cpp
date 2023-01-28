@@ -167,7 +167,7 @@ void RichLabel::CreateNewline( int & x, int & y, int & lineheight )
 
 void RichLabel::Rebuild()
 {
-	RemoveAllChildren();
+	DeleteAllChildren();
 	int x = 0;
 	int y = 0;
 	int lineheight = -1;

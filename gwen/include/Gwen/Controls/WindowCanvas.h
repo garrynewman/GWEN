@@ -25,7 +25,7 @@ namespace Gwen
 
 				GWEN_CLASS( WindowCanvas, Controls::Canvas );
 
-				WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pRenderer, const Gwen::String & strWindowTitle = "" );
+				WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pRenderer, const Gwen::String & strWindowTitle = "", bool is_menu = false );
 				~WindowCanvas();
 
 				virtual void DoThink();
@@ -41,6 +41,7 @@ namespace Gwen
 
 				virtual void Render( Skin::Base* skin );
 
+				void SetWindowSize(int x, int y);
 				virtual Gwen::Point WindowPosition() { return m_WindowPos; }
 				
 				virtual void OnMove(int x, int y) { m_WindowPos = Gwen::Point(x,y); }
@@ -54,10 +55,16 @@ namespace Gwen
 				virtual void SetMaximize( bool b );
 				virtual void Minimize();
 
+				virtual void OnChildRemoved( Controls::Base* pChild );
+
 				virtual void SetSizable( bool b );
 				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_SESizer->Visible(); }
 				virtual void SetMinimumSize( const Gwen::Point & minSize );
 				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
+
+				virtual void SetRemoveWhenChildless(bool yn) { m_bRemoveWhenChildless = yn; }
+
+				virtual void SetTitle( Gwen::String title );
 
 				virtual Gwen::Controls::Base* GetControlAt( int x, int y, bool bOnlyIfMouseEnabled );
 
@@ -68,6 +75,9 @@ namespace Gwen
 
 			protected:
 
+				virtual void OnBoundsChanged( Gwen::Rect oldBounds );
+
+				bool m_bRemoveWhenChildless = false;
 				double m_dpi = 96.0;
 
 				virtual void RenderCanvas();

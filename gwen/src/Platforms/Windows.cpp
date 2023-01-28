@@ -377,7 +377,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
 #include <ShellScalingApi.h>
 
-void* Gwen::Platform::CreatePlatformWindow(int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer)
+void* Gwen::Platform::CreatePlatformWindow(int x, int y, int w, int h, const Gwen::String & strWindowTitle, Gwen::Renderer::Base* renderer, bool is_menu)
 {
 	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 	CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
@@ -410,6 +410,11 @@ void* Gwen::Platform::CreatePlatformWindow(int x, int y, int w, int h, const Gwe
 
 	window_dpis[hWindow] = dy;
 	return ( void* ) hWindow;
+}
+
+void Gwen::Platform::SetWindowTitle(void* pPtr, const Gwen::String & strWindowTitle)
+{
+	SetWindowTextA((HWND)pPtr, strWindowTitle.c_str());
 }
 
 void Gwen::Platform::DestroyPlatformWindow( void* pPtr )

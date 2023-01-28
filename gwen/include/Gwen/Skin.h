@@ -56,18 +56,18 @@ namespace Gwen
 				virtual void DrawGenericPanel( Controls::Base* control ) = 0;
 
 				virtual void DrawButton( Controls::Base* control, bool bDepressed, bool bHovered, bool bDisabled ) = 0;
-				virtual void DrawTabButton( Controls::Base* control, bool bActive, int dir ) = 0;
+				virtual void DrawTabButton( Controls::Base* control, bool bActive, int dir, bool bHovered ) = 0;
 				virtual void DrawTabControl( Controls::Base* control ) = 0;
 				virtual void DrawTabTitleBar( Controls::Base* control ) = 0;
 
 
-				virtual void DrawMenuItem( Controls::Base* control, bool bSubmenuOpen, bool bChecked ) = 0;
+				virtual void DrawMenuItem( Controls::Base* control, bool bSubmenuOpen, bool bChecked, bool bHovered ) = 0;
 				virtual void DrawMenuStrip( Controls::Base* control ) = 0;
 				virtual void DrawMenu( Controls::Base* control, bool bPaddingDisabled ) = 0;
 				virtual void DrawMenuRightArrow( Controls::Base* control ) = 0;
 
-				virtual void DrawRadioButton( Controls::Base* control, bool bSelected, bool bDepressed ) = 0;
-				virtual void DrawCheckBox( Controls::Base* control, bool bSelected, bool bDepressed ) = 0;
+				virtual void DrawRadioButton( Controls::Base* control, bool bSelected, bool bDepressed, bool bHovered ) = 0;
+				virtual void DrawCheckBox( Controls::Base* control, bool bSelected, bool bDepressed, bool bHovered ) = 0;
 				virtual void DrawGroupBox( Controls::Base* control, int textStart, int textHeight, int textWidth ) = 0;
 				virtual void DrawTextBox( Controls::Base* control ) = 0;
 
@@ -87,17 +87,17 @@ namespace Gwen
 				virtual void DrawProgressBar( Controls::Base* control, bool isHorizontal, float progress ) = 0;
 
 				virtual void DrawListBox( Controls::Base* control ) = 0;
-				virtual void DrawListBoxLine( Controls::Base* control, bool bSelected, bool bEven ) = 0;
+				virtual void DrawListBoxLine( Controls::Base* control, bool bSelected, bool bEven, bool bHovered ) = 0;
 
 				virtual void DrawSlider( Controls::Base* control, bool bIsHorizontal, int numNotches, int barSize ) = 0;
-				virtual void DrawSlideButton( Gwen::Controls::Base* control, bool bDepressed, bool bHorizontal ) = 0;
+				virtual void DrawSlideButton( Gwen::Controls::Base* control, bool bDepressed, bool bHorizontal, bool bHovered ) = 0;
 
-				virtual void DrawComboBox( Controls::Base* control, bool bIsDown, bool bIsMenuOpen ) = 0;
+				virtual void DrawComboBox( Controls::Base* control, bool bIsDown, bool bIsMenuOpen, bool bHovered ) = 0;
 				virtual void DrawComboDownArrow( Gwen::Controls::Base* control, bool bHovered, bool bDown, bool bOpen, bool bDisabled ) = 0;
 				virtual void DrawKeyboardHighlight( Controls::Base* control, const Gwen::Rect & rect, int offset ) = 0;
 				virtual void DrawToolTip( Controls::Base* control ) = 0;
 
-				virtual void DrawNumericUpDownButton( Controls::Base* control, bool bDepressed, bool bUp ) = 0;
+				virtual void DrawNumericUpDownButton( Controls::Base* control, bool bDepressed, bool bUp, bool bHovered ) = 0;
 
 				virtual void DrawTreeButton( Controls::Base* control, bool bOpen ) = 0;
 				virtual void DrawTreeControl( Controls::Base* control ) = 0;
