@@ -21,56 +21,48 @@ namespace Gwen
 			public:
 
 				GWEN_CONTROL( Label, Controls::Base );
-				virtual void PreDelete( Gwen::Skin::Base* skin );
+				virtual void PreDelete( Gwen::Skin::Base* skin ) override;
 
 				virtual void SetText( const TextObject & str, bool bDoEvents = true );
 
 				virtual const TextObject & GetText() const { return m_Text->GetText(); }
 
-				virtual void Render( Skin::Base* /*skin*/ ) {}
+				virtual void Render( Skin::Base* /*skin*/ ) override {}
 
-				virtual void PostLayout( Skin::Base* skin );
+				virtual void PostLayout( Skin::Base* skin ) override;
 
 				virtual void SizeToContents();
 
-				virtual void SetAlignment( int iAlign );
-				virtual int GetAlignment();
+				void SetAlignment( int iAlign );
+				int GetAlignment();
 
+				void SetFont( Gwen::UnicodeString strFacename, int iSize, bool bBold );
+				void SetFont( Gwen::Font* pFont ) { m_Text->SetFont( pFont ); }
+				Gwen::Font* GetFont() { return m_Text->GetFont(); }
 
-				virtual void SetFont( Gwen::UnicodeString strFacename, int iSize, bool bBold );
-
-				virtual void SetFont( Gwen::Font* pFont ) { m_Text->SetFont( pFont ); }
-				virtual Gwen::Font* GetFont() { return m_Text->GetFont(); }
-				virtual void SetTextColor( const Gwen::Color & col ) { m_Text->SetTextColor( col ); }
-				virtual void SetTextColorOverride( const Gwen::Color & col ) { m_Text->SetTextColorOverride( col ); }
+				void SetTextColor( const Gwen::Color & col ) { m_Text->SetTextColor( col ); }
+				void SetTextColorOverride( const Gwen::Color & col ) { m_Text->SetTextColorOverride( col ); }
 				inline const Gwen::Color & TextColor() const { return m_Text->TextColor(); }
 
-				virtual int TextWidth() { return m_Text->Width(); }
-				virtual int TextRight() { return m_Text->Right(); }
-				virtual int TextHeight() { return m_Text->Height(); }
-				virtual int TextX() { return m_Text->X(); }
-				virtual int TextY() { return m_Text->Y(); }
-				virtual int TextLength() { return m_Text->Length(); }
+				int TextWidth() { return m_Text->Width(); }
+				int TextRight() { return m_Text->Right(); }
+				int TextHeight() { return m_Text->Height(); }
+				int TextX() { return m_Text->X(); }
+				int TextY() { return m_Text->Y(); }
+				int TextLength() { return m_Text->Length(); }
 
 				Gwen::Rect GetCharacterPosition( int iChar );
 
-				virtual void SetTextPadding( const Padding & padding ) { m_Text->SetPadding( padding ); Invalidate(); InvalidateParent(); }
-				virtual const Padding & GetTextPadding() { return m_Text->GetPadding(); }
+				void SetTextPadding( const Padding & padding ) { m_Text->SetPadding( padding ); Invalidate(); InvalidateParent(); }
+				const Padding & GetTextPadding() { return m_Text->GetPadding(); }
 
-				inline int Alignment() const { return m_iAlign; }
-
-				virtual void MakeColorNormal() { SetTextColor( GetSkin()->Colors.Label.Default ); }
-				virtual void MakeColorBright() { SetTextColor( GetSkin()->Colors.Label.Bright ); }
-				virtual void MakeColorDark() { SetTextColor( GetSkin()->Colors.Label.Dark ); }
-				virtual void MakeColorHighlight() { SetTextColor( GetSkin()->Colors.Label.Highlight ); }
-
-				virtual TextObject GetValue() { return GetText(); }
-				virtual void SetValue( const TextObject & strValue ) { return SetText( strValue ); }
+				virtual TextObject GetValue() override { return GetText(); }
+				virtual void SetValue( const TextObject & strValue ) override { return SetText( strValue ); }
 
 				virtual bool Wrap() { return m_Text->Wrap(); }
 				virtual void SetWrap( bool b ) { m_Text->SetWrap( b ); }
 
-				virtual void OnBoundsChanged( Gwen::Rect oldChildBounds );
+				virtual void OnBoundsChanged( Gwen::Rect oldChildBounds ) override;
 
 			protected:
 

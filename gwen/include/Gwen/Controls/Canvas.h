@@ -49,14 +49,14 @@ namespace Gwen
 				// by checking NeedsRedraw().
 				//
 				virtual bool NeedsRedraw() { return m_bNeedsRedraw; }
-				virtual void Redraw() { m_bNeedsRedraw = true; }
+				virtual void Redraw() override { m_bNeedsRedraw = true; }
 
 				// Internal. Do not call directly.
-				virtual void Render( Skin::Base* pRender );
+				virtual void Render( Skin::Base* pRender ) override;
 
 				// Childpanels call parent->GetCanvas() until they get to
 				// this top level function.
-				virtual Controls::Canvas* GetCanvas() { return this; }
+				virtual Controls::Canvas* GetCanvas() override { return this; }
 
 				virtual void SetScale( float f );
 				virtual float Scale() const { return m_fScale; }
@@ -64,7 +64,7 @@ namespace Gwen
 				virtual void SetFontScale( float f);
 				virtual float FontScale() const { return m_fFontScale; }
 
-				virtual void OnBoundsChanged( Gwen::Rect oldBounds );
+				virtual void OnBoundsChanged( Gwen::Rect oldBounds ) override;
 
 				// Delete all children (this is done called in the destructor too)
 				virtual void ReleaseChildren();

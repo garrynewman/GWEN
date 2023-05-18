@@ -25,14 +25,16 @@ namespace Gwen
 
 				GWEN_CONTROL( CheckBox, Button );
 
-				virtual void Render( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
 				virtual void OnPress();
 
 				virtual void SetChecked( bool Checked );
 				virtual void Toggle() { SetChecked( !IsChecked() ); }
 				virtual bool IsChecked() { return m_bChecked; }
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
+
+				virtual bool OnKeySpace( bool bDown ) override { if ( !bDown ) { SetChecked( !IsChecked() ); } return true; }
 
 				Gwen::Event::Caller	onChecked;
 				Gwen::Event::Caller	onUnChecked;
@@ -68,7 +70,7 @@ namespace Gwen
 
 				virtual CheckBox* Checkbox() { return m_Checkbox; }
 				virtual LabelClickable* Label() { return m_Label; }
-				virtual bool OnKeySpace( bool bDown ) { if ( !bDown ) { m_Checkbox->SetChecked( !m_Checkbox->IsChecked() ); } return true; }
+				virtual bool OnKeySpace( bool bDown ) override { if ( !bDown ) { m_Checkbox->SetChecked( !m_Checkbox->IsChecked() ); } return true; }
 
 			private:
 

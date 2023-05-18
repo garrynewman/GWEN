@@ -20,7 +20,7 @@ namespace Gwen
 						SetText( "" );
 					}
 
-					void Render( Skin::Base* skin )
+					void Render( Skin::Base* skin ) override
 					{
 						// Draw an outline to make sure its not invisible when white
 						skin->GetRender()->SetDrawColor( Gwen::Color( 0, 0, 0 ) );
@@ -81,12 +81,12 @@ namespace Gwen
 						DoChanged();
 					}
 
-					virtual TextObject GetPropertyValue()
+					virtual TextObject GetPropertyValue() override
 					{
 						return m_TextBox->GetText();
 					}
 
-					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents ) override
 					{
 						float col[3];
 						Gwen::Utility::Strings::To::Floats( v.Get(), col, 3 );
@@ -94,12 +94,12 @@ namespace Gwen
 						m_TextBox->SetText( v, bFireChangeEvents );
 					}
 
-					virtual bool IsEditing()
+					virtual bool IsEditing() override
 					{
 						return m_TextBox == Gwen::KeyboardFocus;
 					}
 
-					virtual void DoChanged()
+					virtual void DoChanged() override
 					{
 						float col[3];
 						Gwen::Utility::Strings::To::Floats( m_TextBox->GetText().Get(), col, 3 );

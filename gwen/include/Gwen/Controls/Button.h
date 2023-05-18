@@ -23,11 +23,11 @@ namespace Gwen
 
 				GWEN_CONTROL( Button, Label );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void OnMouseClickLeft( int x, int y, bool bDown );
-				virtual void OnMouseClickRight( int x, int y, bool bDown );
-				virtual void OnMouseDoubleClickLeft( int x, int y );
-				virtual bool OnKeySpace( bool bDown );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void OnMouseClickLeft( int x, int y, bool bDown ) override;
+				virtual void OnMouseClickRight( int x, int y, bool bDown ) override;
+				virtual void OnMouseDoubleClickLeft( int x, int y ) override;
+				virtual bool OnKeySpace( bool bDown ) override;
 
 				virtual void OnPress();
 				virtual void OnRightPress();
@@ -47,14 +47,14 @@ namespace Gwen
 				virtual void SetToggleState( bool b );
 				virtual void Toggle() { SetToggleState( !GetToggleState() ); }
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
 
 
 				virtual void SetImage( const TextObject & strName, bool bCenter = false, bool bMaintainAspectRatio = true );
 
 				virtual void SizeToContents();
-				virtual void PostLayout( Skin::Base* pSkin );
-				virtual void UpdateColours();
+				virtual void PostLayout( Skin::Base* pSkin ) override;
+				virtual void UpdateColours() override;
 
 				virtual void SetImageAlpha( float fMultiply );
 

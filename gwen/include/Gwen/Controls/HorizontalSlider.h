@@ -23,12 +23,12 @@ namespace Gwen
 		{
 				GWEN_CONTROL( HorizontalSlider, Slider );
 
-				virtual void Layout( Skin::Base* skin );
-				virtual void Render( Skin::Base* skin );
+				virtual void Layout( Skin::Base* skin ) override;
+				virtual void Render( Skin::Base* skin ) override;
 
-				virtual float CalculateValue();
-				virtual void UpdateBarFromValue();
-				virtual void OnMouseClickLeft( int x, int y, bool bDown );
+				virtual float CalculateValue() override;
+				virtual void UpdateBarFromValue() override;
+				virtual void OnMouseClickLeft( int x, int y, bool bDown ) override;
 		};
 	}
 }

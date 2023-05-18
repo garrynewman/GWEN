@@ -32,10 +32,10 @@ namespace Gwen
 
 				GWEN_CONTROL( TabButton, Button );
 				virtual ~TabButton() { onClose.Call(this); };
-				virtual void Render( Skin::Base* skin );
-				virtual void Layout( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void Layout( Skin::Base* skin ) override;
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
 
 				void SetPage( Base* page ) { m_Page = page; }
 				Base* GetPage() { return m_Page; }
@@ -54,18 +54,18 @@ namespace Gwen
 				DockedTabControl* PopOut(int x = -1, int y = -1, TabReturnButtonData* out_data = 0);
 				void Return();
 
-				virtual bool DragAndDrop_ShouldStartDrag();
-				virtual void DragAndDrop_StartDragging( Gwen::DragAndDrop::Package* /*pPackage*/, int /*x*/, int /*y*/ ) { SetHidden( true ); }
-				virtual void DragAndDrop_EndDragging( bool /*bSuccess*/, int /*x*/, int /*y*/ );
+				virtual bool DragAndDrop_ShouldStartDrag() override;
+				virtual void DragAndDrop_StartDragging( Gwen::DragAndDrop::Package* /*pPackage*/, int /*x*/, int /*y*/ ) override { SetHidden( true ); }
+				virtual void DragAndDrop_EndDragging( bool /*bSuccess*/, int /*x*/, int /*y*/ ) override;
 
-				virtual bool OnKeyLeft( bool bDown );
-				virtual bool OnKeyRight( bool bDown );
-				virtual bool OnKeyUp( bool bDown );
-				virtual bool OnKeyDown( bool bDown );
+				virtual bool OnKeyLeft( bool bDown ) override;
+				virtual bool OnKeyRight( bool bDown ) override;
+				virtual bool OnKeyUp( bool bDown ) override;
+				virtual bool OnKeyDown( bool bDown ) override;
 
-				virtual void UpdateColours();
+				virtual void UpdateColours() override;
 
-				virtual bool ShouldClip() { return false; }
+				virtual bool ShouldClip() override { return false; }
 				
 				Gwen::Event::Caller	onClose;
 

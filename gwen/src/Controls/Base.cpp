@@ -1090,7 +1090,6 @@ bool Base::HandleAccelerator( Gwen::UnicodeString & accelerator )
 bool Base::OnKeyPress( int iKey, bool bPress )
 {
 	bool bHandled = false;
-
 	switch ( iKey )
 	{
 		case Key::Tab:

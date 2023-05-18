@@ -28,7 +28,7 @@ namespace Gwen
 					SetScaling( false, 100 );
 				}
 
-				virtual void PostLayout( Skin::Base* skin )
+				virtual void PostLayout( Skin::Base* skin ) override
 				{
 					RefreshContainers();
 				}
@@ -94,7 +94,7 @@ namespace Gwen
 					m_pSplitter->SetPos( 100, 0 );
 				}
 
-				virtual void RefreshContainers()
+				virtual void RefreshContainers() override
 				{
 					const Gwen::Rect & inner = GetInnerBounds();
 					int iOffset = m_Size;
@@ -109,7 +109,7 @@ namespace Gwen
 					m_Panels[1]->SetSize( ( inner.x + inner.w ) - ( iOffset + m_SplitterSize ), inner.h );
 				}
 
-				virtual void OnSplitterMoved()
+				virtual void OnSplitterMoved() override
 				{
 					if ( m_RightSided )
 					{ m_Size = Width() - m_pSplitter->X(); }
@@ -120,7 +120,7 @@ namespace Gwen
 					Invalidate();
 				}
 
-				virtual int SplitterPos()
+				virtual int SplitterPos() override
 				{
 					return m_pSplitter->X();
 				}

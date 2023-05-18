@@ -27,11 +27,11 @@ namespace Gwen
 				void SetShowTitlebar( bool bShow ) { m_pTitleBar->SetHidden( !bShow ); }
 				void SetAlwaysShowStrip( bool bShow ) { if (bShow != m_bAlwaysShowStrip) { m_bAlwaysShowStrip = bShow; Invalidate(); } }
 
-				void Layout( Skin::Base* skin );
+				void Layout( Skin::Base* skin ) override;
 				void UpdateTitleBar();
 
-				virtual void DragAndDrop_StartDragging( Gwen::DragAndDrop::Package* pPackage, int x, int y );
-				virtual void DragAndDrop_EndDragging( bool bSuccess, int x, int y );
+				virtual void DragAndDrop_StartDragging( Gwen::DragAndDrop::Package* pPackage, int x, int y ) override;
+				virtual void DragAndDrop_EndDragging( bool bSuccess, int x, int y ) override;
 
 				void MoveTabsTo( DockedTabControl* pTarget );
 

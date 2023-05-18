@@ -25,14 +25,14 @@ namespace Gwen
 
 				GWEN_CONTROL( Menu, ScrollControl );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void RenderUnder( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void RenderUnder( Skin::Base* skin ) override;
 
-				virtual void Layout( Skin::Base* skin );
+				virtual void Layout( Skin::Base* skin ) override;
 
 				virtual MenuItem* AddItem( const TextObject & strName, const TextObject & strIconName = L"", const TextObject & strAccelerator = L"" );
 
-				virtual void AddDivider();
+				void AddDivider();
 
 				void OnHoverItem( Gwen::Controls::Base* pControl );
 				void CloseAll();
@@ -72,7 +72,7 @@ namespace Gwen
 					SetHeight( 1 );
 				}
 
-				void Render( Gwen::Skin::Base* skin );
+				void Render( Gwen::Skin::Base* skin ) override;
 		};
 	}
 

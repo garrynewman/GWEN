@@ -33,17 +33,17 @@ namespace Gwen
 				GWEN_CONTROL( WindowControl, ResizableControl );
 
 				virtual ~WindowControl();
-				virtual void Render( Skin::Base* skin );
-				virtual void RenderUnder( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void RenderUnder( Skin::Base* skin ) override;
 
 				virtual void SetTitle( Gwen::UnicodeString title );
-				virtual void SetTitle( Gwen::String title ) { SetTitle( Gwen::Utility::StringToUnicode( title ) ); }
+				void SetTitle( Gwen::String title ) { SetTitle( Gwen::Utility::StringToUnicode( title ) ); }
 				virtual void SetClosable( bool closeable );
 
-				virtual void Touch();
+				virtual void Touch() override;
 				bool IsOnTop();
 
-				virtual void SetHidden( bool hidden );
+				virtual void SetHidden( bool hidden ) override;
 
 				void CloseButtonPressed();
 				void RenderFocus( Gwen::Skin::Base* skin );

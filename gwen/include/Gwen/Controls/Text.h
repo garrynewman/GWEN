@@ -26,8 +26,8 @@ namespace Gwen
 
 				void SetString( const TextObject & str );
 
-				void Render( Skin::Base* skin );
-				void Layout( Skin::Base* skin );
+				void Render( Skin::Base* skin ) override;
+				void Layout( Skin::Base* skin ) override;
 
 				void RefreshSize();
 

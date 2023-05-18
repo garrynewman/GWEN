@@ -53,12 +53,12 @@ namespace Gwen
 				m_PopOutButton->SetHidden(false);
 			}
 
-			void Render(Skin::Base* skin)
+			void Render(Skin::Base* skin) override
 			{
 				skin->DrawTabTitleBar(this);
 			}
 
-			void DragAndDrop_StartDragging(Gwen::DragAndDrop::Package* pPackage, int x, int y)
+			void DragAndDrop_StartDragging(Gwen::DragAndDrop::Package* pPackage, int x, int y) override
 			{
 				DragAndDrop::SourceControl = GetParent();
 				DragAndDrop::SourceControl->DragAndDrop_StartDragging(pPackage, x, y);

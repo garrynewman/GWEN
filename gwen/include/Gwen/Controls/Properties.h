@@ -30,7 +30,7 @@ namespace Gwen
 
 				GWEN_CONTROL( Properties, Base );
 
-				virtual void PostLayout( Gwen::Skin::Base* skin );
+				virtual void PostLayout( Gwen::Skin::Base* skin ) override;
 
 				PropertyRow* Add( const TextObject & text, const TextObject & value = L"" );
 				PropertyRow* Add( const TextObject & text, Property::Base* pProp, const TextObject & value = L"" );
@@ -59,15 +59,15 @@ namespace Gwen
 				virtual void SetProperty( Property::Base* prop );
 				virtual Property::Base* GetProperty() { return m_Property; }
 
-				virtual void Layout( Gwen::Skin::Base* skin );
-				virtual void Render( Gwen::Skin::Base* skin );
+				virtual void Layout( Gwen::Skin::Base* skin ) override;
+				virtual void Render( Gwen::Skin::Base* skin ) override;
 
 				virtual bool IsEditing() { return m_Property && m_Property->IsEditing(); }
-				virtual bool IsHovered() { return BaseClass::IsHovered() || ( m_Property && m_Property->IsHovered() ); }
+				virtual bool IsHovered() override { return BaseClass::IsHovered() || ( m_Property && m_Property->IsHovered() ); }
 				virtual void OnEditingChanged();
 				virtual void OnHoverChanged();
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
 
 				Event::Caller	onChange;
 

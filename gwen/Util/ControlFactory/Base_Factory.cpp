@@ -17,7 +17,7 @@ namespace Gwen
 
 					UnicodeString GetValue( Controls::Base* ctrl )
 					{
-						return Utility::Format( L"%S", ctrl->GetName().c_str() );
+						return Utility::Format( L"%s", ctrl->GetName().c_str() );
 					}
 
 					void SetValue( Controls::Base* ctrl, const UnicodeString & str )

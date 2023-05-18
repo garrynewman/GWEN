@@ -23,7 +23,7 @@ namespace Gwen
 
 				GWEN_CONTROL( ProgressBar, Label );
 
-				virtual void Render( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
 
 				virtual void SetVertical()  { m_bHorizontal = false; }
 				virtual void SetHorizontal() { m_bHorizontal = true; }

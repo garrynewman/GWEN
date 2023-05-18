@@ -25,10 +25,10 @@ namespace Gwen
 
 				GWEN_CONTROL( GroupBox, Label );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void Layout( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void Layout( Skin::Base* skin ) override;
 
-				virtual void SetInnerMargin( int i ) { m_InnerMargin = i; }
+				void SetInnerMargin( int i ) { m_InnerMargin = i; }
 
 			protected:
 

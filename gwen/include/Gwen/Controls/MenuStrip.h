@@ -21,15 +21,15 @@ namespace Gwen
 		{
 				GWEN_CONTROL( MenuStrip, Menu );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void RenderUnder( Skin::Base* /*skin*/ ) {}
-				virtual void Layout( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void RenderUnder( Skin::Base* /*skin*/ ) override {}
+				virtual void Layout( Skin::Base* skin ) override;
 
 			protected:
 
-				virtual void OnAddItem( MenuItem* item );
-				virtual bool ShouldHoverOpenMenu();
-				virtual void Close() {}
+				virtual void OnAddItem( MenuItem* item ) override;
+				virtual bool ShouldHoverOpenMenu() override;
+				virtual void Close() override {}
 		};
 	}
 

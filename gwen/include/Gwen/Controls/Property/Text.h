@@ -31,22 +31,22 @@ namespace Gwen
 						m_TextBox->onHoverLeave.Add( this, &ThisClass::OnPropertyHoverChanged );
 					}
 
-					virtual TextObject GetPropertyValue()
+					virtual TextObject GetPropertyValue() override
 					{
 						return m_TextBox->GetText();
 					}
 
-					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents ) override
 					{
 						m_TextBox->SetText( v, bFireChangeEvents );
 					}
 
-					virtual bool IsEditing()
+					virtual bool IsEditing() override
 					{
 						return m_TextBox->HasFocus();
 					}
 
-					virtual bool IsHovered()
+					virtual bool IsHovered() override
 					{
 						return BaseClass::IsHovered() || m_TextBox->IsHovered();
 					}

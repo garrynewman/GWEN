@@ -1,6 +1,9 @@
 
 #include "Gwen/Util/ImportExport.h"
-#include "Bootil/Bootil.h"
+//#include "Bootil/Bootil.h"
+
+#include "Tree.h"
+#include "File.h"
 
 
 class DesignerFormat : public Gwen::ImportExport::Base
@@ -37,7 +40,7 @@ void DesignerFormat::Import( Gwen::Controls::Base* pRoot, const Gwen::String & s
 	{ return; }
 
 	Bootil::Data::Tree tree;
-	Bootil::Data::Json::Import( tree, strContents );
+	Bootil::Data::Json::Import( tree, strContents.c_str() );
 
 	if ( !tree.HasChild( "Controls" ) ) { return; }  // false
 

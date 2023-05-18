@@ -32,12 +32,12 @@ namespace Gwen
 						SetHeight( 18 );
 					}
 
-					virtual TextObject GetPropertyValue()
+					virtual TextObject GetPropertyValue() override
 					{
 						return m_Checkbox->IsChecked() ? L"1" : L"0";
 					}
 
-					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents ) override
 					{
 						if ( v == L"1" || v == L"true" || v == L"TRUE" || v == L"yes" || v == L"YES" )
 						{ return m_Checkbox->SetChecked( true ); }
@@ -45,12 +45,12 @@ namespace Gwen
 						return m_Checkbox->SetChecked( false );
 					}
 
-					virtual bool IsEditing()
+					virtual bool IsEditing() override
 					{
 						return m_Checkbox->HasFocus();
 					}
 
-					virtual bool IsHovered()
+					virtual bool IsHovered() override
 					{
 						return BaseClass::IsHovered() || m_Checkbox->IsHovered();
 					}

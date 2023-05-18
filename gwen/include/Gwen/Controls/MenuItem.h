@@ -27,16 +27,16 @@ namespace Gwen
 
 				virtual ~MenuItem();
 
-				virtual void Render( Skin::Base* skin );
-				virtual void Layout( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void Layout( Skin::Base* skin ) override;
 
 				virtual void SizeToContents();
 
 				virtual void OnPress();
 				
-				virtual Gwen::Point GetMinimumSize();
+				virtual Gwen::Point GetMinimumSize() override;
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
 
 				Menu* GetMenu();
 
@@ -51,7 +51,8 @@ namespace Gwen
 				virtual void SetCheckable( bool bCheck ) { m_bCheckable = bCheck; }
 				virtual void SetChecked( bool bCheck );
 				virtual bool GetChecked() { return m_bChecked; }
-				virtual void OnScaleChanged();
+
+				virtual void OnScaleChanged() override;
 
 				template <typename T>
 				MenuItem* SetAction( Gwen::Event::Handler* pHandler, T fn )

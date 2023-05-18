@@ -16,7 +16,7 @@ namespace Gwen
 
 				GWEN_CONTROL( SplitterBar, ControlsInternal::Dragger );
 
-				void Layout( Skin::Base* skin );
+				void Layout( Skin::Base* skin ) override;
 		};
 	}
 }

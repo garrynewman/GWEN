@@ -67,7 +67,7 @@ namespace Gwen
 					return m_Texture.name;
 				}
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					skin->GetRender()->SetDrawColor( m_DrawColor );
 

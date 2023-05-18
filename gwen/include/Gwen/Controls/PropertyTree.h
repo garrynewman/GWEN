@@ -29,7 +29,7 @@ namespace Gwen
 					m_Title->SetTextColorOverride( GetSkin()->Colors.Properties.Title );
 				}
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					skin->DrawPropertyTreeNode( this, m_InnerPanel->X(), m_InnerPanel->Y() );
 				}

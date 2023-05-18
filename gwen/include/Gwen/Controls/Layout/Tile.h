@@ -26,7 +26,7 @@ namespace Gwen
 						SetTileSize( 22, 22 );
 					}
 
-					void PostLayout( Skin::Base* skin )
+					void PostLayout( Skin::Base* skin ) override
 					{
 						Gwen::Rect	bounds = GetInnerBounds();
 						Gwen::Point pos = Point( bounds.x, bounds.y );

@@ -16,7 +16,7 @@ namespace Gwen
 
 				GWEN_CONTROL( CrossSplitter, Controls::Base );
 
-				void Layout( Skin::Base* skin );
+				void Layout( Skin::Base* skin ) override;
 
 				virtual float CalculateValueVertical();
 				virtual float CalculateValueHorizontal();

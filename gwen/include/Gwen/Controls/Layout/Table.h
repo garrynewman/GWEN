@@ -235,7 +235,7 @@ namespace Gwen
 						}
 					}
 
-					void Layout( Skin::Base* skin )
+					void Layout( Skin::Base* skin ) override
 					{
 						BaseClass::Layout( skin );
 
@@ -280,7 +280,7 @@ namespace Gwen
 						InvalidateParent();
 					}
 
-					void PostLayout( Skin::Base* /*skin*/ )
+					void PostLayout( Skin::Base* /*skin*/ ) override
 					{
 						if ( m_bSizeToContents )
 						{

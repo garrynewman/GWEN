@@ -32,7 +32,7 @@ namespace Gwen
 						SetHeight( 18 );
 					}
 
-					virtual TextObject GetPropertyValue()
+					virtual TextObject GetPropertyValue() override
 					{
 						Gwen::Controls::Label* pControl = m_ComboBox->GetSelectedItem();
 
@@ -41,17 +41,17 @@ namespace Gwen
 						return pControl->GetName();
 					}
 
-					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents )
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvents ) override
 					{
 						m_ComboBox->SelectItemByName( v.Get(), bFireChangeEvents );
 					}
 
-					virtual bool IsEditing()
+					virtual bool IsEditing() override
 					{
 						return m_ComboBox->HasFocus();
 					}
 
-					virtual bool IsHovered()
+					virtual bool IsHovered() override
 					{
 						return BaseClass::IsHovered() || m_ComboBox->IsHovered();
 					}

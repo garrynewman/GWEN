@@ -25,7 +25,7 @@ namespace Gwen
 
                 }
 
-                virtual void OnScaleChanged()
+                virtual void OnScaleChanged() override
                 {
                     Base::OnScaleChanged();
 

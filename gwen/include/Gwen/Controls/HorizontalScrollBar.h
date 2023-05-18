@@ -25,26 +25,26 @@ namespace Gwen
 
 				GWEN_CONTROL( HorizontalScrollBar, BaseScrollBar );
 
-				virtual void Layout( Skin::Base* skin );
+				virtual void Layout( Skin::Base* skin ) override;
 
-				virtual void OnMouseClickLeft( int x, int y, bool bDown );
-				virtual void OnBarMoved( Controls::Base* control );
+				virtual void OnMouseClickLeft( int x, int y, bool bDown ) override;
+				virtual void OnBarMoved( Controls::Base* control ) override;
 
-				virtual int GetBarSize() { return m_Bar->Width(); }
-				virtual int GetBarPos() { return m_Bar->X() - Height(); }
-				virtual void SetBarSize( int size ) { m_Bar->SetWidth( size ); }
-				virtual int GetButtonSize() { return Height(); }
+				virtual int GetBarSize() override { return m_Bar->Width(); }
+				virtual int GetBarPos() override { return m_Bar->X() - Height(); }
+				virtual void SetBarSize( int size ) override { m_Bar->SetWidth( size ); }
+				virtual int GetButtonSize() override { return Height(); }
 
-				virtual void ScrollToLeft();
-				virtual void ScrollToRight();
-				virtual void NudgeLeft( Base* control );
-				virtual void NudgeRight( Base* control );
-				virtual float GetNudgeAmount();
+				virtual void ScrollToLeft() override;
+				virtual void ScrollToRight() override;
+				void NudgeLeft( Base* control );
+				void NudgeRight( Base* control );
+				float GetNudgeAmount();
 
-				virtual float CalculateScrolledAmount();
-				virtual bool SetScrolledAmount( float amount, bool forceUpdate );
+				virtual float CalculateScrolledAmount() override;
+				virtual bool SetScrolledAmount( float amount, bool forceUpdate ) override;
 
-				virtual bool IsHorizontal() { return true; }
+				virtual bool IsHorizontal() override { return true; }
 		};
 	}
 }

@@ -21,7 +21,7 @@ namespace Gwen
 
 				GWEN_CONTROL( LabelClickable, Button );
 
-				virtual void Render( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
 
 		};
 	}

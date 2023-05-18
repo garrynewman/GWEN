@@ -26,7 +26,7 @@ namespace Gwen
 				void AddLineBreak();
 				void AddText( const Gwen::TextObject & text, Gwen::Color color, Gwen::Font* font = NULL );
 
-				virtual bool SizeToChildren( bool w = true, bool h = true );
+				virtual bool SizeToChildren( bool w = true, bool h = true ) override;
 
 			protected:
 
@@ -45,13 +45,13 @@ namespace Gwen
 					Gwen::Font*				font;
 				};
 
-				void Layout( Gwen::Skin::Base* skin );
+				void Layout( Gwen::Skin::Base* skin ) override;
 				void SplitLabel( const Gwen::UnicodeString & text, Gwen::Font* pFont, const DividedText & txt, int & x, int & y, int & lineheight );
 				void CreateNewline( int & x, int & y, int & lineheight );
 				void CreateLabel( const Gwen::UnicodeString & text, const DividedText & txt, int & x, int & y, int & lineheight, bool NoSplit );
 				void Rebuild();
 
-				void OnBoundsChanged( Gwen::Rect oldBounds );
+				void OnBoundsChanged( Gwen::Rect oldBounds ) override;
 
 				DividedText::List	m_TextBlocks;
 				bool				m_bNeedsRebuild;

@@ -21,12 +21,12 @@ namespace Gwen
 					SetBounds( 0, 0, GetParent()->Width(), GetParent()->Height() );
 				}
 
-				virtual void Layout( Skin::Base* /*skin*/ )
+				virtual void Layout( Skin::Base* /*skin*/ ) override
 				{
 					SetBounds( 0, 0, GetCanvas()->Width(), GetCanvas()->Height() );
 				}
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					skin->DrawModalControl( this );
 				}

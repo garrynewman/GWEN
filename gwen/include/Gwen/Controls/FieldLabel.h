@@ -45,7 +45,7 @@ namespace Gwen
 					m_pField = pField;
 				}
 
-				void Layout( Gwen::Skin::Base* pskin )
+				void Layout( Gwen::Skin::Base* pskin ) override
 				{
 					m_pField->SetWidth( Width() - 70 );
 					BaseClass::Layout( pskin );

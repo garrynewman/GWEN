@@ -29,17 +29,17 @@ namespace Gwen
 						m_pButton = pButton;
 					}
 					
-					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvent = false)
+					virtual void SetPropertyValue( const TextObject & v, bool bFireChangeEvent = false) override
 					{
 						m_pButton->SetText(v);
 					}
 					
-					virtual TextObject GetPropertyValue()
+					virtual TextObject GetPropertyValue() override
 					{
 						return "";
 					}
 					
-					virtual bool IsEditing()
+					virtual bool IsEditing() override
 					{
 						return false;
 					}

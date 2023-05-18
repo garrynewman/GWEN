@@ -23,14 +23,14 @@ namespace Gwen
 		class GWEN_EXPORT RadioButton : public CheckBox
 		{
 				GWEN_CONTROL( RadioButton, CheckBox );
-				virtual void Render( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
 
 			private:
 
 				// From CheckBox
-				virtual bool AllowUncheck() { return false; }
+				virtual bool AllowUncheck() override { return false; }
 		};
 
 		class GWEN_EXPORT LabeledRadioButton : public Base
@@ -54,7 +54,7 @@ namespace Gwen
 					m_Label->SetKeyboardInputEnabled( false );
 				}
 
-				void RenderFocus( Gwen::Skin::Base* skin )
+				void RenderFocus( Gwen::Skin::Base* skin ) override
 				{
 					if ( Gwen::KeyboardFocus != this ) { return; }
 
@@ -65,7 +65,7 @@ namespace Gwen
 
 				virtual RadioButton*	GetRadioButton() { return m_RadioButton; }
 				virtual LabelClickable*	GetLabel() { return m_Label; }
-				virtual bool OnKeySpace( bool bDown ) { if ( bDown )  { m_RadioButton->SetChecked( !m_RadioButton->IsChecked() ); } return true;  }
+				virtual bool OnKeySpace( bool bDown ) override { if ( bDown )  { m_RadioButton->SetChecked( !m_RadioButton->IsChecked() ); } return true;  }
 
 				virtual void Select() { m_RadioButton->SetChecked( true ); }
 

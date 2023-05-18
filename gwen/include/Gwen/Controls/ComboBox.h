@@ -26,9 +26,9 @@ namespace Gwen
 
 				GWEN_CONTROL( ComboBox, Button );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void Layout( Skin::Base* skin );
-				virtual void UpdateColours();
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void Layout( Skin::Base* skin ) override;
+				virtual void UpdateColours() override;
 
 				virtual void SelectItem( MenuItem* pItem, bool bFireChangeEvents = true );
 				virtual void SelectItemByName( const Gwen::String & name, bool bFireChangeEvents = true );
@@ -41,15 +41,15 @@ namespace Gwen
 
 				virtual void ClearItems();
 
-				virtual bool ShouldRedrawOnHover() { return true; }
+				virtual bool ShouldRedrawOnHover() override { return true; }
 
 				virtual MenuItem* AddItem( const UnicodeString & strLabel, const String & strName = "" );
-				virtual bool OnKeyUp( bool bDown );
-				virtual bool OnKeyDown( bool bDown );
+				virtual bool OnKeyUp( bool bDown ) override;
+				virtual bool OnKeyDown( bool bDown ) override;
 
-				virtual void RenderFocus( Gwen::Skin::Base* skin );
-				virtual void OnLostKeyboardFocus();
-				virtual void OnKeyboardFocus();
+				virtual void RenderFocus( Gwen::Skin::Base* skin ) override;
+				virtual void OnLostKeyboardFocus() override;
+				virtual void OnKeyboardFocus() override;
 
 				virtual bool IsMenuOpen();
 

@@ -25,7 +25,7 @@ namespace Gwen
 					Dock( Pos::Left );
 				}
 
-				virtual bool ShouldDrawBackground()
+				virtual bool ShouldDrawBackground() override
 				{
 					return IsHovered();
 				}
@@ -40,7 +40,7 @@ namespace Gwen
 					SetPadding( Padding( 2, 2, 2, 2 ) );
 				}
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					skin->DrawMenuStrip( this );
 				}

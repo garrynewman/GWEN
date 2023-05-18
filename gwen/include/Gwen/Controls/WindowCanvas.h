@@ -26,47 +26,47 @@ namespace Gwen
 				GWEN_CLASS( WindowCanvas, Controls::Canvas );
 
 				WindowCanvas( int x, int y, int w, int h, Gwen::Skin::Base* pRenderer, const Gwen::String & strWindowTitle = "", bool is_menu = false );
-				~WindowCanvas();
+				virtual ~WindowCanvas();
 
-				virtual void DoThink();
+				virtual void DoThink() override;
 
-				virtual bool WantsQuit() { return m_bQuit; }
 
 				// Gwen::WindowProvider
-				virtual void* GetWindow();
+				virtual void* GetWindow() override;
 
-				virtual bool InputQuit();
+				virtual bool InputQuit() override;
+				bool WantsQuit() { return m_bQuit; }
 
 				Skin::Base* GetSkin( void );
 
 				virtual void Render( Skin::Base* skin );
 
 				void SetWindowSize(int x, int y);
-				virtual Gwen::Point WindowPosition() { return m_WindowPos; }
+				void SetWindowPosition(Gwen::Point pos);
+				Gwen::Point WindowPosition() { return m_WindowPos; }
 				
 				virtual void OnMove(int x, int y) { m_WindowPos = Gwen::Point(x,y); }
-				virtual void SetPos( int x, int y );
-				virtual bool IsOnTop();
+				virtual bool IsOnTop() override;
 
-				virtual void Layout( Skin::Base* skin );
+				virtual void Layout( Skin::Base* skin ) override;
 
-				virtual bool CanMaximize() { return m_bCanMaximize; }
-				virtual void SetCanMaximize( bool b );
-				virtual void SetMaximize( bool b );
-				virtual void Minimize();
+				bool CanMaximize() { return m_bCanMaximize; }
+				void SetCanMaximize( bool b );
+				void SetMaximize( bool b );
+				void Minimize();
 
-				virtual void OnChildRemoved( Controls::Base* pChild );
+				virtual void OnChildRemoved( Controls::Base* pChild ) override;
 
-				virtual void SetSizable( bool b );
-				virtual bool GetSizable() { return m_bHasTitleBar ? true : m_SESizer->Visible(); }
-				virtual void SetMinimumSize( const Gwen::Point & minSize );
-				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
+				void SetSizable( bool b );
+				bool GetSizable() { return m_bHasTitleBar ? true : m_SESizer->Visible(); }
+				void SetMinimumSize( const Gwen::Point & minSize );
+				virtual Gwen::Point GetMinimumSize() override { return m_MinimumSize; }
 
-				virtual void SetRemoveWhenChildless(bool yn) { m_bRemoveWhenChildless = yn; }
+				void SetRemoveWhenChildless(bool yn) { m_bRemoveWhenChildless = yn; }
 
-				virtual void SetTitle( Gwen::String title );
+				void SetTitle( Gwen::String title );
 
-				virtual Gwen::Controls::Base* GetControlAt( int x, int y, bool bOnlyIfMouseEnabled );
+				virtual Gwen::Controls::Base* GetControlAt( int x, int y, bool bOnlyIfMouseEnabled ) override;
 
 				// DPI handling
 				double GetDPI() { return m_dpi; }
@@ -75,26 +75,24 @@ namespace Gwen
 
 			protected:
 
-				virtual void OnBoundsChanged( Gwen::Rect oldBounds );
-
 				bool m_bRemoveWhenChildless = false;
 				double m_dpi = 96.0;
 
-				virtual void RenderCanvas();
-				virtual void DestroyWindow();
+				virtual void RenderCanvas() override;
+				void DestroyWindow();
 
-				virtual void CloseButtonPressed();
-				virtual void MaximizeButtonPressed();
-				virtual void MinimizeButtonPressed();
+				void CloseButtonPressed();
+				void MaximizeButtonPressed();
+				void MinimizeButtonPressed();
 
-				virtual void Dragger_Start();
-				virtual void Dragger_Moved();
-				virtual void SESizer_Moved();
-				virtual void SWSizer_Moved();
-				virtual void LeftSizer_Moved();
-				virtual void RightSizer_Moved();
-				virtual void VerticalSizer_Moved();
-				virtual void OnTitleDoubleClicked();
+				void Dragger_Start();
+				void Dragger_Moved();
+				void SESizer_Moved();
+				void SWSizer_Moved();
+				void LeftSizer_Moved();
+				void RightSizer_Moved();
+				void VerticalSizer_Moved();
+				void OnTitleDoubleClicked();
 
 				void*		m_pOSWindow;
 				bool		m_bQuit;

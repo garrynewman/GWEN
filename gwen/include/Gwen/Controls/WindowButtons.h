@@ -26,7 +26,7 @@ namespace Gwen
 					SetText( "" );
 				}
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					if ( !m_pWindow ) { return; }
 
@@ -47,14 +47,14 @@ namespace Gwen
 		{
 				GWEN_CONTROL_INLINE( WindowMaximizeButton, WindowCloseButton ) { m_bMaximized = false; };
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					if ( !m_pWindow ) { return; }
 
 					skin->DrawWindowMaximizeButton( this, IsDepressed() && IsHovered(), IsHovered() && ShouldDrawHover(), IsDisabled(), m_bMaximized );
 				}
 
-				virtual void SetMaximized( bool b )
+				void SetMaximized( bool b )
 				{
 					m_bMaximized = b;
 				}
@@ -68,7 +68,7 @@ namespace Gwen
 		{
 				GWEN_CONTROL_INLINE( WindowMinimizeButton, WindowCloseButton ) {};
 
-				virtual void Render( Skin::Base* skin )
+				virtual void Render( Skin::Base* skin ) override
 				{
 					if ( !m_pWindow ) { return; }
 

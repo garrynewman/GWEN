@@ -64,7 +64,7 @@ namespace Gwen
 					texture = NULL;
 				}
 
-				void Init( Texture* pTexture, float x, float y, float w, float h, Margin in_margin, float DrawMarginScale = 1.0f )
+				void Init( Texture* pTexture, float x, float y, float w, float h, Margin in_margin, float DrawMarginScale = 1.0 )
 				{
 					texture = pTexture;
 					margin = in_margin;

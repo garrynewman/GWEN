@@ -21,10 +21,10 @@ namespace Gwen
 		{
 				GWEN_CONTROL( TextBox, Label );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void RenderFocus( Gwen::Skin::Base* /*skin*/ ) {};
-				virtual void Layout( Skin::Base* skin );
-				virtual void PostLayout( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void RenderFocus( Gwen::Skin::Base* /*skin*/ ) override {};
+				virtual void Layout( Skin::Base* skin ) override;
+				virtual void PostLayout( Skin::Base* skin ) override;
 
 #ifndef GWEN_NO_ANIMATION
 				virtual void UpdateCaretColor();
@@ -35,24 +35,27 @@ namespace Gwen
 				virtual void InsertText( const Gwen::UnicodeString & str );
 				virtual void DeleteText( int iStartPos, int iLength );
 
+				virtual void SetPlaceholderText(const Gwen::UnicodeString& text) { m_PlaceholderText = text; }
+				virtual void SetMaxLength( int length ) { m_iMaxLength = length; }
+
 				virtual void RefreshCursorBounds();
 
-				virtual bool OnKeyReturn( bool bDown );
-				virtual bool OnKeyBackspace( bool bDown );
-				virtual bool OnKeyDelete( bool bDown );
-				virtual bool OnKeyRight( bool bDown );
-				virtual bool OnKeyLeft( bool bDown );
-				virtual bool OnKeyHome( bool bDown );
-				virtual bool OnKeyEnd( bool bDown );
+				virtual bool OnKeyReturn( bool bDown ) override;
+				virtual bool OnKeyBackspace( bool bDown ) override;
+				virtual bool OnKeyDelete( bool bDown ) override;
+				virtual bool OnKeyRight( bool bDown ) override;
+				virtual bool OnKeyLeft( bool bDown ) override;
+				virtual bool OnKeyHome( bool bDown ) override;
+				virtual bool OnKeyEnd( bool bDown ) override;
 
-				virtual bool AccelOnlyFocus() { return true; }
+				virtual bool AccelOnlyFocus() override { return true; }
 
-				virtual void OnPaste( Gwen::Controls::Base* pCtrl );
-				virtual void OnCopy( Gwen::Controls::Base* pCtrl );
-				virtual void OnCut( Gwen::Controls::Base* pCtrl );
-				virtual void OnSelectAll( Gwen::Controls::Base* pCtrl );
+				virtual void OnPaste( Gwen::Controls::Base* pCtrl ) override;
+				virtual void OnCopy( Gwen::Controls::Base* pCtrl ) override;
+				virtual void OnCut( Gwen::Controls::Base* pCtrl ) override;
+				virtual void OnSelectAll( Gwen::Controls::Base* pCtrl ) override;
 
-				virtual void OnMouseDoubleClickLeft( int x, int y );
+				virtual void OnMouseDoubleClickLeft( int x, int y ) override;
 
 				virtual void EraseSelection();
 				virtual bool HasSelection();
@@ -61,8 +64,9 @@ namespace Gwen
 				virtual void SetCursorPos( int i );
 				virtual void SetCursorEnd( int i );
 
-				virtual void OnMouseClickLeft( int x, int y, bool bDown );
-				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY );
+				virtual void OnMouseClickLeft( int x, int y, bool bDown ) override;
+				virtual void OnMouseClickRight( int /*x*/, int /*y*/, bool /*bDown*/ ) override;
+				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY ) override;
 
                 virtual void SetEditable( bool b ) { m_bEditable = b; }
 
@@ -72,13 +76,15 @@ namespace Gwen
 
 				virtual void OnEnter();
 				
-				virtual void OnKeyboardFocus();
-				virtual void OnLostKeyboardFocus();
+				virtual void OnKeyboardFocus() override;
+				virtual void OnLostKeyboardFocus() override;
 
-				virtual bool NeedsInputChars() { return true; }
+				virtual bool NeedsInputChars() override { return true; }
 
 				virtual void MoveCaretToEnd();
 				virtual void MoveCaretToStart();
+
+				void EnableContextMenu(bool enable) { m_bEnableContextMenu = enable; }
 
 				Event::Caller	onTextChanged;
 				Event::Caller	onReturnPressed;
@@ -92,10 +98,17 @@ namespace Gwen
 
                 bool m_bEditable;
 				bool m_bSelectAll;
+				bool m_bEnableContextMenu;
 
 				int m_iCursorPos;
 				int m_iCursorEnd;
 				int m_iCursorLine;
+
+				int m_iMaxLength;
+
+				double m_dLastClickTime;
+
+				Gwen::UnicodeString m_PlaceholderText;
 
 				Gwen::Rect m_rectSelectionBounds;
 				Gwen::Rect m_rectCaretBounds;
@@ -114,7 +127,7 @@ namespace Gwen
 
 			private:
 
-				virtual bool IsTextAllowed( const Gwen::UnicodeString & str, int iPos );
+				virtual bool IsTextAllowed( const Gwen::UnicodeString & str, int iPos ) override;
 
 		};
 
@@ -124,14 +137,14 @@ namespace Gwen
 
 				GWEN_CONTROL( TextBoxMultiline, TextBox );
 
-				virtual bool OnKeyReturn( bool bDown );
-				virtual void Render( Skin::Base* skin );
-				virtual void MakeCaratVisible();
+				virtual bool OnKeyReturn( bool bDown ) override;
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void MakeCaratVisible() override;
 
-				virtual bool OnKeyHome( bool bDown );
-				virtual bool OnKeyEnd( bool bDown );
-				virtual bool OnKeyUp( bool bDown );
-				virtual bool OnKeyDown( bool bDown );
+				virtual bool OnKeyHome( bool bDown ) override;
+				virtual bool OnKeyEnd( bool bDown ) override;
+				virtual bool OnKeyUp( bool bDown ) override;
+				virtual bool OnKeyDown( bool bDown ) override;
 
 				virtual int GetCurrentLine();
 
@@ -145,10 +158,10 @@ namespace Gwen
 
 				GWEN_CONTROL( PasswordTextBox, TextBox );
 
-				virtual void SetText( const TextObject& str, bool bDoEvents = true );
+				virtual void SetText( const TextObject& str, bool bDoEvents = true ) override;
 				virtual void SetPasswordChar(const char c);
 
-				virtual const TextObject& GetText() const { return m_realText; }
+				virtual const TextObject& GetText() const override { return m_realText; }
 			protected:
 
 				char m_passwordChar;

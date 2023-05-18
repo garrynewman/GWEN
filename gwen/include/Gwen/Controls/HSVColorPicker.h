@@ -35,7 +35,7 @@ namespace Gwen
 				void UpdateControls( Gwen::Color newColor );
 
 				virtual void SetMinimumSize(Gwen::Point size) { m_MinimumSize = size; }
-				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
+				virtual Gwen::Point GetMinimumSize() override { return m_MinimumSize; }
 
 				Event::Caller	onColorChanged;
 

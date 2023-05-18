@@ -21,7 +21,7 @@ namespace Gwen
 
 				GWEN_CONTROL( TreeControl, TreeNode );
 
-				virtual void Render( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
 
 				virtual void OnChildBoundsChanged( Gwen::Rect oldChildBounds, Base* pChild );
 
@@ -29,8 +29,8 @@ namespace Gwen
 
 				virtual void Clear();
 
-				virtual void Layout( Skin::Base* skin );
-				virtual void PostLayout( Skin::Base* skin );
+				virtual void Layout( Skin::Base* skin ) override;
+				virtual void PostLayout( Skin::Base* skin ) override;
 
 				virtual void AllowMultiSelect( bool b ) { m_bAllowMultipleSelection = b; }
 

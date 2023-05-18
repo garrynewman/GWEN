@@ -24,28 +24,28 @@ namespace Gwen
 
 				GWEN_CONTROL( DockBase, Base );
 
-				virtual void Render( Skin::Base* skin );
-				virtual void RenderOver( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
+				virtual void RenderOver( Skin::Base* skin ) override;
 				virtual bool IsEmpty();
 
 				virtual TabControl* GetTabControl();
 
-				virtual DockBase* GetRight() { return GetChildDock( Pos::Right ); }
-				virtual DockBase* GetLeft() { return GetChildDock( Pos::Left ); }
-				virtual DockBase* GetTop() { return GetChildDock( Pos::Top ); }
-				virtual DockBase* GetBottom() { return GetChildDock( Pos::Bottom ); }
+				DockBase* GetRight() { return GetChildDock( Pos::Right ); }
+				DockBase* GetLeft() { return GetChildDock( Pos::Left ); }
+				DockBase* GetTop() { return GetChildDock( Pos::Top ); }
+				DockBase* GetBottom() { return GetChildDock( Pos::Bottom ); }
 
 				// No action on space (default button action is to press)
-				virtual bool OnKeySpace( bool /*bDown*/ ) { return false; }
+				virtual bool OnKeySpace( bool /*bDown*/ ) override { return false; }
 
 			private:
 
 				// Drag n Drop
-				virtual bool DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* pPackage, int x, int y );
-				virtual bool DragAndDrop_CanAcceptPackage( Gwen::DragAndDrop::Package* pPackage );
-				virtual void DragAndDrop_HoverEnter( Gwen::DragAndDrop::Package* pPackage, int x, int y );
-				virtual void DragAndDrop_HoverLeave( Gwen::DragAndDrop::Package* pPackage );
-				virtual void DragAndDrop_Hover( Gwen::DragAndDrop::Package* pPackage, int x, int y );
+				virtual bool DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* pPackage, int x, int y ) override;
+				virtual bool DragAndDrop_CanAcceptPackage( Gwen::DragAndDrop::Package* pPackage ) override;
+				virtual void DragAndDrop_HoverEnter( Gwen::DragAndDrop::Package* pPackage, int x, int y ) override;
+				virtual void DragAndDrop_HoverLeave( Gwen::DragAndDrop::Package* pPackage ) override;
+				virtual void DragAndDrop_Hover( Gwen::DragAndDrop::Package* pPackage, int x, int y ) override;
 
 				virtual void SetupChildDock( int iPos );
 

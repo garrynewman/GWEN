@@ -32,11 +32,11 @@ namespace Gwen
 				virtual bool GetClampMovement() { return m_bClampMovement; }
 
 				virtual void SetMinimumSize( const Gwen::Point & minSize ) { m_MinimumSize = minSize; }
-				virtual Gwen::Point GetMinimumSize() { return m_MinimumSize; }
+				virtual Gwen::Point GetMinimumSize() override { return m_MinimumSize; }
 
 				virtual void DisableResizing();
 
-				virtual bool SetBounds( int x, int y, int w, int h );
+				virtual bool SetBounds( int x, int y, int w, int h ) override;
 
 				virtual void OnResized() {};
 

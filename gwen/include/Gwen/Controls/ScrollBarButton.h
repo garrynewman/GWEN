@@ -20,7 +20,7 @@ namespace Gwen
 
 				GWEN_CONTROL( ScrollBarButton, Controls::Button );
 
-				void Render( Skin::Base* skin );
+				void Render( Skin::Base* skin ) override;
 
 				void SetDirectionUp();
 				void SetDirectionDown();

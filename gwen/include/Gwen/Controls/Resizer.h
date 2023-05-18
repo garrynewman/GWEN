@@ -24,7 +24,7 @@ namespace Gwen
 
 				GWEN_CONTROL( Resizer, Dragger );
 
-				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY );
+				virtual void OnMouseMoved( int x, int y, int deltaX, int deltaY ) override;
 				virtual void SetResizeDir( int dir );
 
 				Event::Caller	onResize;

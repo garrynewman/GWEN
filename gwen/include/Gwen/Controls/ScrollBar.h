@@ -30,14 +30,14 @@ namespace Gwen
 
 				GWEN_CONTROL( BaseScrollBar, Base );
 
-				virtual void Render( Skin::Base* skin );
+				virtual void Render( Skin::Base* skin ) override;
 
 				virtual void SetBarSize( int size ) = 0;
 				virtual int GetBarSize() = 0;
 				virtual int GetBarPos() = 0;
 
 				virtual void OnBarMoved( Controls::Base* control );
-				virtual void OnMouseClickLeft( int /*x*/, int /*y*/, bool /*bDown*/ ) {}
+				virtual void OnMouseClickLeft( int /*x*/, int /*y*/, bool /*bDown*/ ) override {}
 
 				virtual void ScrollToLeft() {}
 				virtual void ScrollToRight() {}

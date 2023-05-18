@@ -65,11 +65,11 @@ namespace Gwen
 
 				virtual const char* GetTypeName() { return "Base"; }
 
-				virtual void DelayedDelete();
+				void DelayedDelete();
 				virtual void PreDelete( Gwen::Skin::Base* skin ) {};
 
-				virtual void SetParent( Controls::Base* pParent );
-				virtual Controls::Base* GetParent() const { return m_Parent; }
+				void SetParent( Controls::Base* pParent );
+				Controls::Base* GetParent() const { return m_Parent; }
 				virtual Controls::Canvas* GetCanvas();
 
 				virtual Base::List & GetChildren() { if ( m_InnerPanel ) { return m_InnerPanel->GetChildren(); } return Children; }
@@ -82,29 +82,29 @@ namespace Gwen
 
 				template <typename T> T* FindChild( const Gwen::String & name, bool bRecursive = false );
 
-				virtual void SetName( const Gwen::String & name ) { m_Name = name; }
-				virtual const Gwen::String & GetName() { return m_Name; }
+				void SetName( const Gwen::String & name ) { m_Name = name; }
+				const Gwen::String & GetName() { return m_Name; }
 
 				virtual void Think() {}
 
 			protected:
 
-				virtual void AddChild( Controls::Base* pChild );
-				virtual void RemoveChild( Controls::Base* pParent );
+				void AddChild( Controls::Base* pChild );
+				void RemoveChild( Controls::Base* pParent );
 				virtual void OnChildAdded( Controls::Base* pChild );
 				virtual void OnChildRemoved( Controls::Base* pChild );
 
 			public:
 
-				virtual void RemoveAllChildren();
-				virtual void DeleteAllChildren();
+				void RemoveAllChildren();
+				void DeleteAllChildren();
 
 				virtual void SendToBack( void );
 				virtual void BringToFront( void );
 				virtual void BringNextToControl( Controls::Base* pChild, bool bBehind );
 
-				virtual Gwen::Point LocalPosToCanvas( const Gwen::Point & in = Point( 0, 0 ) );
-				virtual Gwen::Point CanvasPosToLocal( const Gwen::Point & in );
+				Gwen::Point LocalPosToCanvas( const Gwen::Point & in = Point( 0, 0 ) );
+				Gwen::Point CanvasPosToLocal( const Gwen::Point & in );
 
 				virtual void Dock( int iDock );
 				virtual int GetDock();
@@ -112,38 +112,38 @@ namespace Gwen
 				virtual void RestrictToParent( bool restrict ) { m_bRestrictToParent = restrict; }
 				virtual bool ShouldRestrictToParent() { return m_bRestrictToParent; }
 
-				virtual int X() const { return m_Bounds.x; }
-				virtual int Y() const { return m_Bounds.y; }
-				virtual int Width() const { return m_Bounds.w; }
-				virtual int Height() const { return m_Bounds.h; }
-				virtual int Bottom() const { return m_Bounds.y + m_Bounds.h + m_Margin.bottom; }
-				virtual int Right() const { return m_Bounds.x + m_Bounds.w + m_Margin.right; }
-
-				virtual const Margin & GetMargin() const { return m_Margin; }
-				virtual const Padding & GetPadding() const { return m_Padding; }
-
-				virtual void SetPos( int x, int y );
-				virtual void SetPos( const Point & p ) { return SetPos( p.x, p.y ); }
-				virtual Point GetPos() { return Point( X(), Y() ); }
-				virtual void SetWidth( int w ) { SetSize( w, Height() ); }
-				virtual void SetHeight( int h ) { SetSize( Width(), h ); }
-				virtual bool SetSize( int w, int h );
-				virtual bool SetSize( const Point & p );
-				virtual Point GetSize() { return Point( Width(), Height() ); }
-				virtual bool SetBounds( int x, int y, int w, int h );
-				virtual bool SetBounds( const Gwen::Rect & bounds );
+				int X() const { return m_Bounds.x; }
+				int Y() const { return m_Bounds.y; }
+				int Width() const { return m_Bounds.w; }
+				int Height() const { return m_Bounds.h; }
+				int Bottom() const { return m_Bounds.y + m_Bounds.h + m_Margin.bottom; }
+				int Right() const { return m_Bounds.x + m_Bounds.w + m_Margin.right; }
 
 				virtual void SetPadding( const Padding & padding );
 				virtual void SetMargin( const Margin & margin );
+				virtual const Margin & GetMargin() const { return m_Margin; }
+				virtual const Padding & GetPadding() const { return m_Padding; }
+
+				void SetPos( int x, int y );
+				void SetPos( const Point & p ) { return SetPos( p.x, p.y ); }
+				Point GetPos() { return Point( X(), Y() ); }
+				void SetWidth( int w ) { SetSize( w, Height() ); }
+				void SetHeight( int h ) { SetSize( Width(), h ); }
+				bool SetSize( int w, int h );
+				bool SetSize( const Point & p );
+				Point GetSize() { return Point( Width(), Height() ); }
+				bool SetBounds( const Gwen::Rect & bounds );
+
+				// The root functions for setting and getting position and width/height
+				virtual bool SetBounds( int x, int y, int w, int h );
+				virtual const Gwen::Rect & GetBounds() const { return m_Bounds; }
+
 
 				// MoveTo is identical to SetPos except it uses ShouldRestrictToParent()
 				virtual void MoveTo( int x, int y );
 				virtual void MoveBy( int x, int y );
 
-				virtual const Gwen::Rect & GetBounds() const { return m_Bounds; }
-
 				virtual Controls::Base* GetControlAt( int x, int y, bool bOnlyIfMouseEnabled = true );
-
 
 
 			protected:
@@ -189,10 +189,10 @@ namespace Gwen
 			public:
 
 				virtual void SetHidden( bool hidden ) { if ( m_bHidden == hidden ) { return; } m_bHidden = hidden; Invalidate(); Redraw(); }
-				virtual bool Hidden() const; // Returns true only if this control is hidden
-				virtual bool Visible() const; // Returns false if this control or its parents are hidden
-				virtual void Hide() { SetHidden( true ); }
-				virtual void Show() { SetHidden( false ); }
+				bool Hidden() const; // Returns true only if this control is hidden
+				bool Visible() const; // Returns false if this control or its parents are hidden
+				void Hide() { SetHidden( true ); }
+				void Show() { SetHidden( false ); }
 
 				//Skin
 				virtual void SetSkin( Skin::Base* skin, bool doChildren = false );
@@ -222,7 +222,7 @@ namespace Gwen
 
 				virtual void SetKeyboardInputEnabled( bool b ) { m_bKeyboardInputEnabled = b; }
 				virtual bool GetKeyboardInputEnabled() const { return m_bKeyboardInputEnabled; }
-				virtual bool NeedsInputChars() { return false; }
+				virtual bool NeedsInputChars() { return false; }// note this appears unused
 
 				virtual bool OnChar( Gwen::UnicodeChar /*c*/ ) { return false; }
 
@@ -253,6 +253,7 @@ namespace Gwen
 				virtual bool ShouldDrawHover();
 				virtual bool ShouldRedrawOnHover();
 
+				// Called and propagated up through OnChildTouched whenever a control is clicked
 				virtual void Touch();
 				virtual void OnChildTouched( Controls::Base* pChild );
 
@@ -277,16 +278,15 @@ namespace Gwen
 				virtual Gwen::Point GetMinimumSize() { return Gwen::Point( 1, 1 ); }
 				virtual Gwen::Point GetMaximumSize() { return Gwen::Point( 4096, 4096 ); }
 
-				virtual void SetToolTip( const Gwen::TextObject & strText );
-				virtual void SetToolTip( Base* tooltip ) { m_ToolTip = tooltip; if ( m_ToolTip ) { m_ToolTip->SetParent( this ); m_ToolTip->SetHidden( true ); } }
-				virtual Base* GetToolTip() { return m_ToolTip; }
+				void SetToolTip( const Gwen::TextObject & strText );
+				void SetToolTip( Base* tooltip ) { m_ToolTip = tooltip; if ( m_ToolTip ) { m_ToolTip->SetParent( this ); m_ToolTip->SetHidden( true ); } }
+				Base* GetToolTip() { return m_ToolTip; }
 
 				virtual bool IsMenuComponent();
 				virtual void CloseMenus();
 
 				virtual bool IsTabable() { return m_Tabable; }
 				virtual void SetTabable( bool isTabable ) { m_Tabable = isTabable; }
-
 
 
 
@@ -495,7 +495,9 @@ namespace Gwen
 
 			public:
 
+				// Gets the value of the named child control
 				virtual TextObject GetChildValue( const Gwen::String & strName );
+				// Gets the value of this control
 				virtual TextObject GetValue();
 				virtual void SetValue( const TextObject & strValue );
 				virtual void DoAction() {};

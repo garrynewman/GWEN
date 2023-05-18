@@ -38,6 +38,8 @@ void CheckBox::OnPress()
 
 void CheckBox::OnCheckStatusChanged()
 {
+	Redraw();
+
 	if ( IsChecked() )
 	{
 		onChecked.Call( this );
