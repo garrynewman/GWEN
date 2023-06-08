@@ -27,6 +27,7 @@ namespace Gwen
 					SetMouseInputEnabled( false );
 					m_DrawColor = Colors::White;
 					SetStretch( true );
+					SetKeepAspectRatio( false );
 				}
 
 				virtual ~ImagePanel()
@@ -45,6 +46,11 @@ namespace Gwen
 				virtual void SetImage( const TextObject & imageName )
 				{
 					m_Texture.Load( imageName, GetSkin()->GetRender() );
+				}
+
+				virtual void SetTexture( const Texture& texture )
+				{
+					m_Texture = texture;
 				}
 
 				virtual TextObject & GetImage()
@@ -72,9 +78,33 @@ namespace Gwen
 					skin->GetRender()->SetDrawColor( m_DrawColor );
 
 					if ( m_bStretch )
-					{ skin->GetRender()->DrawTexturedRect( &m_Texture, GetRenderBounds(), m_uv[0], m_uv[1], m_uv[2], m_uv[3] ); }
+					{ 
+						if ( m_bKeepAspectRatio )
+						{
+							auto bounds = GetRenderBounds();
+							float ratio = m_Texture.width/m_Texture.height;
+							// check if we are constrained by height or width
+							if (bounds.w < bounds.h*ratio)
+							{
+								// too narrow
+								bounds.h = bounds.w/ratio;
+							}
+							else
+							{
+								// too short
+								bounds.w = bounds.h*ratio;
+							}
+							skin->GetRender()->DrawTexturedRect( &m_Texture, bounds, m_uv[0], m_uv[1], m_uv[2], m_uv[3] );
+						}
+						else
+						{
+							skin->GetRender()->DrawTexturedRect( &m_Texture, GetRenderBounds(), m_uv[0], m_uv[1], m_uv[2], m_uv[3] );
+						}
+					}
 					else
-					{ skin->GetRender()->DrawTexturedRect( &m_Texture, Gwen::Rect( 0, 0, m_Texture.width, m_Texture.height ), m_uv[0], m_uv[1], m_uv[2], m_uv[3] ); }
+					{ 
+						skin->GetRender()->DrawTexturedRect( &m_Texture, Gwen::Rect( 0, 0, m_Texture.width, m_Texture.height ), m_uv[0], m_uv[1], m_uv[2], m_uv[3] );
+					}
 				}
 
 				virtual void SizeToContents()
@@ -95,6 +125,9 @@ namespace Gwen
 				virtual bool GetStretch() { return m_bStretch; }
 				virtual void SetStretch( bool b ) { m_bStretch = b; }
 
+				virtual bool GetKeepAspectRatio() { return m_bKeepAspectRatio; }
+				virtual void SetKeepAspectRatio( bool b ) { m_bKeepAspectRatio = b; }
+
 			protected:
 
 				Texture			m_Texture;
@@ -102,6 +135,7 @@ namespace Gwen
 				Gwen::Color		m_DrawColor;
 
 				bool			m_bStretch;
+				bool            m_bKeepAspectRatio;
 
 		};
 	}
