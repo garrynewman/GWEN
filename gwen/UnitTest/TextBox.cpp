@@ -12,6 +12,7 @@ class TextBox : public GUnit
 			{
 				Gwen::Controls::TextBox* label = new Gwen::Controls::TextBox( this );
 				label->SetText( "" );
+				label->SetPlaceholderText( "Placeholder Text" );
 				label->SetPos( 10, 10 );
 				label->onTextChanged.Add( this, &ThisClass::OnEdit );
 				label->onReturnPressed.Add( this, &ThisClass::OnSubmit );

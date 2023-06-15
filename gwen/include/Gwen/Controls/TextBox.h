@@ -35,7 +35,7 @@ namespace Gwen
 				virtual void InsertText( const Gwen::UnicodeString & str );
 				virtual void DeleteText( int iStartPos, int iLength );
 
-				virtual void SetPlaceholderText(const Gwen::UnicodeString& text) { m_PlaceholderText = text; }
+				virtual void SetPlaceholderText(const TextObject& text) { m_PlaceholderText = text; }
 				virtual void SetMaxLength( int length ) { m_iMaxLength = length; }
 
 				virtual void RefreshCursorBounds();
@@ -108,7 +108,7 @@ namespace Gwen
 
 				double m_dLastClickTime;
 
-				Gwen::UnicodeString m_PlaceholderText;
+				Gwen::TextObject m_PlaceholderText;
 
 				Gwen::Rect m_rectSelectionBounds;
 				Gwen::Rect m_rectCaretBounds;

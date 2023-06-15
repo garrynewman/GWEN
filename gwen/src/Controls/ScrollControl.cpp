@@ -124,24 +124,31 @@ void ScrollControl::UpdateScrollBars()
 	if ( !m_InnerPanel )
 	{ return; }
 
-	if ( false)//ContentsAreDocked() )
-	{
-		m_VerticalScrollBar->SetHidden( true );
-		m_HorizontalScrollBar->SetHidden( true );
-		m_InnerPanel->SetSize( GetSize() );
-		m_InnerPanel->SetPos( 0, 0 );
-		return;
-	}
-
 	int childrenWidth = 0;
 	int childrenHeight = 0;
 
-	//Get the max size of all our children together
-	for ( Base::List::iterator iter = m_InnerPanel->Children.begin(); iter != m_InnerPanel->Children.end(); ++iter )
+	if (ContentsAreDocked())
 	{
-		Base* pChild = *iter;
-		childrenWidth = Utility::Max( childrenWidth, pChild->Right() );
-		childrenHeight = Utility::Max( childrenHeight, pChild->Bottom() );
+		// If contents are docked, use their minimum size to determine the inner bounds
+		// use our dimensions as a minimum so they at least fill us
+		childrenWidth = Width();
+		childrenHeight = Height();
+
+		for ( Base::List::iterator iter = m_InnerPanel->Children.begin(); iter != m_InnerPanel->Children.end(); ++iter )
+		{
+			Base* pChild = *iter;
+			childrenWidth = Utility::Max( childrenWidth, pChild->GetMinimumSize().x );
+			childrenHeight = Utility::Max( childrenHeight, pChild->GetMinimumSize().y );
+		}
+	}
+	else
+	{
+		for ( Base::List::iterator iter = m_InnerPanel->Children.begin(); iter != m_InnerPanel->Children.end(); ++iter )
+		{
+			Base* pChild = *iter;
+			childrenWidth = Utility::Max( childrenWidth, pChild->Right() );
+			childrenHeight = Utility::Max( childrenHeight, pChild->Bottom() );
+		}
 	}
 
 	if ( m_bCanScrollH )

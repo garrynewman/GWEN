@@ -7,6 +7,7 @@
 
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/TextBox.h"
+#include "Gwen/Controls/Menu.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Anim.h"
 #include "Gwen/Utility.h"
@@ -41,8 +42,11 @@ GWEN_CONTROL_CONSTRUCTOR( TextBox )
 	m_iCursorPos = 0;
 	m_iCursorEnd = 0;
 	m_iCursorLine = 0;
+	m_iMaxLength = -1;
     m_bEditable = true;
 	m_bSelectAll = false;
+	m_dLastClickTime = -1.0;
+	m_bEnableContextMenu = true;
 	SetTextColor( GetSkin()->Colors.Label.Default );
 	SetTabable( true );
 	AddAccelerator( L"Ctrl + C", &TextBox::OnCopy );
@@ -61,7 +65,6 @@ bool TextBox::OnChar( Gwen::UnicodeChar c )
 	return true;
 }
 
-
 void TextBox::OnKeyboardFocus()
 { 
 	Gwen::Anim::Add( this, new ChangeCaretColor() );
@@ -78,7 +81,6 @@ void TextBox::InsertText( const Gwen::UnicodeString & strInsert )
 {
     if ( !m_bEditable ) return;
 
-	// TODO: Make sure fits (implement maxlength)
 	if ( HasSelection() )
 	{
 		EraseSelection();
@@ -90,9 +92,10 @@ void TextBox::InsertText( const Gwen::UnicodeString & strInsert )
 	{ return; }
 
 	UnicodeString str = GetText().GetUnicode();
-	str.insert( m_iCursorPos, strInsert );
+	int insertion_length = m_iMaxLength >= 0 ? std::max<int>(0, m_iMaxLength - str.length()) : strInsert.length();
+	str.insert( m_iCursorPos, strInsert, 0, insertion_length );
 	SetText( str );
-	m_iCursorPos += ( int ) strInsert.size();
+	m_iCursorPos += insertion_length;
 	m_iCursorEnd = m_iCursorPos;
 	m_iCursorLine = 0;
 	RefreshCursorBounds();
@@ -101,16 +104,19 @@ void TextBox::InsertText( const Gwen::UnicodeString & strInsert )
 #ifndef GWEN_NO_ANIMATION
 void TextBox::UpdateCaretColor()
 {
-	if ( m_fNextCaretColorChange > Gwen::Platform::GetTimeInSeconds() ) { return; }
+	double fTimeNow = Gwen::Platform::GetTimeInSeconds();
+	if ( m_fNextCaretColorChange > fTimeNow ) { return; }	
 
-	if ( !HasFocus() ) { m_fNextCaretColorChange = Gwen::Platform::GetTimeInSeconds() + 0.5f; return; }
+	if ( !HasFocus() ) { m_fNextCaretColorChange = fTimeNow + 0.5f; return; }
 
 	Gwen::Color targetcolor = Gwen::Color( 230, 230, 230, 255 );
 
 	if ( m_CaretColor == targetcolor )
 	{ targetcolor = Gwen::Color( 20, 20, 20, 255 ); }
 
-	m_fNextCaretColorChange = Gwen::Platform::GetTimeInSeconds() + 0.5;
+	if (HasSelection()) { return; }
+
+	m_fNextCaretColorChange = fTimeNow + 0.5;
 	m_CaretColor = targetcolor;
 	Redraw();
 }
@@ -120,6 +126,17 @@ void TextBox::Render( Skin::Base* skin )
 {
 	if ( ShouldDrawBackground() )
 	{ skin->DrawTextBox( this ); }
+
+	// Draw placeholder text
+	if (TextLength() == 0 && m_PlaceholderText.length())
+	{
+		auto color = TextColor();
+		color.r *= 2;
+		color.g *= 2;
+		color.b *= 2;
+		skin->GetRender()->SetDrawColor( color );
+		skin->GetRender()->RenderText( GetFont(), Gwen::PointF( GetPadding().left, GetPadding().top ), m_PlaceholderText );
+	}
 
 	if ( !HasFocus() ) { return; }
 
@@ -184,7 +201,42 @@ void TextBox::OnSelectAll( Gwen::Controls::Base* /*pCtrl*/ )
 
 void TextBox::OnMouseDoubleClickLeft( int /*x*/, int /*y*/ )
 {
-	OnSelectAll( this );
+	double now = Gwen::Platform::GetTimeInSeconds();
+	if (m_dLastClickTime > 0 && (now - m_dLastClickTime) < 0.5)
+	{
+		m_dLastClickTime = -1;	
+
+		OnSelectAll( this );
+	}
+	else
+	{
+		m_dLastClickTime = now;
+
+		int iStart = Utility::Min( m_iCursorPos, m_iCursorEnd );
+		int iEnd = Utility::Max( m_iCursorPos, m_iCursorEnd );
+		const UnicodeString & str = GetText().GetUnicode();
+		for (; iStart > 0; iStart--)
+		{
+			if (str[iStart] == ' ' || str[iStart] == '\n' || str[iStart] == '\t')
+			{
+				iStart++;
+				break;
+			}
+		}
+
+		for (; iEnd < str.length(); iEnd++)
+		{
+			if (str[iEnd] == ' ' || str[iEnd] == '\n' || str[iEnd] == '\t')
+			{
+				break;
+			}
+		}
+
+		m_iCursorEnd = iEnd;
+		m_iCursorPos = iStart;
+		m_iCursorLine = 0;
+		RefreshCursorBounds();
+	}
 }
 
 UnicodeString TextBox::GetSelection()
@@ -252,6 +304,14 @@ bool TextBox::OnKeyLeft( bool bDown )
 {
 	if ( !bDown ) { return true; }
 
+	if (!Gwen::Input::IsShiftDown() && HasSelection())
+	{
+		m_iCursorPos = m_iCursorEnd = Utility::Min( m_iCursorPos, m_iCursorEnd );
+		
+		RefreshCursorBounds();
+		return true;
+	}
+
 	if ( m_iCursorPos > 0 )
 	{ m_iCursorPos--; }
 
@@ -267,6 +327,14 @@ bool TextBox::OnKeyLeft( bool bDown )
 bool TextBox::OnKeyRight( bool bDown )
 {
 	if ( !bDown ) { return true; }
+
+	if (!Gwen::Input::IsShiftDown() && HasSelection())
+	{
+		m_iCursorPos = m_iCursorEnd = Utility::Max( m_iCursorPos, m_iCursorEnd );
+		
+		RefreshCursorBounds();
+		return true;
+	}
 
 	if ( m_iCursorPos < TextLength() )
 	{ m_iCursorPos++; }
@@ -385,6 +453,24 @@ void TextBox::OnMouseClickLeft( int x, int y, bool bDown )
 			SetCursorPos( iChar );
 			Gwen::MouseFocus = NULL;
 		}
+	}
+}
+
+void TextBox::OnMouseClickRight( int x, int y, bool bDown )
+{
+	// Show context menu
+	if (bDown && m_bEnableContextMenu)
+	{
+		auto pos = CanvasPosToLocal(Gwen::Point(x, y));
+		Gwen::Controls::Menu* menu = new Gwen::Controls::Menu(GetCanvas());
+		menu->AddItem("Cut")->SetAction(this, &ThisClass::OnCut)->SetAccelerator(L"Ctrl + X");
+		menu->AddItem("Copy")->SetAction(this, &ThisClass::OnCopy)->SetAccelerator(L"Ctrl + C");
+		menu->AddItem("Paste")->SetAction(this, &ThisClass::OnPaste)->SetAccelerator(L"Ctrl + V");
+		// Select all is broken in the context menu, todo fix later
+		//menu->AddItem("Select All")->SetAction(this, &ThisClass::OnSelectAll)->SetAccelerator(L"Ctrl + A");
+		menu->SetDeleteOnClose(true);
+		menu->SetPos(Gwen::Point(x,y));
+		menu->Show();
 	}
 }
 
@@ -569,8 +655,11 @@ void TextBoxMultiline::Render( Skin::Base* skin )
 	}
 
 	// Draw caret
-	skin->GetRender()->SetDrawColor( m_CaretColor );
-	skin->GetRender()->DrawFilledRect( m_rectCaretBounds );
+	if (!HasSelection())
+	{
+		skin->GetRender()->SetDrawColor( m_CaretColor );
+		skin->GetRender()->DrawFilledRect( m_rectCaretBounds );
+	}
 }
 
 void TextBoxMultiline::MakeCaratVisible()

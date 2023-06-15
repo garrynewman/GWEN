@@ -31,11 +31,13 @@ void Dragger::OnMouseClickLeft( int x, int y, bool bDown )
 
 		Gwen::MouseFocus = this;
 		onDragStart.Call( this );
+		Redraw();
 	}
 	else
 	{
 		m_bDepressed = false;
 		Gwen::MouseFocus = NULL;
+		Redraw();
 	}
 }
 
