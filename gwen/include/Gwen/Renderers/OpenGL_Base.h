@@ -37,6 +37,8 @@ namespace Gwen
 				virtual void SetDrawColor( Gwen::Color color );
 				virtual void DrawFilledRect( Gwen::Rect rect );
 
+				virtual void EnableVsync(bool yn);
+
 				void StartClip();
 				void EndClip();
 

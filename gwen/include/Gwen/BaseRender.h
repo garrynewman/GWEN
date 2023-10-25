@@ -49,6 +49,8 @@ namespace Gwen
 				virtual void Begin() {};
 				virtual void End() {};
 
+				virtual void EnableVsync(bool yn) {};
+
 				virtual void SetDrawColor( Color color ) {};
 
 				virtual void DrawFilledRect( Gwen::Rect rect ) {};;

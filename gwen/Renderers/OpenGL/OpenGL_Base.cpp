@@ -632,5 +632,11 @@ namespace Gwen
 			return true;
 		}
 
+		void OpenGL_Base::EnableVsync(bool yn)
+		{
+			auto wglSwapIntervalEXT = (bool(*)(int))wglGetProcAddress("wglSwapIntervalEXT");
+
+			wglSwapIntervalEXT(yn ? 1 : 0);
+		}
 	}
 }
