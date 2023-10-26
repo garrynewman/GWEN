@@ -66,6 +66,8 @@ namespace Gwen
 
 				void SetTitle( Gwen::String title );
 
+				void SetPos(int x, int y);
+
 				virtual Gwen::Controls::Base* GetControlAt( int x, int y, bool bOnlyIfMouseEnabled ) override;
 
 				// DPI handling

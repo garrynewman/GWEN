@@ -386,11 +386,6 @@ void WindowCanvas::SetPos( int x, int y )
 	Gwen::Platform::SetBoundsPlatformWindow( m_pOSWindow, x, y, width, height);
 }
 
-void WindowCanvas::OnBoundsChanged( Gwen::Rect oldBounds )
-{
-	BaseClass::OnBoundsChanged(oldBounds);
-}
-
 void WindowCanvas::SetWindowSize(int x, int y)
 {
 	Gwen::PointF scaling = GetDPIScaling();
